@@ -1,0 +1,9 @@
+{
+  "fdTitle": "Check-in / Check-out",
+  "fdArrivals": "Today's Arrivals",
+  "fdInHouse": "In-House Guests",
+  "fdDepartures": "Today's Departures",
+  "fdArrivalsHint": "Reservations arriving today (confirmed/pending).",
+  "fdInHouseHint": "Guests currently checked in.",
+  "fdDeparturesHint": "Guests scheduled to depart today."
+}

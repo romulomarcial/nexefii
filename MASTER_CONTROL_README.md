@@ -1,47 +1,47 @@
-# 🔐 Master Control Panel - IluxSys
+﻿# ðŸ” Master Control Panel - nexefii
 
 ---
-**📄 Documento**: MASTER_CONTROL_README.md  
-**📦 Versão**: 2.0.0  
-**📅 Última Atualização**: 07/11/2025 - 15:30 BRT  
-**👤 Autor**: IluxSys Development Team  
-**🔄 Status**: ✅ Atualizado e Sincronizado
-
----
-
-## Visão Geral
-
-O **Master Control Panel** é um sistema de super administração que fornece controle total sobre a plataforma IluxSys, incluindo:
-
-- 💾 **Backup & Restore**: Sistema completo, incremental e por propriedade
-- 🏨 **Property Backups**: Backups isolados por propriedade (multi-tenant)
-- 🏗️ **General Structure**: Backup da estrutura geral (rollback de atualizações)
-- 🚀 **Releases & Rollback**: Controle de versões com rollback de releases
-- 👥 **Gestão Avançada de Usuários**: Criar, editar e gerenciar todos os usuários
-- 📊 **Monitoramento do Sistema**: Estatísticas e métricas em tempo real
-- 📝 **Logs & Auditoria**: Registro completo de todas as atividades com filtros
-- ⚙️ **Configurações do Sistema**: Controle total de parâmetros
-- 🔒 **Compression & Encryption**: Backups com compressão real (gzip) e criptografia (AES-256-GCM)
-- 🌐 **i18n Completo**: Suporte para Português, Inglês e Espanhol
+**ðŸ“„ Documento**: MASTER_CONTROL_README.md  
+**ðŸ“¦ VersÃ£o**: 2.0.0  
+**ðŸ“… Ãšltima AtualizaÃ§Ã£o**: 07/11/2025 - 15:30 BRT  
+**ðŸ‘¤ Autor**: nexefii Development Team  
+**ðŸ”„ Status**: âœ… Atualizado e Sincronizado
 
 ---
 
-## 🚀 Credenciais de Acesso
+## VisÃ£o Geral
 
-### Usuário Master (Super Admin)
+O **Master Control Panel** Ã© um sistema de super administraÃ§Ã£o que fornece controle total sobre a plataforma nexefii, incluindo:
+
+- ðŸ’¾ **Backup & Restore**: Sistema completo, incremental e por propriedade
+- ðŸ¨ **Property Backups**: Backups isolados por propriedade (multi-tenant)
+- ðŸ—ï¸ **General Structure**: Backup da estrutura geral (rollback de atualizaÃ§Ãµes)
+- ðŸš€ **Releases & Rollback**: Controle de versÃµes com rollback de releases
+- ðŸ‘¥ **GestÃ£o AvanÃ§ada de UsuÃ¡rios**: Criar, editar e gerenciar todos os usuÃ¡rios
+- ðŸ“Š **Monitoramento do Sistema**: EstatÃ­sticas e mÃ©tricas em tempo real
+- ðŸ“ **Logs & Auditoria**: Registro completo de todas as atividades com filtros
+- âš™ï¸ **ConfiguraÃ§Ãµes do Sistema**: Controle total de parÃ¢metros
+- ðŸ”’ **Compression & Encryption**: Backups com compressÃ£o real (gzip) e criptografia (AES-256-GCM)
+- ðŸŒ **i18n Completo**: Suporte para PortuguÃªs, InglÃªs e Espanhol
+
+---
+
+## ðŸš€ Credenciais de Acesso
+
+### UsuÃ¡rio Master (Super Admin)
 ```
 Username: master
 Password: Master2025!@#$
 ```
 
-**⚠️ IMPORTANTE**: 
-- Este usuário tem acesso TOTAL ao sistema
+**âš ï¸ IMPORTANTE**: 
+- Este usuÃ¡rio tem acesso TOTAL ao sistema
 - Pode visualizar e modificar TODOS os dados
-- Tem permissão para criar backups e restaurar o sistema
-- Pode criar, editar e deletar qualquer usuário (exceto ele mesmo)
+- Tem permissÃ£o para criar backups e restaurar o sistema
+- Pode criar, editar e deletar qualquer usuÃ¡rio (exceto ele mesmo)
 - Guarde essas credenciais em local seguro!
 
-### Usuário Admin (Administrador Regular)
+### UsuÃ¡rio Admin (Administrador Regular)
 ```
 Username: admin
 Password: admin12345!@#
@@ -49,105 +49,105 @@ Password: admin12345!@#
 
 ---
 
-## 📋 Funcionalidades Principais
+## ðŸ“‹ Funcionalidades Principais
 
-### 1. Dashboard (Visão Geral)
-- Estatísticas do sistema em tempo real
-- Total de usuários, propriedades e backups
+### 1. Dashboard (VisÃ£o Geral)
+- EstatÃ­sticas do sistema em tempo real
+- Total de usuÃ¡rios, propriedades e backups
 - Atividade recente
-- **⚡ Ações Rápidas** - Operações de backup de estrutura geral:
-  - **💾 Backup Completo**: Cria backup completo da estrutura geral (CSS, JS, i18n, templates, configs)
-  - **📦 Backup Incremental**: Backup apenas das mudanças desde o último backup completo
-  - **📋 Ver Backups**: Abre pop-up com lista de todos os backups de estrutura geral
+- **âš¡ AÃ§Ãµes RÃ¡pidas** - OperaÃ§Ãµes de backup de estrutura geral:
+  - **ðŸ’¾ Backup Completo**: Cria backup completo da estrutura geral (CSS, JS, i18n, templates, configs)
+  - **ðŸ“¦ Backup Incremental**: Backup apenas das mudanÃ§as desde o Ãºltimo backup completo
+  - **ðŸ“‹ Ver Backups**: Abre pop-up com lista de todos os backups de estrutura geral
     - Visualizar detalhes completos
     - Restaurar backup anterior
-    - Excluir backups desnecessários
+    - Excluir backups desnecessÃ¡rios
     - Download de backups
-  - **📤 Exportar Tudo**: Exporta todos os dados do sistema em JSON
-- Métricas de backups enterprise (sucesso, tamanho, duração)
+  - **ðŸ“¤ Exportar Tudo**: Exporta todos os dados do sistema em JSON
+- MÃ©tricas de backups enterprise (sucesso, tamanho, duraÃ§Ã£o)
 
-**💡 Importante**: As "Ações Rápidas" fazem backup da **estrutura geral do sistema** (não de propriedades específicas). Use para:
-- Backup antes de atualizações de código
-- Salvar estado do sistema antes de mudanças estruturais
-- Criar pontos de restauração para rollback
+**ðŸ’¡ Importante**: As "AÃ§Ãµes RÃ¡pidas" fazem backup da **estrutura geral do sistema** (nÃ£o de propriedades especÃ­ficas). Use para:
+- Backup antes de atualizaÃ§Ãµes de cÃ³digo
+- Salvar estado do sistema antes de mudanÃ§as estruturais
+- Criar pontos de restauraÃ§Ã£o para rollback
 
 ### 2. Backup & Restore (Tradicional)
 
 #### Tipos de Backup:
 
-**🗄️ Backup Completo**
+**ðŸ—„ï¸ Backup Completo**
 - Copia TODOS os dados do sistema
-- Usuários, reservas, inventário, configurações
-- Recomendado antes de grandes mudanças
-- Tamanho maior, mas garante restauração completa
+- UsuÃ¡rios, reservas, inventÃ¡rio, configuraÃ§Ãµes
+- Recomendado antes de grandes mudanÃ§as
+- Tamanho maior, mas garante restauraÃ§Ã£o completa
 
-**📦 Backup Incremental**
-- Copia apenas dados ALTERADOS desde o último backup
-- Mais rápido e ocupa menos espaço
+**ðŸ“¦ Backup Incremental**
+- Copia apenas dados ALTERADOS desde o Ãºltimo backup
+- Mais rÃ¡pido e ocupa menos espaÃ§o
 - Ideal para backups frequentes
 - Requer backup completo como base
 
-**🎯 Backup Seletivo**
-- Escolher módulos específicos para backup
+**ðŸŽ¯ Backup Seletivo**
+- Escolher mÃ³dulos especÃ­ficos para backup
 - Flexibilidade total
 
-#### Opções de Backup:
-- ✅ Incluir anexos
-- ✅ Comprimir backup (gzip real via CompressionStream API)
-- ✅ Criptografar backup (AES-256-GCM via Web Crypto API)
+#### OpÃ§Ãµes de Backup:
+- âœ… Incluir anexos
+- âœ… Comprimir backup (gzip real via CompressionStream API)
+- âœ… Criptografar backup (AES-256-GCM via Web Crypto API)
 
-#### Restauração:
+#### RestauraÃ§Ã£o:
 
 **Completa**: Sobrescreve todos os dados atuais
 **Mesclar**: Preserva dados novos, adiciona apenas ausentes
-**Seletiva**: Escolhe quais módulos restaurar
+**Seletiva**: Escolhe quais mÃ³dulos restaurar
 
-**⚠️ ATENÇÃO**: O sistema cria backup automático de segurança antes de qualquer restauração!
+**âš ï¸ ATENÃ‡ÃƒO**: O sistema cria backup automÃ¡tico de seguranÃ§a antes de qualquer restauraÃ§Ã£o!
 
 ---
 
-### 3. 🏨 Property Backups (Enterprise Multi-Tenant)
+### 3. ðŸ¨ Property Backups (Enterprise Multi-Tenant)
 
 Sistema de backups isolados por propriedade, ideal para ambiente multi-tenant.
 
-#### Características:
+#### CaracterÃ­sticas:
 
 **Isolamento Total**
-- Cada propriedade tem seus próprios backups
+- Cada propriedade tem seus prÃ³prios backups
 - Dados completamente separados
-- Zero risco de contaminação entre propriedades
+- Zero risco de contaminaÃ§Ã£o entre propriedades
 
 **Backups por Propriedade**
-- **Full Backup**: Backup completo de uma propriedade específica
-  - Usuários da propriedade
-  - Configurações específicas
+- **Full Backup**: Backup completo de uma propriedade especÃ­fica
+  - UsuÃ¡rios da propriedade
+  - ConfiguraÃ§Ãµes especÃ­ficas
   - Assets e dados
   - Base para backups incrementais
 
-- **Incremental Backup**: Apenas mudanças desde o último backup
+- **Incremental Backup**: Apenas mudanÃ§as desde o Ãºltimo backup
   - Referencia um backup full como pai
-  - Economia de espaço
-  - Restauração rápida
+  - Economia de espaÃ§o
+  - RestauraÃ§Ã£o rÃ¡pida
 
-**Métricas em Tempo Real**
+**MÃ©tricas em Tempo Real**
 - Total de backups
-- Backups nas últimas 24h
+- Backups nas Ãºltimas 24h
 - Taxa de sucesso
-- Tempo médio de backup
-- Tamanho médio dos backups
+- Tempo mÃ©dio de backup
+- Tamanho mÃ©dio dos backups
 - Storage total utilizado
 
-**Catálogo de Backups**
-- Visualização por propriedade
+**CatÃ¡logo de Backups**
+- VisualizaÃ§Ã£o por propriedade
 - Filtros: All / Full / Incremental
 - Busca por nome de propriedade
-- Ações: Ver detalhes, Restaurar, Excluir
+- AÃ§Ãµes: Ver detalhes, Restaurar, Excluir
 
-**Restore Wizard (Assistente de Restauração)**
+**Restore Wizard (Assistente de RestauraÃ§Ã£o)**
 
 *Step 1 - Select Scope:*
 - **Full**: Substitui tudo
-- **Selective**: Escolhe módulos (Users, Properties, Settings, Assets)
+- **Selective**: Escolhe mÃ³dulos (Users, Properties, Settings, Assets)
 - **Merge**: Combina dados existentes
 
 *Step 2 - Restore Point:*
@@ -155,78 +155,78 @@ Sistema de backups isolados por propriedade, ideal para ambiente multi-tenant.
 - Mostra metadata completa
 
 *Step 3 - Validate & Execute:*
-- ✅ Validar integridade antes de restaurar
-- ✅ Criar backup de segurança antes de restaurar
-- Execução com confirmação
+- âœ… Validar integridade antes de restaurar
+- âœ… Criar backup de seguranÃ§a antes de restaurar
+- ExecuÃ§Ã£o com confirmaÃ§Ã£o
 
 **Agendamento de Backups**
-- Configurar backups automáticos por propriedade
+- Configurar backups automÃ¡ticos por propriedade
 - Formato cron (ex: `0 2 * * *` = 2am diariamente)
-- Tipos: Incremental (diário) ou Full (semanal)
-- Política de retenção configurável:
-  - Dias (diários)
+- Tipos: Incremental (diÃ¡rio) ou Full (semanal)
+- PolÃ­tica de retenÃ§Ã£o configurÃ¡vel:
+  - Dias (diÃ¡rios)
   - Semanas (semanais)
   - Meses (mensais)
-- Scheduler automático executa em background
+- Scheduler automÃ¡tico executa em background
 
 **Compression & Encryption**
-- ✅ Compressão real usando **CompressionStream API** (gzip)
-  - Logs mostram ratio de compressão real
-  - Redução típica de 60-80% no tamanho
+- âœ… CompressÃ£o real usando **CompressionStream API** (gzip)
+  - Logs mostram ratio de compressÃ£o real
+  - ReduÃ§Ã£o tÃ­pica de 60-80% no tamanho
   - Feature detection com fallback simulado
   
-- ✅ Criptografia real usando **Web Crypto API**
+- âœ… Criptografia real usando **Web Crypto API**
   - Algoritmo: AES-256-GCM
   - Key generation: `crypto.subtle.generateKey`
   - Keys armazenadas como JWK no localStorage
-  - IV (Initialization Vector) único por backup
+  - IV (Initialization Vector) Ãºnico por backup
   - Feature detection com fallback simulado
 
 **Feature Toggles**
-- `enterprise_compress_enabled` - Habilitar/desabilitar compressão
+- `enterprise_compress_enabled` - Habilitar/desabilitar compressÃ£o
 - `enterprise_encrypt_enabled` - Habilitar/desabilitar criptografia
-- Configuráveis via UI ou localStorage
+- ConfigurÃ¡veis via UI ou localStorage
 
 ---
 
-### 4. 🏗️ General Structure Backups
+### 4. ðŸ—ï¸ General Structure Backups
 
-Sistema de backup da estrutura geral do sistema, permitindo **rollback de atualizações**.
+Sistema de backup da estrutura geral do sistema, permitindo **rollback de atualizaÃ§Ãµes**.
 
-#### O que é Capturado:
+#### O que Ã© Capturado:
 
-**📄 Stylesheets**
-- Conteúdo completo de tags `<style>` inline
+**ðŸ“„ Stylesheets**
+- ConteÃºdo completo de tags `<style>` inline
 - URLs de arquivos CSS externos (`<link>`)
-- Media queries e configurações
+- Media queries e configuraÃ§Ãµes
 
-**📜 Scripts**
+**ðŸ“œ Scripts**
 - Lista de todos os scripts carregados
 - Metadata (async, defer, type)
 - Preview de scripts inline
-- Rastreamento de módulos críticos (app.js, master-control.js, etc.)
+- Rastreamento de mÃ³dulos crÃ­ticos (app.js, master-control.js, etc.)
 
-**🌐 i18n (Internacionalização)**
-- Todas as traduções cacheadas
+**ðŸŒ i18n (InternacionalizaÃ§Ã£o)**
+- Todas as traduÃ§Ãµes cacheadas
 - Arquivos enterprise (pt/en/es)
 - Arquivo principal i18n.json
 - Locale atual
 
-**🎨 Templates**
+**ðŸŽ¨ Templates**
 - Estrutura DOM principal
 - Meta tags
 - Classes do body
 - Data attributes
-- Identificação de componentes (tabs, modals, cards)
+- IdentificaÃ§Ã£o de componentes (tabs, modals, cards)
 
-**🔄 Migrations**
-- Histórico de migrações aplicadas
-- Versão do schema atual
-- Rastreamento de mudanças de estrutura
+**ðŸ”„ Migrations**
+- HistÃ³rico de migraÃ§Ãµes aplicadas
+- VersÃ£o do schema atual
+- Rastreamento de mudanÃ§as de estrutura
 
-**🖼️ Shared Assets**
+**ðŸ–¼ï¸ Shared Assets**
 - Logos detectados
-- Ícones carregados
+- Ãcones carregados
 - Imagens utilizadas
 - Fontes (@font-face)
 
@@ -234,164 +234,164 @@ Sistema de backup da estrutura geral do sistema, permitindo **rollback de atuali
 
 **Criar Backup de Estrutura**
 - Selecionar componentes para backup
-- Tag de versão customizável (ex: `v2.1.0`, `pre-hotfix-2024`)
-- Descrição opcional
-- Compressão e criptografia disponíveis
+- Tag de versÃ£o customizÃ¡vel (ex: `v2.1.0`, `pre-hotfix-2024`)
+- DescriÃ§Ã£o opcional
+- CompressÃ£o e criptografia disponÃ­veis
 
 **Rollback/Restore**
-- ✅ Backup de segurança automático antes do rollback
-- ✅ Validação de integridade (checksums)
-- ✅ Restauração seletiva de componentes
-- ✅ Recarga automática da página após restore
-- Ideal para reverter atualizações problemáticas
+- âœ… Backup de seguranÃ§a automÃ¡tico antes do rollback
+- âœ… ValidaÃ§Ã£o de integridade (checksums)
+- âœ… RestauraÃ§Ã£o seletiva de componentes
+- âœ… Recarga automÃ¡tica da pÃ¡gina apÃ³s restore
+- Ideal para reverter atualizaÃ§Ãµes problemÃ¡ticas
 
 **Versionamento**
-- Histórico completo de versões
-- Comparação entre versões
-- Identificação de mudanças
+- HistÃ³rico completo de versÃµes
+- ComparaÃ§Ã£o entre versÃµes
+- IdentificaÃ§Ã£o de mudanÃ§as
 
-**Métricas**
+**MÃ©tricas**
 - Total de backups de estrutura
-- Data do último backup
+- Data do Ãºltimo backup
 - Tamanho total utilizado
-- Contagem de componentes únicos
+- Contagem de componentes Ãºnicos
 
 #### Casos de Uso:
 
-1. **Antes de Atualização**:
+1. **Antes de AtualizaÃ§Ã£o**:
    ```
    - Criar backup: "v2.0.5 - Antes de update i18n"
-   - Fazer atualização
+   - Fazer atualizaÃ§Ã£o
    - Se der problema, restore do backup
    ```
 
 2. **Deploy de Hotfix**:
    ```
-   - Criar backup: "v2.1.0 - Antes de hotfix crítico"
+   - Criar backup: "v2.1.0 - Antes de hotfix crÃ­tico"
    - Aplicar hotfix
    - Testar
    - Se falhar, rollback imediato
    ```
 
-3. **Refatoração**:
+3. **RefatoraÃ§Ã£o**:
    ```
    - Criar backup: "v2.2.0 - Antes de refactor master-control"
-   - Refatorar código
+   - Refatorar cÃ³digo
    - Backup garante volta ao estado anterior
    ```
 
 ---
 
-### 5. 🚀 Releases & Rollback
+### 5. ðŸš€ Releases & Rollback
 
-Sistema de controle de versões e releases com capacidade de rollback.
+Sistema de controle de versÃµes e releases com capacidade de rollback.
 
 #### Funcionalidades:
-- Criar releases com tag e descrição
+- Criar releases com tag e descriÃ§Ã£o
 - Marcar releases como stable/beta/alpha
-- Histórico completo de releases
+- HistÃ³rico completo de releases
 - Rollback para qualquer release anterior
-- Comparação entre releases
-- Changelog automático
+- ComparaÃ§Ã£o entre releases
+- Changelog automÃ¡tico
 
 ---
 
-### 6. Gestão de Usuários
+### 6. GestÃ£o de UsuÃ¡rios
 
-#### Níveis de Acesso:
-1. **Master** 🔐 - Super Admin (acesso total)
-2. **Admin** 👨‍💼 - Administrador (gerenciamento geral)
-3. **Manager** 👔 - Gerente (acesso a múltiplas propriedades)
-4. **User** 👤 - Usuário básico (acesso limitado)
+#### NÃ­veis de Acesso:
+1. **Master** ðŸ” - Super Admin (acesso total)
+2. **Admin** ðŸ‘¨â€ðŸ’¼ - Administrador (gerenciamento geral)
+3. **Manager** ðŸ‘” - Gerente (acesso a mÃºltiplas propriedades)
+4. **User** ðŸ‘¤ - UsuÃ¡rio bÃ¡sico (acesso limitado)
 
-#### Ações Disponíveis:
-- ➕ Criar novos usuários
-- 👁️ Visualizar detalhes
-- ✏️ Editar informações
-- 🔒 Suspender acesso
-- ✅ Ativar usuários
-- 🗑️ Deletar usuários
+#### AÃ§Ãµes DisponÃ­veis:
+- âž• Criar novos usuÃ¡rios
+- ðŸ‘ï¸ Visualizar detalhes
+- âœï¸ Editar informaÃ§Ãµes
+- ðŸ”’ Suspender acesso
+- âœ… Ativar usuÃ¡rios
+- ðŸ—‘ï¸ Deletar usuÃ¡rios
 
-#### Status de Usuário:
+#### Status de UsuÃ¡rio:
 - **Ativo**: Pode acessar o sistema
-- **Pendente**: Aguardando aprovação
+- **Pendente**: Aguardando aprovaÃ§Ã£o
 - **Suspenso**: Acesso temporariamente bloqueado
 
 ---
 
-### 7. 📝 Logs & Auditoria (Aprimorado)
+### 7. ðŸ“ Logs & Auditoria (Aprimorado)
 
-Sistema completo de auditoria com filtros avançados.
+Sistema completo de auditoria com filtros avanÃ§ados.
 
 #### Tipos de Log:
-- 🔐 **Autenticação**: Logins, logouts, tentativas falhas
-- 💾 **Backup**: Criação e restauração de backups
-- 🏨 **Property Backup**: Backups por propriedade (tenant_backup)
-- 🏗️ **General Backup**: Backups de estrutura geral
-- ♻️ **Restore**: Operações de restauração
-- 👤 **Usuário**: Criação, edição, exclusão de usuários
-- ⚙️ **Sistema**: Alterações de configuração
-- 🚀 **Release**: Criação e rollback de releases
+- ðŸ” **AutenticaÃ§Ã£o**: Logins, logouts, tentativas falhas
+- ðŸ’¾ **Backup**: CriaÃ§Ã£o e restauraÃ§Ã£o de backups
+- ðŸ¨ **Property Backup**: Backups por propriedade (tenant_backup)
+- ðŸ—ï¸ **General Backup**: Backups de estrutura geral
+- â™»ï¸ **Restore**: OperaÃ§Ãµes de restauraÃ§Ã£o
+- ðŸ‘¤ **UsuÃ¡rio**: CriaÃ§Ã£o, ediÃ§Ã£o, exclusÃ£o de usuÃ¡rios
+- âš™ï¸ **Sistema**: AlteraÃ§Ãµes de configuraÃ§Ã£o
+- ðŸš€ **Release**: CriaÃ§Ã£o e rollback de releases
 
-#### Níveis de Log:
-- **Critical**: Erros críticos que requerem atenção imediata
+#### NÃ­veis de Log:
+- **Critical**: Erros crÃ­ticos que requerem atenÃ§Ã£o imediata
 - **Error**: Erros que afetam funcionalidade
-- **Warning**: Avisos de situações anormais
-- **Info**: Informações de operações normais
+- **Warning**: Avisos de situaÃ§Ãµes anormais
+- **Info**: InformaÃ§Ãµes de operaÃ§Ãµes normais
 
-#### Filtros Avançados:
+#### Filtros AvanÃ§ados:
 - **Por Tipo**: Selecione um ou mais tipos de log
-- **Por Nível**: Filtre por severidade
-- **Por Data**: Range de datas (início e fim)
+- **Por NÃ­vel**: Filtre por severidade
+- **Por Data**: Range de datas (inÃ­cio e fim)
 - **Busca**: Pesquisa de texto livre
 
 #### Export de Logs:
-- ✅ Exportar logs filtrados em JSON
+- âœ… Exportar logs filtrados em JSON
 - Download direto do navegador
 - Inclui todos os metadados e detalhes
-- Útil para análise externa e compliance
+- Ãštil para anÃ¡lise externa e compliance
 
 #### Backend Integration:
-- Preferência por `enterpriseBackup.getAuditLog()` quando disponível
+- PreferÃªncia por `enterpriseBackup.getAuditLog()` quando disponÃ­vel
 - Filtros aplicados no backend para performance
-- Fallback para logs tradicionais se enterprise não disponível
+- Fallback para logs tradicionais se enterprise nÃ£o disponÃ­vel
 
----### 8. Configurações do Sistema
+---### 8. ConfiguraÃ§Ãµes do Sistema
 
-#### Backup Automático:
+#### Backup AutomÃ¡tico:
 - **Desabilitado**: Manual apenas
-- **Diário**: Backup incremental todo dia
+- **DiÃ¡rio**: Backup incremental todo dia
 - **Semanal**: Backup incremental toda semana
-- **Mensal**: Backup incremental todo mês
+- **Mensal**: Backup incremental todo mÃªs
 
-#### Retenção de Backups:
+#### RetenÃ§Ã£o de Backups:
 - Define por quantos dias manter backups antigos
-- Padrão: 30 dias
-- Após esse período, backups antigos são automaticamente removidos
+- PadrÃ£o: 30 dias
+- ApÃ³s esse perÃ­odo, backups antigos sÃ£o automaticamente removidos
 
-#### Versionamento Automático:
-- **Habilitado**: Cria versões automaticamente após mudanças significativas
-- **Desabilitado**: Apenas versões manuais (marcos)
+#### Versionamento AutomÃ¡tico:
+- **Habilitado**: Cria versÃµes automaticamente apÃ³s mudanÃ§as significativas
+- **Desabilitado**: Apenas versÃµes manuais (marcos)
 
-#### Nível de Log:
-- **Erro**: Apenas erros críticos
+#### NÃ­vel de Log:
+- **Erro**: Apenas erros crÃ­ticos
 - **Aviso**: Erros + avisos
-- **Info**: Erros + avisos + informações
+- **Info**: Erros + avisos + informaÃ§Ãµes
 - **Debug**: Tudo (mais detalhado, para desenvolvimento)
 
 #### Compression & Encryption (Enterprise):
-- **Compression**: Habilitar compressão gzip real nos backups
+- **Compression**: Habilitar compressÃ£o gzip real nos backups
 - **Encryption**: Habilitar criptografia AES-256-GCM nos backups
 - Feature toggles persistidos no localStorage
 
 ---
 
-## 🌐 Internacionalização (i18n)
+## ðŸŒ InternacionalizaÃ§Ã£o (i18n)
 
 ### Idiomas Suportados:
-- 🇧🇷 **Português** (pt) - Idioma padrão
-- 🇺🇸 **Inglês** (en)
-- 🇪🇸 **Espanhol** (es)
+- ðŸ‡§ðŸ‡· **PortuguÃªs** (pt) - Idioma padrÃ£o
+- ðŸ‡ºðŸ‡¸ **InglÃªs** (en)
+- ðŸ‡ªðŸ‡¸ **Espanhol** (es)
 
 ### Sistema i18n:
 - **Deep Merge**: Combina i18n.json principal com arquivos enterprise
@@ -400,8 +400,8 @@ Sistema completo de auditoria com filtros avançados.
   - `i18n-enterprise-en.json`
   - `i18n-enterprise-es.json`
 - **Carregamento**: Fetch + merge em runtime
-- **Fallback**: Se idioma não disponível, volta para pt
-- **data-i18n**: Atributos HTML para tradução automática
+- **Fallback**: Se idioma nÃ£o disponÃ­vel, volta para pt
+- **data-i18n**: Atributos HTML para traduÃ§Ã£o automÃ¡tica
 
 ### Estrutura de Chaves:
 
@@ -416,10 +416,10 @@ Sistema completo de auditoria com filtros avançados.
     "propertyBackups": {
       "metricsTitle": "Per-Property Backup Metrics",
       "totalBackups": "Total Backups",
-      // ... mais traduções
+      // ... mais traduÃ§Ãµes
     },
     "generalBackups": {
-      // ... traduções de estrutura geral
+      // ... traduÃ§Ãµes de estrutura geral
     }
   }
 }
@@ -427,152 +427,152 @@ Sistema completo de auditoria com filtros avançados.
 
 ---
 
-## 🔧 Funcionalidades de Manutenção
+## ðŸ”§ Funcionalidades de ManutenÃ§Ã£o
 
 ### Limpeza de Cache
-- Remove dados temporários
+- Remove dados temporÃ¡rios
 - Otimiza performance
-- Não afeta dados permanentes
+- NÃ£o afeta dados permanentes
 
 ### Otimizar Banco
 - Reorganiza dados no LocalStorage
 - Melhora velocidade de acesso
-- Remove fragmentação
+- Remove fragmentaÃ§Ã£o
 
 ### Reparar Integridade
-- Verifica consistência dos dados
-- Corrige referências quebradas
+- Verifica consistÃªncia dos dados
+- Corrige referÃªncias quebradas
 - Valida estrutura de dados
 
 ### Reset Sistema
-- ⚠️ **ATENÇÃO MÁXIMA!**
+- âš ï¸ **ATENÃ‡ÃƒO MÃXIMA!**
 - Apaga TODOS os dados
 - Volta ao estado inicial
-- Requer dupla confirmação
+- Requer dupla confirmaÃ§Ã£o
 - Use apenas em casos extremos!
 
 ---
 
-## 💾 Armazenamento
+## ðŸ’¾ Armazenamento
 
 ### Monitoramento:
 - Exibe uso atual do LocalStorage
-- Mostra espaço disponível
+- Mostra espaÃ§o disponÃ­vel
 - Barra visual de progresso
-- Alerta quando próximo do limite
+- Alerta quando prÃ³ximo do limite
 
 ### Limites:
-- LocalStorage: ~5MB (típico)
-- Backups são comprimidos para economizar espaço
+- LocalStorage: ~5MB (tÃ­pico)
+- Backups sÃ£o comprimidos para economizar espaÃ§o
 - Sistema alerta quando atingir 80% de uso
 
 ---
 
-## 🎯 Fluxo de Trabalho Recomendado
+## ðŸŽ¯ Fluxo de Trabalho Recomendado
 
 ### Durante Desenvolvimento:
 
 1. **Criar Backup de Estrutura Geral**
    - Antes de iniciar trabalho importante
-   - Tag de versão: `v2.0.0-pre-feature-X`
-   - Descrição clara do estado atual
-   - Selecionar componentes críticos
+   - Tag de versÃ£o: `v2.0.0-pre-feature-X`
+   - DescriÃ§Ã£o clara do estado atual
+   - Selecionar componentes crÃ­ticos
 
 2. **Trabalhar Normalmente**
-   - Fazer alterações necessárias
+   - Fazer alteraÃ§Ãµes necessÃ¡rias
    - Sistema registra tudo em logs de auditoria
 
-3. **Criar Backups Intermediários**
-   - Property backups para propriedades específicas
-   - General backups antes de mudanças estruturais
-   - "v2.0.1 - Antes de refatoração do módulo X"
+3. **Criar Backups IntermediÃ¡rios**
+   - Property backups para propriedades especÃ­ficas
+   - General backups antes de mudanÃ§as estruturais
+   - "v2.0.1 - Antes de refatoraÃ§Ã£o do mÃ³dulo X"
 
 4. **Backup Incremental por Propriedade**
-   - Configure agendamento automático
+   - Configure agendamento automÃ¡tico
    - Cron: `0 2 * * *` (2am diariamente)
-   - Retenção: 7 dias
-   - Garante segurança sem ocupar muito espaço
+   - RetenÃ§Ã£o: 7 dias
+   - Garante seguranÃ§a sem ocupar muito espaÃ§o
 
 5. **Backup Completo de Estrutura Semanal**
    - Crie backup geral toda semana
    - Todos os componentes selecionados
    - Download e armazenamento externo
-   - Segurança extra para rollback
+   - SeguranÃ§a extra para rollback
 
 6. **Habilitar Compression & Encryption**
-   - ✅ Marque "Compress" para reduzir tamanho (60-80%)
-   - ✅ Marque "Encrypt" para segurança adicional
+   - âœ… Marque "Compress" para reduzir tamanho (60-80%)
+   - âœ… Marque "Encrypt" para seguranÃ§a adicional
    - Chaves armazenadas automaticamente
 
-### Para Produção (Nuvem):
+### Para ProduÃ§Ã£o (Nuvem):
 
-1. **Backup Automático por Propriedade**
-   - Frequência: Diária (incremental)
-   - Frequência: Semanal (full)
-   - Retenção: 30 dias
+1. **Backup AutomÃ¡tico por Propriedade**
+   - FrequÃªncia: DiÃ¡ria (incremental)
+   - FrequÃªncia: Semanal (full)
+   - RetenÃ§Ã£o: 30 dias
 
 2. **Backup de Estrutura Geral**
    - Antes de cada deploy
-   - Tag: Número da versão/release
-   - Descrição: Changelog resumido
+   - Tag: NÃºmero da versÃ£o/release
+   - DescriÃ§Ã£o: Changelog resumido
 
 3. **Monitoramento de Logs**
    - Revisar logs de erro diariamente
    - Filtrar por tipo "error" e "critical"
-   - Configurar alertas para erros críticos
-   - Exportar logs para análise externa
+   - Configurar alertas para erros crÃ­ticos
+   - Exportar logs para anÃ¡lise externa
 
 4. **Armazenamento Externo**
    - Download de backups semanalmente
    - Armazenamento em cloud (S3, Azure, etc.)
-   - Criptografia obrigatória
-   - Retenção de longo prazo (1+ ano)
+   - Criptografia obrigatÃ³ria
+   - RetenÃ§Ã£o de longo prazo (1+ ano)
 
 5. **Releases e Rollback**
    - Criar release antes de deploy
    - Testar em staging
-   - Se der problema em produção: rollback imediato
+   - Se der problema em produÃ§Ã£o: rollback imediato
    - Backup de estrutura permite reverter tudo
 
 ---
 
-## � Segurança Avançada
+## ï¿½ SeguranÃ§a AvanÃ§ada
 
 ### Compression (CompressionStream API):
 
 **Como Funciona:**
 ```javascript
-// Compressão usando gzip nativo do browser
+// CompressÃ£o usando gzip nativo do browser
 const stream = new CompressionStream('gzip');
 const writer = stream.writable.getWriter();
 await writer.write(new TextEncoder().encode(jsonData));
 await writer.close();
-// Resultado: 60-80% de redução no tamanho
+// Resultado: 60-80% de reduÃ§Ã£o no tamanho
 ```
 
-**Benefícios:**
+**BenefÃ­cios:**
 - Reduz drasticamente o uso de storage
-- Mais backups no mesmo espaço
+- Mais backups no mesmo espaÃ§o
 - Performance: algoritmo nativo otimizado
-- Logs mostram ratio real de compressão
+- Logs mostram ratio real de compressÃ£o
 
 **Feature Detection:**
 - Detecta se browser suporta CompressionStream
-- Fallback para simulação se não suportado
+- Fallback para simulaÃ§Ã£o se nÃ£o suportado
 - Toggle pode ser desabilitado se causar problemas
 
 ### Encryption (Web Crypto API):
 
 **Como Funciona:**
 ```javascript
-// Geração de chave AES-256-GCM
+// GeraÃ§Ã£o de chave AES-256-GCM
 const key = await crypto.subtle.generateKey(
   { name: 'AES-GCM', length: 256 },
   true,  // extractable
   ['encrypt', 'decrypt']
 );
 
-// IV aleatório único por backup
+// IV aleatÃ³rio Ãºnico por backup
 const iv = crypto.getRandomValues(new Uint8Array(12));
 
 // Criptografia
@@ -583,52 +583,52 @@ const encrypted = await crypto.subtle.encrypt(
 );
 ```
 
-**Segurança:**
+**SeguranÃ§a:**
 - AES-256-GCM (Galois/Counter Mode)
-- IV único por backup (prevent replay attacks)
+- IV Ãºnico por backup (prevent replay attacks)
 - Keys armazenadas como JWK no localStorage
 - Key ID associado a cada backup
 
-**⚠️ IMPORTANTE:**
-- Keys no localStorage não é seguro para produção
-- Para produção: usar Key Management Service (AWS KMS, Azure Key Vault)
-- Implementação atual é demo/desenvolvimento
-- Em produção, keys devem estar em vault seguro
+**âš ï¸ IMPORTANTE:**
+- Keys no localStorage nÃ£o Ã© seguro para produÃ§Ã£o
+- Para produÃ§Ã£o: usar Key Management Service (AWS KMS, Azure Key Vault)
+- ImplementaÃ§Ã£o atual Ã© demo/desenvolvimento
+- Em produÃ§Ã£o, keys devem estar em vault seguro
 
-### Boas Práticas de Segurança:
+### Boas PrÃ¡ticas de SeguranÃ§a:
 
 1. **Trocar Senha Master Imediatamente**
    ```
-   - Acesse: Gestão de Usuários
-   - Edite o usuário "master"
-   - Defina senha forte e única
+   - Acesse: GestÃ£o de UsuÃ¡rios
+   - Edite o usuÃ¡rio "master"
+   - Defina senha forte e Ãºnica
    - Use gerenciador de senhas
    ```
 
 2. **Limitar Acesso Master**
    - Apenas 1-2 pessoas devem ter acesso master
-   - Admin já tem poder suficiente para 99% das tarefas
+   - Admin jÃ¡ tem poder suficiente para 99% das tarefas
    - Registrar quem tem acesso master
 
 3. **Habilitar Criptografia de Backup**
-   - Marque "🔒 Encrypt" ao criar backups
-   - Protege dados sensíveis
+   - Marque "ðŸ”’ Encrypt" ao criar backups
+   - Protege dados sensÃ­veis
    - Especialmente importante para backups exportados
 
 4. **Revisar Logs Regularmente**
    - Filtrar por tipo "error" e "critical"
    - Exportar logs mensalmente
    - Detectar atividades suspeitas
-   - Acompanhar mudanças importantes
+   - Acompanhar mudanÃ§as importantes
 
 5. **Fazer Download de Backups**
-   - Não confiar apenas no LocalStorage
+   - NÃ£o confiar apenas no LocalStorage
    - Export JSON de backups importantes
-   - Armazenamento externo é essencial
+   - Armazenamento externo Ã© essencial
    - Manter versionamento de backups
 
 6. **Rotation de Keys**
-   - Em produção, implementar rotation de encryption keys
+   - Em produÃ§Ã£o, implementar rotation de encryption keys
    - Periodicidade: 90 dias
    - Re-encrypt backups antigos com nova key
    - Revogar keys antigas
@@ -636,85 +636,85 @@ const encrypted = await crypto.subtle.encrypt(
 7. **Audit Trail**
    - Logs registram TUDO
    - Quem fez, quando, o que
-   - Imutável (append-only)
+   - ImutÃ¡vel (append-only)
    - Exportar para sistema externo de compliance
 
 ---
 
-## 📊 Estatísticas e Métricas
+## ðŸ“Š EstatÃ­sticas e MÃ©tricas
 
 ### Dashboard mostra:
-- Total de usuários cadastrados
-- Usuários ativos no sistema
+- Total de usuÃ¡rios cadastrados
+- UsuÃ¡rios ativos no sistema
 - Total de propriedades gerenciadas
-- Total de backups disponíveis
-- Últimas 10 atividades do sistema
+- Total de backups disponÃ­veis
+- Ãšltimas 10 atividades do sistema
 
 ### Logs registram:
-- Quem fez a ação
+- Quem fez a aÃ§Ã£o
 - Quando foi feito
-- Que tipo de ação
-- Detalhes da operação
+- Que tipo de aÃ§Ã£o
+- Detalhes da operaÃ§Ã£o
 - Resultado (sucesso/erro)
 
 ---
 
-## 🚨 Troubleshooting
+## ðŸš¨ Troubleshooting
 
 ### "Backup muito grande"
-- Use backup incremental ao invés de completo
-- Habilite compressão
+- Use backup incremental ao invÃ©s de completo
+- Habilite compressÃ£o
 - Limpe logs antigos antes
 
-### "Espaço insuficiente"
-- Delete backups antigos desnecessários
+### "EspaÃ§o insuficiente"
+- Delete backups antigos desnecessÃ¡rios
 - Exporte e salve externamente
 - Limpe cache e otimize banco
 
-### "Restauração falhou"
+### "RestauraÃ§Ã£o falhou"
 - Verifique integridade do backup
-- Certifique-se que há espaço suficiente
-- Use opção "mesclar" ao invés de "completa"
+- Certifique-se que hÃ¡ espaÃ§o suficiente
+- Use opÃ§Ã£o "mesclar" ao invÃ©s de "completa"
 
-### "Não consigo criar usuário"
-- Verifique se username já existe
-- Confirme que email é único
-- Verifique espaço disponível
+### "NÃ£o consigo criar usuÃ¡rio"
+- Verifique se username jÃ¡ existe
+- Confirme que email Ã© Ãºnico
+- Verifique espaÃ§o disponÃ­vel
 
 ---
 
-## 📁 Estrutura de Dados
+## ðŸ“ Estrutura de Dados
 
 ### LocalStorage Keys:
 
 ```javascript
-// Usuários
-'iluxsys_users' - Array de todos os usuários
+// UsuÃ¡rios
+'nexefii_users' - Array de todos os usuÃ¡rios
 
-// Sessão
-'iluxsys_session' - Sessão atual do usuário
-'currentUser' - Usuário atual (Master Control Panel)
+// SessÃ£o
+'nexefii_session' - SessÃ£o atual do usuÃ¡rio
+'currentUser' - UsuÃ¡rio atual (Master Control Panel)
 
 // Master Control (Tradicional)
 'master_backups' - Array de backups criados
-'master_versions' - Array de versões/marcos
+'master_versions' - Array de versÃµes/marcos
 'master_logs' - Array de logs de auditoria
-'master_settings' - Configurações do sistema
+'master_settings' - ConfiguraÃ§Ãµes do sistema
 
 // Enterprise Backup System
 'enterprise_tenant_backups' - Map de backups por propriedade
 'enterprise_general_backups' - Array de backups de estrutura geral
-'enterprise_metrics' - Métricas de backup (sucesso, duração, tamanho)
+'enterprise_metrics' - MÃ©tricas de backup (sucesso, duraÃ§Ã£o, tamanho)
 'enterprise_audit_log' - Logs de auditoria enterprise
-'enterprise_restore_tests' - Histórico de validações de restore
+'enterprise_restore_tests' - HistÃ³rico de validaÃ§Ãµes de restore
 'enterprise_tenant_schedules' - Agendamentos de backup por propriedade
 
 // Feature Toggles
-'enterprise_compress_enabled' - Habilitar compressão real (true/false)
+'enterprise_compress_enabled' - Habilitar compressÃ£o real (true/false)
 'enterprise_encrypt_enabled' - Habilitar criptografia real (true/false)
 
 // Backups Individuais (Soft Delete)
-'enterprise_tenant_backup_{id}' - Backup específico com flag deleted
+'enterprise_tenant_backup_{id}' - Backup especÃ­fico com flag deleted
 'enterprise_general_backup_{id}' - Backup de estrutura com flag deleted
 
 // Encryption Keys (JWK format)
@@ -722,65 +722,65 @@ const encrypted = await crypto.subtle.encrypt(
 
 // i18n
 'i18n_locale' - Idioma atual (pt/en/es)
-'cached_i18n' - Traduções cacheadas
-'i18n_enterprise_pt' - Traduções enterprise Português
-'i18n_enterprise_en' - Traduções enterprise Inglês
-'i18n_enterprise_es' - Traduções enterprise Espanhol
+'cached_i18n' - TraduÃ§Ãµes cacheadas
+'i18n_enterprise_pt' - TraduÃ§Ãµes enterprise PortuguÃªs
+'i18n_enterprise_en' - TraduÃ§Ãµes enterprise InglÃªs
+'i18n_enterprise_es' - TraduÃ§Ãµes enterprise Espanhol
 'i18n_main' - Arquivo i18n.json principal
 
 // Migrations
-'migration_history' - Histórico de migrações aplicadas
-'schema_version' - Versão atual do schema
+'migration_history' - HistÃ³rico de migraÃ§Ãµes aplicadas
+'schema_version' - VersÃ£o atual do schema
 
 // Dados do Sistema
-'user_*' - Dados de usuários individuais
+'user_*' - Dados de usuÃ¡rios individuais
 'reservation_*' - Reservas
-'inventory_*' - Inventário de quartos
-'config_*' - Configurações diversas
+'inventory_*' - InventÃ¡rio de quartos
+'config_*' - ConfiguraÃ§Ãµes diversas
 ```
 
 ---
 
-## 🏗️ Arquitetura do Sistema
+## ðŸ—ï¸ Arquitetura do Sistema
 
 ### Componentes Principais:
 
 **1. master-control.html**
 - Interface principal do Master Control Panel
-- Estrutura de tabs e navegação
+- Estrutura de tabs e navegaÃ§Ã£o
 - Forms e tabelas de dados
 - Modals e wizards
 
 **2. master-control.js**
-- Controle principal da aplicação
+- Controle principal da aplicaÃ§Ã£o
 - Gerenciamento de tabs
 - Sistema de backup/restore tradicional
-- Gestão de usuários
+- GestÃ£o de usuÃ¡rios
 - Logs e auditoria
 
 **3. master-control-enterprise.js**
-- Extensão enterprise do Master Control
+- ExtensÃ£o enterprise do Master Control
 - Property Backups (multi-tenant)
 - General Structure Backups
 - Releases & Rollback
-- Integração com EnterpriseBackupSystem
+- IntegraÃ§Ã£o com EnterpriseBackupSystem
 
 **4. enterprise-backup-system.js**
 - Backend do sistema de backups enterprise
-- Algoritmos de compressão (CompressionStream API)
+- Algoritmos de compressÃ£o (CompressionStream API)
 - Algoritmos de criptografia (Web Crypto API)
-- Gerenciamento de métricas
+- Gerenciamento de mÃ©tricas
 - Sistema de auditoria
-- Validação de integridade (checksums)
+- ValidaÃ§Ã£o de integridade (checksums)
 
 **5. i18n.js**
-- Sistema de internacionalização
-- Deep merge de traduções
-- Carregamento dinâmico de idiomas
-- Aplicação automática de traduções
+- Sistema de internacionalizaÃ§Ã£o
+- Deep merge de traduÃ§Ãµes
+- Carregamento dinÃ¢mico de idiomas
+- AplicaÃ§Ã£o automÃ¡tica de traduÃ§Ãµes
 
 **6. i18n-enterprise-{pt,en,es}.json**
-- Traduções específicas dos módulos enterprise
+- TraduÃ§Ãµes especÃ­ficas dos mÃ³dulos enterprise
 - Separadas por idioma
 - Merged com i18n.json principal
 
@@ -788,193 +788,193 @@ const encrypted = await crypto.subtle.encrypt(
 
 ```
 UI (HTML) 
-  ↓
+  â†“
 master-control-enterprise.js
-  ↓
+  â†“
 enterprise-backup-system.js
-  ↓
+  â†“
 LocalStorage / Web APIs (Compression, Crypto)
 ```
 
 ### APIs Utilizadas:
 
 **CompressionStream API**
-- Compressão real usando gzip
+- CompressÃ£o real usando gzip
 - `new CompressionStream('gzip')`
 - Stream processing para grandes volumes
 - Feature detection com fallback
 
 **Web Crypto API**
-- `crypto.subtle.generateKey()` - Geração de chaves AES-256-GCM
+- `crypto.subtle.generateKey()` - GeraÃ§Ã£o de chaves AES-256-GCM
 - `crypto.subtle.encrypt()` - Criptografia de dados
 - `crypto.subtle.exportKey('jwk')` - Export de chaves
 - Random IV generation com `crypto.getRandomValues()`
 
 **LocalStorage API**
-- Persistência de dados
-- ~5MB de limite típico
-- Serialização JSON
+- PersistÃªncia de dados
+- ~5MB de limite tÃ­pico
+- SerializaÃ§Ã£o JSON
 - Soft delete pattern
 
 ---
 
-## 🔄 Versionamento de Código
+## ðŸ”„ Versionamento de CÃ³digo
 
-### Para desenvolvimento com controle de versões:
+### Para desenvolvimento com controle de versÃµes:
 
-1. **Antes de cada alteração importante**:
+1. **Antes de cada alteraÃ§Ã£o importante**:
    ```javascript
    // No Master Control Panel:
-   - Clique em "📸 Criar Marco (Snapshot)"
-   - Descreva a mudança: "v1.5.0 - Adicionado módulo de relatórios"
+   - Clique em "ðŸ“¸ Criar Marco (Snapshot)"
+   - Descreva a mudanÃ§a: "v1.5.0 - Adicionado mÃ³dulo de relatÃ³rios"
    - Sistema captura estado completo
    ```
 
 2. **Sistema registra automaticamente**:
    - Estrutura de arquivos
    - Total de registros
-   - Configurações ativas
-   - Timestamp e responsável
+   - ConfiguraÃ§Ãµes ativas
+   - Timestamp e responsÃ¡vel
 
-3. **Restaurar versão específica**:
-   - Vá para aba "🗂️ Versionamento"
+3. **Restaurar versÃ£o especÃ­fica**:
+   - VÃ¡ para aba "ðŸ—‚ï¸ Versionamento"
    - Escolha o marco desejado
-   - Clique em "♻️ Restaurar esta versão"
+   - Clique em "â™»ï¸ Restaurar esta versÃ£o"
 
 ---
 
-## 🌐 Preparação para Cloud
+## ðŸŒ PreparaÃ§Ã£o para Cloud
 
 ### Quando implementar em nuvem:
 
 1. **Backend Integration**:
    - Substituir LocalStorage por API REST
    - Implementar banco de dados real (PostgreSQL, MongoDB)
-   - Adicionar autenticação JWT
+   - Adicionar autenticaÃ§Ã£o JWT
 
 2. **Backup Cloud**:
    - Integrar com AWS S3 / Azure Blob / Google Cloud Storage
-   - Backups automáticos para cloud
-   - Retenção configurável
+   - Backups automÃ¡ticos para cloud
+   - RetenÃ§Ã£o configurÃ¡vel
 
 3. **Logs Centralizados**:
    - Integrar com ELK Stack / CloudWatch / DataDog
    - Alertas em tempo real
-   - Dashboards avançados
+   - Dashboards avanÃ§ados
 
 4. **Versionamento**:
-   - Integrar com Git para código
+   - Integrar com Git para cÃ³digo
    - Versionamento de schema de banco
-   - Migrations automáticas
+   - Migrations automÃ¡ticas
 
 ---
 
-## 📞 Suporte
+## ðŸ“ž Suporte
 
-Para dúvidas ou problemas com o Master Control Panel:
+Para dÃºvidas ou problemas com o Master Control Panel:
 
-- 📧 Email: master@iluxsys.com
-- 🌐 Documentação: [Em desenvolvimento]
-- 🐛 Report de Bugs: [Issue tracker]
+- ðŸ“§ Email: master@nexefii.com
+- ðŸŒ DocumentaÃ§Ã£o: [Em desenvolvimento]
+- ðŸ› Report de Bugs: [Issue tracker]
 
 ---
 
-## ⚖️ Licença e Uso
+## âš–ï¸ LicenÃ§a e Uso
 
-Este sistema é proprietário da IluxSys.
+Este sistema Ã© proprietÃ¡rio da nexefii.
 Uso restrito a administradores autorizados.
-Todos os logs são registrados e auditáveis.
+Todos os logs sÃ£o registrados e auditÃ¡veis.
 
 ---
 
-## 🎓 Treinamento
+## ðŸŽ“ Treinamento
 
-### Recomendado antes de usar em produção:
+### Recomendado antes de usar em produÃ§Ã£o:
 
 1. **Praticar em Desenvolvimento**
    - Criar backups de teste
-   - Experimentar restaurações
+   - Experimentar restauraÃ§Ãµes
    - Criar e restaurar marcos
 
-2. **Entender Consequências**
+2. **Entender ConsequÃªncias**
    - Saber quando usar cada tipo de backup
-   - Conhecer diferença entre restauração completa/mesclar
+   - Conhecer diferenÃ§a entre restauraÃ§Ã£o completa/mesclar
    - Entender sistema de logs
 
-3. **Preparar Plano de Recuperação**
+3. **Preparar Plano de RecuperaÃ§Ã£o**
    - Documentar processo de backup
-   - Definir responsáveis
-   - Estabelecer rotina de manutenção
+   - Definir responsÃ¡veis
+   - Estabelecer rotina de manutenÃ§Ã£o
 
 ---
 
-**Versão do Documento**: 2.0.0  
-**Última Atualização**: Novembro 2025  
-**Autor**: IluxSys Development Team
+**VersÃ£o do Documento**: 2.0.0  
+**Ãšltima AtualizaÃ§Ã£o**: Novembro 2025  
+**Autor**: nexefii Development Team
 
-## 📝 Changelog do Sistema
+## ðŸ“ Changelog do Sistema
 
 ### v2.0.0 (Novembro 2025) - Enterprise Edition
 
-**✨ Novas Funcionalidades:**
-- ✅ Property Backups (Multi-tenant isolado)
-- ✅ General Structure Backups (Rollback de atualizações)
-- ✅ Releases & Rollback
-- ✅ Compression real (CompressionStream API - gzip)
-- ✅ Encryption real (Web Crypto API - AES-256-GCM)
-- ✅ Audit Logs com filtros avançados (tipo, nível, data)
-- ✅ Export de logs em JSON
-- ✅ i18n completo (Português, Inglês, Espanhol)
-- ✅ Agendamento de backups com cron
-- ✅ Restore Wizard com 3 steps
-- ✅ Feature toggles para compression/encryption
-- ✅ Métricas em tempo real por propriedade
-- ✅ Soft delete pattern para backups
+**âœ¨ Novas Funcionalidades:**
+- âœ… Property Backups (Multi-tenant isolado)
+- âœ… General Structure Backups (Rollback de atualizaÃ§Ãµes)
+- âœ… Releases & Rollback
+- âœ… Compression real (CompressionStream API - gzip)
+- âœ… Encryption real (Web Crypto API - AES-256-GCM)
+- âœ… Audit Logs com filtros avanÃ§ados (tipo, nÃ­vel, data)
+- âœ… Export de logs em JSON
+- âœ… i18n completo (PortuguÃªs, InglÃªs, Espanhol)
+- âœ… Agendamento de backups com cron
+- âœ… Restore Wizard com 3 steps
+- âœ… Feature toggles para compression/encryption
+- âœ… MÃ©tricas em tempo real por propriedade
+- âœ… Soft delete pattern para backups
 
-**🔧 Melhorias:**
-- Renomeado: "Tenant Backups" → "Property Backups" (consistência terminológica)
+**ðŸ”§ Melhorias:**
+- Renomeado: "Tenant Backups" â†’ "Property Backups" (consistÃªncia terminolÃ³gica)
 - Deep merge para i18n (arquivos enterprise + main)
-- Checksums para validação de integridade
-- Backup de segurança automático antes de restore
-- Feature detection com fallback para APIs não suportadas
-- Logs mostram ratio real de compressão
+- Checksums para validaÃ§Ã£o de integridade
+- Backup de seguranÃ§a automÃ¡tico antes de restore
+- Feature detection com fallback para APIs nÃ£o suportadas
+- Logs mostram ratio real de compressÃ£o
 - Keys de criptografia armazenadas como JWK
 
-**📚 Documentação:**
+**ðŸ“š DocumentaÃ§Ã£o:**
 - README completamente atualizado
 - Exemplos de uso de todas as funcionalidades
-- Guias de segurança e boas práticas
+- Guias de seguranÃ§a e boas prÃ¡ticas
 - Arquitetura detalhada do sistema
-- Fluxo de trabalho para desenvolvimento e produção
+- Fluxo de trabalho para desenvolvimento e produÃ§Ã£o
 
-### v1.0.0 (Outubro 2025) - Lançamento Inicial
+### v1.0.0 (Outubro 2025) - LanÃ§amento Inicial
 
-**✨ Funcionalidades Iniciais:**
-- Dashboard com visão geral
+**âœ¨ Funcionalidades Iniciais:**
+- Dashboard com visÃ£o geral
 - Backup & Restore tradicional
-- Gestão de usuários
+- GestÃ£o de usuÃ¡rios
 - Sistema de logs
-- Versionamento básico
-- Configurações do sistema
+- Versionamento bÃ¡sico
+- ConfiguraÃ§Ãµes do sistema
 - Interface Master Control Panel
 
 ---
 
-## 🚀 Próximas Funcionalidades (Roadmap)
+## ðŸš€ PrÃ³ximas Funcionalidades (Roadmap)
 
 ### v2.1.0 (Planejado)
-- [ ] Backend API REST para persistência real
-- [ ] Integração com cloud storage (S3, Azure Blob, GCS)
+- [ ] Backend API REST para persistÃªncia real
+- [ ] IntegraÃ§Ã£o com cloud storage (S3, Azure Blob, GCS)
 - [ ] Key Management Service integration
-- [ ] Notificações em tempo real
+- [ ] NotificaÃ§Ãµes em tempo real
 - [ ] Webhooks para eventos de backup
-- [ ] Dashboard analytics avançado
-- [ ] Comparação visual entre backups
-- [ ] Diff viewer para mudanças
+- [ ] Dashboard analytics avanÃ§ado
+- [ ] ComparaÃ§Ã£o visual entre backups
+- [ ] Diff viewer para mudanÃ§as
 
 ### v2.2.0 (Planejado)
-- [ ] Backup incremental multi-nível
-- [ ] Deduplicação de dados
+- [ ] Backup incremental multi-nÃ­vel
+- [ ] DeduplicaÃ§Ã£o de dados
 - [ ] Backup streaming para grandes volumes
 - [ ] Restore point-in-time
 - [ ] Automated disaster recovery
@@ -982,7 +982,7 @@ Todos os logs são registrados e auditáveis.
 - [ ] Compliance reports (SOC2, GDPR)
 
 ### v3.0.0 (Futuro)
-- [ ] Machine Learning para predição de falhas
+- [ ] Machine Learning para prediÃ§Ã£o de falhas
 - [ ] Automated backup optimization
 - [ ] Smart retention policies
 - [ ] Backup verification automation

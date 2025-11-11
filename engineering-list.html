@@ -1,9 +1,9 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="pt-br">
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>iLuxSys · Lista de Quartos</title>
+    <title>nexefii Â· Lista de Quartos</title>
     <link rel="stylesheet" href="style.css">
     <script src="auth.js"></script>
     <script>
@@ -13,7 +13,7 @@
             }
             // Module permission check
             if (!((window.IluxAuth && IluxAuth.hasModuleAccess) ? IluxAuth.hasModuleAccess('engineering') : true)) {
-                alert('Você não tem permissão para acessar o módulo de Engenharia.');
+                alert('VocÃª nÃ£o tem permissÃ£o para acessar o mÃ³dulo de Engenharia.');
                 window.location.href = 'index.html';
             }
     </script>
@@ -124,13 +124,13 @@
     </div>
     <header>
         <div class="brand">
-            <img src="assets/logo_iluxsys.png">
+            <img src="assets/Nexefii_logo_3d-official.png" alt="Nexefii">
         </div>
         <div style="display:flex;align-items:center;gap:8px">
             <select id="langSelect" onchange="changeLanguage(this.value)" style="padding:6px;border-radius:8px;border:1px solid var(--line)">
-                <option value="pt">Português</option>
+                <option value="pt">PortuguÃªs</option>
                 <option value="en">English</option>
-                <option value="es">Español</option>
+                <option value="es">EspaÃ±ol</option>
             </select>
             <button class="btn ghost" onclick="window.close()">Fechar</button>
         </div>
@@ -156,8 +156,8 @@
                     <div class="stat-value" id="occupiedRooms">0</div>
                 </div>
                 <div class="stat-card">
-                    <div class="stat-label">Temperatura Média</div>
-                    <div class="stat-value" id="avgTemp">--°C</div>
+                    <div class="stat-label">Temperatura MÃ©dia</div>
+                    <div class="stat-value" id="avgTemp">--Â°C</div>
                 </div>
             </div>
 
@@ -166,19 +166,19 @@
                     <option value="hvac_on">HVAC Ligado</option>
                     <option value="hvac_cool">Resfriamento</option>
                     <option value="hvac_heat">Aquecimento</option>
-                    <option value="hvac_auto">Automático</option>
+                    <option value="hvac_auto">AutomÃ¡tico</option>
                     <option value="hvac_off">HVAC Desligado</option>
                 </select>
                 <select id="floorFilter" onchange="updateList()">
                     <option value="all">Todos os Andares</option>
-                    <option value="1">1º Andar</option>
-                    <option value="2">2º Andar</option>
-                    <option value="3">3º Andar</option>
+                    <option value="1">1Âº Andar</option>
+                    <option value="2">2Âº Andar</option>
+                    <option value="3">3Âº Andar</option>
                 </select>
                 <select id="sortBy" onchange="updateList()">
                     <option value="room">Ordenar por Quarto</option>
                     <option value="temp">Ordenar por Temperatura</option>
-                    <option value="update">Ordenar por Atualização</option>
+                    <option value="update">Ordenar por AtualizaÃ§Ã£o</option>
                 </select>
             </div>
 

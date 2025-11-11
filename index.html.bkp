@@ -1,0 +1,122 @@
+<!DOCTYPE html><html lang="pt-br"><head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="description" content="NEXEFII - Next-generation multi-tenant hospitality platform with PMS, EMS, and Engineering modules">
+<meta name="theme-color" content="#E42121">
+<link rel="manifest" href="manifest.json">
+<link rel="icon" type="image/png" href="assets/Nexefii_logo_3d-official.png">
+<link rel="apple-touch-icon" href="assets/Nexefii_logo_3d-official.png">
+<title id="page-title">NEXEFII · Portal de Hotéis</title>
+<link rel="stylesheet" href="style.css">
+<link rel="stylesheet" href="css/property-dashboard.css">
+<link rel="stylesheet" href="css/property-dashboard-pms.css">
+<!-- Early compatibility stubs so scripts that run immediately can reference these globals safely -->
+<script>
+  (function(){
+    try{
+      if (typeof window.NexefiiAuth === 'undefined') {
+        window.NexefiiAuth = window.NexefiiAuth || {
+          login: async (u,p)=>{ throw new Error('NexefiiAuth not loaded yet'); },
+          logout: ()=>{},
+          getSession: ()=>{ try { return JSON.parse(localStorage.getItem('nexefii_session')||'null'); } catch(e){return null;} },
+          isAuthenticated: ()=> !!localStorage.getItem('nexefii_session')
+        };
+      }
+      if (typeof window.IluxAuth === 'undefined') {
+        window.IluxAuth = window.IluxAuth || {
+          login: async (u,p)=>{ throw new Error('IluxAuth not loaded yet'); },
+          logout: ()=>{},
+          getSession: ()=>{ try { return JSON.parse(localStorage.getItem('nexefii_session')||localStorage.getItem('nexefii_session')||'null'); } catch(e){return null;} },
+          isAuthenticated: ()=> !!(localStorage.getItem('nexefii_session')||localStorage.getItem('nexefii_session'))
+        };
+      }
+      // Also ensure the legacy identifier names exist (some inline code references NexefiiAuth/IluxAuth directly)
+      // Ensure window-level objects exist and expose safe, no-throw identifiers
+      window.NexefiiAuth = window.NexefiiAuth || {
+        login: async (u,p)=>{ throw new Error('NexefiiAuth not loaded yet'); },
+        logout: ()=>{},
+        getSession: ()=>{ try { return JSON.parse(localStorage.getItem('nexefii_session')||'null'); } catch(e){return null;} },
+        isAuthenticated: ()=> !!localStorage.getItem('nexefii_session'),
+        setSession: (s)=>{ try { if(!s) return; localStorage.setItem('nexefii_session', JSON.stringify(s)); } catch(e){} }
+      };
+  // also declare simple global identifiers so older inline scripts that reference the bare name don't throw
+  // assign to the bare identifier (no `var`) so it becomes a true global reference
+  NexefiiAuth = window.NexefiiAuth;
+
+      window.IluxAuth = window.IluxAuth || {
+        login: async (u,p)=>{ throw new Error('IluxAuth not loaded yet'); },
+        logout: ()=>{},
+        getSession: ()=>{ try { return JSON.parse(localStorage.getItem('nexefii_session')||localStorage.getItem('nexefii_session')||'null'); } catch(e){return null;} },
+        isAuthenticated: ()=> !!(localStorage.getItem('nexefii_session')||localStorage.getItem('nexefii_session')),
+        getCurrentSession: function(){ return this.getSession(); },
+        setSession: function(s){ try { if(!s) return; localStorage.setItem('nexefii_session', JSON.stringify(s)); localStorage.setItem('nexefii_session', JSON.stringify(s)); } catch(e){} }
+      };
+  // same for the legacy bare identifier
+  IluxAuth = window.IluxAuth;
+    }catch(e){}
+  })();
+</script>
+<script src="nexefii-auth.js"></script>
+<script src="auth.js"></script>
+<script src="properties.js"></script>
+<script>
+
+  // Friendly auth check + inline actions (does NOT aggressively redirect to login)
+  // - Tries NexefiiAuth then IluxAuth safely
+  // - Exposes helper functions used by inline buttons
+  function safeIsAuthenticated() {
+      try {
+        return (window.NexefiiAuth && typeof window.NexefiiAuth.isAuthenticated === 'function')
+          ? window.NexefiiAuth.isAuthenticated()
+          : ((window.IluxAuth && typeof window.IluxAuth.isAuthenticated === 'function') ? window.IluxAuth.isAuthenticated() : false);
+      } catch (e) {
+        return false;
+      }
+  }
+
+  function openLogin(){ window.location.href = 'login.html'; }
+  function openShell(){ window.location.href = 'shell.html'; }
+
+  // Lightweight demo login: seeds a demo session in localStorage and redirects to shell
+  function demoLogin(){
+    try{
+      const demo = { email: 'demo@nexefii.com', name: 'Demo User', properties: [] };
+      localStorage.setItem('nexefii_session', JSON.stringify(demo));
+      // try to call auth adapters if available
+      if (window.NexefiiAuth && typeof NexefiiAuth.setSession === 'function') NexefiiAuth.setSession(demo);
+      if (window.IluxAuth && typeof IluxAuth.setSession === 'function') IluxAuth.setSession(demo);
+    } catch(e){}
+    window.location.href = 'shell.html';
+  }
+
+  // --- Compatibility shims ---
+  // Ensure global access to NexefiiAuth (some files reference window.NexefiiAuth or NexefiiAuth directly)
+  try {
+    if (typeof window.NexefiiAuth === 'undefined') {
+      if (typeof NexefiiAuth !== 'undefined') {
+        window.NexefiiAuth = NexefiiAuth;
+      } else {
+        // create a minimal graceful stub to avoid ReferenceError in templates
+        window.NexefiiAuth = {
+          login: async () => { throw new Error('NexefiiAuth not available'); },
+          logout: () => {},
+          getSession: () => { try { return JSON.parse(localStorage.getItem('nexefii_session')||'null'); } catch(e){return null;} },
+          isAuthenticated: () => !!localStorage.getItem('nexefii_session')
+        };
+      }
+    }
+  } catch (e) {
+    // swallow errors to avoid breaking page
+  }
+
+  // Ensure IluxAuth has getCurrentSession for compatibility with older callers
+  try {
+    if (typeof window.IluxAuth !== 'undefined') {
+      if (typeof IluxAuth.getCurrentSession !== 'function') {
+        IluxAuth.getCurrentSession = IluxAuth.getSession || function() {
+          try { return JSON.parse(localStorage.getItem('nexefii_session') || localStorage.getItem('nexefii_session') || 'null'); } catch(e){ return null; }
+        };
+      }
+    }
+  } catch(e){}
+
+</script>

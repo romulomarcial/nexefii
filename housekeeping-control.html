@@ -1,9 +1,9 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="pt-br">
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>iLuxSys · Controle de Governança</title>
+  <title>nexefii Â· Controle de GovernanÃ§a</title>
   <link rel="stylesheet" href="style.css">
   <script src="auth.js"></script>
   <script>
@@ -13,7 +13,7 @@
     }
     // Module permission check
     if (!((window.IluxAuth && IluxAuth.hasModuleAccess) ? IluxAuth.hasModuleAccess('housekeeping') : true)) {
-      alert('Você não tem permissão para acessar o módulo de Governança.');
+      alert('VocÃª nÃ£o tem permissÃ£o para acessar o mÃ³dulo de GovernanÃ§a.');
       window.location.href = 'index.html';
     }
   </script>
@@ -34,15 +34,15 @@
   <div id="loadingOverlay" class="loading-overlay">
     <div class="loading-spinner"></div>
   </div>
-  <header>
-    <div class="brand">
-      <img src="assets/logo_iluxsys.png">
-    </div>
+    <header>
+      <div class="brand">
+        <img src="assets/Nexefii_logo_3d-official.png" alt="Nexefii">
+      </div>
     <div style="display:flex;align-items:center;gap:8px">
       <select id="langSelect" onchange="changeLanguage(this.value)" style="padding:6px;border-radius:8px;border:1px solid var(--line)">
-        <option value="pt">Português</option>
+        <option value="pt">PortuguÃªs</option>
         <option value="en">English</option>
-        <option value="es">Español</option>
+        <option value="es">EspaÃ±ol</option>
       </select>
       <button class="btn ghost" onclick="window.close()">Fechar</button>
     </div>
@@ -56,9 +56,9 @@
             <label for="floorSelect" id="lbl-floor">Pavimento:</label>
             <select id="floorSelect" class="form-select" onchange="hkChangeFloor(this.value)">
               <option value="all" id="opt-all-floors">Todos os andares</option>
-              <option value="3">3º Andar</option>
-              <option value="2">2º Andar</option>
-              <option value="1">1º Andar</option>
+              <option value="3">3Âº Andar</option>
+              <option value="2">2Âº Andar</option>
+              <option value="1">1Âº Andar</option>
             </select>
           </div>
           <div style="display:flex;align-items:center;gap:8px">
@@ -86,7 +86,7 @@
       <div style="display:flex;justify-content:flex-end;align-items:center;gap:8px;margin-top:12px">
         <button class="btn" id="btn-prev" onclick="hkPrevPage()">Anterior</button>
         <div id="page-info" class="muted">1 / 1</div>
-        <button class="btn" id="btn-next" onclick="hkNextPage()">Próximo</button>
+        <button class="btn" id="btn-next" onclick="hkNextPage()">PrÃ³ximo</button>
       </div>
     </div>
   </div>
@@ -127,3 +127,4 @@
   </script>
 </body>
 </html>
+

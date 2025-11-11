@@ -1,0 +1,1852 @@
+[console:log] ✅ PropertyDatabase loaded successfully
+[console:log] ✅ Router.js loaded (v1.0.0)
+[console:log] ✅ PWA Installer loaded (Service Worker DISABLED for stability)
+[console:log] ✅ PWA Installer loaded
+[console:log] [Shell] Service Worker disabled for development
+[console:log] [Shell] Initializing NEXEFII Shell...
+[console:log] [Shell] Initializing i18n...
+[console:log] [I18n] Legacy monolithic loaded for seeding
+[console:log] [I18n] Segment loaded: common (pt)
+[console:log] [I18n] Segment loaded: wizard (pt)
+[console:log] [I18n] Segment loaded: dashboard (pt)
+[console:log] [I18n] Segment loaded: rooms (pt)
+[console:log] [I18n] Segment loaded: frontdesk (pt)
+[console:log] [I18n] Segment loaded: reservations (pt)
+[console:log] [I18n] Segment loaded: common (en)
+[console:log] [I18n] Segment loaded: wizard (en)
+[console:log] [I18n] Segment loaded: dashboard (en)
+[console:log] [I18n] Segment loaded: rooms (en)
+[console:log] [I18n] Segment loaded: frontdesk (en)
+[console:log] [I18n] Segment loaded: reservations (en)
+[console:log] [I18n] Segment loaded: common (es)
+[console:log] [I18n] Segment loaded: wizard (es)
+[console:log] [I18n] Segment loaded: dashboard (es)
+[console:log] [I18n] Segment loaded: rooms (es)
+[console:log] [I18n] Segment loaded: frontdesk (es)
+[console:log] [I18n] Segment loaded: reservations (es)
+[console:log] [I18n] Languages ready: JSHandle@array
+[console:log] [I18n] Applied translations to 4 elements
+[console:log] [Shell] i18n initialized
+[console:log] [Shell] User session loaded: demo@example.com
+[console:log] [Router] Router initialized JSHandle@object
+[console:log] [Router] Property resolver set JSHandle@object
+[console:log] [Router] Auth guard set JSHandle@object
+[console:log] [Router] Property access guard set JSHandle@object
+[console:log] [Router] Global middleware added JSHandle@object
+[console:log] [Router] Route registered JSHandle@object
+[console:log] [Router] Route registered JSHandle@object
+[console:log] [Router] Route registered JSHandle@object
+[console:log] [Router] Route registered JSHandle@object
+[console:log] [Router] Route registered JSHandle@object
+[console:log] [Router] Route registered JSHandle@object
+[console:log] [Router] Route registered JSHandle@object
+[console:log] [Router] Route matched JSHandle@object
+[console:log] [Shell] Auth guard: PASS
+[console:log] [Router] Router started JSHandle@object
+[console:log] [Shell] Shell initialized successfully
+[console:log] [I18n] Applied translations to 1 elements
+[console:log] [Shell] Loading page: home 
+[console:log] [Shell] Executing inline script: 
+  async function initHomePage() {
+    console.log('[Home] Initializing home page');
+    
+    // Subscribe to language changes if i18n is available
+    if (window.NEXEFII?.i18n) {
+      window.NEXEFII.i18n.onChange((lang) => {
+        console.log('[Home] Language changed to:', lang);
+        // Re-render the page to update translations
+        renderHomePage();
+      });
+    } else {
+      console.warn('[Home] I18n not available');
+    }
+    
+    // Initial render
+    renderHomePage();
+  }
+  
+  function renderHomePage() {
+    // Force reload user session from localStorage to pick up newly created properties
+    const sessionData = localStorage.getItem('nexefii_session');
+    if (sessionData) {
+      window.NEXEFII.currentUser = JSON.parse(sessionData);
+    }
+    
+    const user = window.NEXEFII.currentUser;
+    const container = document.getElementById('properties-container');
+    
+    if (!user || !user.properties || user.properties.length === 0) {
+      // Empty state
+      container.innerHTML = `
+        <div class="empty-state">
+          <div class="empty-state-icon">🏨</div>
+          <h2 class="empty-state-title" data-i18n="home.empty.title">Nenhuma Propriedade Encontrada</h2>
+          <p class="empty-state-message" data-i18n="home.empty.message">
+            Você ainda não tem propriedades cadastradas no sistema.
+          </p>
+          <a href="/wizard" class="btn-primary" data-router-link>
+            <span data-i18n="home.empty.cta">Adicionar Primeira Propriedade</span>
+          </a>
+        </div>
+      `;
+      if (window.NEXEFII?.i18n) window.NEXEFII.i18n.applyToDOM(container);
+      return;
+    }
+    
+    // Render properties grid
+    container.innerHTML = `
+      <div class="properties-grid">
+        ${user.properties.map(property => `
+          <a href="/property/${property.slug}/dashboard" class="property-card" data-router-link>
+            <div class="property-card-image-wrapper">
+              <img class="property-card-image" src="${property.image || '/assets/images/default-property.jpg'}" alt="${property.name}" loading="lazy" />
+            </div>
+            <div class="property-card-icon">${property.icon || '🏨'}</div>
+            <h3 class="property-card-title">${property.name}</h3>
+            <div class="property-card-modules">
+              ${(property.modules && property.modules.length > 0)
+                ? property.modules.map(m => `<span class='property-module-badge'>${m}</span>`).join(' ')
+                : '<span style="color:#999;" data-i18n="home.card.noModules">Nenhum módulo</span>'}
+            </div>
+            <p class="property-card-description">
+              ${property.description || '<span data-i18n="home.card.defaultDescription">Clique para acessar o painel de controle</span>'}
+            </p>
+            <div class="property-card-stats">
+              <div class="property-stat">
+                <div class="property-stat-value">${property.stats?.rooms || 0}</div>
+                <div class="property-stat-label" data-i18n="home.card.stats.rooms">Quartos</div>
+              </div>
+              <div class="property-stat">
+                <div class="property-stat-value">${property.stats?.occupancy || 0}%</div>
+                <div class="property-stat-label" data-i18n="home.card.stats.occupancy">Ocupação</div>
+              </div>
+              <div class="property-stat">
+                <div class="property-stat-value">${property.stats?.reservations || 0}</div>
+                <div class="property-stat-label" data-i18n="home.card.stats.reservations">Reservas</div>
+              </div>
+            </div>
+          </a>
+        `).join('')}
+      </div>
+    `;
+    if (window.NEXEFII?.i18n) window.NEXEFII.i18n.applyToDOM(container);
+    
+    console.log('[Home] Home page rendered with', user.properties.length, 'properties');
+  }
+
+[console:log] [Shell] Page loaded successfully: home
+[console:log] [Router] Route handler executed JSHandle@object
+[console:log] 💾 Install prompt available
+[console:info] Banner not shown: beforeinstallpromptevent.preventDefault() called. The page must call beforeinstallpromptevent.prompt() to show the banner.
+[console:log] [Router] Navigation requested JSHandle@object
+[console:log] [Router] Route matched JSHandle@object
+[console:log] [Shell] Auth guard: PASS
+[console:log] [Router] Route matched JSHandle@object
+[console:log] [Shell] Auth guard: PASS
+[console:log] [I18n] Applied translations to 1 elements
+[console:log] [I18n] Applied translations to 1 elements
+[console:log] [Shell] Loading page: wizard 
+[console:log] [Shell] Loading page: wizard 
+[console:log] [Shell] Executing inline script: 
+  // Initialize Wizard Manager (idempotent / safe re-entry)
+  // Ensure global WizardManager is available (loaded by shell)
+  if (typeof WizardManager === 'undefined') {
+    console.error('[Wizard] WizardManager not loaded');
+  }
+  // Reuse existing instance if present to avoid redeclaration errors on re-navigation
+  window.wizard = (window.wizard && window.wizard instanceof WizardManager)
+    ? window.wizard
+    : new WizardManager();
+  var wizard = window.wizard;
+
+  // ============================================================================
+  // Step Navigation
+  // ============================================================================
+
+  function updateUI() {
+    // Update progress steps
+    const steps = document.querySelectorAll('.progress-step');
+    steps.forEach((step, index) => {
+      const stepNum = index + 1;
+      const circle = step.querySelector('.step-circle');
+      const label = step.querySelector('.step-label');
+
+      if (stepNum < wizard.currentStep) {
+        circle.classList.add('completed');
+        circle.classList.remove('active');
+        circle.textContent = '✓';
+      } else if (stepNum === wizard.currentStep) {
+        circle.classList.add('active');
+        circle.classList.remove('completed');
+        circle.textContent = stepNum;
+        label.classList.add('active');
+      } else {
+        circle.classList.remove('active', 'completed');
+        circle.textContent = stepNum;
+        label.classList.remove('active');
+      }
+    });
+
+    // Update step content visibility
+    document.querySelectorAll('.step-content').forEach((content, index) => {
+      // Step order: 1 (basic), 2 (details), modules, 3 (rooms), 4 (settings), 5 (seed), 6 (review)
+      if (
+        (wizard.currentStep === 1 && content.id === 'step-1') ||
+        (wizard.currentStep === 2 && content.id === 'step-2') ||
+        (wizard.currentStep === 3 && content.id === 'step-modules') ||
+        (wizard.currentStep === 4 && content.id === 'step-3') ||
+        (wizard.currentStep === 5 && content.id === 'step-4') ||
+        (wizard.currentStep === 6 && content.id === 'step-5') ||
+        (wizard.currentStep === 7 && content.id === 'step-6')
+      ) {
+        content.classList.add('active');
+      } else {
+        content.classList.remove('active');
+      }
+    });
+
+    // Update buttons
+    const btnPrev = document.getElementById('btn-prev');
+    const btnNext = document.getElementById('btn-next');
+
+    btnPrev.style.display = wizard.isFirstStep() ? 'none' : 'block';
+    if (window.NEXEFII?.i18n) {
+      const label = wizard.isLastStep() ? window.NEXEFII.i18n.t('wizard.buttons.create') : window.NEXEFII.i18n.t('wizard.buttons.next');
+      // Keep arrow with text, but don't break data-i18n spans
+      const span = btnNext.querySelector('[data-i18n]');
+      if (span) span.textContent = label;
+    } else {
+      btnNext.textContent = wizard.isLastStep() ? 'Concluir →' : 'Próximo →';
+    }
+    btnNext.style.display = wizard.isLastStep() ? 'none' : 'block';
+
+    // Update step-specific UI
+    if (wizard.currentStep === 4) {
+      document.getElementById('total-rooms-needed').textContent = wizard.data.roomsCount || 0;
+      renderCategories();
+    }
+
+    if (wizard.currentStep === 7) {
+      updateReview();
+    }
+
+    // Apply translations after DOM updates
+    try { if (window.NEXEFII?.i18n) window.NEXEFII.i18n.applyToDOM(document.querySelector('.wizard-content')); } catch(e) { console.warn('[Wizard] i18n apply error', e); }
+  }
+
+  function nextStep() {
+    if (wizard.nextStep()) {
+      clearErrors();
+      updateUI();
+    } else {
+      showErrors();
+    }
+  }
+
+  function prevStep() {
+    if (wizard.prevStep()) {
+      clearErrors();
+      updateUI();
+    }
+  }
+
+  // Make functions globally accessible for onclick handlers
+  window.nextStep = nextStep;
+  window.prevStep = prevStep;
+  // Expose room template/category functions for inline onclick handlers
+  window.applyTemplate = applyTemplate;
+  window.addCategory = addCategory;
+  window.removeCategory = removeCategory;
+
+  // ============================================================================
+  // Form Handling
+  // ============================================================================
+
+  function clearErrors() {
+    document.querySelectorAll('.form-error').forEach(el => {
+      el.classList.remove('show');
+      el.textContent = '';
+    });
+    document.querySelectorAll('.form-input, .form-select').forEach(el => {
+      el.classList.remove('error');
+    });
+  }
+
+  function showErrors() {
+    const errors = wizard.getValidationErrors();
+    
+    for (const [field, message] of Object.entries(errors)) {
+      const errorEl = document.getElementById(`error-${field}`);
+      const inputEl = document.getElementById(field);
+      
+      if (errorEl) {
+        errorEl.textContent = message;
+        errorEl.classList.add('show');
+      }
+      
+      if (inputEl) {
+        inputEl.classList.add('error');
+      }
+    }
+  }
+
+  // Bind input events
+  ['name', 'description', 'type', 'roomsCount', 'city', 'state', 'street', 'zip', 'country', 
+   'currency', 'timezone', 'checkInTime', 'checkOutTime', 'language'].forEach(field => {
+    const el = document.getElementById(field);
+    if (el) {
+      el.addEventListener('input', (e) => {
+        const value = e.target.value;
+        
+        if (field === 'roomsCount') {
+          wizard.updateData(field, parseInt(value) || 0);
+        } else if (field.startsWith('address.')) {
+          wizard.updateData(`address.${field.split('.')[1]}`, value);
+        } else if (['city', 'state', 'street', 'zip', 'country'].includes(field)) {
+          wizard.updateData(`address.${field}`, value);
+        } else if (['currency', 'timezone', 'language', 'checkInTime', 'checkOutTime'].includes(field)) {
+          wizard.updateData(`settings.${field}`, value);
+        } else {
+          wizard.updateData(field, value);
+        }
+
+        // Auto-update slug field
+        if (field === 'name') {
+          document.getElementById('slug').value = wizard.data.slug;
+        }
+      });
+    }
+  });
+
+  // Icon selector
+  document.querySelectorAll('.icon-option').forEach(option => {
+    option.addEventListener('click', () => {
+      document.querySelectorAll('.icon-option').forEach(o => o.classList.remove('selected'));
+      option.classList.add('selected');
+      wizard.updateData('icon', option.dataset.icon);
+    });
+  });
+
+  // Seed data checkboxes
+  ['createSampleRooms', 'createSampleGuests', 'createSampleReservations'].forEach(field => {
+    const el = document.getElementById(field);
+    if (el) {
+      el.addEventListener('change', (e) => {
+        wizard.updateData(`seedData.${field}`, e.target.checked);
+      });
+    }
+  });
+
+  // Module selection checkboxes
+  const moduleIds = [
+    'module-ems', 'module-bms', 'module-automation', 'module-analytics',
+    'module-pms', 'module-iot', 'module-access', 'module-other'
+  ];
+  moduleIds.forEach(id => {
+    const el = document.getElementById(id);
+    if (el) {
+      el.addEventListener('change', () => {
+        wizard.data.modules = moduleIds
+          .filter(mid => document.getElementById(mid)?.checked)
+          .map(mid => document.getElementById(mid).value);
+        updateReview();
+      });
+    }
+  });
+
+  // ============================================================================
+  // Image Upload Management
+  // ============================================================================
+
+  // Tab switching
+  document.querySelectorAll('.image-tab').forEach(tab => {
+    tab.addEventListener('click', function() {
+      const targetTab = this.dataset.tab;
+      
+      // Update active tab button
+      document.querySelectorAll('.image-tab').forEach(t => t.classList.remove('active'));
+      this.classList.add('active');
+      
+      // Update active tab content
+      document.querySelectorAll('.image-tab-content').forEach(content => {
+        content.classList.remove('active');
+      });
+      document.getElementById(`${targetTab}-tab`).classList.add('active');
+    });
+  });
+
+  // Gallery image selection
+  document.querySelectorAll('.gallery-image').forEach(img => {
+    img.addEventListener('click', function() {
+      // Remove previous selection
+      document.querySelectorAll('.gallery-image').forEach(i => i.classList.remove('selected'));
+      
+      // Select this image
+      this.classList.add('selected');
+      
+      // Update hidden field
+      const imagePath = this.dataset.image;
+      document.getElementById('propertyImage').value = imagePath;
+      wizard.updateData('image', imagePath);
+    });
+  });
+
+  // File upload
+  const fileInput = document.getElementById('image-file');
+  const uploadPreview = document.getElementById('upload-preview');
+  const uploadLoading = document.getElementById('upload-loading');
+  const uploadArea = document.querySelector('.upload-area');
+  
+  // Function to process image file
+  function processImageFile(file) {
+    // Validate file size (5MB max)
+    if (file.size > 5 * 1024 * 1024) {
+      alert('❌ Arquivo muito grande! Máximo 5MB.');
+      return;
+    }
+    
+    // Validate file type
+    if (!file.type.startsWith('image/')) {
+      alert('❌ Por favor, selecione uma imagem válida.');
+      return;
+    }
+    
+    // Show loading
+    if (uploadLoading) {
+      uploadLoading.classList.add('show');
+      uploadPreview.classList.remove('show');
+    }
+    
+    // Read and display preview
+    const reader = new FileReader();
+    reader.onload = function(event) {
+      const imageData = event.target.result;
+      
+      // Hide loading, show preview
+      if (uploadLoading) uploadLoading.classList.remove('show');
+      
+      uploadPreview.innerHTML = `<img src="${imageData}" alt="Preview">`;
+      uploadPreview.classList.add('show');
+      
+      // Update hidden field
+      document.getElementById('propertyImage').value = imageData;
+      wizard.updateData('image', imageData);
+    };
+    reader.onerror = function() {
+      if (uploadLoading) uploadLoading.classList.remove('show');
+      alert('❌ Erro ao processar imagem.');
+    };
+    reader.readAsDataURL(file);
+  }
+  
+  fileInput.addEventListener('change', function(e) {
+    const file = e.target.files[0];
+    if (!file) return;
+    processImageFile(file);
+  });
+
+  // Drag and drop handlers
+  if (uploadArea) {
+    uploadArea.addEventListener('dragover', function(e) {
+      e.preventDefault();
+      e.stopPropagation();
+      this.classList.add('drag-over');
+    });
+
+    uploadArea.addEventListener('dragleave', function(e) {
+      e.preventDefault();
+      e.stopPropagation();
+      this.classList.remove('drag-over');
+    });
+
+    uploadArea.addEventListener('drop', function(e) {
+      e.preventDefault();
+      e.stopPropagation();
+      this.classList.remove('drag-over');
+      
+      const files = e.dataTransfer.files;
+      if (files.length > 0) {
+        processImageFile(files[0]);
+      }
+    });
+  }
+
+  // URL preview
+  const urlInput = document.getElementById('image-url');
+  const urlPreview = document.getElementById('url-preview');
+  const btnPreviewUrl = document.getElementById('btn-preview-url');
+  
+  btnPreviewUrl.addEventListener('click', function() {
+    const url = urlInput.value.trim();
+    if (!url) {
+      alert('❌ Digite uma URL válida.');
+      return;
+    }
+    
+    // Create image element to test URL
+    const img = new Image();
+    img.onload = function() {
+      urlPreview.innerHTML = `<img src="${url}" alt="Preview">`;
+      urlPreview.classList.add('show');
+      
+      // Update hidden field
+      document.getElementById('propertyImage').value = url;
+      wizard.updateData('image', url);
+    };
+    img.onerror = function() {
+      alert('❌ Não foi possível carregar a imagem. Verifique a URL.');
+    };
+    img.src = url;
+  });
+
+  // ============================================================================
+  // Room Categories
+  // ============================================================================
+
+  function applyTemplate(templateName) {
+    wizard.applyTemplate(templateName);
+    renderCategories();
+  }
+
+  function renderCategories() {
+    const container = document.getElementById('category-list');
+    if (!container) {
+      console.warn('[Wizard] category-list container not found');
+      return;
+    }
+    
+    const categories = wizard.data.roomCategories;
+
+    if (!categories || categories.length === 0) {
+      let emptyMessage = 'Nenhuma categoria adicionada. Use um template ou adicione manualmente.';
+      try {
+        if (window.NEXEFII?.i18n) {
+          emptyMessage = window.NEXEFII.i18n.t('wizard.rooms.emptyMessage') || emptyMessage;
+        }
+      } catch(e) {
+        console.warn('[Wizard] Error getting translation:', e);
+      }
+      container.innerHTML = `<p style="color: #999; text-align: center; padding: 2rem;">${emptyMessage}</p>`;
+      return;
+    }
+
+    // Get translations
+    let removeLabel = 'Remover';
+    let priceLabel = 'Preço:';
+    let quantityLabel = 'Quantidade:';
+    let roomsLabel = 'quartos';
+    
+    try {
+      if (window.NEXEFII?.i18n) {
+        removeLabel = window.NEXEFII.i18n.t('wizard.rooms.removeButton') || removeLabel;
+        priceLabel = window.NEXEFII.i18n.t('wizard.rooms.priceLabel') || priceLabel;
+        quantityLabel = window.NEXEFII.i18n.t('wizard.rooms.quantityLabel') || quantityLabel;
+        roomsLabel = window.NEXEFII.i18n.t('wizard.rooms.roomsLabel') || roomsLabel;
+      }
+    } catch(e) {
+      console.warn('[Wizard] Error getting category translations:', e);
+    }
+
+    // Get currency symbol based on current language
+    const currentLang = window.NEXEFII?.i18n?.getLanguage() || 'pt';
+    const langToCurrencyMap = {
+      'pt': 'R$',   // Portuguese → Brazilian Real
+      'en': '$',    // English → US Dollar
+      'es': '€'     // Spanish → Euro (or use '$' for Latin America)
+    };
+    const currencySymbol = langToCurrencyMap[currentLang] || 'R$';
+
+    container.innerHTML = categories.map((cat, index) => `
+      <div class="category-card">
+        <div class="category-card-header">
+          <div class="category-name">${cat.name}</div>
+          <button class="btn-remove" onclick="removeCategory(${index})">${removeLabel}</button>
+        </div>
+        <div class="form-grid">
+          <div>
+            <strong>${priceLabel}</strong> ${currencySymbol} ${cat.price}
+          </div>
+          <div>
+            <strong>${quantityLabel}</strong> ${cat.count} ${roomsLabel}
+          </div>
+        </div>
+      </div>
+    `).join('');
+  }
+
+  function addCategory() {
+    const name = prompt('Nome da categoria:');
+    if (!name) return;
+
+    const price = parseInt(prompt('Preço por noite (R$):')) || 0;
+    const count = parseInt(prompt('Quantidade de quartos:')) || 0;
+
+    wizard.addRoomCategory({ name, price, count, capacity: 2 });
+    renderCategories();
+  }
+
+  function removeCategory(index) {
+    wizard.removeRoomCategory(index);
+    renderCategories();
+  }
+
+  // ============================================================================
+  // Review
+  // ============================================================================
+
+  function updateReview() {
+    const data = wizard.getData();
+
+    // Update property image
+    const reviewImage = document.getElementById('review-image');
+    if (reviewImage && data.image) {
+      reviewImage.src = data.image;
+    }
+
+    document.getElementById('review-name').textContent = data.name;
+    document.getElementById('review-slug').textContent = data.slug;
+    document.getElementById('review-type').textContent = data.type;
+    document.getElementById('review-roomsCount').textContent = data.roomsCount;
+    document.getElementById('review-currency').textContent = data.settings.currency;
+    document.getElementById('review-checktimes').textContent = 
+      `${data.settings.checkInTime} / ${data.settings.checkOutTime}`;
+
+    // Render categories
+    const categoriesHTML = data.roomCategories.map(cat => `
+      <div class="review-item">
+        <span class="review-label">${cat.name}</span>
+        <span class="review-value">${cat.count} quartos × R$ ${cat.price}</span>
+      </div>
+    `).join('');
+    document.getElementById('review-categories').innerHTML = categoriesHTML;
+
+    // Render selected modules
+    const modulesContainer = document.getElementById('review-modules');
+    if (modulesContainer) {
+      if (data.modules && data.modules.length > 0) {
+        modulesContainer.innerHTML = data.modules.map(m => `<span class="review-value">${m}</span>`).join(', ');
+      } else {
+        modulesContainer.innerHTML = '<span style="color:#999;">Nenhum módulo selecionado</span>';
+      }
+    }
+  }
+
+  // ============================================================================
+  // Create Property
+  // ============================================================================
+
+  function showProgressModal() {
+    // Create modal overlay
+    const overlay = document.createElement('div');
+    overlay.id = 'progress-modal';
+    overlay.style.cssText = `
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0, 0, 0, 0.7);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 10000;
+      backdrop-filter: blur(5px);
+    `;
+
+    // Create modal content
+    const modal = document.createElement('div');
+    modal.style.cssText = `
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      border-radius: 20px;
+      padding: 40px;
+      max-width: 500px;
+      width: 90%;
+      box-shadow: 0 20px 60px rgba(0, 0, 0, 0.4);
+      text-align: center;
+      color: white;
+    `;
+
+    modal.innerHTML = `
+      <div style="font-size: 48px; margin-bottom: 20px;">🏨</div>
+      <h2 style="margin: 0 0 10px; font-size: 24px; font-weight: 600;">Criando sua propriedade</h2>
+      <p id="progress-status" style="margin: 0 0 30px; font-size: 16px; opacity: 0.9;">Preparando...</p>
+      
+      <div style="background: rgba(255, 255, 255, 0.2); border-radius: 10px; height: 12px; overflow: hidden; margin-bottom: 20px;">
+        <div id="progress-bar" style="background: white; height: 100%; width: 0%; transition: width 0.5s ease-out; border-radius: 10px;"></div>
+      </div>
+      
+      <div id="progress-steps" style="font-size: 14px; opacity: 0.8; line-height: 1.6;">
+        <div id="step-1">⏳ Criando estrutura...</div>
+        <div id="step-2">⏳ Gerando quartos...</div>
+        <div id="step-3">⏳ Criando hóspedes...</div>
+        <div id="step-4">⏳ Gerando reservas...</div>
+        <div id="step-5">⏳ Salvando dados...</div>
+      </div>
+    `;
+
+    overlay.appendChild(modal);
+    document.body.appendChild(overlay);
+    
+    return {
+      updateProgress: (percent, status) => {
+        document.getElementById('progress-bar').style.width = percent + '%';
+        document.getElementById('progress-status').textContent = status;
+      },
+      completeStep: (stepNum) => {
+        const stepEl = document.getElementById(`step-${stepNum}`);
+        if (stepEl) {
+          stepEl.innerHTML = stepEl.innerHTML.replace('⏳', '✅');
+          stepEl.style.opacity = '1';
+          stepEl.style.fontWeight = '600';
+        }
+      },
+      showSuccess: (propertyName) => {
+        modal.innerHTML = `
+          <div style="font-size: 64px; margin-bottom: 20px; animation: bounce 0.6s;">🎉</div>
+          <h2 style="margin: 0 0 10px; font-size: 28px; font-weight: 600;">Pronto!</h2>
+          <p style="margin: 0 0 20px; font-size: 18px; opacity: 0.95;">
+            "${propertyName}" foi criada com sucesso!
+          </p>
+          <p style="margin: 0; font-size: 16px; opacity: 0.8;">
+            Redirecionando para o dashboard...
+          </p>
+          <style>
+            @keyframes bounce {
+              0%, 100% { transform: translateY(0); }
+              50% { transform: translateY(-20px); }
+            }
+          </style>
+        `;
+      },
+      close: () => {
+        overlay.remove();
+      }
+    };
+  }
+
+  async function createProperty() {
+    const btnCreate = document.getElementById('btn-create');
+    btnCreate.disabled = true;
+    btnCreate.textContent = 'Criando...';
+
+    const progress = showProgressModal();
+
+    try {
+      // Step 1: Create structure (20%)
+      progress.updateProgress(10, 'Criando estrutura da propriedade...');
+      await new Promise(resolve => setTimeout(resolve, 300));
+      progress.completeStep(1);
+      progress.updateProgress(20, 'Estrutura criada!');
+      
+      // Step 2: Generate rooms (40%)
+      progress.updateProgress(30, 'Gerando quartos...');
+      await new Promise(resolve => setTimeout(resolve, 400));
+      progress.completeStep(2);
+      progress.updateProgress(40, 'Quartos criados!');
+      
+      // Step 3: Create guests (60%)
+      progress.updateProgress(50, 'Criando hóspedes de exemplo...');
+      await new Promise(resolve => setTimeout(resolve, 300));
+      progress.completeStep(3);
+      progress.updateProgress(60, 'Hóspedes criados!');
+      
+      // Step 4: Generate reservations (80%)
+      progress.updateProgress(70, 'Gerando reservas...');
+      await new Promise(resolve => setTimeout(resolve, 400));
+      progress.completeStep(4);
+      progress.updateProgress(80, 'Reservas criadas!');
+      
+      // Step 5: Save everything (100%)
+      progress.updateProgress(90, 'Salvando dados...');
+      const property = await wizard.createProperty();
+      property.modules = wizard.data.modules || [];
+      progress.completeStep(5);
+      progress.updateProgress(100, 'Concluído!');
+      
+      // Show success message
+      await new Promise(resolve => setTimeout(resolve, 300));
+      progress.showSuccess(property.name);
+      
+      // Wait a bit then redirect
+      await new Promise(resolve => setTimeout(resolve, 2000));
+      progress.close();
+
+      // Persist created property to IluxProps (compat shim) and to user session
+      try {
+        const propRecord = Object.assign({}, property, { key: property.key || property.slug });
+        if (window.IluxProps && typeof window.IluxProps.upsertProperty === 'function') {
+          window.IluxProps.upsertProperty(propRecord);
+        } else {
+          // Fallback: write directly to localStorage under iluxsys_properties
+          try {
+            const m = JSON.parse(localStorage.getItem('iluxsys_properties') || '{}');
+            m[propRecord.key] = propRecord;
+            localStorage.setItem('iluxsys_properties', JSON.stringify(m));
+          } catch (e) { /* ignore */ }
+        }
+
+        // Also add to current user properties and persist session for Nexefii compatibility
+        try {
+          const sessionKey = 'nexefii_session';
+          const altSessionKey = 'iluxsys_session';
+          let session = null;
+          try { session = JSON.parse(localStorage.getItem(sessionKey) || 'null'); } catch(e) { session = null; }
+          if (!session) {
+            try { session = JSON.parse(localStorage.getItem(altSessionKey) || 'null'); } catch(e) { session = null; }
+          }
+          if (!session) session = window.NEXEFII.currentUser || { properties: [] };
+          session.properties = session.properties || [];
+          // avoid duplicates by key
+          if (!session.properties.some(p => p.key === propRecord.key || p.slug === propRecord.slug)) {
+            session.properties.push({ id: propRecord.id || propRecord.key, key: propRecord.key, slug: propRecord.slug, name: propRecord.name });
+          }
+          localStorage.setItem(sessionKey, JSON.stringify(session));
+          localStorage.setItem(altSessionKey, JSON.stringify(session));
+          window.NEXEFII.currentUser = session;
+        } catch (e) { console.warn('[Wizard] session persist failed', e); }
+      } catch (e) { console.warn('[Wizard] upsert property failed', e); }
+
+      // Redirect to property dashboard
+      window.NEXEFII.router.navigate(`/property/${property.slug}/dashboard`);
+      
+    } catch (error) {
+      console.error('[Wizard] Error creating property:', error);
+      progress.close();
+      alert(`❌ Erro ao criar propriedade:\n\n${error.message}`);
+      btnCreate.disabled = false;
+      try {
+        const text = window.NEXEFII?.i18n ? window.NEXEFII.i18n.t('wizard.buttons.create') : '✨ Criar Propriedade';
+        btnCreate.textContent = text;
+      } catch(_) { btnCreate.textContent = '✨ Criar Propriedade'; }
+    }
+  }
+  // Registrar globalmente para acesso externo (shell.html)
+  window.createProperty = createProperty;
+
+  // ============================================================================
+  // Initialize
+  // ============================================================================
+
+  async function initWizardPage() {
+    console.log('[Wizard] Initializing wizard page');
+    
+    // Prepare timezone rendering function (used both on init and when language changes)
+    function renderTimezoneSelect() {
+      const tzSelect = document.getElementById('timezone');
+      if (!tzSelect) return;
+      // Backup: lista de grupos e cidades/fusos (hardcoded, pode ser movido para JSON futuramente)
+      const tzData = [
+        {
+          key: 'americas',
+          options: [
+            { value: 'America/New_York', label: 'Nova York (UTC-5/-4)' },
+            { value: 'America/Los_Angeles', label: 'Los Angeles (UTC-8/-7)' },
+            { value: 'America/Chicago', label: 'Chicago (UTC-6/-5)' },
+            { value: 'America/Denver', label: 'Denver (UTC-7/-6)' },
+            { value: 'America/Toronto', label: 'Toronto (UTC-5/-4)' },
+            { value: 'America/Sao_Paulo', label: 'São Paulo (UTC-3)' },
+            { value: 'America/Manaus', label: 'Manaus (UTC-4)' },
+            { value: 'America/Rio_Branco', label: 'Rio Branco (UTC-5)' },
+            { value: 'America/Fortaleza', label: 'Fortaleza (UTC-3)' },
+            { value: 'America/Buenos_Aires', label: 'Buenos Aires (UTC-3)' },
+            { value: 'America/Santiago', label: 'Santiago (UTC-3/-4)' },
+            { value: 'America/Lima', label: 'Lima (UTC-5)' },
+            { value: 'America/Bogota', label: 'Bogotá (UTC-5)' },
+            { value: 'America/Mexico_City', label: 'Cidade do México (UTC-6)' },
+            { value: 'America/Caracas', label: 'Caracas (UTC-4)' }
+          ]
+        },
+        {
+          key: 'europe',
+          options: [
+            { value: 'Europe/London', label: 'Londres (UTC+0/+1)' },
+            { value: 'Europe/Paris', label: 'Paris (UTC+1/+2)' },
+            { value: 'Europe/Berlin', label: 'Berlim (UTC+1/+2)' },
+            { value: 'Europe/Madrid', label: 'Madri (UTC+1/+2)' },
+            { value: 'Europe/Rome', label: 'Roma (UTC+1/+2)' },
+            { value: 'Europe/Amsterdam', label: 'Amsterdã (UTC+1/+2)' },
+            { value: 'Europe/Brussels', label: 'Bruxelas (UTC+1/+2)' },
+            { value: 'Europe/Zurich', label: 'Zurique (UTC+1/+2)' },
+            { value: 'Europe/Lisbon', label: 'Lisboa (UTC+0/+1)' },
+            { value: 'Europe/Moscow', label: 'Moscou (UTC+3)' }
+          ]
+        },
+        {
+          key: 'asiaPacific',
+          options: [
+            { value: 'Asia/Tokyo', label: 'Tóquio (UTC+9)' },
+            { value: 'Asia/Shanghai', label: 'Xangai (UTC+8)' },
+            { value: 'Asia/Hong_Kong', label: 'Hong Kong (UTC+8)' },
+            { value: 'Asia/Singapore', label: 'Singapura (UTC+8)' },
+            { value: 'Asia/Seoul', label: 'Seul (UTC+9)' },
+            { value: 'Asia/Dubai', label: 'Dubai (UTC+4)' },
+            { value: 'Asia/Bangkok', label: 'Bangkok (UTC+7)' },
+            { value: 'Asia/Kolkata', label: 'Mumbai (UTC+5:30)' },
+            { value: 'Australia/Sydney', label: 'Sydney (UTC+10/+11)' },
+            { value: 'Australia/Melbourne', label: 'Melbourne (UTC+10/+11)' },
+            { value: 'Pacific/Auckland', label: 'Auckland (UTC+12/+13)' }
+          ]
+        },
+        {
+          key: 'africaMiddleEast',
+          options: [
+            { value: 'Africa/Cairo', label: 'Cairo (UTC+2)' },
+            { value: 'Africa/Johannesburg', label: 'Joanesburgo (UTC+2)' },
+            { value: 'Africa/Lagos', label: 'Lagos (UTC+1)' },
+            { value: 'Asia/Jerusalem', label: 'Jerusalém (UTC+2/+3)' },
+            { value: 'Asia/Istanbul', label: 'Istambul (UTC+3)' }
+          ]
+        }
+      ];
+      // Limpar select
+      tzSelect.innerHTML = '';
+      // Renderizar grupos e opções
+      tzData.forEach(group => {
+        const label = window.NEXEFII?.i18n?.t('wizard.config.timezoneGroups.' + group.key) || group.key;
+        const optgroup = document.createElement('optgroup');
+        optgroup.label = label;
+        group.options.forEach(opt => {
+          const option = document.createElement('option');
+          option.value = opt.value;
+          // Busca nome traduzido da cidade/fuso
+          option.textContent = window.NEXEFII?.i18n?.t('wizard.config.timezoneCities.' + opt.value) || opt.label;
+          optgroup.appendChild(option);
+        });
+        tzSelect.appendChild(optgroup);
+      });
+    }
+
+    // Subscribe to language changes if i18n is available so we re-render the select with translations
+    if (window.NEXEFII?.i18n) {
+      window.NEXEFII.i18n.onChange((lang) => {
+        console.log('[Wizard] Language changed to:', lang);
+        // Step 4: Rooms
+        const step4 = document.getElementById('step-3');
+        if (step4 && step4.classList.contains('active')) {
+          renderCategories();
+        }
+        // Re-render timezone select using current translations
+        renderTimezoneSelect();
+        // Re-apply translations to DOM
+        try { window.NEXEFII.i18n.applyToDOM(); } catch(e) { /* ignore */ }
+      });
+    } else {
+      console.warn('[Wizard] I18n not available');
+    }
+
+    // Ensure timezone select is populated on initial load as well
+    try { renderTimezoneSelect(); } catch(e) { console.warn('[Wizard] renderTimezoneSelect failed', e); }
+    
+    updateUI();
+  }
+
+  // Initialize wizard page when loaded
+  initWizardPage();
+
+[console:log] [Wizard] Initializing wizard page
+[console:log] [I18n] Applied translations to 85 elements
+[console:log] [Shell] Page loaded successfully: wizard
+[console:log] [Router] Route handler executed JSHandle@object
+[console:log] [Shell] Executing inline script: 
+  // Initialize Wizard Manager (idempotent / safe re-entry)
+  // Ensure global WizardManager is available (loaded by shell)
+  if (typeof WizardManager === 'undefined') {
+    console.error('[Wizard] WizardManager not loaded');
+  }
+  // Reuse existing instance if present to avoid redeclaration errors on re-navigation
+  window.wizard = (window.wizard && window.wizard instanceof WizardManager)
+    ? window.wizard
+    : new WizardManager();
+  var wizard = window.wizard;
+
+  // ============================================================================
+  // Step Navigation
+  // ============================================================================
+
+  function updateUI() {
+    // Update progress steps
+    const steps = document.querySelectorAll('.progress-step');
+    steps.forEach((step, index) => {
+      const stepNum = index + 1;
+      const circle = step.querySelector('.step-circle');
+      const label = step.querySelector('.step-label');
+
+      if (stepNum < wizard.currentStep) {
+        circle.classList.add('completed');
+        circle.classList.remove('active');
+        circle.textContent = '✓';
+      } else if (stepNum === wizard.currentStep) {
+        circle.classList.add('active');
+        circle.classList.remove('completed');
+        circle.textContent = stepNum;
+        label.classList.add('active');
+      } else {
+        circle.classList.remove('active', 'completed');
+        circle.textContent = stepNum;
+        label.classList.remove('active');
+      }
+    });
+
+    // Update step content visibility
+    document.querySelectorAll('.step-content').forEach((content, index) => {
+      // Step order: 1 (basic), 2 (details), modules, 3 (rooms), 4 (settings), 5 (seed), 6 (review)
+      if (
+        (wizard.currentStep === 1 && content.id === 'step-1') ||
+        (wizard.currentStep === 2 && content.id === 'step-2') ||
+        (wizard.currentStep === 3 && content.id === 'step-modules') ||
+        (wizard.currentStep === 4 && content.id === 'step-3') ||
+        (wizard.currentStep === 5 && content.id === 'step-4') ||
+        (wizard.currentStep === 6 && content.id === 'step-5') ||
+        (wizard.currentStep === 7 && content.id === 'step-6')
+      ) {
+        content.classList.add('active');
+      } else {
+        content.classList.remove('active');
+      }
+    });
+
+    // Update buttons
+    const btnPrev = document.getElementById('btn-prev');
+    const btnNext = document.getElementById('btn-next');
+
+    btnPrev.style.display = wizard.isFirstStep() ? 'none' : 'block';
+    if (window.NEXEFII?.i18n) {
+      const label = wizard.isLastStep() ? window.NEXEFII.i18n.t('wizard.buttons.create') : window.NEXEFII.i18n.t('wizard.buttons.next');
+      // Keep arrow with text, but don't break data-i18n spans
+      const span = btnNext.querySelector('[data-i18n]');
+      if (span) span.textContent = label;
+    } else {
+      btnNext.textContent = wizard.isLastStep() ? 'Concluir →' : 'Próximo →';
+    }
+    btnNext.style.display = wizard.isLastStep() ? 'none' : 'block';
+
+    // Update step-specific UI
+    if (wizard.currentStep === 4) {
+      document.getElementById('total-rooms-needed').textContent = wizard.data.roomsCount || 0;
+      renderCategories();
+    }
+
+    if (wizard.currentStep === 7) {
+      updateReview();
+    }
+
+    // Apply translations after DOM updates
+    try { if (window.NEXEFII?.i18n) window.NEXEFII.i18n.applyToDOM(document.querySelector('.wizard-content')); } catch(e) { console.warn('[Wizard] i18n apply error', e); }
+  }
+
+  function nextStep() {
+    if (wizard.nextStep()) {
+      clearErrors();
+      updateUI();
+    } else {
+      showErrors();
+    }
+  }
+
+  function prevStep() {
+    if (wizard.prevStep()) {
+      clearErrors();
+      updateUI();
+    }
+  }
+
+  // Make functions globally accessible for onclick handlers
+  window.nextStep = nextStep;
+  window.prevStep = prevStep;
+  // Expose room template/category functions for inline onclick handlers
+  window.applyTemplate = applyTemplate;
+  window.addCategory = addCategory;
+  window.removeCategory = removeCategory;
+
+  // ============================================================================
+  // Form Handling
+  // ============================================================================
+
+  function clearErrors() {
+    document.querySelectorAll('.form-error').forEach(el => {
+      el.classList.remove('show');
+      el.textContent = '';
+    });
+    document.querySelectorAll('.form-input, .form-select').forEach(el => {
+      el.classList.remove('error');
+    });
+  }
+
+  function showErrors() {
+    const errors = wizard.getValidationErrors();
+    
+    for (const [field, message] of Object.entries(errors)) {
+      const errorEl = document.getElementById(`error-${field}`);
+      const inputEl = document.getElementById(field);
+      
+      if (errorEl) {
+        errorEl.textContent = message;
+        errorEl.classList.add('show');
+      }
+      
+      if (inputEl) {
+        inputEl.classList.add('error');
+      }
+    }
+  }
+
+  // Bind input events
+  ['name', 'description', 'type', 'roomsCount', 'city', 'state', 'street', 'zip', 'country', 
+   'currency', 'timezone', 'checkInTime', 'checkOutTime', 'language'].forEach(field => {
+    const el = document.getElementById(field);
+    if (el) {
+      el.addEventListener('input', (e) => {
+        const value = e.target.value;
+        
+        if (field === 'roomsCount') {
+          wizard.updateData(field, parseInt(value) || 0);
+        } else if (field.startsWith('address.')) {
+          wizard.updateData(`address.${field.split('.')[1]}`, value);
+        } else if (['city', 'state', 'street', 'zip', 'country'].includes(field)) {
+          wizard.updateData(`address.${field}`, value);
+        } else if (['currency', 'timezone', 'language', 'checkInTime', 'checkOutTime'].includes(field)) {
+          wizard.updateData(`settings.${field}`, value);
+        } else {
+          wizard.updateData(field, value);
+        }
+
+        // Auto-update slug field
+        if (field === 'name') {
+          document.getElementById('slug').value = wizard.data.slug;
+        }
+      });
+    }
+  });
+
+  // Icon selector
+  document.querySelectorAll('.icon-option').forEach(option => {
+    option.addEventListener('click', () => {
+      document.querySelectorAll('.icon-option').forEach(o => o.classList.remove('selected'));
+      option.classList.add('selected');
+      wizard.updateData('icon', option.dataset.icon);
+    });
+  });
+
+  // Seed data checkboxes
+  ['createSampleRooms', 'createSampleGuests', 'createSampleReservations'].forEach(field => {
+    const el = document.getElementById(field);
+    if (el) {
+      el.addEventListener('change', (e) => {
+        wizard.updateData(`seedData.${field}`, e.target.checked);
+      });
+    }
+  });
+
+  // Module selection checkboxes
+  const moduleIds = [
+    'module-ems', 'module-bms', 'module-automation', 'module-analytics',
+    'module-pms', 'module-iot', 'module-access', 'module-other'
+  ];
+  moduleIds.forEach(id => {
+    const el = document.getElementById(id);
+    if (el) {
+      el.addEventListener('change', () => {
+        wizard.data.modules = moduleIds
+          .filter(mid => document.getElementById(mid)?.checked)
+          .map(mid => document.getElementById(mid).value);
+        updateReview();
+      });
+    }
+  });
+
+  // ============================================================================
+  // Image Upload Management
+  // ============================================================================
+
+  // Tab switching
+  document.querySelectorAll('.image-tab').forEach(tab => {
+    tab.addEventListener('click', function() {
+      const targetTab = this.dataset.tab;
+      
+      // Update active tab button
+      document.querySelectorAll('.image-tab').forEach(t => t.classList.remove('active'));
+      this.classList.add('active');
+      
+      // Update active tab content
+      document.querySelectorAll('.image-tab-content').forEach(content => {
+        content.classList.remove('active');
+      });
+      document.getElementById(`${targetTab}-tab`).classList.add('active');
+    });
+  });
+
+  // Gallery image selection
+  document.querySelectorAll('.gallery-image').forEach(img => {
+    img.addEventListener('click', function() {
+      // Remove previous selection
+      document.querySelectorAll('.gallery-image').forEach(i => i.classList.remove('selected'));
+      
+      // Select this image
+      this.classList.add('selected');
+      
+      // Update hidden field
+      const imagePath = this.dataset.image;
+      document.getElementById('propertyImage').value = imagePath;
+      wizard.updateData('image', imagePath);
+    });
+  });
+
+  // File upload
+  const fileInput = document.getElementById('image-file');
+  const uploadPreview = document.getElementById('upload-preview');
+  const uploadLoading = document.getElementById('upload-loading');
+  const uploadArea = document.querySelector('.upload-area');
+  
+  // Function to process image file
+  function processImageFile(file) {
+    // Validate file size (5MB max)
+    if (file.size > 5 * 1024 * 1024) {
+      alert('❌ Arquivo muito grande! Máximo 5MB.');
+      return;
+    }
+    
+    // Validate file type
+    if (!file.type.startsWith('image/')) {
+      alert('❌ Por favor, selecione uma imagem válida.');
+      return;
+    }
+    
+    // Show loading
+    if (uploadLoading) {
+      uploadLoading.classList.add('show');
+      uploadPreview.classList.remove('show');
+    }
+    
+    // Read and display preview
+    const reader = new FileReader();
+    reader.onload = function(event) {
+      const imageData = event.target.result;
+      
+      // Hide loading, show preview
+      if (uploadLoading) uploadLoading.classList.remove('show');
+      
+      uploadPreview.innerHTML = `<img src="${imageData}" alt="Preview">`;
+      uploadPreview.classList.add('show');
+      
+      // Update hidden field
+      document.getElementById('propertyImage').value = imageData;
+      wizard.updateData('image', imageData);
+    };
+    reader.onerror = function() {
+      if (uploadLoading) uploadLoading.classList.remove('show');
+      alert('❌ Erro ao processar imagem.');
+    };
+    reader.readAsDataURL(file);
+  }
+  
+  fileInput.addEventListener('change', function(e) {
+    const file = e.target.files[0];
+    if (!file) return;
+    processImageFile(file);
+  });
+
+  // Drag and drop handlers
+  if (uploadArea) {
+    uploadArea.addEventListener('dragover', function(e) {
+      e.preventDefault();
+      e.stopPropagation();
+      this.classList.add('drag-over');
+    });
+
+    uploadArea.addEventListener('dragleave', function(e) {
+      e.preventDefault();
+      e.stopPropagation();
+      this.classList.remove('drag-over');
+    });
+
+    uploadArea.addEventListener('drop', function(e) {
+      e.preventDefault();
+      e.stopPropagation();
+      this.classList.remove('drag-over');
+      
+      const files = e.dataTransfer.files;
+      if (files.length > 0) {
+        processImageFile(files[0]);
+      }
+    });
+  }
+
+  // URL preview
+  const urlInput = document.getElementById('image-url');
+  const urlPreview = document.getElementById('url-preview');
+  const btnPreviewUrl = document.getElementById('btn-preview-url');
+  
+  btnPreviewUrl.addEventListener('click', function() {
+    const url = urlInput.value.trim();
+    if (!url) {
+      alert('❌ Digite uma URL válida.');
+      return;
+    }
+    
+    // Create image element to test URL
+    const img = new Image();
+    img.onload = function() {
+      urlPreview.innerHTML = `<img src="${url}" alt="Preview">`;
+      urlPreview.classList.add('show');
+      
+      // Update hidden field
+      document.getElementById('propertyImage').value = url;
+      wizard.updateData('image', url);
+    };
+    img.onerror = function() {
+      alert('❌ Não foi possível carregar a imagem. Verifique a URL.');
+    };
+    img.src = url;
+  });
+
+  // ============================================================================
+  // Room Categories
+  // ============================================================================
+
+  function applyTemplate(templateName) {
+    wizard.applyTemplate(templateName);
+    renderCategories();
+  }
+
+  function renderCategories() {
+    const container = document.getElementById('category-list');
+    if (!container) {
+      console.warn('[Wizard] category-list container not found');
+      return;
+    }
+    
+    const categories = wizard.data.roomCategories;
+
+    if (!categories || categories.length === 0) {
+      let emptyMessage = 'Nenhuma categoria adicionada. Use um template ou adicione manualmente.';
+      try {
+        if (window.NEXEFII?.i18n) {
+          emptyMessage = window.NEXEFII.i18n.t('wizard.rooms.emptyMessage') || emptyMessage;
+        }
+      } catch(e) {
+        console.warn('[Wizard] Error getting translation:', e);
+      }
+      container.innerHTML = `<p style="color: #999; text-align: center; padding: 2rem;">${emptyMessage}</p>`;
+      return;
+    }
+
+    // Get translations
+    let removeLabel = 'Remover';
+    let priceLabel = 'Preço:';
+    let quantityLabel = 'Quantidade:';
+    let roomsLabel = 'quartos';
+    
+    try {
+      if (window.NEXEFII?.i18n) {
+        removeLabel = window.NEXEFII.i18n.t('wizard.rooms.removeButton') || removeLabel;
+        priceLabel = window.NEXEFII.i18n.t('wizard.rooms.priceLabel') || priceLabel;
+        quantityLabel = window.NEXEFII.i18n.t('wizard.rooms.quantityLabel') || quantityLabel;
+        roomsLabel = window.NEXEFII.i18n.t('wizard.rooms.roomsLabel') || roomsLabel;
+      }
+    } catch(e) {
+      console.warn('[Wizard] Error getting category translations:', e);
+    }
+
+    // Get currency symbol based on current language
+    const currentLang = window.NEXEFII?.i18n?.getLanguage() || 'pt';
+    const langToCurrencyMap = {
+      'pt': 'R$',   // Portuguese → Brazilian Real
+      'en': '$',    // English → US Dollar
+      'es': '€'     // Spanish → Euro (or use '$' for Latin America)
+    };
+    const currencySymbol = langToCurrencyMap[currentLang] || 'R$';
+
+    container.innerHTML = categories.map((cat, index) => `
+      <div class="category-card">
+        <div class="category-card-header">
+          <div class="category-name">${cat.name}</div>
+          <button class="btn-remove" onclick="removeCategory(${index})">${removeLabel}</button>
+        </div>
+        <div class="form-grid">
+          <div>
+            <strong>${priceLabel}</strong> ${currencySymbol} ${cat.price}
+          </div>
+          <div>
+            <strong>${quantityLabel}</strong> ${cat.count} ${roomsLabel}
+          </div>
+        </div>
+      </div>
+    `).join('');
+  }
+
+  function addCategory() {
+    const name = prompt('Nome da categoria:');
+    if (!name) return;
+
+    const price = parseInt(prompt('Preço por noite (R$):')) || 0;
+    const count = parseInt(prompt('Quantidade de quartos:')) || 0;
+
+    wizard.addRoomCategory({ name, price, count, capacity: 2 });
+    renderCategories();
+  }
+
+  function removeCategory(index) {
+    wizard.removeRoomCategory(index);
+    renderCategories();
+  }
+
+  // ============================================================================
+  // Review
+  // ============================================================================
+
+  function updateReview() {
+    const data = wizard.getData();
+
+    // Update property image
+    const reviewImage = document.getElementById('review-image');
+    if (reviewImage && data.image) {
+      reviewImage.src = data.image;
+    }
+
+    document.getElementById('review-name').textContent = data.name;
+    document.getElementById('review-slug').textContent = data.slug;
+    document.getElementById('review-type').textContent = data.type;
+    document.getElementById('review-roomsCount').textContent = data.roomsCount;
+    document.getElementById('review-currency').textContent = data.settings.currency;
+    document.getElementById('review-checktimes').textContent = 
+      `${data.settings.checkInTime} / ${data.settings.checkOutTime}`;
+
+    // Render categories
+    const categoriesHTML = data.roomCategories.map(cat => `
+      <div class="review-item">
+        <span class="review-label">${cat.name}</span>
+        <span class="review-value">${cat.count} quartos × R$ ${cat.price}</span>
+      </div>
+    `).join('');
+    document.getElementById('review-categories').innerHTML = categoriesHTML;
+
+    // Render selected modules
+    const modulesContainer = document.getElementById('review-modules');
+    if (modulesContainer) {
+      if (data.modules && data.modules.length > 0) {
+        modulesContainer.innerHTML = data.modules.map(m => `<span class="review-value">${m}</span>`).join(', ');
+      } else {
+        modulesContainer.innerHTML = '<span style="color:#999;">Nenhum módulo selecionado</span>';
+      }
+    }
+  }
+
+  // ============================================================================
+  // Create Property
+  // ============================================================================
+
+  function showProgressModal() {
+    // Create modal overlay
+    const overlay = document.createElement('div');
+    overlay.id = 'progress-modal';
+    overlay.style.cssText = `
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0, 0, 0, 0.7);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 10000;
+      backdrop-filter: blur(5px);
+    `;
+
+    // Create modal content
+    const modal = document.createElement('div');
+    modal.style.cssText = `
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      border-radius: 20px;
+      padding: 40px;
+      max-width: 500px;
+      width: 90%;
+      box-shadow: 0 20px 60px rgba(0, 0, 0, 0.4);
+      text-align: center;
+      color: white;
+    `;
+
+    modal.innerHTML = `
+      <div style="font-size: 48px; margin-bottom: 20px;">🏨</div>
+      <h2 style="margin: 0 0 10px; font-size: 24px; font-weight: 600;">Criando sua propriedade</h2>
+      <p id="progress-status" style="margin: 0 0 30px; font-size: 16px; opacity: 0.9;">Preparando...</p>
+      
+      <div style="background: rgba(255, 255, 255, 0.2); border-radius: 10px; height: 12px; overflow: hidden; margin-bottom: 20px;">
+        <div id="progress-bar" style="background: white; height: 100%; width: 0%; transition: width 0.5s ease-out; border-radius: 10px;"></div>
+      </div>
+      
+      <div id="progress-steps" style="font-size: 14px; opacity: 0.8; line-height: 1.6;">
+        <div id="step-1">⏳ Criando estrutura...</div>
+        <div id="step-2">⏳ Gerando quartos...</div>
+        <div id="step-3">⏳ Criando hóspedes...</div>
+        <div id="step-4">⏳ Gerando reservas...</div>
+        <div id="step-5">⏳ Salvando dados...</div>
+      </div>
+    `;
+
+    overlay.appendChild(modal);
+    document.body.appendChild(overlay);
+    
+    return {
+      updateProgress: (percent, status) => {
+        document.getElementById('progress-bar').style.width = percent + '%';
+        document.getElementById('progress-status').textContent = status;
+      },
+      completeStep: (stepNum) => {
+        const stepEl = document.getElementById(`step-${stepNum}`);
+        if (stepEl) {
+          stepEl.innerHTML = stepEl.innerHTML.replace('⏳', '✅');
+          stepEl.style.opacity = '1';
+          stepEl.style.fontWeight = '600';
+        }
+      },
+      showSuccess: (propertyName) => {
+        modal.innerHTML = `
+          <div style="font-size: 64px; margin-bottom: 20px; animation: bounce 0.6s;">🎉</div>
+          <h2 style="margin: 0 0 10px; font-size: 28px; font-weight: 600;">Pronto!</h2>
+          <p style="margin: 0 0 20px; font-size: 18px; opacity: 0.95;">
+            "${propertyName}" foi criada com sucesso!
+          </p>
+          <p style="margin: 0; font-size: 16px; opacity: 0.8;">
+            Redirecionando para o dashboard...
+          </p>
+          <style>
+            @keyframes bounce {
+              0%, 100% { transform: translateY(0); }
+              50% { transform: translateY(-20px); }
+            }
+          </style>
+        `;
+      },
+      close: () => {
+        overlay.remove();
+      }
+    };
+  }
+
+  async function createProperty() {
+    const btnCreate = document.getElementById('btn-create');
+    btnCreate.disabled = true;
+    btnCreate.textContent = 'Criando...';
+
+    const progress = showProgressModal();
+
+    try {
+      // Step 1: Create structure (20%)
+      progress.updateProgress(10, 'Criando estrutura da propriedade...');
+      await new Promise(resolve => setTimeout(resolve, 300));
+      progress.completeStep(1);
+      progress.updateProgress(20, 'Estrutura criada!');
+      
+      // Step 2: Generate rooms (40%)
+      progress.updateProgress(30, 'Gerando quartos...');
+      await new Promise(resolve => setTimeout(resolve, 400));
+      progress.completeStep(2);
+      progress.updateProgress(40, 'Quartos criados!');
+      
+      // Step 3: Create guests (60%)
+      progress.updateProgress(50, 'Criando hóspedes de exemplo...');
+      await new Promise(resolve => setTimeout(resolve, 300));
+      progress.completeStep(3);
+      progress.updateProgress(60, 'Hóspedes criados!');
+      
+      // Step 4: Generate reservations (80%)
+      progress.updateProgress(70, 'Gerando reservas...');
+      await new Promise(resolve => setTimeout(resolve, 400));
+      progress.completeStep(4);
+      progress.updateProgress(80, 'Reservas criadas!');
+      
+      // Step 5: Save everything (100%)
+      progress.updateProgress(90, 'Salvando dados...');
+      const property = await wizard.createProperty();
+      property.modules = wizard.data.modules || [];
+      progress.completeStep(5);
+      progress.updateProgress(100, 'Concluído!');
+      
+      // Show success message
+      await new Promise(resolve => setTimeout(resolve, 300));
+      progress.showSuccess(property.name);
+      
+      // Wait a bit then redirect
+      await new Promise(resolve => setTimeout(resolve, 2000));
+      progress.close();
+
+      // Persist created property to IluxProps (compat shim) and to user session
+      try {
+        const propRecord = Object.assign({}, property, { key: property.key || property.slug });
+        if (window.IluxProps && typeof window.IluxProps.upsertProperty === 'function') {
+          window.IluxProps.upsertProperty(propRecord);
+        } else {
+          // Fallback: write directly to localStorage under iluxsys_properties
+          try {
+            const m = JSON.parse(localStorage.getItem('iluxsys_properties') || '{}');
+            m[propRecord.key] = propRecord;
+            localStorage.setItem('iluxsys_properties', JSON.stringify(m));
+          } catch (e) { /* ignore */ }
+        }
+
+        // Also add to current user properties and persist session for Nexefii compatibility
+        try {
+          const sessionKey = 'nexefii_session';
+          const altSessionKey = 'iluxsys_session';
+          let session = null;
+          try { session = JSON.parse(localStorage.getItem(sessionKey) || 'null'); } catch(e) { session = null; }
+          if (!session) {
+            try { session = JSON.parse(localStorage.getItem(altSessionKey) || 'null'); } catch(e) { session = null; }
+          }
+          if (!session) session = window.NEXEFII.currentUser || { properties: [] };
+          session.properties = session.properties || [];
+          // avoid duplicates by key
+          if (!session.properties.some(p => p.key === propRecord.key || p.slug === propRecord.slug)) {
+            session.properties.push({ id: propRecord.id || propRecord.key, key: propRecord.key, slug: propRecord.slug, name: propRecord.name });
+          }
+          localStorage.setItem(sessionKey, JSON.stringify(session));
+          localStorage.setItem(altSessionKey, JSON.stringify(session));
+          window.NEXEFII.currentUser = session;
+        } catch (e) { console.warn('[Wizard] session persist failed', e); }
+      } catch (e) { console.warn('[Wizard] upsert property failed', e); }
+
+      // Redirect to property dashboard
+      window.NEXEFII.router.navigate(`/property/${property.slug}/dashboard`);
+      
+    } catch (error) {
+      console.error('[Wizard] Error creating property:', error);
+      progress.close();
+      alert(`❌ Erro ao criar propriedade:\n\n${error.message}`);
+      btnCreate.disabled = false;
+      try {
+        const text = window.NEXEFII?.i18n ? window.NEXEFII.i18n.t('wizard.buttons.create') : '✨ Criar Propriedade';
+        btnCreate.textContent = text;
+      } catch(_) { btnCreate.textContent = '✨ Criar Propriedade'; }
+    }
+  }
+  // Registrar globalmente para acesso externo (shell.html)
+  window.createProperty = createProperty;
+
+  // ============================================================================
+  // Initialize
+  // ============================================================================
+
+  async function initWizardPage() {
+    console.log('[Wizard] Initializing wizard page');
+    
+    // Prepare timezone rendering function (used both on init and when language changes)
+    function renderTimezoneSelect() {
+      const tzSelect = document.getElementById('timezone');
+      if (!tzSelect) return;
+      // Backup: lista de grupos e cidades/fusos (hardcoded, pode ser movido para JSON futuramente)
+      const tzData = [
+        {
+          key: 'americas',
+          options: [
+            { value: 'America/New_York', label: 'Nova York (UTC-5/-4)' },
+            { value: 'America/Los_Angeles', label: 'Los Angeles (UTC-8/-7)' },
+            { value: 'America/Chicago', label: 'Chicago (UTC-6/-5)' },
+            { value: 'America/Denver', label: 'Denver (UTC-7/-6)' },
+            { value: 'America/Toronto', label: 'Toronto (UTC-5/-4)' },
+            { value: 'America/Sao_Paulo', label: 'São Paulo (UTC-3)' },
+            { value: 'America/Manaus', label: 'Manaus (UTC-4)' },
+            { value: 'America/Rio_Branco', label: 'Rio Branco (UTC-5)' },
+            { value: 'America/Fortaleza', label: 'Fortaleza (UTC-3)' },
+            { value: 'America/Buenos_Aires', label: 'Buenos Aires (UTC-3)' },
+            { value: 'America/Santiago', label: 'Santiago (UTC-3/-4)' },
+            { value: 'America/Lima', label: 'Lima (UTC-5)' },
+            { value: 'America/Bogota', label: 'Bogotá (UTC-5)' },
+            { value: 'America/Mexico_City', label: 'Cidade do México (UTC-6)' },
+            { value: 'America/Caracas', label: 'Caracas (UTC-4)' }
+          ]
+        },
+        {
+          key: 'europe',
+          options: [
+            { value: 'Europe/London', label: 'Londres (UTC+0/+1)' },
+            { value: 'Europe/Paris', label: 'Paris (UTC+1/+2)' },
+            { value: 'Europe/Berlin', label: 'Berlim (UTC+1/+2)' },
+            { value: 'Europe/Madrid', label: 'Madri (UTC+1/+2)' },
+            { value: 'Europe/Rome', label: 'Roma (UTC+1/+2)' },
+            { value: 'Europe/Amsterdam', label: 'Amsterdã (UTC+1/+2)' },
+            { value: 'Europe/Brussels', label: 'Bruxelas (UTC+1/+2)' },
+            { value: 'Europe/Zurich', label: 'Zurique (UTC+1/+2)' },
+            { value: 'Europe/Lisbon', label: 'Lisboa (UTC+0/+1)' },
+            { value: 'Europe/Moscow', label: 'Moscou (UTC+3)' }
+          ]
+        },
+        {
+          key: 'asiaPacific',
+          options: [
+            { value: 'Asia/Tokyo', label: 'Tóquio (UTC+9)' },
+            { value: 'Asia/Shanghai', label: 'Xangai (UTC+8)' },
+            { value: 'Asia/Hong_Kong', label: 'Hong Kong (UTC+8)' },
+            { value: 'Asia/Singapore', label: 'Singapura (UTC+8)' },
+            { value: 'Asia/Seoul', label: 'Seul (UTC+9)' },
+            { value: 'Asia/Dubai', label: 'Dubai (UTC+4)' },
+            { value: 'Asia/Bangkok', label: 'Bangkok (UTC+7)' },
+            { value: 'Asia/Kolkata', label: 'Mumbai (UTC+5:30)' },
+            { value: 'Australia/Sydney', label: 'Sydney (UTC+10/+11)' },
+            { value: 'Australia/Melbourne', label: 'Melbourne (UTC+10/+11)' },
+            { value: 'Pacific/Auckland', label: 'Auckland (UTC+12/+13)' }
+          ]
+        },
+        {
+          key: 'africaMiddleEast',
+          options: [
+            { value: 'Africa/Cairo', label: 'Cairo (UTC+2)' },
+            { value: 'Africa/Johannesburg', label: 'Joanesburgo (UTC+2)' },
+            { value: 'Africa/Lagos', label: 'Lagos (UTC+1)' },
+            { value: 'Asia/Jerusalem', label: 'Jerusalém (UTC+2/+3)' },
+            { value: 'Asia/Istanbul', label: 'Istambul (UTC+3)' }
+          ]
+        }
+      ];
+      // Limpar select
+      tzSelect.innerHTML = '';
+      // Renderizar grupos e opções
+      tzData.forEach(group => {
+        const label = window.NEXEFII?.i18n?.t('wizard.config.timezoneGroups.' + group.key) || group.key;
+        const optgroup = document.createElement('optgroup');
+        optgroup.label = label;
+        group.options.forEach(opt => {
+          const option = document.createElement('option');
+          option.value = opt.value;
+          // Busca nome traduzido da cidade/fuso
+          option.textContent = window.NEXEFII?.i18n?.t('wizard.config.timezoneCities.' + opt.value) || opt.label;
+          optgroup.appendChild(option);
+        });
+        tzSelect.appendChild(optgroup);
+      });
+    }
+
+    // Subscribe to language changes if i18n is available so we re-render the select with translations
+    if (window.NEXEFII?.i18n) {
+      window.NEXEFII.i18n.onChange((lang) => {
+        console.log('[Wizard] Language changed to:', lang);
+        // Step 4: Rooms
+        const step4 = document.getElementById('step-3');
+        if (step4 && step4.classList.contains('active')) {
+          renderCategories();
+        }
+        // Re-render timezone select using current translations
+        renderTimezoneSelect();
+        // Re-apply translations to DOM
+        try { window.NEXEFII.i18n.applyToDOM(); } catch(e) { /* ignore */ }
+      });
+    } else {
+      console.warn('[Wizard] I18n not available');
+    }
+
+    // Ensure timezone select is populated on initial load as well
+    try { renderTimezoneSelect(); } catch(e) { console.warn('[Wizard] renderTimezoneSelect failed', e); }
+    
+    updateUI();
+  }
+
+  // Initialize wizard page when loaded
+  initWizardPage();
+
+[console:log] [Wizard] Initializing wizard page
+[console:log] [I18n] Applied translations to 85 elements
+[console:log] [Shell] Page loaded successfully: wizard
+[console:log] [Router] Route handler executed JSHandle@object
+[console:log] [Wizard] Creating property... JSHandle@object
+[console:log] [Wizard] Created sample rooms
+[console:log] [Wizard] Created sample guests
+[console:log] [Wizard] Property added to user session
+[console:log] [Wizard] Property created successfully: JSHandle@object
+[console:log] [Router] Navigation requested JSHandle@object
+[console:log] [Router] Route matched JSHandle@object
+[console:log] [Shell] Resolving property: puppeteer-test-property
+[console:log] [Shell] Property resolved: JSHandle@object
+[console:log] [Router] Route matched JSHandle@object
+[console:log] [Shell] Resolving property: puppeteer-test-property
+[console:log] [Shell] Property resolved: JSHandle@object
+[console:log] [Shell] Auth guard: PASS
+[console:log] [Shell] Auth guard: PASS
+[console:log] [Shell] Property access guard for Puppeteer Test Property: PASS
+[console:log] [Shell] Property access guard for Puppeteer Test Property: PASS
+[test] createProperty result {"ok":true}
+[console:log] [I18n] Applied translations to 1 elements
+[console:log] [I18n] Applied translations to 1 elements
+[console:log] [Shell] Loading page: dashboard JSHandle@object
+[console:log] [Shell] Property context set: Puppeteer Test Property
+[console:log] [Shell] Loading page: dashboard JSHandle@object
+[console:log] [Shell] Property context set: Puppeteer Test Property
+[console:log] [Shell] Executing inline script: 
+  async function initDashboardPage(property) {
+    console.log('[Dashboard] Initializing dashboard for', property.name);
+    
+    // Update header
+    document.getElementById('property-title').textContent = property.name;
+    document.getElementById('property-subtitle').textContent = 
+      `Painel de controle · ${property.description || 'Gestão completa da propriedade'}`;
+    // Atualizar links dinâmicos com slug
+    document.querySelectorAll('[href*="__SLUG__"]').forEach(link => {
+      link.href = link.href.replace('__SLUG__', property.slug);
+    });
+    // Aplicar traduções
+    if (window.NEXEFII?.i18n) window.NEXEFII.i18n.applyToDOM();
+    
+    // Show selected modules
+    const modulesEl = document.getElementById('dashboard-modules');
+    if (modulesEl) {
+      if (property.modules && property.modules.length > 0) {
+        modulesEl.innerHTML = property.modules.map(m => `<span class="module-badge">${m}</span>`).join(' ');
+      } else {
+        modulesEl.innerHTML = '<span style="color:#999;">Nenhum módulo selecionado</span>';
+      }
+    }
+    
+    // Load stats
+    await loadDashboardStats(property);
+    
+    // Load recent reservations
+    await loadRecentReservations(property);
+    
+    console.log('[Dashboard] Dashboard initialized');
+  }
+  
+  async function loadDashboardStats(property) {
+    // TODO: implementar estatísticas do dashboard
+  }
+
+[console:log] [Shell] Page loaded successfully: dashboard
+[console:log] [Router] Route handler executed JSHandle@object
+[console:log] [Shell] Executing inline script: 
+  async function initDashboardPage(property) {
+    console.log('[Dashboard] Initializing dashboard for', property.name);
+    
+    // Update header
+    document.getElementById('property-title').textContent = property.name;
+    document.getElementById('property-subtitle').textContent = 
+      `Painel de controle · ${property.description || 'Gestão completa da propriedade'}`;
+    // Atualizar links dinâmicos com slug
+    document.querySelectorAll('[href*="__SLUG__"]').forEach(link => {
+      link.href = link.href.replace('__SLUG__', property.slug);
+    });
+    // Aplicar traduções
+    if (window.NEXEFII?.i18n) window.NEXEFII.i18n.applyToDOM();
+    
+    // Show selected modules
+    const modulesEl = document.getElementById('dashboard-modules');
+    if (modulesEl) {
+      if (property.modules && property.modules.length > 0) {
+        modulesEl.innerHTML = property.modules.map(m => `<span class="module-badge">${m}</span>`).join(' ');
+      } else {
+        modulesEl.innerHTML = '<span style="color:#999;">Nenhum módulo selecionado</span>';
+      }
+    }
+    
+    // Load stats
+    await loadDashboardStats(property);
+    
+    // Load recent reservations
+    await loadRecentReservations(property);
+    
+    console.log('[Dashboard] Dashboard initialized');
+  }
+  
+  async function loadDashboardStats(property) {
+    // TODO: implementar estatísticas do dashboard
+  }
+
+[console:log] [Shell] Page loaded successfully: dashboard
+[console:log] [Router] Route handler executed JSHandle@object

@@ -1,4 +1,4 @@
-
+﻿
 // ---- i18n external loader (app) with safe fallback and cache ----
 let I18N_APP = null;
 let I18N_HOTELS = null;
@@ -10,7 +10,7 @@ const CACHE_DURATION = 3600000; // 1 hora em milissegundos
 // Canonical hotel keys as used in i18n.json
 const ALL_HOTEL_KEYS = ['iluxSaoPaulo','iluxMiami','iluxRioDeJaneiro'];
 const HOTEL_KEY_BY_NAME = {
-  'São Paulo':'iluxSaoPaulo',
+  'SÃ£o Paulo':'iluxSaoPaulo',
   'Miami':'iluxMiami',
   'Rio de Janeiro':'iluxRioDeJaneiro'
 };
@@ -20,12 +20,12 @@ const HOTEL_DOM_CODE_BY_KEY = {
   iluxRioDeJaneiro: 'rio'
 };
 const HOTEL_CITY_NAME_BY_KEY = {
-  iluxSaoPaulo: 'São Paulo',
+  iluxSaoPaulo: 'SÃ£o Paulo',
   iluxMiami: 'Miami',
   iluxRioDeJaneiro: 'Rio de Janeiro'
 };
 const HOTEL_DISPLAY_NAME_BY_KEY = {
-  iluxSaoPaulo: 'iLux Hotel São Paulo',
+  iluxSaoPaulo: 'iLux Hotel SÃ£o Paulo',
   iluxMiami: 'iLux Hotel Miami',
   iluxRioDeJaneiro: 'iLux Hotel Rio de Janeiro'
 };
@@ -97,7 +97,7 @@ function applyPropertyFilter(){
         else if(id.endsWith('-rio')) k='iluxRioDeJaneiro';
         else {
           const txt = (titleEl.textContent||'').trim();
-          k = HOTEL_KEY_BY_NAME['São Paulo'] && txt.includes('São Paulo') ? 'iluxSaoPaulo'
+          k = HOTEL_KEY_BY_NAME['SÃ£o Paulo'] && txt.includes('SÃ£o Paulo') ? 'iluxSaoPaulo'
             : (txt.includes('Miami') ? 'iluxMiami'
             : (txt.includes('Rio') ? 'iluxRioDeJaneiro' : null));
         }
@@ -120,7 +120,7 @@ function applyPropertyFilter(){
         container.parentElement.insertBefore(emptyHint, container);
       }
       const L = getStrings(localStorage.getItem('ilux_lang')||'pt');
-      emptyHint.innerText = (L && L.noHotelsAccess) || 'Nenhum hotel autorizado para o seu usuário.';
+      emptyHint.innerText = (L && L.noHotelsAccess) || 'Nenhum hotel autorizado para o seu usuÃ¡rio.';
     }else if(emptyHint){
       emptyHint.remove();
     }
@@ -147,10 +147,10 @@ function renderHotelComparisons(){
       const ms = monthStats(y, m, city);
       const occToday = dailyOccPercent(d, m, city);
       const soldFmt = ms.sold.toLocaleString(lang==='en'?'en-US':'pt-BR');
-      const lblOccToday = STR.occToday || 'Ocupação hoje';
+      const lblOccToday = STR.occToday || 'OcupaÃ§Ã£o hoje';
       const lblRevM = STR.revM || 'Receita (M)';
       const lblADR = (STR.pills && STR.pills.adr) || 'ADR';
-      const lblSoldMonth = (STR.pills && STR.pills.soldMonth) || 'Quartos vendidos (mês)';
+      const lblSoldMonth = (STR.pills && STR.pills.soldMonth) || 'Quartos vendidos (mÃªs)';
       return `<div class="tile"><h4>${disp}</h4><div class="kpis">
         <div class="kpi"><div class="label">${lblOccToday}</div><div class="value">${occToday}%</div></div>
         <div class="kpi"><div class="label">${lblRevM}</div><div class="value">${fmtCurrency(ms.revenue)}</div></div>
@@ -161,7 +161,7 @@ function renderHotelComparisons(){
     grid.innerHTML = cards;
     const titleEl = document.getElementById('t-compare');
     if(titleEl){
-      titleEl.innerText = (lang==='en' ? 'Hotel Comparison' : (lang==='es' ? 'Comparación de Hoteles' : 'Comparativo de Hotéis'));
+      titleEl.innerText = (lang==='en' ? 'Hotel Comparison' : (lang==='es' ? 'ComparaciÃ³n de Hoteles' : 'Comparativo de HotÃ©is'));
     }
   }catch(e){ /* no-op */ }
 }
@@ -175,7 +175,7 @@ function openEngineeringControl() {
         'width=1200,height=800,menubar=no,toolbar=no,location=no,status=no');
 }
 
-// Function to open housekeeping (governança) control window
+// Function to open housekeeping (governanÃ§a) control window
 function openHousekeepingControl() {
   // Snapshot current suites so the control page can access them
   try{
@@ -232,84 +232,84 @@ async function loadAppI18N(){
       return;
     }
 
-    // Se não tem cache ou expirou, carrega do servidor
+    // Se nÃ£o tem cache ou expirou, carrega do servidor
     // Adiciona timestamp para evitar cache do navegador
     const res = await fetch(`i18n.json?t=${now}`, {cache:'no-store'});
     if(!res.ok) throw new Error('http');
     const data = await res.json();
     
-    // Atualiza o cache em memória e localStorage
+    // Atualiza o cache em memÃ³ria e localStorage
     I18N_CACHE = data;
     I18N_CACHE_TIMESTAMP = now;
     localStorage.setItem('i18n_cache', JSON.stringify(data));
     localStorage.setItem('i18n_cache_timestamp', now.toString());
     
-    // Atualiza as referências
+    // Atualiza as referÃªncias
     I18N_APP = { pt:data.pt.app, en:data.en.app, es:data.es.app };
     I18N_HOTELS = { pt:data.pt.hotels, en:data.en.hotels, es:data.es.hotels };
   }catch(e){
-    // minimal fallback so UI não quebra em file://
+    // minimal fallback so UI nÃ£o quebra em file://
     I18N_APP = {
-      pt:{summary:'Resumo por hotel',legend:'Legenda',low:'Baixa',medium:'Média',high:'Alta',hotels:'Hotéis',
-          openControl:'Abrir Controle',openRTI:'Abrir Painel Virtual RTI',logout:'Sair',status:'Status',shortcuts:'Atalhos',livePreview:'Visualização ao Vivo (simulação)',close:'Fechar',revenueM:'Receita (M)',sold:'Vendidos',available:'Disponíveis',occToday:'Ocupação hoje',rooms:'Quartos',adr:'ADR',days:'Dias',calendarTitle:'Calendário de Reservas',reservedRate:'Taxa de reserva'},
+      pt:{summary:'Resumo por hotel',legend:'Legenda',low:'Baixa',medium:'MÃ©dia',high:'Alta',hotels:'HotÃ©is',
+          openControl:'Abrir Controle',openRTI:'Abrir Painel Virtual RTI',logout:'Sair',status:'Status',shortcuts:'Atalhos',livePreview:'VisualizaÃ§Ã£o ao Vivo (simulaÃ§Ã£o)',close:'Fechar',revenueM:'Receita (M)',sold:'Vendidos',available:'DisponÃ­veis',occToday:'OcupaÃ§Ã£o hoje',rooms:'Quartos',adr:'ADR',days:'Dias',calendarTitle:'CalendÃ¡rio de Reservas',reservedRate:'Taxa de reserva'},
       en:{summary:'Summary per hotel',legend:'Legend',low:'Low',medium:'Medium',high:'High',hotels:'Hotels',
           openControl:'Open Control',openRTI:'Open RTI Virtual Panel',logout:'Logout',status:'Status',shortcuts:'Shortcuts',livePreview:'Live Preview (simulation)',close:'Close',revenueM:'Revenue (M)',sold:'Sold',available:'Available',occToday:'Occupancy today',rooms:'Rooms',adr:'ADR',days:'Days',calendarTitle:'Reservations Calendar',reservedRate:'Reservation rate'},
       es:{summary:'Resumen por hotel',legend:'Leyenda',low:'Baja',medium:'Media',high:'Alta',hotels:'Hoteles',
-          openControl:'Abrir Control',openRTI:'Abrir RTI Virtual Panel',logout:'Salir',status:'Estado',shortcuts:'Atajos',livePreview:'Live Preview (simulación)',close:'Cerrar',revenueM:'Ingreso (M)',sold:'Vendidos',available:'Disponibles',occToday:'Ocupación hoy',rooms:'Cuartos',adr:'ADR',days:'Días',calendarTitle:'Calendario de Reservas',reservedRate:'Tasa de reserva'}
+          openControl:'Abrir Control',openRTI:'Abrir RTI Virtual Panel',logout:'Salir',status:'Estado',shortcuts:'Atajos',livePreview:'Live Preview (simulaciÃ³n)',close:'Cerrar',revenueM:'Ingreso (M)',sold:'Vendidos',available:'Disponibles',occToday:'OcupaciÃ³n hoy',rooms:'Cuartos',adr:'ADR',days:'DÃ­as',calendarTitle:'Calendario de Reservas',reservedRate:'Tasa de reserva'}
     };
   }
 }
 
-// app.js (modular) — v4_1 i18n expanded
+// app.js (modular) â€” v4_1 i18n expanded
 function getStrings(lang){
   const packs={
     pt:{
-      portalTitle:"iLuxSys · Portal de Hotéis",
-      summary:"Resumo por hotel", legend:"Legenda", low:"Baixa", mid:"Média", high:"Alta",
-      click:"Clique em um hotel para abrir o painel de controle ou o calendário do mês.",
-      hotels:"Hotéis", logout:"Sair",
-      rtiTexts:{conn:"Conexão", ip:"IP", port:"Porta", profile:"Perfil", user:"Usuário", areas:"Ambientes", lightsLobby:"Luzes · Lobby", climateRestaurant:"Clima · Restaurante", audioPool:"Áudio · Piscina", scenesSuites:"Cenas · Suítes", liveHint:"Aqui pode entrar um iframe/app quando o RTI real estiver disponível."},
-      occ:"Ocupação", revM:"Receita (Mês)", sold:"Vendidos", avail:"Disponíveis",
+      portalTitle:"nexefii Â· Portal de HotÃ©is",
+      summary:"Resumo por hotel", legend:"Legenda", low:"Baixa", mid:"MÃ©dia", high:"Alta",
+      click:"Clique em um hotel para abrir o painel de controle ou o calendÃ¡rio do mÃªs.",
+      hotels:"HotÃ©is", logout:"Sair",
+      rtiTexts:{conn:"ConexÃ£o", ip:"IP", port:"Porta", profile:"Perfil", user:"UsuÃ¡rio", areas:"Ambientes", lightsLobby:"Luzes Â· Lobby", climateRestaurant:"Clima Â· Restaurante", audioPool:"Ãudio Â· Piscina", scenesSuites:"Cenas Â· SuÃ­tes", liveHint:"Aqui pode entrar um iframe/app quando o RTI real estiver disponÃ­vel."},
+      occ:"OcupaÃ§Ã£o", revM:"Receita (MÃªs)", sold:"Vendidos", avail:"DisponÃ­veis",
   openControl:"Abrir Controle", openRTI:"Abrir Painel Virtual RTI",
-  rtiTitle:"Painel Virtual RTI", status:"Status", shortcuts:"Atalhos", livePreview:"Visualização ao Vivo (simulação)",
+  rtiTitle:"Painel Virtual RTI", status:"Status", shortcuts:"Atalhos", livePreview:"VisualizaÃ§Ã£o ao Vivo (simulaÃ§Ã£o)",
       close:"Fechar",
-      controlTitle:"Controle do Hotel · {hotel}", roomStatus:"Hotel Status",
-      calTitle:"Calendário de Reservas · {month} {year}",
+      controlTitle:"Controle do Hotel Â· {hotel}", roomStatus:"Hotel Status",
+      calTitle:"CalendÃ¡rio de Reservas Â· {month} {year}",
       pills:{
         totalRooms:"Quartos Totais", occupied:"Ocupados", unoccupied:"Desocupados",
-        checkin:"Check-in Hoje", checkout:"Check-out Hoje", unavailable:"Indisponíveis",
-        revMonth:"Receita (mês)", revForecast:"Previsão mês", soldMonth:"Quartos vendidos (mês)",
+        checkin:"Check-in Hoje", checkout:"Check-out Hoje", unavailable:"IndisponÃ­veis",
+        revMonth:"Receita (mÃªs)", revForecast:"PrevisÃ£o mÃªs", soldMonth:"Quartos vendidos (mÃªs)",
         adr:"ADR", rooms:"Quartos", days:"Dias"
       },
-      months:["janeiro","fevereiro","março","abril","maio","junho","julho","agosto","setembro","outubro","novembro","dezembro"],
-      weekdays:["Seg","Ter","Qua","Qui","Sex","Sáb","Dom"],
-      occToday:"Ocupação hoje",
+      months:["janeiro","fevereiro","marÃ§o","abril","maio","junho","julho","agosto","setembro","outubro","novembro","dezembro"],
+      weekdays:["Seg","Ter","Qua","Qui","Sex","SÃ¡b","Dom"],
+      occToday:"OcupaÃ§Ã£o hoje",
       rooms:"Quartos",
       // Dashboard cards
-      metricsTitle:"Métricas do Mês",
+      metricsTitle:"MÃ©tricas do MÃªs",
       metricRevenue:"Receita",
-      metricForecast:"Previsão",
+      metricForecast:"PrevisÃ£o",
       metricRoomsSold:"Quartos Vendidos",
       engineeringTitle:"ENGENHARIA",
-      housekeepingTitle:"GOVERNANÇA",
+      housekeepingTitle:"GOVERNANÃ‡A",
       alertsTitle:"ALERTAS",
       hvacOn:"HVAC Ligado",
       hvacCool:"Resfriamento",
       hvacHeat:"Aquecimento",
-      hvacAuto:"Automático",
+      hvacAuto:"AutomÃ¡tico",
       hvacOff:"HVAC Desligado",
-      hkDnd:"Não Perturbe",
-      hkCallService:"Chamada de Serviço",
+      hkDnd:"NÃ£o Perturbe",
+      hkCallService:"Chamada de ServiÃ§o",
       hkMur:"Limpeza do Quarto",
       alertThermostatOffline:"Termostato Desconectado",
-      alertHvacMaintenance:"Manutenção HVAC",
+      alertHvacMaintenance:"ManutenÃ§Ã£o HVAC",
       alertHighHumidity:"Umidade Alta",
       openEngineering:"Abrir Controle de Engenharia",
-      openHousekeeping:"Abrir Controle de Governança",
+      openHousekeeping:"Abrir Controle de GovernanÃ§a",
       openAlerts:"Gerenciar Alertas"
     },
     en:{
-      portalTitle:"iLuxSys · Hotel Portal",
+      portalTitle:"nexefii Â· Hotel Portal",
       summary:"Summary per hotel", legend:"Legend", low:"Low", mid:"Medium", high:"High",
       click:"Click a hotel to open control panel or the monthly calendar.",
       hotels:"Hotels",
@@ -317,8 +317,8 @@ function getStrings(lang){
       rtiTexts:{
         conn:"Connection", ip:"IP", port:"Port",
         profile:"Profile", user:"User", areas:"Areas",
-        lightsLobby:"Lights · Lobby", climateRestaurant:"Climate · Restaurant",
-        audioPool:"Audio · Pool", scenesSuites:"Scenes · Suites",
+        lightsLobby:"Lights Â· Lobby", climateRestaurant:"Climate Â· Restaurant",
+        audioPool:"Audio Â· Pool", scenesSuites:"Scenes Â· Suites",
         liveHint:"An iframe/app can be embedded here when the real RTI is available."
       },
 
@@ -326,8 +326,8 @@ function getStrings(lang){
       openControl:"Open Control", openRTI:"Open RTI Virtual Panel",
   rtiTitle:"RTI Virtual Panel", status:"Status", shortcuts:"Shortcuts", livePreview:"Live Preview (simulation)",
       close:"Close",
-      controlTitle:"Hotel Control · {hotel}", roomStatus:"Hotel Status",
-      calTitle:"Reservations Calendar · {month} {year}",
+      controlTitle:"Hotel Control Â· {hotel}", roomStatus:"Hotel Status",
+      calTitle:"Reservations Calendar Â· {month} {year}",
       pills:{
         totalRooms:"Total Rooms", occupied:"Occupied", unoccupied:"Unoccupied",
         checkin:"Check-in Today", checkout:"Check-out Today", unavailable:"Unavailable",
@@ -362,47 +362,47 @@ function getStrings(lang){
       openAlerts:"Manage Alerts"
     },
     es:{
-      portalTitle:"iLuxSys · Portal de Hoteles",
+      portalTitle:"nexefii Â· Portal de Hoteles",
       summary:"Resumen por hotel", legend:"Leyenda", low:"Baja", mid:"Media", high:"Alta",
       click:"Haga clic en un hotel para abrir el panel de control o el calendario mensual.",
       hotels:"Hoteles", logout:"Salir",
-      rtiTexts:{conn:"Conexión", ip:"IP", port:"Puerto", profile:"Perfil", user:"Usuario", areas:"Ambientes", lightsLobby:"Luces · Lobby", climateRestaurant:"Clima · Restaurante", audioPool:"Audio · Piscina", scenesSuites:"Escenas · Suites", liveHint:"Aquí se puede insertar un iframe/app cuando el RTI real esté disponible."},
-      occ:"Ocupación", revM:"Ingresos (Mes)", sold:"Vendidas", avail:"Disponibles",
+      rtiTexts:{conn:"ConexiÃ³n", ip:"IP", port:"Puerto", profile:"Perfil", user:"Usuario", areas:"Ambientes", lightsLobby:"Luces Â· Lobby", climateRestaurant:"Clima Â· Restaurante", audioPool:"Audio Â· Piscina", scenesSuites:"Escenas Â· Suites", liveHint:"AquÃ­ se puede insertar un iframe/app cuando el RTI real estÃ© disponible."},
+      occ:"OcupaciÃ³n", revM:"Ingresos (Mes)", sold:"Vendidas", avail:"Disponibles",
       openControl:"Control Abierto", openRTI:"Panel RTI Virtual Abierto",
-      rtiTitle:"RTI Virtual Panel", status:"Estado", shortcuts:"Atajos", livePreview:"Vista en vivo (simulación)",
+      rtiTitle:"RTI Virtual Panel", status:"Estado", shortcuts:"Atajos", livePreview:"Vista en vivo (simulaciÃ³n)",
       close:"Cerrar",
-      controlTitle:"Control del Hotel · {hotel}", roomStatus:"Estado del Hotel",
-      calTitle:"Calendario de Reservas · {month} {year}",
+      controlTitle:"Control del Hotel Â· {hotel}", roomStatus:"Estado del Hotel",
+      calTitle:"Calendario de Reservas Â· {month} {year}",
       pills:{
         totalRooms:"Habitaciones Totales", occupied:"Ocupadas", unoccupied:"Desocupadas",
         checkin:"Check-in Hoy", checkout:"Check-out Hoy", unavailable:"No disponibles",
-        revMonth:"Ingresos (mes)", revForecast:"Pronóstico (mes)", soldMonth:"Habitaciones vendidas (mes)",
-        adr:"ADR", rooms:"Habitaciones", days:"Días"
+        revMonth:"Ingresos (mes)", revForecast:"PronÃ³stico (mes)", soldMonth:"Habitaciones vendidas (mes)",
+        adr:"ADR", rooms:"Habitaciones", days:"DÃ­as"
       },
       months:["enero","febrero","marzo","abril","mayo","junio","julio","agosto","septiembre","octubre","noviembre","diciembre"],
-      weekdays:["Lun","Mar","Mié","Jue","Vie","Sáb","Dom"],
-      occToday:"Ocupación hoy",
+      weekdays:["Lun","Mar","MiÃ©","Jue","Vie","SÃ¡b","Dom"],
+      occToday:"OcupaciÃ³n hoy",
       rooms:"Habitaciones",
       // Dashboard cards
-      metricsTitle:"Métricas del Mes",
+      metricsTitle:"MÃ©tricas del Mes",
       metricRevenue:"Ingresos",
-      metricForecast:"Pronóstico",
+      metricForecast:"PronÃ³stico",
       metricRoomsSold:"Habitaciones Vendidas",
-      engineeringTitle:"INGENIERÍA",
+      engineeringTitle:"INGENIERÃA",
       housekeepingTitle:"GOBERNANZA",
       alertsTitle:"ALERTAS",
       hvacOn:"HVAC Encendido",
       hvacCool:"Enfriamiento",
-      hvacHeat:"Calefacción",
-      hvacAuto:"Automático",
+      hvacHeat:"CalefacciÃ³n",
+      hvacAuto:"AutomÃ¡tico",
       hvacOff:"HVAC Apagado",
       hkDnd:"No Molestar",
       hkCallService:"Llamar Servicio",
-      hkMur:"Hacer Habitación",
+      hkMur:"Hacer HabitaciÃ³n",
       alertThermostatOffline:"Termostato Desconectado",
       alertHvacMaintenance:"Mantenimiento HVAC",
       alertHighHumidity:"Humedad Alta",
-      openEngineering:"Abrir Control de Ingeniería",
+      openEngineering:"Abrir Control de IngenierÃ­a",
       openHousekeeping:"Abrir Control de Gobernanza",
       openAlerts:"Gestionar Alertas"
     }
@@ -436,11 +436,11 @@ async function changeLanguage(newLang) {
   // Mostra o loading
   document.getElementById('loadingOverlay').classList.add('show');
   
-  // Adiciona classe de transição em todos elementos traduzíveis
+  // Adiciona classe de transiÃ§Ã£o em todos elementos traduzÃ­veis
   const elements = document.querySelectorAll('[data-i18n]');
   elements.forEach(el => el.classList.add('changing'));
 
-  // Aguarda a transição de opacidade terminar
+  // Aguarda a transiÃ§Ã£o de opacidade terminar
   await new Promise(resolve => setTimeout(resolve, 300));
   
   lang = newLang;
@@ -448,12 +448,12 @@ async function changeLanguage(newLang) {
   await loadAppI18N();
   STR = getStrings(lang);
   
-  // Atualiza todos os textos da página
+  // Atualiza todos os textos da pÃ¡gina
   await initTexts();
   
-  // FORÇA atualização dos botões (garantia extra)
+  // FORÃ‡A atualizaÃ§Ã£o dos botÃµes (garantia extra)
   setTimeout(() => {
-    // Atualiza botões novamente para garantir
+    // Atualiza botÃµes novamente para garantir
     t('btn-ctl-sp', STR.openControl);
     t('btn-rti-sp', STR.openRTI);
     t('btn-ctl-mi', STR.openControl);
@@ -465,14 +465,14 @@ async function changeLanguage(newLang) {
     t('t-rooms-rio', STR.rooms);
   }, 100);
   
-  // Remove classe de transição após atualizar textos
+  // Remove classe de transiÃ§Ã£o apÃ³s atualizar textos
   setTimeout(() => {
     elements.forEach(el => el.classList.remove('changing'));
     // Esconde o loading
     document.getElementById('loadingOverlay').classList.remove('show');
   }, 50);
-  bindHomeKPIs(); // recarrega KPIs para atualizar formatação de moeda/números
-  renderHotelComparisons(); // atualiza comparativo multi-hotéis (se aplicável)
+  bindHomeKPIs(); // recarrega KPIs para atualizar formataÃ§Ã£o de moeda/nÃºmeros
+  renderHotelComparisons(); // atualiza comparativo multi-hotÃ©is (se aplicÃ¡vel)
   // Re-renderiza cards do dashboard se estiver aberto
   if(document.getElementById('controlModal') && document.getElementById('controlModal').classList.contains('open')) {
     renderDashboardCards();
@@ -482,14 +482,14 @@ async function changeLanguage(newLang) {
 async function initTexts(){
   STR = getStrings(lang);
   
-  // Atualiza título do portal
-  t('page-title', STR.portalTitle || 'iLuxSys · Portal de Hotéis');
-  t('header-title', STR.portalTitle || 'iLuxSys · Portal de Hotéis');
+  // Atualiza tÃ­tulo do portal
+  t('page-title', STR.portalTitle || 'nexefii Â· Portal de HotÃ©is');
+  t('header-title', STR.portalTitle || 'nexefii Â· Portal de HotÃ©is');
   
   // Header logout
   const lo=document.getElementById('btnLogout'); if(lo) lo.innerText=STR.logout;
 
-  const user=localStorage.getItem('ilux_user')||'demo@iluxsys.com';
+  const user=localStorage.getItem('ilux_user')||'demo@nexefii.com';
   t('userBox', user);
   t('t-summary', STR.summary);
   t('t-legend-title', STR.legend);
@@ -504,9 +504,9 @@ async function initTexts(){
   // Legend hint
   t('t-click', STR.click);
 
-  // Hotel cards - botões e "Quartos"
-  // São Paulo
-  t('t-rooms', STR.rooms);  // ID sem sufixo para São Paulo
+  // Hotel cards - botÃµes e "Quartos"
+  // SÃ£o Paulo
+  t('t-rooms', STR.rooms);  // ID sem sufixo para SÃ£o Paulo
   t('btn-ctl-sp', STR.openControl);
   t('btn-rti-sp', STR.openRTI);
   
@@ -516,13 +516,13 @@ async function initTexts(){
   t('btn-rti-mi', STR.openRTI);
   
   // Rio
-  t('t-rooms-rio', STR.rooms);  // ID com -rio (não -rj)
+  t('t-rooms-rio', STR.rooms);  // ID com -rio (nÃ£o -rj)
   t('btn-ctl-rj', STR.openControl);
   t('btn-rti-rj', STR.openRTI);
   
-  // Hotel names (opcional - pode manter como estão se forem marcas)
+  // Hotel names (opcional - pode manter como estÃ£o se forem marcas)
   const hotelNames = {
-    'sp': 'iLux Hotel São Paulo',
+    'sp': 'iLux Hotel SÃ£o Paulo',
     'mi': 'iLux Hotel Miami',
     'rio': 'iLux Hotel Rio de Janeiro'
   };
@@ -530,15 +530,15 @@ async function initTexts(){
     t('hotel-name-'+code, name);
   });
   
-  // Traduz o título das métricas se existir
+  // Traduz o tÃ­tulo das mÃ©tricas se existir
   const metricsTitle = document.getElementById('t-metrics');
   if(metricsTitle) {
-    metricsTitle.innerText = STR.metricsTitle || 'Métricas do Mês';
+    metricsTitle.innerText = STR.metricsTitle || 'MÃ©tricas do MÃªs';
   }
   
-  // Traduz os labels das métricas
+  // Traduz os labels das mÃ©tricas
   t('t-metric-revenue', STR.metricRevenue || 'Receita');
-  t('t-metric-forecast', STR.metricForecast || 'Previsão');
+  t('t-metric-forecast', STR.metricForecast || 'PrevisÃ£o');
   t('t-metric-rooms-sold', STR.metricRoomsSold || 'Quartos Vendidos');
 }
 
@@ -557,7 +557,7 @@ function bindHomeKPIs(){
 }
 
 // Control modal
-let calState={year:new Date().getFullYear(),month:new Date().getMonth(),hotel:'São Paulo'};
+let calState={year:new Date().getFullYear(),month:new Date().getMonth(),hotel:'SÃ£o Paulo'};
 
 function openControl(h){
   // Property-based access guard
@@ -572,7 +572,7 @@ function openControl(h){
   const ctlSub = document.getElementById('controlSubtitle'); if(ctlSub) ctlSub.innerText = ctlText;
   const rs=document.getElementById('roomStats'); rs.innerHTML='';
   const pills=STR.pills;
-  // Usar 11 pavimentos x 9 suítes = 99 quartos para esta visualização
+  // Usar 11 pavimentos x 9 suÃ­tes = 99 quartos para esta visualizaÃ§Ã£o
   const totalRooms = 11 * 9;
   const occupied = Math.round(totalRooms * 0.68);
   const unoccupied = totalRooms - occupied;
@@ -584,13 +584,13 @@ function openControl(h){
   renderCalendar();
   document.getElementById('controlModal').classList.add('open');
 
-  // Inicia a simulação do dashboard (11 pavimentos x 9 suítes)
+  // Inicia a simulaÃ§Ã£o do dashboard (11 pavimentos x 9 suÃ­tes)
   startDashboardSimulation(11, 9);
 }
 
 function closeControl(){ 
   document.getElementById('controlModal').classList.remove('open'); 
-  // Para a simulação quando o modal é fechado
+  // Para a simulaÃ§Ã£o quando o modal Ã© fechado
   stopDashboardSimulation();
 }
 
@@ -602,7 +602,7 @@ function openRTI(h){
     alert((L && L.accessDeniedHotel) || 'Acesso negado para este hotel.');
     return;
   }
-  const rtiText = STR.rtiTitle+' · '+h+' (simulated)';
+  const rtiText = STR.rtiTitle+' Â· '+h+' (simulated)';
   document.getElementById('rtiTitle').innerText = rtiText;
   const rtiSub = document.getElementById('rtiSubtitle'); if(rtiSub) rtiSub.innerText = rtiText;
   document.getElementById('btn-close-rti').innerText = STR.close;
@@ -612,9 +612,9 @@ function openRTI(h){
   // Status localized
   const T=STR.rtiTexts;
   const sb=document.getElementById('rtiStatusBox');
-  sb.innerHTML = `<b>${T.conn}:</b> Online · <b>${T.ip}:</b> 10.0.0.15 · <b>${T.port}:</b> 49153`+
-                 `<br><b>${T.profile}:</b> Hotel · <b>${T.user}:</b> operador`+
-                 `<br><b>${T.areas}:</b> Lobby, Restaurante, Piscina, Suítes`;
+  sb.innerHTML = `<b>${T.conn}:</b> Online Â· <b>${T.ip}:</b> 10.0.0.15 Â· <b>${T.port}:</b> 49153`+
+                 `<br><b>${T.profile}:</b> Hotel Â· <b>${T.user}:</b> operador`+
+                 `<br><b>${T.areas}:</b> Lobby, Restaurante, Piscina, SuÃ­tes`;
   // Shortcut buttons
   document.getElementById('btn-rti-l1').innerText = T.lightsLobby;
   document.getElementById('btn-rti-l2').innerText = T.climateRestaurant;
@@ -815,7 +815,7 @@ function getWeatherByTime(hour, season) {
 
 function updateTimeAndWeather(){
   const cityData = {
-    'São Paulo': {
+    'SÃ£o Paulo': {
       timezone: 'America/Sao_Paulo',
       baseTemp: 24,
       unit: 'C',
@@ -867,11 +867,11 @@ function updateTimeAndWeather(){
     
     // Add some random variation
     const randomVar = data.unit === 'F' ? 
-      Math.round((Math.random() - 0.5) * 6) : // ±3°F
-      Math.round((Math.random() - 0.5) * 4);   // ±2°C
+      Math.round((Math.random() - 0.5) * 6) : // Â±3Â°F
+      Math.round((Math.random() - 0.5) * 4);   // Â±2Â°C
     
     const temp = baseTemp + tempVariation + randomVar;
-    const tempUnit = data.unit === 'F' ? '°F' : '°C';
+    const tempUnit = data.unit === 'F' ? 'Â°F' : 'Â°C';
     
     // Get weather icon based on time
     const iconType = getWeatherByTime(hour);
@@ -895,7 +895,7 @@ function updateTimeAndWeather(){
 // Efficient function to update only time display
 function updateTimeDisplay(){
   const cityData = {
-    'São Paulo': {timezone: 'America/Sao_Paulo', elementId: 'time-sp'},
+    'SÃ£o Paulo': {timezone: 'America/Sao_Paulo', elementId: 'time-sp'},
     'Miami': {timezone: 'America/New_York', elementId: 'time-mi'},
     'Rio de Janeiro': {timezone: 'America/Sao_Paulo', elementId: 'time-rio'}
   };
@@ -966,8 +966,8 @@ function buildInitialSuites(floors, suitesPerFloor){
         callTime: Math.random()>0.7 ? timestamp : '-----', // 30% have call time
         lastUpdate: timestamp,
         humidity: Math.floor(Math.random()*40)+40, // 40-79%
-        roomTemp: Math.floor(Math.random()*6)+20, // 20-25°C
-        thermostat: Math.floor(Math.random()*6)+20 // 20-25°C
+        roomTemp: Math.floor(Math.random()*6)+20, // 20-25Â°C
+        thermostat: Math.floor(Math.random()*6)+20 // 20-25Â°C
       });
     }
   }
@@ -1082,11 +1082,11 @@ function openEngineeringListModal(metric){
   if(sel) sel.value = ENG_LIST_STATE.metric;
   const hdr = document.getElementById('engListHeading');
   const lbl = document.getElementById('engMetricLabel');
-  if(hdr) hdr.firstChild && (hdr.firstChild.textContent = (L.engineeringTitle||'ENGENHARIA') + ' · ');
+  if(hdr) hdr.firstChild && (hdr.firstChild.textContent = (L.engineeringTitle||'ENGENHARIA') + ' Â· ');
   if(lbl) lbl.innerText = (sel ? sel.options[sel.selectedIndex].text : (L.hvacOn||'HVAC On'));
   const btnClose = document.getElementById('btn-close-englist'); if(btnClose) btnClose.innerText = L.close || 'Fechar';
-  const title = document.getElementById('engListTitle'); if(title) title.innerText = (L.engineeringTitle||'ENGENHARIA') + ' · Lista';
-  const sub = document.getElementById('engListSubtitle'); if(sub) sub.innerText = (L.engineeringTitle||'ENGENHARIA') + ' · ' + (lbl? lbl.innerText : '');
+  const title = document.getElementById('engListTitle'); if(title) title.innerText = (L.engineeringTitle||'ENGENHARIA') + ' Â· Lista';
+  const sub = document.getElementById('engListSubtitle'); if(sub) sub.innerText = (L.engineeringTitle||'ENGENHARIA') + ' Â· ' + (lbl? lbl.innerText : '');
   document.getElementById('engListModal').classList.add('open');
   renderEngListModal();
 }
@@ -1142,7 +1142,7 @@ function renderEngListModal(){
   const pageList = list.slice(start, start+ENG_LIST_STATE.pageSize);
   const from = total? (start+1) : 0; const to = Math.min(start+ENG_LIST_STATE.pageSize, total);
 
-  if(info) info.innerText = `${total} ${L.rooms || 'Quartos'} • ${from}–${to}`;
+  if(info) info.innerText = `${total} ${L.rooms || 'Quartos'} â€¢ ${from}â€“${to}`;
 
   // Floor counters
   const fc = computeEngFloorCounts();
@@ -1150,7 +1150,7 @@ function renderEngListModal(){
   if(fcBox){
     fcBox.innerHTML = fc.map((cnt, idx)=>{
       const floor = idx+1; const active = (ENG_LIST_STATE.floor!=="all" && parseInt(ENG_LIST_STATE.floor,10)===floor);
-      return `<span class="floor-chip${active?' active':''}" data-floor="${floor}">${floor}º · ${cnt}</span>`;
+      return `<span class="floor-chip${active?' active':''}" data-floor="${floor}">${floor}Âº Â· ${cnt}</span>`;
     }).join('');
     // click handlers
     Array.from(fcBox.querySelectorAll('.floor-chip')).forEach(el=>{
@@ -1164,7 +1164,7 @@ function renderEngListModal(){
   }
 
   const pageInfo = document.getElementById('engPageInfo');
-  if(pageInfo) pageInfo.innerText = `Página ${ENG_LIST_STATE.page}/${pages}`;
+  if(pageInfo) pageInfo.innerText = `PÃ¡gina ${ENG_LIST_STATE.page}/${pages}`;
 
   // Update pagination buttons visibility and state
   const prevBtn = document.getElementById('engPrev');
@@ -1269,16 +1269,16 @@ function openHousekeepingListModal(metric){
       <option value="DND">${L.hkDnd || 'DND'}</option>
       <option value="CollectTray">${L.hkCollectTray || 'Collect Tray'}</option>
       <option value="MUR">${L.hkMur || 'MUR'}</option>
-      <option value="None">${L.hkNone || 'Sem Solicitação'}</option>`;
+      <option value="None">${L.hkNone || 'Sem SolicitaÃ§Ã£o'}</option>`;
   }
   if(sel) sel.value = HK_LIST_STATE.metric;
   const hdr = document.getElementById('hkListHeading');
   const lbl = document.getElementById('hkMetricLabel');
-  if(hdr) hdr.firstChild && (hdr.firstChild.textContent = (L.housekeepingTitle||'GOVERNANÇA') + ' · ');
+  if(hdr) hdr.firstChild && (hdr.firstChild.textContent = (L.housekeepingTitle||'GOVERNANÃ‡A') + ' Â· ');
   if(lbl) lbl.innerText = (sel ? sel.options[sel.selectedIndex].text : (L.hkDnd||'DND'));
   const btnClose = document.getElementById('btn-close-hklist'); if(btnClose) btnClose.innerText = L.close || 'Fechar';
-  const title = document.getElementById('hkListTitle'); if(title) title.innerText = (L.housekeepingTitle||'GOVERNANÇA') + ' · Lista';
-  const sub = document.getElementById('hkListSubtitle'); if(sub) sub.innerText = (L.housekeepingTitle||'GOVERNANÇA') + ' · ' + (lbl? lbl.innerText : '');
+  const title = document.getElementById('hkListTitle'); if(title) title.innerText = (L.housekeepingTitle||'GOVERNANÃ‡A') + ' Â· Lista';
+  const sub = document.getElementById('hkListSubtitle'); if(sub) sub.innerText = (L.housekeepingTitle||'GOVERNANÃ‡A') + ' Â· ' + (lbl? lbl.innerText : '');
   document.getElementById('hkListModal').classList.add('open');
   renderHkListModal();
 }
@@ -1333,14 +1333,14 @@ function renderHkListModal(){
   const pageList = list.slice(start, start+HK_LIST_STATE.pageSize);
   const from = total? (start+1) : 0; const to = Math.min(start+HK_LIST_STATE.pageSize, total);
 
-  if(info) info.innerText = `${total} ${L.rooms || 'Quartos'} • ${from}–${to}`;
+  if(info) info.innerText = `${total} ${L.rooms || 'Quartos'} â€¢ ${from}â€“${to}`;
 
   const fc = computeHkFloorCounts();
   const fcBox = document.getElementById('hkFloorCounters');
   if(fcBox){
     fcBox.innerHTML = fc.map((cnt, idx)=>{
       const floor = idx+1; const active = (HK_LIST_STATE.floor!=="all" && parseInt(HK_LIST_STATE.floor,10)===floor);
-      return `<span class="floor-chip${active?' active':''}" data-floor="${floor}">${floor}º · ${cnt}</span>`;
+      return `<span class="floor-chip${active?' active':''}" data-floor="${floor}">${floor}Âº Â· ${cnt}</span>`;
     }).join('');
     Array.from(fcBox.querySelectorAll('.floor-chip')).forEach(el=>{
       el.addEventListener('click', ()=>{
@@ -1353,7 +1353,7 @@ function renderHkListModal(){
   }
 
   const pageInfo = document.getElementById('hkPageInfo');
-  if(pageInfo) pageInfo.innerText = `Página ${HK_LIST_STATE.page}/${pages}`;
+  if(pageInfo) pageInfo.innerText = `PÃ¡gina ${HK_LIST_STATE.page}/${pages}`;
 
   const prevBtn = document.getElementById('hkPrev');
   const nextBtn = document.getElementById('hkNext');
@@ -1384,7 +1384,7 @@ function renderHkListModal(){
       const isThermostatOffline = s.alerts && s.alerts.includes('Thermostat Offline');
       const hvacClass = (s.hvac==='Cool'?'hvac-cool': s.hvac==='Heat'?'hvac-heat': s.hvac==='Auto'?'hvac-auto': s.hvac==='Off'?'hvac-off':'hvac-on');
       const hvacDisplay = isThermostatOffline ? '<span class="hvac-chip hvac-off" style="opacity:0.6">Offline</span>' : `<span class="hvac-chip ${hvacClass}">${s.hvac}</span>`;
-      const hkDisplay = (!s.hk || s.hk==='None') ? 'Sem Solicitação' : s.hk;
+      const hkDisplay = (!s.hk || s.hk==='None') ? 'Sem SolicitaÃ§Ã£o' : s.hk;
       return `<tr>
         <td style="padding:8px;border-top:1px dashed var(--line)">${rn}</td>
         <td style="padding:8px;border-top:1px dashed var(--line)"><span class="hk-chip ${hkClass}">${hkDisplay}</span></td>
@@ -1459,11 +1459,11 @@ function openAlertsListModal(metric){
   if(sel) sel.value = ALERT_LIST_STATE.metric;
   const hdr = document.getElementById('alertListHeading');
   const lbl = document.getElementById('alertMetricLabel');
-  if(hdr) hdr.firstChild && (hdr.firstChild.textContent = (L.alertsTitle||'ALERTAS') + ' · ');
+  if(hdr) hdr.firstChild && (hdr.firstChild.textContent = (L.alertsTitle||'ALERTAS') + ' Â· ');
   if(lbl) lbl.innerText = (sel ? sel.options[sel.selectedIndex].text : 'Todos');
   const btnClose = document.getElementById('btn-close-alertlist'); if(btnClose) btnClose.innerText = L.close || 'Fechar';
-  const title = document.getElementById('alertListTitle'); if(title) title.innerText = (L.alertsTitle||'ALERTAS') + ' · Lista';
-  const sub = document.getElementById('alertListSubtitle'); if(sub) sub.innerText = (L.alertsTitle||'ALERTAS') + ' · ' + (lbl? lbl.innerText : '');
+  const title = document.getElementById('alertListTitle'); if(title) title.innerText = (L.alertsTitle||'ALERTAS') + ' Â· Lista';
+  const sub = document.getElementById('alertListSubtitle'); if(sub) sub.innerText = (L.alertsTitle||'ALERTAS') + ' Â· ' + (lbl? lbl.innerText : '');
   document.getElementById('alertListModal').classList.add('open');
   renderAlertListModal();
 }
@@ -1518,14 +1518,14 @@ function renderAlertListModal(){
   const pageList = list.slice(start, start+ALERT_LIST_STATE.pageSize);
   const from = total? (start+1) : 0; const to = Math.min(start+ALERT_LIST_STATE.pageSize, total);
 
-  if(info) info.innerText = `${total} ${L.rooms || 'Quartos'} • ${from}–${to}`;
+  if(info) info.innerText = `${total} ${L.rooms || 'Quartos'} â€¢ ${from}â€“${to}`;
 
   const fc = computeAlertFloorCounts();
   const fcBox = document.getElementById('alertFloorCounters');
   if(fcBox){
     fcBox.innerHTML = fc.map((cnt, idx)=>{
       const floor = idx+1; const active = (ALERT_LIST_STATE.floor!=="all" && parseInt(ALERT_LIST_STATE.floor,10)===floor);
-      return `<span class="floor-chip${active?' active':''}" data-floor="${floor}">${floor}º · ${cnt}</span>`;
+      return `<span class="floor-chip${active?' active':''}" data-floor="${floor}">${floor}Âº Â· ${cnt}</span>`;
     }).join('');
     Array.from(fcBox.querySelectorAll('.floor-chip')).forEach(el=>{
       el.addEventListener('click', ()=>{
@@ -1538,7 +1538,7 @@ function renderAlertListModal(){
   }
 
   const pageInfo = document.getElementById('alertPageInfo');
-  if(pageInfo) pageInfo.innerText = `Página ${ALERT_LIST_STATE.page}/${pages}`;
+  if(pageInfo) pageInfo.innerText = `PÃ¡gina ${ALERT_LIST_STATE.page}/${pages}`;
 
   const prevBtn = document.getElementById('alertPrev');
   const nextBtn = document.getElementById('alertNext');
@@ -1674,10 +1674,10 @@ function renderDashboardCards(){
         <h4>${L.engineeringTitle || 'ENGENHARIA'}</h4>
         <div class="chart-toggle">
           <button class="${viewMode==='list'?'active':''}" onclick="toggleCardView('engineering','list')">
-            📋 Lista
+            ðŸ“‹ Lista
           </button>
           <button class="${viewMode==='chart'?'active':''}" onclick="toggleCardView('engineering','chart')">
-            📊 Gráfico
+            ðŸ“Š GrÃ¡fico
           </button>
         </div>
         <div class="card-content">
@@ -1700,10 +1700,10 @@ function renderDashboardCards(){
         <h4>${L.housekeepingTitle || 'HOUSEKEEPING'}</h4>
         <div class="chart-toggle">
           <button class="${viewMode==='list'?'active':''}" onclick="toggleCardView('housekeeping','list')">
-            📋 Lista
+            ðŸ“‹ Lista
           </button>
           <button class="${viewMode==='chart'?'active':''}" onclick="toggleCardView('housekeeping','chart')">
-            📊 Gráfico
+            ðŸ“Š GrÃ¡fico
           </button>
         </div>
         <div class="card-content">
@@ -1711,7 +1711,7 @@ function renderDashboardCards(){
         </div>
         <div class="dashboard-card-button">
           <button class="btn primary" onclick="openHousekeepingControl()" id="btn-housekeeping">
-            ${L.openHousekeeping || 'Abrir Controle de Governança'}
+            ${L.openHousekeeping || 'Abrir Controle de GovernanÃ§a'}
           </button>
         </div>
       </div>
@@ -1726,10 +1726,10 @@ function renderDashboardCards(){
         <h4>${L.alertsTitle || 'ALERTAS'}</h4>
         <div class="chart-toggle">
           <button class="${viewMode==='list'?'active':''}" onclick="toggleCardView('alerts','list')">
-            📋 Lista
+            ðŸ“‹ Lista
           </button>
           <button class="${viewMode==='chart'?'active':''}" onclick="toggleCardView('alerts','chart')">
-            📊 Gráfico
+            ðŸ“Š GrÃ¡fico
           </button>
         </div>
         <div class="card-content">
@@ -1750,7 +1750,7 @@ function renderDashboardCards(){
     html += `
       <div class="dashboard-card pms-card">
         <h4 style="display:flex;align-items:center;gap:8px">
-          🏨 ${L.pmsTitle || 'PMS - Sistema de Gestão'}
+          ðŸ¨ ${L.pmsTitle || 'PMS - Sistema de GestÃ£o'}
         </h4>
         <div class="card-content">
           <div style="font-size:12px;color:var(--muted);margin-bottom:12px">
@@ -1759,31 +1759,31 @@ function renderDashboardCards(){
           <ul style="list-style:none;padding:0;margin:0;display:flex;flex-direction:column;gap:6px">
             <li style="padding:8px;background:var(--bg);border-radius:6px;cursor:pointer;transition:all 0.2s" onmouseover="this.style.background='var(--bg-hover)'" onmouseout="this.style.background='var(--bg)'" onclick="openPMSModule('reservations')">
               <div style="display:flex;align-items:center;gap:8px">
-                <span>📅</span>
+                <span>ðŸ“…</span>
                 <span style="font-weight:500">${L.pmsReservations || 'Reservas'}</span>
               </div>
             </li>
             <li style="padding:8px;background:var(--bg);border-radius:6px;cursor:pointer;transition:all 0.2s" onmouseover="this.style.background='var(--bg-hover)'" onmouseout="this.style.background='var(--bg)'" onclick="openPMSModule('checkInOut')">
               <div style="display:flex;align-items:center;gap:8px">
-                <span>🔑</span>
+                <span>ðŸ”‘</span>
                 <span style="font-weight:500">${L.pmsCheckInOut || 'Check-in / Check-out'}</span>
               </div>
             </li>
             <li style="padding:8px;background:var(--bg);border-radius:6px;cursor:pointer;transition:all 0.2s" onmouseover="this.style.background='var(--bg-hover)'" onmouseout="this.style.background='var(--bg)'" onclick="openPMSModule('guestProfile')">
               <div style="display:flex;align-items:center;gap:8px">
-                <span>👤</span>
-                <span style="font-weight:500">${L.pmsGuestProfile || 'Perfil do Hóspede / CRM'}</span>
+                <span>ðŸ‘¤</span>
+                <span style="font-weight:500">${L.pmsGuestProfile || 'Perfil do HÃ³spede / CRM'}</span>
               </div>
             </li>
             <li style="padding:8px;background:var(--bg);border-radius:6px;cursor:pointer;transition:all 0.2s" onmouseover="this.style.background='var(--bg-hover)'" onmouseout="this.style.background='var(--bg)'" onclick="openPMSModule('roomAssignment')">
               <div style="display:flex;align-items:center;gap:8px">
-                <span>🚪</span>
-                <span style="font-weight:500">${L.pmsRoomAssignment || 'Alocação de Quartos'}</span>
+                <span>ðŸšª</span>
+                <span style="font-weight:500">${L.pmsRoomAssignment || 'AlocaÃ§Ã£o de Quartos'}</span>
               </div>
             </li>
             <li style="padding:8px;background:var(--bg);border-radius:6px;cursor:pointer;transition:all 0.2s" onmouseover="this.style.background='var(--bg-hover)'" onmouseout="this.style.background='var(--bg)'" onclick="openPMSModule('concierge')">
               <div style="display:flex;align-items:center;gap:8px">
-                <span>🎩</span>
+                <span>ðŸŽ©</span>
                 <span style="font-weight:500">${L.pmsConcierge || 'Concierge / Bell Desk'}</span>
               </div>
             </li>
@@ -1791,7 +1791,7 @@ function renderDashboardCards(){
         </div>
         <div class="dashboard-card-button">
           <button class="btn primary" onclick="openPMSConfig()">
-            ${L.pmsModulesConfig || 'Configurar Módulos PMS'}
+            ${L.pmsModulesConfig || 'Configurar MÃ³dulos PMS'}
           </button>
         </div>
       </div>
@@ -1824,7 +1824,7 @@ function renderHousekeepingList(hk, L){
       <li style="cursor:pointer" onclick="(window.openHousekeepingListModal||function(){})('DND')">${L.hkDnd || 'DND'} <span class="count-badge">${hk.DND}</span></li>
       <li style="cursor:pointer" onclick="(window.openHousekeepingListModal||function(){})('CollectTray')">${L.hkCollectTray || 'Collect Tray'} <span class="count-badge">${hk.CollectTray}</span></li>
       <li style="cursor:pointer" onclick="(window.openHousekeepingListModal||function(){})('MUR')">${L.hkMur || 'MUR'} <span class="count-badge">${hk.MUR}</span></li>
-      <li style="cursor:pointer" onclick="(window.openHousekeepingListModal||function(){})('None')">${L.hkNone || 'Sem Solicitação'} <span class="count-badge">${hk.None}</span></li>
+      <li style="cursor:pointer" onclick="(window.openHousekeepingListModal||function(){})('None')">${L.hkNone || 'Sem SolicitaÃ§Ã£o'} <span class="count-badge">${hk.None}</span></li>
     </ul>
   `;
 }
@@ -1857,7 +1857,7 @@ function renderHousekeepingChart(hk){
     {label:'DND',value:hk.DND,color:'#8b5cf6'},
     {label:'Collect Tray',value:hk.CollectTray,color:'#ec4899'},
     {label:'MUR',value:hk.MUR,color:'#14b8a6'},
-    {label:'Sem Solicitação',value:hk.None,color:'#94a3b8'}
+    {label:'Sem SolicitaÃ§Ã£o',value:hk.None,color:'#94a3b8'}
   ];
   return createBarChart(data, totalApartments);
 }
@@ -1998,7 +1998,7 @@ function openPMSModule(moduleId) {
   // Get module info
   if(!window.PMSModuleManager) {
     console.warn('[PMS] PMSModuleManager not loaded');
-    alert('PMS Module Manager não carregado. Recarregue a página.');
+    alert('PMS Module Manager nÃ£o carregado. Recarregue a pÃ¡gina.');
     return;
   }
   
@@ -2023,7 +2023,7 @@ function openPMSModule(moduleId) {
     window.open('pms-frontdesk.html', '_blank', 'width=1400,height=900');
   } else {
     // Placeholder: Show coming soon message for other modules
-    alert(`🚧 ${moduleName}\n\nMódulo em desenvolvimento.\nEm breve você terá acesso a todas as funcionalidades!`);
+    alert(`ðŸš§ ${moduleName}\n\nMÃ³dulo em desenvolvimento.\nEm breve vocÃª terÃ¡ acesso a todas as funcionalidades!`);
   }
   
   // TODO: Implement other module opening logic
@@ -2035,8 +2035,9 @@ function openPMSConfig() {
   const curLang = localStorage.getItem('ilux_lang') || 'pt';
   const L = getStrings(curLang);
   
-  alert(`⚙️ ${L.pmsModulesConfig || 'Configuração de Módulos PMS'}\n\nInterface de configuração em desenvolvimento.\nAcesse o painel administrativo para configurar propriedades e módulos.`);
+  alert(`âš™ï¸ ${L.pmsModulesConfig || 'ConfiguraÃ§Ã£o de MÃ³dulos PMS'}\n\nInterface de configuraÃ§Ã£o em desenvolvimento.\nAcesse o painel administrativo para configurar propriedades e mÃ³dulos.`);
   
   // TODO: Open configuration modal or redirect to admin page
 }
+
 

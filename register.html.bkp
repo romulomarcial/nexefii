@@ -1,0 +1,521 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>iLuxSys · Solicitar Acesso</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+  <style>
+    :root{
+      --bg:#f6f7fb; --card:#ffffff; --line:#e7eaf0; --text:#0f172a; --muted:#64748b;
+      --primary:#2f6bff; --primary-contrast:#ffffff; --shadow:0 10px 30px rgba(15,23,42,.08);
+      --radius:16px; --success:#22c55e; --error:#ef4444;
+    }
+    *{box-sizing:border-box}
+    body{margin:0;background:var(--bg);font-family:'Inter',system-ui,Segoe UI,Roboto,Arial,sans-serif;color:var(--text)}
+    .wrap{min-height:100dvh;display:grid;place-items:center;padding:24px}
+    .card{width:100%;max-width:580px;background:var(--card);border:1px solid var(--line);
+      border-radius:var(--radius);box-shadow:var(--shadow);padding:32px 32px 28px}
+  .brand{display:flex;align-items:center;gap:10px;margin-bottom:8px}
+  .brand img{height:40px}
+  @media(min-width:1200px){ .brand img{height:48px} }
+    .title{font-weight:700;font-size:16px;letter-spacing:.2px}
+    .subtitle{font-size:13px;color:var(--muted);margin-bottom:20px;line-height:1.5}
+    label{display:block;font-size:12px;font-weight:600;color:var(--text);margin:14px 0 6px}
+    label.required::after{content:' *';color:var(--error)}
+    select,input{width:100%;padding:12px 14px;border:1px solid var(--line);border-radius:12px;
+      font-size:14px;outline:none;background:#fff;transition:all 0.2s}
+    select:focus,input:focus{border-color:var(--primary);box-shadow:0 0 0 4px rgba(47,107,255,.08)}
+    .input-error{border-color:var(--error)}
+    .error-msg{color:var(--error);font-size:11px;margin-top:4px;display:none}
+    .error-msg.show{display:block}
+    .btn{display:inline-flex;justify-content:center;align-items:center;gap:8px;border-radius:12px;
+      padding:12px 20px;border:1px solid var(--line);cursor:pointer;font-weight:600;font-size:14px;
+      transition:all 0.2s;text-decoration:none}
+    .primary{background:var(--primary);color:var(--primary-contrast);border-color:var(--primary)}
+    .primary:hover{background:#2557d6}
+    .ghost{background:transparent;color:var(--text)}
+    .ghost:hover{background:var(--bg)}
+    .full{width:100%}
+    .form-row{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+    .back-link{display:inline-flex;align-items:center;gap:6px;color:var(--muted);
+      font-size:13px;text-decoration:none;margin-bottom:16px;transition:color 0.2s}
+    .back-link:hover{color:var(--text)}
+    .success-card{display:none;text-align:center;padding:20px}
+    .success-card.show{display:block}
+    .success-icon{width:64px;height:64px;margin:0 auto 16px;background:var(--success);
+      border-radius:50%;display:flex;align-items:center;justify-content:center;color:white;font-size:32px}
+      .modules-section{margin:20px 0;padding:16px;background:var(--bg);border-radius:12px}
+      .modules-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:12px}
+      .module-item{display:flex;align-items:center;gap:8px;padding:8px;cursor:pointer}
+      .module-item input[type="checkbox"]{width:18px;height:18px;cursor:pointer}
+      .module-item label{cursor:pointer;font-size:13px}
+    @media (max-width: 640px) {
+        .form-row,.modules-grid{grid-template-columns:1fr}
+    }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <div class="card">
+      <a href="login.html" class="back-link" id="backLink">
+        ← <span id="backText">Voltar para login</span>
+      </a>
+      
+      <div class="brand">
+        <img src="assets/Nexefii_logo_3d-official.png" alt="Nexefii">
+      </div>
+      <div class="subtitle" id="subtitle">Solicite acesso à plataforma. Após o envio, sua solicitação será analisada pela equipe.</div>
+
+      <div id="registerForm">
+        <label id="labLang">Idioma</label>
+        <select id="lang">
+          <option value="pt">Português (Brasil)</option>
+          <option value="en">English</option>
+          <option value="es">Español</option>
+        </select>
+
+        <label id="labFullName" class="required">Nome Completo</label>
+        <input id="fullName" type="text" placeholder="João Silva" autocomplete="name">
+        <div class="error-msg" id="errFullName"></div>
+
+        <div class="form-row">
+          <div>
+            <label id="labEmail" class="required">Email</label>
+            <input id="email" type="email" placeholder="joao@empresa.com" autocomplete="email">
+            <div class="error-msg" id="errEmail"></div>
+          </div>
+          <div>
+            <label id="labPhone" class="required">Telefone</label>
+            <input id="phone" type="tel" placeholder="+55 11 98765-4321" autocomplete="tel">
+            <div class="error-msg" id="errPhone"></div>
+          </div>
+        </div>
+
+        <label id="labCountry" class="required">País</label>
+        <select id="country">
+          <option value="">-- Selecione --</option>
+          <option value="BR">Brasil</option>
+          <option value="US">United States</option>
+          <option value="AR">Argentina</option>
+          <option value="CL">Chile</option>
+          <option value="CO">Colombia</option>
+          <option value="MX">México</option>
+          <option value="PE">Perú</option>
+          <option value="UY">Uruguay</option>
+          <option value="ES">España</option>
+          <option value="PT">Portugal</option>
+          <option value="OTHER">Outro / Other / Otro</option>
+        </select>
+        <div class="error-msg" id="errCountry"></div>
+
+        <label id="labProperty" class="required">Propriedade</label>
+        <select id="property"></select>
+        <div class="error-msg" id="errProperty"></div>
+
+        <label id="labPosition" class="required">Cargo / Posição</label>
+        <input id="position" type="text" placeholder="Gerente Geral" autocomplete="organization-title">
+        <div class="error-msg" id="errPosition"></div>
+
+        <label id="labUsername" class="required">Usuário</label>
+        <input id="username" type="text" placeholder="joao.silva" autocomplete="username">
+        <div class="error-msg" id="errUsername"></div>
+
+          <div class="modules-section">
+            <label id="labModules" style="margin:0 0 8px 0">Módulos Solicitados</label>
+            <p id="modulesHint" style="font-size:12px;color:var(--muted);margin:0 0 12px 0">
+              Selecione os módulos aos quais deseja ter acesso:
+            </p>
+            <div class="modules-grid" id="modulesGrid"></div>
+          </div>
+
+        <div class="form-row">
+          <div>
+            <label id="labPassword" class="required">Senha</label>
+            <input id="password" type="password" placeholder="••••••••" autocomplete="new-password">
+            <div class="error-msg" id="errPassword"></div>
+          </div>
+          <div>
+            <label id="labConfirmPassword" class="required">Confirmar Senha</label>
+            <input id="confirmPassword" type="password" placeholder="••••••••" autocomplete="new-password">
+            <div class="error-msg" id="errConfirmPassword"></div>
+          </div>
+        </div>
+
+        <button id="btnRegister" class="btn primary full" style="margin-top:20px" onclick="doRegister()">
+          <span id="btnRegisterText">Solicitar Acesso</span>
+        </button>
+
+        <div style="text-align:center;margin-top:16px;font-size:13px;color:var(--muted)">
+          <span id="haveAccountText">Já tem uma conta?</span>
+          <a href="login.html" style="color:var(--primary);font-weight:600;text-decoration:none" id="loginLink">Fazer login</a>
+        </div>
+      </div>
+
+      <div id="successCard" class="success-card">
+        <div class="success-icon">✓</div>
+        <h2 id="successTitle" style="margin:0 0 12px 0;font-size:20px">Solicitação Enviada!</h2>
+        <p id="successMessage" style="color:var(--muted);font-size:14px;line-height:1.6;margin-bottom:24px">
+          Sua solicitação de acesso foi enviada com sucesso. Um email foi encaminhado para nossa equipe que irá analisar e autorizar seu acesso em breve.
+        </p>
+        <a href="login.html" class="btn primary" id="backToLoginBtn">Voltar para Login</a>
+      </div>
+    </div>
+  </div>
+
+  <script src="auth.js"></script>
+  <script>
+    let I18N_REGISTER = null;
+    let HOTELS_I18N = null;
+
+    const DEFAULT_HOTELS = {
+      pt: {
+        iluxSaoPaulo: 'iLux Hotel São Paulo',
+        iluxMiami: 'iLux Hotel Miami',
+        iluxRioDeJaneiro: 'iLux Hotel Rio de Janeiro'
+      },
+      en: {
+        iluxSaoPaulo: 'iLux Hotel São Paulo',
+        iluxMiami: 'iLux Hotel Miami',
+        iluxRioDeJaneiro: 'iLux Hotel Rio de Janeiro'
+      },
+      es: {
+        iluxSaoPaulo: 'iLux Hotel São Paulo',
+        iluxMiami: 'iLux Hotel Miami',
+        iluxRioDeJaneiro: 'iLux Hotel Rio de Janeiro'
+      }
+    };
+
+    const DEFAULT_REGISTER_I18N = {
+      pt: {
+        backToLogin: 'Voltar para login',
+        title: 'Solicitar Acesso',
+        subtitle: 'Solicite acesso à plataforma. Após o envio, sua solicitação será analisada pela equipe.',
+        lang: 'Idioma',
+        fullName: 'Nome Completo',
+        phFullName: 'João Silva',
+        email: 'Email',
+        phEmail: 'joao@empresa.com',
+        phone: 'Telefone',
+        phPhone: '+55 11 98765-4321',
+        country: 'País',
+        countrySelect: '-- Selecione --',
+        property: 'Propriedade',
+        propertySelect: '-- Selecione a propriedade --',
+        position: 'Cargo / Posição',
+        phPosition: 'Gerente Geral',
+        username: 'Usuário',
+        phUsername: 'joao.silva',
+        password: 'Senha',
+        phPassword: '••••••••',
+        confirmPassword: 'Confirmar Senha',
+        phConfirmPassword: '••••••••',
+        modules: 'Módulos Solicitados',
+        modulesHint: 'Selecione os módulos aos quais deseja ter acesso:',
+        btnRegister: 'Solicitar Acesso',
+        haveAccount: 'Já tem uma conta?',
+        doLogin: 'Fazer login',
+        successTitle: 'Solicitação Enviada!',
+        successMessage: 'Sua solicitação de acesso foi enviada com sucesso. Um email foi encaminhado para nossa equipe que irá analisar e autorizar seu acesso em breve.',
+        backToLoginBtn: 'Voltar para Login',
+        errors: {
+          required: 'Este campo é obrigatório',
+          invalidEmail: 'Email inválido',
+          passwordTooShort: 'A senha deve ter no mínimo 8 caracteres',
+          passwordWeak: 'A senha deve conter números e caracteres especiais',
+          passwordMismatch: 'As senhas não coincidem',
+          usernameExists: 'Este nome de usuário já está em uso',
+          emailExists: 'Este email já está cadastrado',
+          genericError: 'Erro ao processar solicitação. Tente novamente.'
+        }
+      },
+      en: {
+        backToLogin: 'Back to login',
+        title: 'Request Access',
+        subtitle: 'Request access to the platform. After submission, your request will be reviewed by our team.',
+        lang: 'Language',
+        fullName: 'Full Name',
+        phFullName: 'John Smith',
+        email: 'Email',
+        phEmail: 'user@company.com',
+        phone: 'Phone',
+        phPhone: '+1 555 123-4567',
+        country: 'Country',
+        countrySelect: '-- Select --',
+        property: 'Property',
+        propertySelect: '-- Select property --',
+        position: 'Position / Role',
+        phPosition: 'General Manager',
+        username: 'Username',
+        phUsername: 'john.smith',
+        password: 'Password',
+        phPassword: '••••••••',
+        confirmPassword: 'Confirm Password',
+        phConfirmPassword: '••••••••',
+        modules: 'Requested Modules',
+        modulesHint: 'Select the modules you want to access:',
+        btnRegister: 'Request Access',
+        haveAccount: 'Already have an account?',
+        doLogin: 'Sign in',
+        successTitle: 'Request Sent!',
+        successMessage: 'Your access request has been sent successfully. An email has been forwarded to our team who will review and authorize your access soon.',
+        backToLoginBtn: 'Back to Login',
+        errors: {
+          required: 'This field is required',
+          invalidEmail: 'Invalid email',
+          passwordTooShort: 'Password must be at least 8 characters',
+          passwordWeak: 'Password must contain numbers and special characters',
+          passwordMismatch: 'Passwords do not match',
+          usernameExists: 'This username is already taken',
+          emailExists: 'This email is already registered',
+          genericError: 'Error processing request. Please try again.'
+        }
+      },
+      es: {
+        backToLogin: 'Volver al inicio de sesión',
+        title: 'Solicitar Acceso',
+        subtitle: 'Solicite acceso a la plataforma. Después del envío, su solicitud será revisada por nuestro equipo.',
+        lang: 'Idioma',
+        fullName: 'Nombre Completo',
+        phFullName: 'Juan Pérez',
+        email: 'Correo Electrónico',
+        phEmail: 'juan@empresa.com',
+        phone: 'Teléfono',
+        phPhone: '+54 11 1234-5678',
+        country: 'País',
+        countrySelect: '-- Seleccione --',
+        property: 'Propiedad',
+        propertySelect: '-- Seleccione la propiedad --',
+        position: 'Cargo / Posición',
+        phPosition: 'Gerente General',
+        username: 'Usuario',
+        phUsername: 'juan.perez',
+        password: 'Contraseña',
+        phPassword: '••••••••',
+        confirmPassword: 'Confirmar Contraseña',
+        phConfirmPassword: '••••••••',
+        modules: 'Módulos Solicitados',
+        modulesHint: 'Seleccione los módulos a los que desea acceder:',
+        btnRegister: 'Solicitar Acceso',
+        haveAccount: '¿Ya tienes una cuenta?',
+        doLogin: 'Iniciar sesión',
+        successTitle: '¡Solicitud Enviada!',
+        successMessage: 'Su solicitud de acceso ha sido enviada con éxito. Se ha enviado un correo electrónico a nuestro equipo que revisará y autorizará su acceso pronto.',
+        backToLoginBtn: 'Volver al Inicio de Sesión',
+        errors: {
+          required: 'Este campo es obligatorio',
+          invalidEmail: 'Correo electrónico inválido',
+          passwordTooShort: 'La contraseña debe tener al menos 8 caracteres',
+          passwordWeak: 'La contraseña debe contener números y caracteres especiales',
+          passwordMismatch: 'Las contraseñas no coinciden',
+          usernameExists: 'Este nombre de usuario ya está en uso',
+          emailExists: 'Este correo electrónico ya está registrado',
+          genericError: 'Error al procesar la solicitud. Inténtelo de nuevo.'
+        }
+      }
+    };
+
+    async function loadRegisterI18N(){
+      try{
+        const res = await fetch('i18n.json',{cache:'no-store'});
+        if(!res.ok) throw new Error('http');
+        const data = await res.json();
+        const merge = (base, extra) => ({...base, ...(extra || {})});
+        I18N_REGISTER = {
+          pt: merge(DEFAULT_REGISTER_I18N.pt, data?.pt?.register),
+          en: merge(DEFAULT_REGISTER_I18N.en, data?.en?.register),
+          es: merge(DEFAULT_REGISTER_I18N.es, data?.es?.register)
+        };
+        HOTELS_I18N = {
+          pt: data?.pt?.hotels || DEFAULT_HOTELS.pt,
+          en: data?.en?.hotels || DEFAULT_HOTELS.en,
+          es: data?.es?.hotels || DEFAULT_HOTELS.es
+        };
+      }catch(e){
+        // Fallback embedded translations
+        I18N_REGISTER = DEFAULT_REGISTER_I18N;
+        HOTELS_I18N = DEFAULT_HOTELS;
+      }
+    }
+
+    function applyRegisterLang(){
+      if(!I18N_REGISTER) return;
+      const sel = document.getElementById('lang');
+      const L = I18N_REGISTER[sel.value] || I18N_REGISTER.pt;
+      const MOD = IluxAuth.MODULE_NAMES[sel.value] || IluxAuth.MODULE_NAMES.pt;
+      const HOTELS = HOTELS_I18N?.[sel.value] || HOTELS_I18N?.pt || DEFAULT_HOTELS.pt;
+
+      document.getElementById('backText').innerText = L.backToLogin;
+      document.getElementById('subtitle').innerText = L.subtitle;
+      document.getElementById('labLang').innerText = L.lang;
+      document.getElementById('labFullName').childNodes[0].textContent = L.fullName;
+      document.getElementById('labEmail').childNodes[0].textContent = L.email;
+      document.getElementById('labPhone').childNodes[0].textContent = L.phone;
+      document.getElementById('labCountry').childNodes[0].textContent = L.country;
+      document.getElementById('labUsername').childNodes[0].textContent = L.username;
+  // Placeholders
+  document.getElementById('fullName').placeholder = L.phFullName || document.getElementById('fullName').placeholder;
+  document.getElementById('email').placeholder = L.phEmail || document.getElementById('email').placeholder;
+  document.getElementById('phone').placeholder = L.phPhone || document.getElementById('phone').placeholder;
+  document.getElementById('position').placeholder = L.phPosition || document.getElementById('position').placeholder;
+  document.getElementById('username').placeholder = L.phUsername || document.getElementById('username').placeholder;
+  document.getElementById('password').placeholder = L.phPassword || document.getElementById('password').placeholder;
+  document.getElementById('confirmPassword').placeholder = L.phConfirmPassword || document.getElementById('confirmPassword').placeholder;
+      document.getElementById('labProperty').childNodes[0].textContent = L.property || 'Propriedade';
+        document.getElementById('labModules').childNodes[0].textContent = L.modules;
+      document.getElementById('labPosition').childNodes[0].textContent = L.position || 'Cargo / Posição';
+        document.getElementById('modulesHint').innerText = L.modulesHint;
+      document.getElementById('labPassword').childNodes[0].textContent = L.password;
+      document.getElementById('labConfirmPassword').childNodes[0].textContent = L.confirmPassword;
+      document.getElementById('btnRegisterText').innerText = L.btnRegister;
+      document.getElementById('haveAccountText').innerText = L.haveAccount;
+      document.getElementById('loginLink').innerText = L.doLogin;
+      document.getElementById('successTitle').innerText = L.successTitle;
+      document.getElementById('successMessage').innerText = L.successMessage;
+      document.getElementById('backToLoginBtn').innerText = L.backToLoginBtn;
+      
+  const countrySelect = document.getElementById('country');
+  countrySelect.options[0].text = L.countrySelect || DEFAULT_REGISTER_I18N[sel.value].countrySelect;
+
+      // Render property options
+      const propSelect = document.getElementById('property');
+      const options = ['<option value="">' + (L.propertySelect || '-- Selecione a propriedade --') + '</option>'];
+      Object.entries(HOTELS).forEach(([key, label]) => {
+        options.push(`<option value="${key}">${label}</option>`);
+      });
+      propSelect.innerHTML = options.join('');
+
+        // Render modules checkboxes
+        const modulesGrid = document.getElementById('modulesGrid');
+        modulesGrid.innerHTML = Object.values(IluxAuth.MODULES).map(module => `
+          <div class="module-item">
+            <input type="checkbox" id="mod_${module}" value="${module}">
+            <label for="mod_${module}">${MOD[module]}</label>
+          </div>
+        `).join('');
+
+      localStorage.setItem('ilux_lang', sel.value);
+    }
+
+    function validateEmail(email) {
+      const re = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+      return re.test(email);
+    }
+
+    function clearErrors() {
+      document.querySelectorAll('.error-msg').forEach(el => el.classList.remove('show'));
+      document.querySelectorAll('input, select').forEach(el => el.classList.remove('input-error'));
+    }
+
+    function showError(fieldId, message) {
+      const errorEl = document.getElementById('err' + fieldId.charAt(0).toUpperCase() + fieldId.slice(1));
+      if(errorEl) {
+        errorEl.innerText = message;
+        errorEl.classList.add('show');
+      }
+      const inputEl = document.getElementById(fieldId);
+      if(inputEl) inputEl.classList.add('input-error');
+    }
+
+    function doRegister(){
+      clearErrors();
+      
+      const lang = document.getElementById('lang').value;
+      const L = I18N_REGISTER[lang] || I18N_REGISTER.pt;
+      
+      const fullName = document.getElementById('fullName').value.trim();
+      const email = document.getElementById('email').value.trim();
+      const phone = document.getElementById('phone').value.trim();
+  const country = document.getElementById('country').value;
+  const propertyKey = document.getElementById('property').value;
+      const position = document.getElementById('position').value.trim();
+      const username = document.getElementById('username').value.trim();
+      const password = document.getElementById('password').value;
+      const confirmPassword = document.getElementById('confirmPassword').value;
+
+      let hasError = false;
+
+      // Validate required fields
+      if(!fullName) { showError('fullName', L.errors.required); hasError = true; }
+      if(!email) { showError('email', L.errors.required); hasError = true; }
+      else if(!validateEmail(email)) { showError('email', L.errors.invalidEmail); hasError = true; }
+      if(!phone) { showError('phone', L.errors.required); hasError = true; }
+  if(!country) { showError('country', L.errors.required); hasError = true; }
+  if(!propertyKey) { showError('property', L.errors.required); hasError = true; }
+      if(!position) { showError('position', L.errors.required); hasError = true; }
+      if(!username) { showError('username', L.errors.required); hasError = true; }
+      
+      if(!password) { 
+        showError('password', L.errors.required); 
+        hasError = true; 
+      } else {
+        const passwordValidation = IluxAuth.validatePassword(password);
+        if(!passwordValidation.valid) {
+          const errorKey = passwordValidation.error === 'password_too_short' ? 'passwordTooShort' : 'passwordWeak';
+          showError('password', L.errors[errorKey]);
+          hasError = true;
+        }
+      }
+      
+      if(!confirmPassword) { 
+        showError('confirmPassword', L.errors.required); 
+        hasError = true; 
+      } else if(password !== confirmPassword) {
+        showError('confirmPassword', L.errors.passwordMismatch);
+        hasError = true;
+      }
+
+      if(hasError) return;
+
+        // Collect selected modules
+        const selectedModules = [];
+        Object.values(IluxAuth.MODULES).forEach(module => {
+          const checkbox = document.getElementById(`mod_${module}`);
+          if(checkbox && checkbox.checked) {
+            selectedModules.push(module);
+          }
+        });
+
+      // Register user
+      const result = IluxAuth.registerUser({
+        fullName,
+        email,
+        phone,
+        country,
+        propertyKey,
+        position,
+        username,
+          password,
+          modules: selectedModules
+      });
+
+      if(!result.success) {
+        if(result.error === 'username_exists') {
+          showError('username', L.errors.usernameExists);
+        } else if(result.error === 'email_exists') {
+          showError('email', L.errors.emailExists);
+        } else {
+          alert(L.errors.genericError);
+        }
+        return;
+      }
+
+      // Show success
+      document.getElementById('registerForm').style.display = 'none';
+      document.getElementById('successCard').classList.add('show');
+    }
+
+    // Initialize
+    window.addEventListener('DOMContentLoaded', async () => {
+      await loadRegisterI18N();
+      const saved = localStorage.getItem('ilux_lang') || 'pt';
+      const sel = document.getElementById('lang');
+      sel.value = saved;
+      applyRegisterLang();
+      sel.addEventListener('change', applyRegisterLang);
+    });
+  </script>
+</body>
+</html>

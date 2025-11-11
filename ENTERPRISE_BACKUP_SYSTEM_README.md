@@ -1,17 +1,17 @@
-# 🏢 Enterprise Backup System - IluxSys
+﻿# ðŸ¢ Enterprise Backup System - nexefii
 
 ---
-**📄 Documento**: ENTERPRISE_BACKUP_SYSTEM_README.md  
-**📦 Versão**: 2.0.0  
-**📅 Última Atualização**: 07/11/2025 - 15:30 BRT  
-**👤 Autor**: IluxSys Development Team  
-**🔄 Status**: ✅ Atualizado e Sincronizado
+**ðŸ“„ Documento**: ENTERPRISE_BACKUP_SYSTEM_README.md  
+**ðŸ“¦ VersÃ£o**: 2.0.0  
+**ðŸ“… Ãšltima AtualizaÃ§Ã£o**: 07/11/2025 - 15:30 BRT  
+**ðŸ‘¤ Autor**: nexefii Development Team  
+**ðŸ”„ Status**: âœ… Atualizado e Sincronizado
 
 ---
 
-## 📋 Índice
+## ðŸ“‹ Ãndice
 
-1. [Visão Geral](#visão-geral)
+1. [VisÃ£o Geral](#visÃ£o-geral)
 2. [Arquitetura](#arquitetura)
 3. [Property Backups](#property-backups)
 4. [General Structure Backups](#general-structure-backups)
@@ -22,20 +22,20 @@
 
 ---
 
-## Visão Geral
+## VisÃ£o Geral
 
-O **Enterprise Backup System** (`enterprise-backup-system.js`) é o backend do sistema de backups enterprise do IluxSys. Fornece funcionalidades avançadas de backup, compressão, criptografia e auditoria.
+O **Enterprise Backup System** (`enterprise-backup-system.js`) Ã© o backend do sistema de backups enterprise do nexefii. Fornece funcionalidades avanÃ§adas de backup, compressÃ£o, criptografia e auditoria.
 
 ### Responsabilidades:
 
-- ✅ Gerenciamento de backups por propriedade (multi-tenant)
-- ✅ Backups de estrutura geral (rollback de atualizações)
-- ✅ Compressão real usando CompressionStream API
-- ✅ Criptografia real usando Web Crypto API (AES-256-GCM)
-- ✅ Sistema de auditoria completo
-- ✅ Validação de integridade (checksums)
-- ✅ Métricas e dashboard
-- ✅ Agendamento e retenção de backups
+- âœ… Gerenciamento de backups por propriedade (multi-tenant)
+- âœ… Backups de estrutura geral (rollback de atualizaÃ§Ãµes)
+- âœ… CompressÃ£o real usando CompressionStream API
+- âœ… Criptografia real usando Web Crypto API (AES-256-GCM)
+- âœ… Sistema de auditoria completo
+- âœ… ValidaÃ§Ã£o de integridade (checksums)
+- âœ… MÃ©tricas e dashboard
+- âœ… Agendamento e retenÃ§Ã£o de backups
 
 ---
 
@@ -49,9 +49,9 @@ class EnterpriseBackupSystem {
     this.currentUser = currentUser;
     this.tenantBackups = {};      // Map: tenantId -> Array<Backup>
     this.generalBackups = [];     // Array de backups de estrutura
-    this.metrics = {};            // Métricas agregadas
+    this.metrics = {};            // MÃ©tricas agregadas
     this.auditLog = [];           // Log de auditoria
-    this.restoreTests = [];       // Testes de validação
+    this.restoreTests = [];       // Testes de validaÃ§Ã£o
     
     // Storage Keys
     this.KEYS = {
@@ -69,21 +69,21 @@ class EnterpriseBackupSystem {
 
 ```
 UI Request
-    ↓
+    â†“
 EnterpriseBackupSystem
-    ↓
+    â†“
 Data Capture (captureTenantDatabase/captureStylesheets/etc)
-    ↓
-Compression (opcional) → CompressionStream API
-    ↓
-Encryption (opcional) → Web Crypto API
-    ↓
+    â†“
+Compression (opcional) â†’ CompressionStream API
+    â†“
+Encryption (opcional) â†’ Web Crypto API
+    â†“
 Checksum Calculation
-    ↓
+    â†“
 LocalStorage Persistence
-    ↓
+    â†“
 Metrics Update
-    ↓
+    â†“
 Audit Log
 ```
 
@@ -91,20 +91,20 @@ Audit Log
 
 ## Property Backups
 
-### Métodos Principais:
+### MÃ©todos Principais:
 
 #### `createTenantBackup(tenantId, options)`
 
-Cria backup de uma propriedade específica.
+Cria backup de uma propriedade especÃ­fica.
 
-**Parâmetros:**
+**ParÃ¢metros:**
 ```javascript
 {
   tenantId: string,           // ID da propriedade
   options: {
     type: 'full' | 'incremental',
     createdBy: string,
-    compress: boolean,        // Usar compressão real
+    compress: boolean,        // Usar compressÃ£o real
     encrypt: boolean         // Usar criptografia real
   }
 }
@@ -128,24 +128,24 @@ Cria backup de uma propriedade específica.
 ```
 
 **Dados Capturados:**
-- Database (localStorage específico da propriedade)
+- Database (localStorage especÃ­fico da propriedade)
 - Assets (imagens, documentos)
-- Configurations (configurações específicas)
-- Checksums para validação
+- Configurations (configuraÃ§Ãµes especÃ­ficas)
+- Checksums para validaÃ§Ã£o
 
 #### `createIncrementalTenantBackup(tenantId, options)`
 
-Cria backup incremental baseado no último full backup.
+Cria backup incremental baseado no Ãºltimo full backup.
 
 **Requisitos:**
 - Deve existir um backup full anterior
-- Captura apenas dados modificados desde o último backup
+- Captura apenas dados modificados desde o Ãºltimo backup
 
 **Estrutura:**
 ```javascript
 {
   type: 'incremental',
-  parent_backup_id: 'tenant_1729000000000',  // Referência ao full backup
+  parent_backup_id: 'tenant_1729000000000',  // ReferÃªncia ao full backup
   changes: {
     added: [...],
     modified: [...],
@@ -158,18 +158,18 @@ Cria backup incremental baseado no último full backup.
 
 Restaura backup de uma propriedade.
 
-**Opções de Restore:**
+**OpÃ§Ãµes de Restore:**
 - `mode: 'full'` - Substitui tudo
-- `mode: 'selective'` - Seleciona módulos específicos
+- `mode: 'selective'` - Seleciona mÃ³dulos especÃ­ficos
 - `mode: 'merge'` - Mescla com dados existentes
 - `validate: true` - Valida integridade antes
-- `createSafetyBackup: true` - Backup de segurança automático
+- `createSafetyBackup: true` - Backup de seguranÃ§a automÃ¡tico
 
 ---
 
 ## General Structure Backups
 
-### Métodos Principais:
+### MÃ©todos Principais:
 
 #### `createGeneralBackup(options)`
 
@@ -178,7 +178,7 @@ Cria backup da estrutura geral do sistema.
 **Componentes Capturados:**
 
 1. **Stylesheets** (`captureStylesheets()`)
-   - Tags `<style>` inline (conteúdo completo)
+   - Tags `<style>` inline (conteÃºdo completo)
    - Links `<link rel="stylesheet">` (URLs e metadata)
    - Media queries
 
@@ -186,10 +186,10 @@ Cria backup da estrutura geral do sistema.
    - Lista de scripts carregados
    - Metadata (async, defer, type)
    - Preview de scripts inline
-   - Rastreamento de módulos críticos
+   - Rastreamento de mÃ³dulos crÃ­ticos
 
 3. **i18n** (`captureI18n()`)
-   - Traduções cacheadas
+   - TraduÃ§Ãµes cacheadas
    - Arquivos enterprise (pt/en/es)
    - Arquivo i18n.json principal
    - Locale atual
@@ -201,11 +201,11 @@ Cria backup da estrutura geral do sistema.
    - Componentes identificados
 
 5. **Migrations** (`captureMigrations()`)
-   - Histórico de migrações aplicadas
-   - Versão do schema atual
+   - HistÃ³rico de migraÃ§Ãµes aplicadas
+   - VersÃ£o do schema atual
 
 6. **Shared Assets** (`captureSharedAssets()`)
-   - Logos, ícones, imagens
+   - Logos, Ã­cones, imagens
    - Fontes (@font-face)
 
 **Exemplo:**
@@ -213,7 +213,7 @@ Cria backup da estrutura geral do sistema.
 await enterpriseBackup.createGeneralBackup({
   components: ['stylesheets', 'scripts', 'i18n', 'templates'],
   version: 'v2.1.0',
-  description: 'Backup antes de atualização crítica',
+  description: 'Backup antes de atualizaÃ§Ã£o crÃ­tica',
   createdBy: 'master',
   compress: true,
   encrypt: true
@@ -225,24 +225,24 @@ await enterpriseBackup.createGeneralBackup({
 Restaura backup de estrutura geral (rollback).
 
 **Processo:**
-1. Cria backup de segurança (se `createSafetyBackup: true`)
+1. Cria backup de seguranÃ§a (se `createSafetyBackup: true`)
 2. Valida integridade (se `validate: true`)
 3. Restaura i18n para localStorage
 4. Restaura migrations
-5. Retorna `requiresReload: true` (página precisa recarregar)
+5. Retorna `requiresReload: true` (pÃ¡gina precisa recarregar)
 
 ---
 
 ## Compression & Encryption
 
-### Compressão (CompressionStream API)
+### CompressÃ£o (CompressionStream API)
 
-#### Implementação:
+#### ImplementaÃ§Ã£o:
 
 ```javascript
 async _compressData(dataString) {
   if (!window.CompressionStream) {
-    // Fallback: simulação
+    // Fallback: simulaÃ§Ã£o
     return { data: btoa(dataString), size: dataString.length };
   }
 
@@ -279,20 +279,20 @@ async _compressData(dataString) {
 }
 ```
 
-**Características:**
+**CaracterÃ­sticas:**
 - Algoritmo: gzip (deflate)
-- Redução típica: 60-80%
+- ReduÃ§Ã£o tÃ­pica: 60-80%
 - Feature detection com fallback
 - Logs mostram ratio real
 
 ### Criptografia (Web Crypto API)
 
-#### Implementação:
+#### ImplementaÃ§Ã£o:
 
 ```javascript
 async _encryptData(dataString) {
   if (!window.crypto?.subtle) {
-    // Fallback: simulação
+    // Fallback: simulaÃ§Ã£o
     return { data: btoa(dataString), iv: 'simulated', keyId: 'sim_key' };
   }
 
@@ -303,7 +303,7 @@ async _encryptData(dataString) {
     ['encrypt', 'decrypt']
   );
 
-  // IV aleatório único
+  // IV aleatÃ³rio Ãºnico
   const iv = crypto.getRandomValues(new Uint8Array(12));
 
   // Criptografar
@@ -329,15 +329,15 @@ async _encryptData(dataString) {
 }
 ```
 
-**Características:**
+**CaracterÃ­sticas:**
 - Algoritmo: AES-256-GCM
-- IV único por backup (12 bytes)
+- IV Ãºnico por backup (12 bytes)
 - Keys armazenadas como JWK no localStorage
 - Key ID associado a cada backup
 
-**⚠️ SEGURANÇA:**
-- localStorage não é seguro para produção
-- Em produção: usar KMS (AWS KMS, Azure Key Vault)
+**âš ï¸ SEGURANÃ‡A:**
+- localStorage nÃ£o Ã© seguro para produÃ§Ã£o
+- Em produÃ§Ã£o: usar KMS (AWS KMS, Azure Key Vault)
 - Implementar key rotation (90 dias)
 - Keys devem estar em vault seguro
 
@@ -345,7 +345,7 @@ async _encryptData(dataString) {
 
 ## API Reference
 
-### Métodos Públicos:
+### MÃ©todos PÃºblicos:
 
 #### Property Backups:
 
@@ -359,13 +359,13 @@ createIncrementalTenantBackup(tenantId, options)
 // Restaurar backup
 restoreTenantBackup(tenantId, backupId, options)
 
-// Obter catálogo de backups
+// Obter catÃ¡logo de backups
 getTenantBackupCatalog(tenantId)
 
-// Buscar backup específico
+// Buscar backup especÃ­fico
 findTenantBackup(tenantId, backupId)
 
-// Aplicar política de retenção
+// Aplicar polÃ­tica de retenÃ§Ã£o
 applyRetentionPolicy(tenantId, customPolicy)
 
 // Validar restore
@@ -381,14 +381,14 @@ createGeneralBackup(options)
 // Restaurar estrutura (rollback)
 restoreGeneralBackup(backupId, options)
 
-// Obter catálogo
+// Obter catÃ¡logo
 getGeneralBackupCatalog()
 ```
 
-#### Métricas e Auditoria:
+#### MÃ©tricas e Auditoria:
 
 ```javascript
-// Dashboard de métricas
+// Dashboard de mÃ©tricas
 getMetricsDashboard()
 
 // Log de auditoria com filtros
@@ -400,7 +400,7 @@ exportAuditLog(format)
 // Registrar audit
 audit(type, level, message, data)
 
-// Atualizar métricas
+// Atualizar mÃ©tricas
 updateMetrics(category, data)
 ```
 
@@ -413,10 +413,10 @@ validateChecksums(backup)
 // Calcular checksums
 calculateChecksums(data)
 
-// Obter versão da plataforma
+// Obter versÃ£o da plataforma
 getCurrentPlatformVersion()
 
-// Obter versão do schema
+// Obter versÃ£o do schema
 getSchemaVersion(tenantId)
 
 // Feature detection
@@ -435,12 +435,12 @@ _encryptData(dataString)
 'enterprise_tenant_backups'          // Map: { tenantId: [backups] }
 'enterprise_general_backups'         // Array de backups de estrutura
 
-// Métricas
-'enterprise_metrics'                 // Objeto com métricas agregadas
+// MÃ©tricas
+'enterprise_metrics'                 // Objeto com mÃ©tricas agregadas
 
 // Auditoria
 'enterprise_audit_log'               // Array de eventos
-'enterprise_restore_tests'           // Testes de validação
+'enterprise_restore_tests'           // Testes de validaÃ§Ã£o
 
 // Agendamento
 'enterprise_tenant_schedules'        // Array de schedules cron
@@ -450,7 +450,7 @@ _encryptData(dataString)
 'enterprise_encrypt_enabled'         // boolean
 
 // Backups Individuais (Soft Delete)
-'enterprise_tenant_backup_{id}'      // Backup específico
+'enterprise_tenant_backup_{id}'      // Backup especÃ­fico
 'enterprise_general_backup_{id}'     // Backup de estrutura
 
 // Encryption Keys
@@ -473,7 +473,7 @@ _encryptData(dataString)
   // Dados
   database: [...],      // Dados do localStorage
   assets: [...],        // Assets da propriedade
-  configurations: {...}, // Configurações
+  configurations: {...}, // ConfiguraÃ§Ãµes
   
   // Metadata
   metadata: {
@@ -518,7 +518,7 @@ _encryptData(dataString)
   created_by: 'master',
   created_at: '2025-11-07T18:30:00.000Z',
   version: 'v2.1.0',
-  description: 'Backup antes de atualização',
+  description: 'Backup antes de atualizaÃ§Ã£o',
   components: ['stylesheets', 'scripts', 'i18n', 'templates'],
   size_bytes: 89234,
   
@@ -556,37 +556,37 @@ _encryptData(dataString)
 
 ### v2.0.0 (07/11/2025)
 
-**✨ Novas Funcionalidades:**
-- ✅ Property Backups (full e incremental)
-- ✅ General Structure Backups (6 componentes)
-- ✅ Compressão real (CompressionStream API)
-- ✅ Criptografia real (Web Crypto API - AES-256-GCM)
-- ✅ Sistema de auditoria completo
-- ✅ Validação de integridade (checksums)
-- ✅ Soft delete pattern
-- ✅ Feature toggles persistidos
-- ✅ Métricas agregadas em tempo real
-- ✅ Export de logs em JSON
+**âœ¨ Novas Funcionalidades:**
+- âœ… Property Backups (full e incremental)
+- âœ… General Structure Backups (6 componentes)
+- âœ… CompressÃ£o real (CompressionStream API)
+- âœ… Criptografia real (Web Crypto API - AES-256-GCM)
+- âœ… Sistema de auditoria completo
+- âœ… ValidaÃ§Ã£o de integridade (checksums)
+- âœ… Soft delete pattern
+- âœ… Feature toggles persistidos
+- âœ… MÃ©tricas agregadas em tempo real
+- âœ… Export de logs em JSON
 
-**🔧 Melhorias:**
-- Feature detection com fallback para APIs não suportadas
+**ðŸ”§ Melhorias:**
+- Feature detection com fallback para APIs nÃ£o suportadas
 - Logs mostram compression ratio real
 - Keys de criptografia armazenadas como JWK
-- Backup de segurança automático antes de restore
-- Validação de checksums antes de restore
+- Backup de seguranÃ§a automÃ¡tico antes de restore
+- ValidaÃ§Ã£o de checksums antes de restore
 
-**📚 Documentação:**
+**ðŸ“š DocumentaÃ§Ã£o:**
 - README completo criado
 - API reference documentada
 - Storage schema detalhado
-- Exemplos de código
+- Exemplos de cÃ³digo
 
 ### v1.0.0 (Outubro 2025)
-- Versão inicial do sistema enterprise
+- VersÃ£o inicial do sistema enterprise
 
 ---
 
-## 🔗 Links Relacionados
+## ðŸ”— Links Relacionados
 
 - [Master Control README](./MASTER_CONTROL_README.md)
 - [Master Control Enterprise README](./MASTER_CONTROL_ENTERPRISE_README.md)
@@ -594,5 +594,6 @@ _encryptData(dataString)
 
 ---
 
-**Desenvolvido por IluxSys Development Team**  
-**© 2025 IluxSys - Todos os direitos reservados**
+**Desenvolvido por nexefii Development Team**  
+**Â© 2025 nexefii - Todos os direitos reservados**
+

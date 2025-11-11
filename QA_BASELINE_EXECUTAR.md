@@ -1,34 +1,34 @@
-# 🚀 QA Baseline - Instruções de Execução
+﻿# ðŸš€ QA Baseline - InstruÃ§Ãµes de ExecuÃ§Ã£o
 
-**Status:** ✅ Sistema preparado - Pronto para captura  
+**Status:** âœ… Sistema preparado - Pronto para captura  
 **Data:** 08/11/2025  
 **Tempo Estimado:** 2-3 horas
 
 ---
 
-## 📋 Visão Geral
+## ðŸ“‹ VisÃ£o Geral
 
-Sistema de QA Baseline completamente preparado! Agora você precisa executar a captura antes de iniciarmos a refatoração arquitetural.
+Sistema de QA Baseline completamente preparado! Agora vocÃª precisa executar a captura antes de iniciarmos a refatoraÃ§Ã£o arquitetural.
 
 **O que foi criado:**
 
-1. ✅ **qa-baseline-capture.js** - Script automatizado de captura
-2. ✅ **QA_BASELINE_MANUAL.md** - Guia detalhado com 35+ screenshots
-3. ✅ **Estrutura de diretórios** - Organização completa
-4. ✅ **VERSION.txt** - Documentação de metadados
-5. ✅ **CHECKLIST.md** - 160 critérios de aceitação
+1. âœ… **qa-baseline-capture.js** - Script automatizado de captura
+2. âœ… **QA_BASELINE_MANUAL.md** - Guia detalhado com 35+ screenshots
+3. âœ… **Estrutura de diretÃ³rios** - OrganizaÃ§Ã£o completa
+4. âœ… **VERSION.txt** - DocumentaÃ§Ã£o de metadados
+5. âœ… **CHECKLIST.md** - 160 critÃ©rios de aceitaÃ§Ã£o
 
 ---
 
-## 🎯 Execução Passo a Passo
+## ðŸŽ¯ ExecuÃ§Ã£o Passo a Passo
 
-### Passo 1: Preparação (5 minutos)
+### Passo 1: PreparaÃ§Ã£o (5 minutos)
 
 #### 1.1 Verificar arquivos criados
 
 ```powershell
 # No terminal PowerShell:
-cd r:\Development\Projects\iluxsys
+cd r:\Development\Projects\nexefii
 
 # Listar arquivos QA
 dir qa-baseline-capture.js
@@ -36,23 +36,23 @@ dir QA_BASELINE_MANUAL.md
 dir qa-baseline\2025-11-08\ -Recurse
 ```
 
-**Você deve ver:**
+**VocÃª deve ver:**
 ```
 qa-baseline-capture.js
 QA_BASELINE_MANUAL.md
 qa-baseline\2025-11-08\
-  ├── VERSION.txt
-  ├── reports\
-  ├── screenshots\
-  ├── computed-styles\
-  └── acceptance-criteria\
-      └── CHECKLIST.md
+  â”œâ”€â”€ VERSION.txt
+  â”œâ”€â”€ reports\
+  â”œâ”€â”€ screenshots\
+  â”œâ”€â”€ computed-styles\
+  â””â”€â”€ acceptance-criteria\
+      â””â”€â”€ CHECKLIST.md
 ```
 
 #### 1.2 Abrir Master Control
 
-1. Navegue até: `r:\Development\Projects\iluxsys\master-control.html`
-2. Faça login com credenciais **master**:
+1. Navegue atÃ©: `r:\Development\Projects\nexefii\master-control.html`
+2. FaÃ§a login com credenciais **master**:
    - Username: `master`
    - Password: `Master2025!@#$`
 3. Abra DevTools: **F12**
@@ -74,9 +74,9 @@ document.head.appendChild(script);
 
 **Aguarde mensagem:**
 ```
-╔════════════════════════════════════════════════════════════════╗
-║                 🎯 QA Baseline Capture System                  ║
-╚════════════════════════════════════════════════════════════════╝
+â•”â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•—
+â•‘                 ðŸŽ¯ QA Baseline Capture System                  â•‘
+â•šâ•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
 ```
 
 #### 2.2 Executar captura
@@ -88,21 +88,21 @@ await qaBaseline.captureFullBaseline();
 
 **Output esperado:**
 ```
-🎯 Iniciando captura de QA Baseline...
-📦 Capturando estado do LocalStorage...
-✅ Capturados X chaves do LocalStorage
-📄 Capturando página atual...
-✅ Página capturada: Master Control Panel
-🎨 Capturando computed styles...
-✅ Capturados computed styles de X componentes
-⚙️ Capturando funcionalidades...
-✅ Capturadas X funcionalidades
-📊 Gerando relatório...
-✅ Relatório salvo no localStorage (chave: qa_baseline_report)
-✅ Baseline capturado com sucesso!
+ðŸŽ¯ Iniciando captura de QA Baseline...
+ðŸ“¦ Capturando estado do LocalStorage...
+âœ… Capturados X chaves do LocalStorage
+ðŸ“„ Capturando pÃ¡gina atual...
+âœ… PÃ¡gina capturada: Master Control Panel
+ðŸŽ¨ Capturando computed styles...
+âœ… Capturados computed styles de X componentes
+âš™ï¸ Capturando funcionalidades...
+âœ… Capturadas X funcionalidades
+ðŸ“Š Gerando relatÃ³rio...
+âœ… RelatÃ³rio salvo no localStorage (chave: qa_baseline_report)
+âœ… Baseline capturado com sucesso!
 ```
 
-#### 2.3 Exportar relatórios
+#### 2.3 Exportar relatÃ³rios
 
 ```javascript
 // Exportar JSON
@@ -114,11 +114,11 @@ qaBaseline.exportHTMLReport();
 // Arquivo: qa-baseline-report-2025-11-08.html
 ```
 
-#### 2.4 Mover relatórios para pasta
+#### 2.4 Mover relatÃ³rios para pasta
 
 ```powershell
 # No PowerShell (ajuste o caminho da pasta Downloads):
-cd r:\Development\Projects\iluxsys
+cd r:\Development\Projects\nexefii
 
 # Mover arquivos da pasta Downloads para reports
 Move-Item ~\Downloads\qa-baseline-2025-11-08.json qa-baseline\2025-11-08\reports\
@@ -136,23 +136,23 @@ Move-Item ~\Downloads\qa-baseline-report-2025-11-08.html qa-baseline\2025-11-08\
 code QA_BASELINE_MANUAL.md
 ```
 
-#### 3.2 Capturar screenshots por seção
+#### 3.2 Capturar screenshots por seÃ§Ã£o
 
-**📸 Use Windows Snipping Tool:**
+**ðŸ“¸ Use Windows Snipping Tool:**
 - Pressione: **Win + Shift + S**
-- Selecione área
+- Selecione Ã¡rea
 - Salve em: `qa-baseline\2025-11-08\screenshots\`
 
-**Seções para capturar (35+ screenshots):**
+**SeÃ§Ãµes para capturar (35+ screenshots):**
 
 1. **Dashboard** (3 screenshots)
    - Estado inicial
    - Modal de backups
-   - Confirmação de operação
+   - ConfirmaÃ§Ã£o de operaÃ§Ã£o
 
 2. **Backup & Restore** (5 screenshots)
    - Tela principal
-   - Seleção de módulos
+   - SeleÃ§Ã£o de mÃ³dulos
    - Lista de backups
    - Modal de detalhes
    - Restore wizard
@@ -160,7 +160,7 @@ code QA_BASELINE_MANUAL.md
 3. **Property Backups** (5 screenshots)
    - Tela principal
    - Criar backup
-   - Catálogo
+   - CatÃ¡logo
    - Restore wizard
    - Agendamento
 
@@ -173,12 +173,12 @@ code QA_BASELINE_MANUAL.md
 5. **Releases & Rollback** (3 screenshots)
    - Tela principal
    - Criar release
-   - Histórico
+   - HistÃ³rico
 
-6. **Gestão de Usuários** (4 screenshots)
+6. **GestÃ£o de UsuÃ¡rios** (4 screenshots)
    - Tela principal
-   - Criar usuário
-   - Editar usuário
+   - Criar usuÃ¡rio
+   - Editar usuÃ¡rio
    - Detalhes
 
 7. **Logs & Auditoria** (3 screenshots)
@@ -186,11 +186,11 @@ code QA_BASELINE_MANUAL.md
    - Filtros aplicados
    - Detalhes de log
 
-8. **Configurações** (2 screenshots)
+8. **ConfiguraÃ§Ãµes** (2 screenshots)
    - Tela principal
    - Modificada
 
-9. **Manutenção** (2 screenshots)
+9. **ManutenÃ§Ã£o** (2 screenshots)
    - Tela principal
    - Storage monitor
 
@@ -198,47 +198,47 @@ code QA_BASELINE_MANUAL.md
     - Index default
     - Index com property
     - Property test main
-    - Modal de aprovação
+    - Modal de aprovaÃ§Ã£o
 
-**📋 Checklist:** Siga `QA_BASELINE_MANUAL.md` seção por seção
+**ðŸ“‹ Checklist:** Siga `QA_BASELINE_MANUAL.md` seÃ§Ã£o por seÃ§Ã£o
 
 ---
 
-### Passo 4: Validação dos Dados (15 minutos)
+### Passo 4: ValidaÃ§Ã£o dos Dados (15 minutos)
 
-#### 4.1 Verificar relatório gerado
+#### 4.1 Verificar relatÃ³rio gerado
 
 ```javascript
 // No Console:
 const report = JSON.parse(localStorage.getItem('qa_baseline_report'));
 
-// Validar conteúdo
-console.log('📊 Resumo do Baseline:');
+// Validar conteÃºdo
+console.log('ðŸ“Š Resumo do Baseline:');
 console.log('Pages:', report.summary.totalPages);
 console.log('Components:', report.summary.totalComponents);
 console.log('Features:', report.summary.totalInteractions);
 console.log('Storage Keys:', report.summary.localStorageKeys);
 
 // Deve mostrar:
-// Pages: 1+ (dependendo de quantas páginas capturou)
+// Pages: 1+ (dependendo de quantas pÃ¡ginas capturou)
 // Components: 15+ (computed styles capturados)
 // Features: 5+ (funcionalidades detectadas)
 // Storage Keys: 10+ (chaves do localStorage)
 ```
 
-#### 4.2 Abrir relatório HTML
+#### 4.2 Abrir relatÃ³rio HTML
 
 ```powershell
-# Abrir relatório no navegador
+# Abrir relatÃ³rio no navegador
 start qa-baseline\2025-11-08\reports\qa-baseline-report-2025-11-08.html
 ```
 
-**Validar que contém:**
-- ✅ Summary com estatísticas
-- ✅ Pages captured (com screenshots se html2canvas disponível)
-- ✅ Functional features listadas
-- ✅ LocalStorage state capturado
-- ✅ Component styles documentados
+**Validar que contÃ©m:**
+- âœ… Summary com estatÃ­sticas
+- âœ… Pages captured (com screenshots se html2canvas disponÃ­vel)
+- âœ… Functional features listadas
+- âœ… LocalStorage state capturado
+- âœ… Component styles documentados
 
 #### 4.3 Verificar screenshots
 
@@ -247,7 +247,7 @@ start qa-baseline\2025-11-08\reports\qa-baseline-report-2025-11-08.html
 (Get-ChildItem qa-baseline\2025-11-08\screenshots\*.png).Count
 ```
 
-**Mínimo esperado:** 35 screenshots
+**MÃ­nimo esperado:** 35 screenshots
 
 ---
 
@@ -266,12 +266,12 @@ Compress-Archive -Path qa-baseline\2025-11-08 -DestinationPath qa-baseline-2025-
 
 #### 5.2 Upload para cloud
 
-**Opções:**
+**OpÃ§Ãµes:**
 
 **Google Drive:**
 1. Acesse: https://drive.google.com
 2. Upload: `qa-baseline-2025-11-08.zip`
-3. Compartilhe com permissão de leitura (você mesmo)
+3. Compartilhe com permissÃ£o de leitura (vocÃª mesmo)
 
 **Dropbox:**
 1. Acesse: https://dropbox.com
@@ -307,7 +307,7 @@ Ready for Refactor:       [X] YES  [ ] NO
 
 ---
 
-### Passo 6: Validação Final (10 minutos)
+### Passo 6: ValidaÃ§Ã£o Final (10 minutos)
 
 #### 6.1 Checklist de arquivos
 
@@ -319,18 +319,18 @@ tree qa-baseline\2025-11-08 /F
 **Deve conter:**
 ```
 qa-baseline\2025-11-08
-├── VERSION.txt ✅
-├── reports\
-│   ├── qa-baseline-2025-11-08.json ✅
-│   └── qa-baseline-report-2025-11-08.html ✅
-├── screenshots\
-│   ├── 01-dashboard-initial.png ✅
-│   ├── 02-dashboard-backups-modal.png ✅
-│   └── ... (35+ arquivos) ✅
-├── computed-styles\
-│   └── [vazio - será extraído do JSON] ✅
-└── acceptance-criteria\
-    └── CHECKLIST.md ✅
+â”œâ”€â”€ VERSION.txt âœ…
+â”œâ”€â”€ reports\
+â”‚   â”œâ”€â”€ qa-baseline-2025-11-08.json âœ…
+â”‚   â””â”€â”€ qa-baseline-report-2025-11-08.html âœ…
+â”œâ”€â”€ screenshots\
+â”‚   â”œâ”€â”€ 01-dashboard-initial.png âœ…
+â”‚   â”œâ”€â”€ 02-dashboard-backups-modal.png âœ…
+â”‚   â””â”€â”€ ... (35+ arquivos) âœ…
+â”œâ”€â”€ computed-styles\
+â”‚   â””â”€â”€ [vazio - serÃ¡ extraÃ­do do JSON] âœ…
+â””â”€â”€ acceptance-criteria\
+    â””â”€â”€ CHECKLIST.md âœ…
 ```
 
 #### 6.2 Revisar CHECKLIST.md
@@ -341,21 +341,21 @@ code qa-baseline\2025-11-08\acceptance-criteria\CHECKLIST.md
 ```
 
 **Revisar:**
-- [ ] 160 critérios de aceitação documentados
-- [ ] 5 cenários críticos definidos
+- [ ] 160 critÃ©rios de aceitaÃ§Ã£o documentados
+- [ ] 5 cenÃ¡rios crÃ­ticos definidos
 - [ ] Categorias: Visual (50), Functional (85), Data (15), Performance (10)
 
 ---
 
-## ✅ Conclusão e Próximos Passos
+## âœ… ConclusÃ£o e PrÃ³ximos Passos
 
 ### Se tudo foi capturado corretamente:
 
-**Você está pronto para iniciar a refatoração! 🎉**
+**VocÃª estÃ¡ pronto para iniciar a refatoraÃ§Ã£o! ðŸŽ‰**
 
-### Opções de implementação:
+### OpÃ§Ãµes de implementaÃ§Ã£o:
 
-#### **Opção A: Gradual (Recomendado - 12 semanas)**
+#### **OpÃ§Ã£o A: Gradual (Recomendado - 12 semanas)**
 
 **Sprint 1-2: Foundation**
 - Implementar `PropertyDatabase.js`
@@ -365,11 +365,11 @@ code qa-baseline\2025-11-08\acceptance-criteria\CHECKLIST.md
 - Validar contra baseline
 
 ```
-Comando para começar:
-"Vamos começar a implementação gradual - Sprint 1-2: Foundation"
+Comando para comeÃ§ar:
+"Vamos comeÃ§ar a implementaÃ§Ã£o gradual - Sprint 1-2: Foundation"
 ```
 
-#### **Opção B: Proof of Concept (1-2 semanas)**
+#### **OpÃ§Ã£o B: Proof of Concept (1-2 semanas)**
 
 **PoC: PropertyDatabase apenas**
 - Implementar apenas `PropertyDatabase.js`
@@ -378,118 +378,119 @@ Comando para começar:
 - Decidir se continuar
 
 ```
-Comando para começar:
+Comando para comeÃ§ar:
 "Vamos fazer PoC - apenas PropertyDatabase.js"
 ```
 
-#### **Opção C: Implementação Full (Agressiva - 2-3 semanas)**
+#### **OpÃ§Ã£o C: ImplementaÃ§Ã£o Full (Agressiva - 2-3 semanas)**
 
 **Todos os componentes da Phase 1**
 - PropertyDatabase + Router + Shell + Auth
-- Implementação paralela de todos
+- ImplementaÃ§Ã£o paralela de todos
 - Testes integrados
-- Validação completa
+- ValidaÃ§Ã£o completa
 
 ```
-Comando para começar:
+Comando para comeÃ§ar:
 "Vamos implementar Phase 1 completa agora"
 ```
 
 ---
 
-## 🔒 Segurança do Baseline
+## ðŸ”’ SeguranÃ§a do Baseline
 
-### ⚠️ IMPORTANTE - NÃO APAGUE:
+### âš ï¸ IMPORTANTE - NÃƒO APAGUE:
 
 ```
-❌ NÃO deletar pasta qa-baseline\
-❌ NÃO modificar arquivos capturados
-❌ NÃO sobrescrever screenshots
-❌ NÃO perder backup externo (ZIP)
+âŒ NÃƒO deletar pasta qa-baseline\
+âŒ NÃƒO modificar arquivos capturados
+âŒ NÃƒO sobrescrever screenshots
+âŒ NÃƒO perder backup externo (ZIP)
 ```
 
-### ✅ Este baseline é CRÍTICO:
+### âœ… Este baseline Ã© CRÃTICO:
 
-- 🎯 Referência golden para comparação
-- 🔍 Validação de zero regressão
-- 📊 Proof de estado anterior
-- 🛡️ Rollback se necessário
-- 📋 Documentação de compliance
+- ðŸŽ¯ ReferÃªncia golden para comparaÃ§Ã£o
+- ðŸ” ValidaÃ§Ã£o de zero regressÃ£o
+- ðŸ“Š Proof de estado anterior
+- ðŸ›¡ï¸ Rollback se necessÃ¡rio
+- ðŸ“‹ DocumentaÃ§Ã£o de compliance
 
 ---
 
-## 📞 Se Encontrar Problemas
+## ðŸ“ž Se Encontrar Problemas
 
-### Script não carrega:
+### Script nÃ£o carrega:
 
 ```javascript
 // Verificar caminho:
 console.log(window.location.href);
-// Deve estar em: file:///r:/Development/Projects/iluxsys/master-control.html
+// Deve estar em: file:///r:/Development/Projects/nexefii/master-control.html
 
 // Tentar caminho absoluto:
 const script = document.createElement('script');
-script.src = 'file:///r:/Development/Projects/iluxsys/qa-baseline-capture.js';
+script.src = 'file:///r:/Development/Projects/nexefii/qa-baseline-capture.js';
 document.head.appendChild(script);
 ```
 
-### html2canvas não disponível:
+### html2canvas nÃ£o disponÃ­vel:
 
-- Screenshots automáticos não funcionarão
-- **Solução:** Capturas manuais são suficientes
-- Ignore avisos sobre screenshots no relatório
+- Screenshots automÃ¡ticos nÃ£o funcionarÃ£o
+- **SoluÃ§Ã£o:** Capturas manuais sÃ£o suficientes
+- Ignore avisos sobre screenshots no relatÃ³rio
 
 ### Muitos screenshots para capturar:
 
-- **Mínimo aceitável:** 20 screenshots (principais telas)
+- **MÃ­nimo aceitÃ¡vel:** 20 screenshots (principais telas)
 - **Ideal:** 35+ screenshots (todos os estados)
-- **Foco em:** Telas principais de cada tab + modals críticos
+- **Foco em:** Telas principais de cada tab + modals crÃ­ticos
 
 ---
 
-## 🎓 Dicas Finais
+## ðŸŽ“ Dicas Finais
 
 ### Para captura eficiente:
 
-1. **Use segundo monitor** (se disponível) - Um para sistema, outro para manual
-2. **Nomeie screenshots corretamente** - Siga numeração do manual
+1. **Use segundo monitor** (se disponÃ­vel) - Um para sistema, outro para manual
+2. **Nomeie screenshots corretamente** - Siga numeraÃ§Ã£o do manual
 3. **Capture em tela cheia** - Melhor qualidade e contexto
 4. **Documente bugs encontrados** - Anote no CHECKLIST.md
-5. **Não se apresse** - Baseline correto é crucial
+5. **NÃ£o se apresse** - Baseline correto Ã© crucial
 
 ### Para screenshots consistentes:
 
-- ✅ Mesma resolução sempre (não redimensione janela)
-- ✅ Zoom do browser em 100%
-- ✅ Sem elementos temporários (cursores, tooltips)
-- ✅ Estados limpos (sem erros temporários)
+- âœ… Mesma resoluÃ§Ã£o sempre (nÃ£o redimensione janela)
+- âœ… Zoom do browser em 100%
+- âœ… Sem elementos temporÃ¡rios (cursores, tooltips)
+- âœ… Estados limpos (sem erros temporÃ¡rios)
 
 ---
 
-## 📊 Status Report
+## ðŸ“Š Status Report
 
 Quando terminar, me informe:
 
 ```
-✅ Baseline capturado!
+âœ… Baseline capturado!
 
 Arquivos gerados:
-- JSON report: ✅
-- HTML report: ✅
-- Screenshots: X/35 ✅
-- ZIP backup: ✅
-- Cloud upload: ✅
+- JSON report: âœ…
+- HTML report: âœ…
+- Screenshots: X/35 âœ…
+- ZIP backup: âœ…
+- Cloud upload: âœ…
 
-Pronto para próxima fase!
+Pronto para prÃ³xima fase!
 ```
 
 ---
 
-**Boa sorte com a captura! 🚀**
+**Boa sorte com a captura! ðŸš€**
 
-Quando terminar, escolha a opção de implementação e vamos começar a transformação arquitetural!
+Quando terminar, escolha a opÃ§Ã£o de implementaÃ§Ã£o e vamos comeÃ§ar a transformaÃ§Ã£o arquitetural!
 
 ---
 
-**Última atualização:** 08/11/2025  
-**Autor:** GitHub Copilot (IluxSys Development)
+**Ãšltima atualizaÃ§Ã£o:** 08/11/2025  
+**Autor:** GitHub Copilot (nexefii Development)
+

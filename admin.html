@@ -1,9 +1,9 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="pt-br">
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>iLuxSys · Administração</title>
+  <title>nexefii Â· AdministraÃ§Ã£o</title>
   <link rel="stylesheet" href="style.css">
   <script src="auth.js"></script>
   <script src="properties.js"></script>
@@ -11,7 +11,7 @@
     // Admin-only guard
     const session = ((window.IluxAuth && IluxAuth.getCurrentSession) ? IluxAuth.getCurrentSession() : (window.NexefiiAuth && NexefiiAuth.getCurrentSession ? ((window.NexefiiAuth && NexefiiAuth.getCurrentSession) ? NexefiiAuth.getCurrentSession() : (window.IluxAuth && IluxAuth.getCurrentSession ? IluxAuth.getCurrentSession() : null)) : null));
     if(!session || session.role !== 'admin') {
-      alert('Acesso negado. Apenas administradores podem acessar esta página.');
+      alert('Acesso negado. Apenas administradores podem acessar esta pÃ¡gina.');
       window.location.href = 'index.html';
     }
   </script>
@@ -77,12 +77,12 @@
 </head>
 <body>
   <header>
-    <div class="brand">
-      <img src="assets/logo_iluxsys.png">
+      <div class="brand">
+      <img src="assets/Nexefii_logo_3d-official.png" alt="Nexefii">
     </div>
     <div style="display:flex;align-items:center;gap:8px">
       <button class="btn ghost" onclick="window.location.href='index.html'">
-        <span id="btnDashboard">← Voltar ao Dashboard</span>
+        <span id="btnDashboard">â† Voltar ao Dashboard</span>
       </button>
       <button class="btn ghost" onclick="logout()">
         <span id="btnLogout">Sair</span>
@@ -92,23 +92,23 @@
 
   <div class="admin-container">
     <div class="admin-header">
-      <div class="admin-title" id="pageTitle">Gerenciamento de Usuários</div>
+      <div class="admin-title" id="pageTitle">Gerenciamento de UsuÃ¡rios</div>
       <select id="langSelect" onchange="changeLanguage(this.value)" 
         style="padding:8px 12px;border-radius:8px;border:1px solid var(--line)">
-        <option value="pt">Português</option>
+        <option value="pt">PortuguÃªs</option>
         <option value="en">English</option>
-        <option value="es">Español</option>
+        <option value="es">EspaÃ±ol</option>
       </select>
     </div>
 
     <div class="stats-grid">
       <div class="stat-card">
         <div class="stat-value" id="statTotal">0</div>
-        <div class="stat-label" id="lblTotal">Total de Usuários</div>
+        <div class="stat-label" id="lblTotal">Total de UsuÃ¡rios</div>
       </div>
       <div class="stat-card">
         <div class="stat-value" id="statPending">0</div>
-        <div class="stat-label" id="lblPending">Aguardando Aprovação</div>
+        <div class="stat-label" id="lblPending">Aguardando AprovaÃ§Ã£o</div>
       </div>
       <div class="stat-card">
         <div class="stat-value" id="statApproved">0</div>
@@ -132,12 +132,12 @@
       <div class="table-header">
         <div id="colName">Nome</div>
         <div id="colEmail">Email</div>
-        <div id="colUsername">Usuário</div>
+        <div id="colUsername">UsuÃ¡rio</div>
         <div id="colStatus">Status</div>
         <div id="colProperty">Propriedade</div>
         <div id="colPosition">Cargo</div>
-        <div id="colModules">Módulos</div>
-        <div id="colActions">Ações</div>
+        <div id="colModules">MÃ³dulos</div>
+        <div id="colActions">AÃ§Ãµes</div>
       </div>
       <div id="usersTableBody"></div>
     </div>
@@ -151,10 +151,10 @@
     </div>
   </div>
 
-  <!-- Modal de Edição de Módulos -->
+  <!-- Modal de EdiÃ§Ã£o de MÃ³dulos -->
   <div id="moduleModal" class="modal" onclick="closeModal(event)">
     <div class="modal-content" onclick="event.stopPropagation()">
-      <div class="modal-title" id="modalTitle">Gerenciar Módulos</div>
+      <div class="modal-title" id="modalTitle">Gerenciar MÃ³dulos</div>
       <div id="modalUserInfo" style="margin-bottom:20px;color:var(--muted);font-size:14px"></div>
       <div>
         <label id="labProperty" style="font-size:12px;font-weight:600;">Propriedade</label>
@@ -183,16 +183,16 @@
           <input id="propImageUrl" class="input" placeholder="assets/images/hotel_sp.jpg" />
         </div>
         <div>
-          <label id="labPropCapacity" style="font-size:12px;font-weight:600;">Capacidade de Usuários</label>
+          <label id="labPropCapacity" style="font-size:12px;font-weight:600;">Capacidade de UsuÃ¡rios</label>
           <select id="propCapacity" style="width:100%;margin-top:6px;padding:10px;border:1px solid var(--line);border-radius:8px">
-            <option value="to30">Até 30</option>
-            <option value="30to50">30 até 50</option>
-            <option value="50to100">50 até 100</option>
+            <option value="to30">AtÃ© 30</option>
+            <option value="30to50">30 atÃ© 50</option>
+            <option value="50to100">50 atÃ© 100</option>
             <option value="100plus">Acima de 100</option>
           </select>
         </div>
         <div>
-          <label id="labPropModules" style="font-size:12px;font-weight:600;">Módulos Adquiridos</label>
+          <label id="labPropModules" style="font-size:12px;font-weight:600;">MÃ³dulos Adquiridos</label>
           <div class="module-checkboxes" id="propModules"></div>
         </div>
         <div style="display:flex;align-items:center;gap:8px">
@@ -216,28 +216,28 @@
     let HOTELS_I18N = null;
     const DEFAULT_HOTELS = {
       pt: {
-        iluxSaoPaulo: 'iLux Hotel São Paulo',
+        iluxSaoPaulo: 'iLux Hotel SÃ£o Paulo',
         iluxMiami: 'iLux Hotel Miami',
         iluxRioDeJaneiro: 'iLux Hotel Rio de Janeiro'
       },
       en: {
-        iluxSaoPaulo: 'iLux Hotel São Paulo',
+        iluxSaoPaulo: 'iLux Hotel SÃ£o Paulo',
         iluxMiami: 'iLux Hotel Miami',
         iluxRioDeJaneiro: 'iLux Hotel Rio de Janeiro'
       },
       es: {
-        iluxSaoPaulo: 'iLux Hotel São Paulo',
+        iluxSaoPaulo: 'iLux Hotel SÃ£o Paulo',
         iluxMiami: 'iLux Hotel Miami',
         iluxRioDeJaneiro: 'iLux Hotel Rio de Janeiro'
       }
     };
     const DEFAULT_ADMIN_I18N = {
       pt: {
-        pageTitle: 'Gerenciamento de Usuários',
-        btnDashboard: '← Voltar ao Dashboard',
+        pageTitle: 'Gerenciamento de UsuÃ¡rios',
+        btnDashboard: 'â† Voltar ao Dashboard',
         btnLogout: 'Sair',
-        lblTotal: 'Total de Usuários',
-        lblPending: 'Aguardando Aprovação',
+        lblTotal: 'Total de UsuÃ¡rios',
+        lblPending: 'Aguardando AprovaÃ§Ã£o',
         lblApproved: 'Aprovados',
         lblDenied: 'Negados',
         tabAll: 'Todos',
@@ -246,19 +246,19 @@
         tabDenied: 'Negados',
         colName: 'Nome',
         colEmail: 'Email',
-        colUsername: 'Usuário',
+        colUsername: 'UsuÃ¡rio',
         colStatus: 'Status',
         colProperty: 'Propriedade',
         colPosition: 'Cargo',
-        colModules: 'Módulos',
-        colActions: 'Ações',
+        colModules: 'MÃ³dulos',
+        colActions: 'AÃ§Ãµes',
     tabProperties: 'Propriedades',
         statusPending: 'Aguardando',
         statusApproved: 'Aprovado',
         statusDenied: 'Negado',
         btnApprove: 'Aprovar',
         btnDeny: 'Negar',
-        btnEdit: 'Módulos',
+        btnEdit: 'MÃ³dulos',
         btnDelete: 'Excluir',
     btnNewProperty: 'Nova Propriedade',
     propTitle: 'Propriedades',
@@ -266,29 +266,29 @@
     propModalTitleEdit: 'Editar Propriedade',
     labPropKey: 'Propriedade',
     labPropImage: 'Imagem (URL)',
-    labPropCapacity: 'Capacidade de Usuários',
-    labPropModules: 'Módulos Adquiridos',
+    labPropCapacity: 'Capacidade de UsuÃ¡rios',
+    labPropModules: 'MÃ³dulos Adquiridos',
     labPropActive: 'Ativa',
     btnApproveSave: 'Aprovar e Salvar',
-        emptyState: 'Nenhum usuário encontrado',
-        modalTitle: 'Gerenciar Módulos',
+        emptyState: 'Nenhum usuÃ¡rio encontrado',
+        modalTitle: 'Gerenciar MÃ³dulos',
   labProperty: 'Propriedade',
         btnCancel: 'Cancelar',
         btnSave: 'Salvar',
-        confirmApprove: 'Aprovar este usuário?',
-        confirmDeny: 'Negar acesso a este usuário?',
-        confirmDelete: 'Excluir permanentemente este usuário?',
+        confirmApprove: 'Aprovar este usuÃ¡rio?',
+        confirmDeny: 'Negar acesso a este usuÃ¡rio?',
+        confirmDelete: 'Excluir permanentemente este usuÃ¡rio?',
     confirmDeleteProperty: 'Excluir esta propriedade?',
-        successApprove: 'Usuário aprovado com sucesso!',
-        successDeny: 'Usuário negado.',
-        successDelete: 'Usuário excluído.',
-    successModules: 'Módulos atualizados com sucesso!',
+        successApprove: 'UsuÃ¡rio aprovado com sucesso!',
+        successDeny: 'UsuÃ¡rio negado.',
+        successDelete: 'UsuÃ¡rio excluÃ­do.',
+    successModules: 'MÃ³dulos atualizados com sucesso!',
     successProperty: 'Propriedade salva com sucesso!',
-    successPropertyDelete: 'Propriedade excluída.'
+    successPropertyDelete: 'Propriedade excluÃ­da.'
       },
       en: {
         pageTitle: 'User Management',
-        btnDashboard: '← Back to Dashboard',
+        btnDashboard: 'â† Back to Dashboard',
         btnLogout: 'Logout',
         lblTotal: 'Total Users',
         lblPending: 'Pending Approval',
@@ -341,11 +341,11 @@
     successPropertyDelete: 'Property deleted.'
       },
       es: {
-        pageTitle: 'Gestión de Usuarios',
-        btnDashboard: '← Volver al Panel',
+        pageTitle: 'GestiÃ³n de Usuarios',
+        btnDashboard: 'â† Volver al Panel',
         btnLogout: 'Salir',
         lblTotal: 'Total de Usuarios',
-        lblPending: 'Esperando Aprobación',
+        lblPending: 'Esperando AprobaciÃ³n',
         lblApproved: 'Aprobados',
         lblDenied: 'Negados',
         tabAll: 'Todos',
@@ -358,7 +358,7 @@
         colStatus: 'Estado',
         colProperty: 'Propiedad',
         colPosition: 'Cargo',
-        colModules: 'Módulos',
+        colModules: 'MÃ³dulos',
         colActions: 'Acciones',
         tabProperties: 'Propiedades',
         statusPending: 'Esperando',
@@ -366,7 +366,7 @@
         statusDenied: 'Negado',
         btnApprove: 'Aprobar',
         btnDeny: 'Negar',
-        btnEdit: 'Módulos',
+        btnEdit: 'MÃ³dulos',
         btnDelete: 'Eliminar',
         btnNewProperty: 'Nueva Propiedad',
         propTitle: 'Propiedades',
@@ -375,23 +375,23 @@
         labPropKey: 'Propiedad',
         labPropImage: 'Imagen (URL)',
         labPropCapacity: 'Capacidad de Usuarios',
-        labPropModules: 'Módulos Comprados',
+        labPropModules: 'MÃ³dulos Comprados',
         labPropActive: 'Activa',
         btnApproveSave: 'Aprobar y Guardar',
         emptyState: 'No se encontraron usuarios',
-        modalTitle: 'Gestionar Módulos',
+        modalTitle: 'Gestionar MÃ³dulos',
   labProperty: 'Propiedad',
         btnCancel: 'Cancelar',
         btnSave: 'Guardar',
-        confirmApprove: '¿Aprobar este usuario?',
-        confirmDeny: '¿Negar acceso a este usuario?',
-        confirmDelete: '¿Eliminar permanentemente este usuario?',
-        confirmDeleteProperty: '¿Eliminar esta propiedad?',
-        successApprove: '¡Usuario aprobado con éxito!',
+        confirmApprove: 'Â¿Aprobar este usuario?',
+        confirmDeny: 'Â¿Negar acceso a este usuario?',
+        confirmDelete: 'Â¿Eliminar permanentemente este usuario?',
+        confirmDeleteProperty: 'Â¿Eliminar esta propiedad?',
+        successApprove: 'Â¡Usuario aprobado con Ã©xito!',
         successDeny: 'Usuario negado.',
         successDelete: 'Usuario eliminado.',
-        successModules: '¡Módulos actualizados con éxito!',
-        successProperty: '¡Propiedad guardada con éxito!',
+        successModules: 'Â¡MÃ³dulos actualizados con Ã©xito!',
+        successProperty: 'Â¡Propiedad guardada con Ã©xito!',
         successPropertyDelete: 'Propiedad eliminada.'
       }
     };
@@ -457,8 +457,8 @@
       // Property modal labels
       document.getElementById('labPropKey').innerText = L.labPropKey || 'Propriedade';
       document.getElementById('labPropImage').innerText = L.labPropImage || 'Imagem (URL)';
-      document.getElementById('labPropCapacity').innerText = L.labPropCapacity || 'Capacidade de Usuários';
-      document.getElementById('labPropModules').innerText = L.labPropModules || 'Módulos Adquiridos';
+      document.getElementById('labPropCapacity').innerText = L.labPropCapacity || 'Capacidade de UsuÃ¡rios';
+      document.getElementById('labPropModules').innerText = L.labPropModules || 'MÃ³dulos Adquiridos';
       document.getElementById('labPropActive').innerText = L.labPropActive || 'Ativa';
       document.getElementById('btnPropCancel').innerText = L.btnCancel;
       document.getElementById('btnPropSave').innerText = L.btnSave;
@@ -562,7 +562,7 @@
       }catch(err){
         console.error('[admin] renderUsers failed', err);
         const tbody = document.getElementById('usersTableBody');
-        if(tbody) tbody.innerHTML = `<div class="empty-state">Erro ao carregar usuários.</div>`;
+        if(tbody) tbody.innerHTML = `<div class="empty-state">Erro ao carregar usuÃ¡rios.</div>`;
       }
     }
 
@@ -653,7 +653,7 @@
           if(purchased && !purchased.includes(module)){
             cb.checked = false;
             cb.disabled = true;
-            cb.parentElement.title = 'Módulo não adquirido para esta propriedade';
+            cb.parentElement.title = 'MÃ³dulo nÃ£o adquirido para esta propriedade';
             cb.parentElement.style.opacity = '0.6';
           }else{
             cb.disabled = false;
@@ -729,7 +729,7 @@
       grid.innerHTML = props.map(p=>{
         const name = HOTELS[p.key] || p.key;
         const mods = (p.modulesPurchased||[]).map(m=> (IluxAuth.MODULE_NAMES[lang]||IluxAuth.MODULE_NAMES.pt)[m] || m).join(', ') || '-';
-        const capLabel = p.userCapacity==='to30'?'≤30': p.userCapacity==='30to50'?'30–50': p.userCapacity==='50to100'?'50–100': '100+';
+        const capLabel = p.userCapacity==='to30'?'â‰¤30': p.userCapacity==='30to50'?'30â€“50': p.userCapacity==='50to100'?'50â€“100': '100+';
         return `
           <div class="prop-card">
             <img class="prop-thumb" src="${p.imageUrl||''}" onerror="this.style.display='none'" />
@@ -799,7 +799,7 @@
       const L = I18N_ADMIN[lang] || I18N_ADMIN.pt;
       if(!confirm(L.confirmDeleteProperty||'Excluir esta propriedade?')) return;
       const r = IluxProps.deleteProperty(key);
-      if(r.success){ alert(L.successPropertyDelete||'Propriedade excluída.'); renderProperties(); }
+      if(r.success){ alert(L.successPropertyDelete||'Propriedade excluÃ­da.'); renderProperties(); }
     }
 
     // Initialize
@@ -814,3 +814,4 @@
   </script>
 </body>
 </html>
+

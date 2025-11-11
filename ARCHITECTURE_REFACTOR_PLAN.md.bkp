@@ -1,0 +1,875 @@
+# 🏗️ Plano de Reestruturação Arquitetural - IluxSys SaaS Híbrida
+
+---
+**📄 Documento**: ARCHITECTURE_REFACTOR_PLAN.md  
+**📦 Versão**: 1.0.0  
+**📅 Criado em**: 08/11/2025  
+**👤 Autor**: IluxSys Development Team  
+**🎯 Objetivo**: Transformar sistema monolítico em arquitetura SaaS híbrida/cloud-native
+
+---
+
+## 🎯 Visão Geral da Transformação
+
+### Estado Atual (AS-IS)
+- ❌ Arquivos HTML estáticos por propriedade
+- ❌ LocalStorage único compartilhado
+- ❌ Sem isolamento de dados por tenant
+- ❌ Sem versionamento de schema
+- ❌ Sem sincronização cloud
+- ❌ Backups manuais sem automação
+
+### Estado Futuro (TO-BE)
+- ✅ **Roteamento lógico** via `/property/{slug}`
+- ✅ **DB/Schema isolado** por propriedade
+- ✅ **Versionamento** com migrations forward/reverse
+- ✅ **OTA global** com compatibility gate
+- ✅ **Sync Service** híbrido com delta sync
+- ✅ **Backups automatizados** por propriedade
+- ✅ **Shell Architecture** com loading dinâmico
+- ✅ **Multi-tenant dashboard** com KPIs comparativos
+
+---
+
+## 📐 Arquitetura Proposta
+
+```
+┌─────────────────────────────────────────────────────────────────┐
+│                     MASTER CONTROL PANEL                         │
+│  (Orquestrador Central - Governança & Administração)            │
+├─────────────────────────────────────────────────────────────────┤
+│  • Implementation Wizard    • Sync Configuration                │
+│  • Multi-Property Dashboard • Backups & Restore                 │
+│  • OTA Management          • Logs & Audit                       │
+│  • Settings & i18n         • Releases & Rollback                │
+└─────────────────────────────────────────────────────────────────┘
+                              ↓
+┌─────────────────────────────────────────────────────────────────┐
+│                    SHELL ARCHITECTURE                            │
+│  index.html (Shell) → Core Loader (Router, i18n, Auth, Tokens) │
+└─────────────────────────────────────────────────────────────────┘
+                              ↓
+        ┌──────────────────┬──────────────────┬──────────────────┐
+        │   Property A     │   Property B     │   Property C     │
+        │  /property/miami │ /property/paulo  │ /property/rio    │
+        ├──────────────────┼──────────────────┼──────────────────┤
+        │ • Isolated DB    │ • Isolated DB    │ • Isolated DB    │
+        │ • schema_v1.0.0  │ • schema_v1.0.0  │ • schema_v1.0.0  │
+        │ • Admin User     │ • Admin User     │ • Admin User     │
+        │ • PMS+EMS+BMS    │ • PMS only       │ • PMS+EMS        │
+        │ • Auto Backups   │ • Auto Backups   │ • Auto Backups   │
+        │ • Delta Sync     │ • Delta Sync     │ • Delta Sync     │
+        └──────────────────┴──────────────────┴──────────────────┘
+                              ↓
+┌─────────────────────────────────────────────────────────────────┐
+│                    SYNC SERVICE (Híbrido)                        │
+│  • Delta Sync     • Conflict Resolution   • Retry Logic         │
+│  • Queue Manager  • Status Monitor        • Error Recovery      │
+└─────────────────────────────────────────────────────────────────┘
+                              ↓
+┌─────────────────────────────────────────────────────────────────┐
+│                    CLOUD BACKEND (Futuro)                        │
+│  • REST API       • PostgreSQL Multi-tenant  • S3 Backups       │
+│  • Auth Service   • Key Management Service   • Observability    │
+└─────────────────────────────────────────────────────────────────┘
+```
+
+---
+
+## 🎯 Fase 1: Foundation & Core Refactoring
+
+### 1.1 Database Abstraction Layer (DAL)
+**Objetivo**: Criar camada de abstração para isolar dados por propriedade
+
+**Arquivos a criar:**
+```
+/core/
+  database/
+    PropertyDatabase.js       # Classe base para DB por propriedade
+    SchemaManager.js          # Gerenciador de schemas e migrations
+    MigrationRunner.js        # Executor de migrations
+    QueryBuilder.js           # Builder para queries isoladas
+    IndexedDBAdapter.js       # Adapter para IndexedDB (futuro)
+```
+
+**PropertyDatabase.js - Estrutura:**
+```javascript
+class PropertyDatabase {
+  constructor(propertyKey) {
+    this.propertyKey = propertyKey;
+    this.prefix = `property_${propertyKey}_`;
+    this.schemaVersion = null;
+    this.migrations = [];
+  }
+
+  // CRUD Operations isoladas
+  async set(collection, id, data) {
+    const key = `${this.prefix}${collection}_${id}`;
+    const record = {
+      ...data,
+      propertyId: this.propertyKey,
+      _version: this.schemaVersion,
+      _timestamp: new Date().toISOString()
+    };
+    localStorage.setItem(key, JSON.stringify(record));
+  }
+
+  async get(collection, id) {
+    const key = `${this.prefix}${collection}_${id}`;
+    const data = localStorage.getItem(key);
+    return data ? JSON.parse(data) : null;
+  }
+
+  async query(collection, filter) {
+    const prefix = `${this.prefix}${collection}_`;
+    const results = [];
+    for (let i = 0; i < localStorage.length; i++) {
+      const key = localStorage.key(i);
+      if (key.startsWith(prefix)) {
+        const data = JSON.parse(localStorage.getItem(key));
+        if (!filter || filter(data)) {
+          results.push(data);
+        }
+      }
+    }
+    return results;
+  }
+
+  async delete(collection, id) {
+    const key = `${this.prefix}${collection}_${id}`;
+    localStorage.removeItem(key);
+  }
+
+  // Schema Management
+  async getCurrentVersion() {
+    const versionKey = `${this.prefix}_schema_version`;
+    return localStorage.getItem(versionKey) || '0.0.0';
+  }
+
+  async setVersion(version) {
+    const versionKey = `${this.prefix}_schema_version`;
+    localStorage.setItem(versionKey, version);
+    this.schemaVersion = version;
+  }
+
+  // Migration Support
+  async runMigrations(targetVersion) {
+    // Implementar lógica de migrations forward/reverse
+  }
+}
+```
+
+### 1.2 Router & Shell System
+**Objetivo**: Implementar roteamento lógico SPA
+
+**Arquivos a criar:**
+```
+/core/
+  router/
+    Router.js                 # Router principal com history API
+    RouteConfig.js            # Configuração de rotas
+    RouteGuards.js            # Guards de autenticação/autorização
+    PropertyResolver.js       # Resolve propriedade da rota
+```
+
+**Router.js - Estrutura:**
+```javascript
+class Router {
+  constructor() {
+    this.routes = new Map();
+    this.currentProperty = null;
+    this.guards = [];
+    this.init();
+  }
+
+  init() {
+    window.addEventListener('popstate', (e) => this.handleRoute());
+    document.addEventListener('click', (e) => {
+      if (e.target.matches('[data-route]')) {
+        e.preventDefault();
+        this.navigate(e.target.getAttribute('data-route'));
+      }
+    });
+    this.handleRoute();
+  }
+
+  register(path, handler, guards = []) {
+    this.routes.set(path, { handler, guards });
+  }
+
+  async navigate(path, replaceState = false) {
+    if (replaceState) {
+      history.replaceState({}, '', path);
+    } else {
+      history.pushState({}, '', path);
+    }
+    await this.handleRoute();
+  }
+
+  async handleRoute() {
+    const path = window.location.pathname;
+    
+    // Parse property slug: /property/{slug}/page
+    const propertyMatch = path.match(/^\/property\/([^\/]+)(\/.*)?$/);
+    if (propertyMatch) {
+      const [, slug, subpath] = propertyMatch;
+      await this.loadProperty(slug);
+      return await this.loadPage(subpath || '/dashboard');
+    }
+
+    // Master Control routes
+    if (path.startsWith('/master')) {
+      return await this.loadMasterPage(path);
+    }
+
+    // Default route
+    return await this.loadMultiPropertyDashboard();
+  }
+
+  async loadProperty(slug) {
+    // Carregar contexto da propriedade
+    const property = await this.resolveProperty(slug);
+    if (!property) {
+      return this.navigate('/404');
+    }
+    
+    this.currentProperty = property;
+    
+    // Inicializar DB da propriedade
+    window.propertyDB = new PropertyDatabase(property.key);
+    
+    // Carregar módulos habilitados
+    await this.loadPropertyModules(property.modulesPurchased);
+    
+    // Atualizar UI
+    this.updatePropertyContext(property);
+  }
+
+  async loadPage(pagePath) {
+    // Carregar página dinamicamente
+    const page = await this.fetchPage(pagePath);
+    this.renderPage(page);
+  }
+}
+```
+
+### 1.3 Shell HTML
+**Objetivo**: Criar shell que carrega conteúdo dinamicamente
+
+**index.html - Novo:**
+```html
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>IluxSys - Property Management System</title>
+  
+  <!-- Core CSS (Mínimo) -->
+  <link rel="stylesheet" href="/core/styles/shell.css">
+  <link rel="stylesheet" href="/core/styles/variables.css">
+  
+  <!-- Core Scripts -->
+  <script src="/core/database/PropertyDatabase.js" defer></script>
+  <script src="/core/router/Router.js" defer></script>
+  <script src="/core/auth/AuthService.js" defer></script>
+  <script src="/core/i18n/I18nService.js" defer></script>
+  <script src="/core/loader/PageLoader.js" defer></script>
+  <script src="/core/init.js" defer></script>
+</head>
+<body>
+  <!-- Loading Screen -->
+  <div id="app-loader" class="loader-overlay">
+    <div class="loader-spinner"></div>
+    <p>Carregando IluxSys...</p>
+  </div>
+
+  <!-- Shell Container -->
+  <div id="app-shell" style="display: none;">
+    <!-- Top Bar (Sempre visível) -->
+    <header id="app-header">
+      <!-- Renderizado dinamicamente -->
+    </header>
+
+    <!-- Content Area (Dinâmico) -->
+    <main id="app-content">
+      <!-- Páginas carregadas aqui -->
+    </main>
+
+    <!-- Toasts/Notifications -->
+    <div id="app-toasts"></div>
+
+    <!-- Modals Container -->
+    <div id="app-modals"></div>
+  </div>
+
+  <!-- Error Screen -->
+  <div id="app-error" style="display: none;">
+    <h1>⚠️ Erro ao Carregar</h1>
+    <p id="error-message"></p>
+    <button onclick="location.reload()">Recarregar</button>
+  </div>
+</body>
+</html>
+```
+
+---
+
+## 🎯 Fase 2: Implementation Wizard
+
+### 2.1 Wizard de Criação de Propriedade
+**Objetivo**: Interface guiada para provisionamento completo
+
+**Arquivos a criar:**
+```
+/master/
+  implementation/
+    ImplementationWizard.js   # Controller do wizard
+    WizardSteps.js            # Definição dos passos
+    PropertyProvisioner.js    # Lógica de provisioning
+    ModuleSelector.js         # Seletor de módulos
+    AdminCreator.js           # Criação de admin local
+```
+
+**WizardSteps.js - Passos:**
+```javascript
+const WIZARD_STEPS = [
+  {
+    id: 'property-info',
+    title: 'Informações da Propriedade',
+    fields: [
+      { name: 'key', label: 'Property ID', type: 'text', required: true },
+      { name: 'name', label: 'Nome', type: 'text', required: true },
+      { name: 'slug', label: 'URL Slug', type: 'text', required: true },
+      { name: 'category', label: 'Categoria', type: 'select', options: ['hotel', 'resort', 'hostel'] }
+    ]
+  },
+  {
+    id: 'modules',
+    title: 'Seleção de Módulos',
+    description: 'Escolha os módulos que serão habilitados',
+    modules: [
+      { id: 'pms', name: 'PMS', description: 'Property Management System', required: true },
+      { id: 'ems', name: 'EMS', description: 'Engineering Management System' },
+      { id: 'bms', name: 'BMS', description: 'Building Management System' }
+    ]
+  },
+  {
+    id: 'admin-user',
+    title: 'Administrador Local',
+    fields: [
+      { name: 'adminName', label: 'Nome Completo', type: 'text', required: true },
+      { name: 'adminEmail', label: 'E-mail', type: 'email', required: true },
+      { name: 'adminUsername', label: 'Username', type: 'text', default: 'admin' },
+      { name: 'adminPassword', label: 'Senha', type: 'password', required: true }
+    ]
+  },
+  {
+    id: 'backup-config',
+    title: 'Configuração de Backups',
+    fields: [
+      { name: 'autoBackup', label: 'Backup Automático', type: 'checkbox', default: true },
+      { name: 'backupFrequency', label: 'Frequência', type: 'select', options: ['daily', 'weekly'] },
+      { name: 'retentionDays', label: 'Retenção (dias)', type: 'number', default: 30 }
+    ]
+  },
+  {
+    id: 'ota-config',
+    title: 'Canal de Atualização',
+    fields: [
+      { name: 'otaChannel', label: 'Canal OTA', type: 'select', options: ['stable', 'beta', 'alpha'] },
+      { name: 'autoUpdate', label: 'Auto-Update', type: 'checkbox', default: true }
+    ]
+  },
+  {
+    id: 'review',
+    title: 'Revisão Final',
+    type: 'summary'
+  }
+];
+```
+
+**PropertyProvisioner.js - Lógica:**
+```javascript
+class PropertyProvisioner {
+  async provision(wizardData) {
+    const steps = [
+      () => this.createProperty(wizardData),
+      () => this.provisionDatabase(wizardData.key),
+      () => this.runMigrations(wizardData.key),
+      () => this.createAdminUser(wizardData),
+      () => this.activateModules(wizardData.key, wizardData.modules),
+      () => this.configureBackups(wizardData.key, wizardData.backupConfig),
+      () => this.registerOTA(wizardData.key, wizardData.otaChannel),
+      () => this.auditLog(wizardData)
+    ];
+
+    for (let i = 0; i < steps.length; i++) {
+      const stepName = steps[i].name;
+      try {
+        await steps[i]();
+        this.updateProgress(i + 1, steps.length, `✅ ${stepName}`);
+      } catch (error) {
+        this.updateProgress(i + 1, steps.length, `❌ ${stepName}: ${error.message}`);
+        throw new Error(`Provisioning failed at step: ${stepName}`);
+      }
+    }
+
+    return {
+      success: true,
+      propertyKey: wizardData.key,
+      slug: wizardData.slug,
+      adminCredentials: {
+        username: wizardData.adminUsername,
+        password: wizardData.adminPassword // Exibir uma única vez!
+      }
+    };
+  }
+
+  async createProperty(data) {
+    const property = {
+      key: data.key,
+      name: data.name,
+      slug: data.slug,
+      category: data.category,
+      modulesPurchased: data.modules,
+      created: new Date().toISOString(),
+      status: 'provisioning'
+    };
+
+    await window.IluxProps.upsertProperty(property);
+  }
+
+  async provisionDatabase(propertyKey) {
+    const db = new PropertyDatabase(propertyKey);
+    await db.initialize();
+    await db.setVersion('1.0.0');
+  }
+
+  async runMigrations(propertyKey) {
+    const db = new PropertyDatabase(propertyKey);
+    const schemaManager = new SchemaManager(db);
+    await schemaManager.runMigrations('1.0.0');
+  }
+
+  async createAdminUser(data) {
+    const db = new PropertyDatabase(data.key);
+    const user = {
+      id: 'user_' + Date.now(),
+      username: data.adminUsername,
+      password: this.hashPassword(data.adminPassword),
+      name: data.adminName,
+      email: data.adminEmail,
+      role: 'admin',
+      properties: [data.key],
+      status: 'active',
+      createdAt: new Date().toISOString()
+    };
+
+    await db.set('users', user.id, user);
+  }
+
+  async activateModules(propertyKey, modules) {
+    for (const moduleId of modules) {
+      await this.loadModuleManifest(propertyKey, moduleId);
+    }
+  }
+}
+```
+
+---
+
+## 🎯 Fase 3: Multi-Property Dashboard
+
+### 3.1 Dashboard com KPIs
+**Objetivo**: Visão consolidada de todas as propriedades
+
+**Arquivos a criar:**
+```
+/master/
+  dashboard/
+    MultiPropertyDashboard.js
+    KPICalculator.js
+    PropertyCard.js
+    ComparisonChart.js
+```
+
+**MultiPropertyDashboard.js:**
+```javascript
+class MultiPropertyDashboard {
+  async render() {
+    const properties = await this.loadAllProperties();
+    const kpis = await this.calculateKPIs(properties);
+
+    return `
+      <div class="multi-property-dashboard">
+        <header>
+          <h1>🏨 Multi-Property Dashboard</h1>
+          <div class="summary-cards">
+            <div class="summary-card">
+              <h3>Total de Propriedades</h3>
+              <p class="metric">${properties.length}</p>
+            </div>
+            <div class="summary-card">
+              <h3>Ocupação Média</h3>
+              <p class="metric">${kpis.averageOccupancy}%</p>
+            </div>
+            <div class="summary-card">
+              <h3>ADR Médio</h3>
+              <p class="metric">R$ ${kpis.averageADR}</p>
+            </div>
+          </div>
+        </header>
+
+        <div class="properties-grid">
+          ${properties.map(p => this.renderPropertyCard(p, kpis[p.key])).join('')}
+        </div>
+      </div>
+    `;
+  }
+
+  renderPropertyCard(property, kpi) {
+    return `
+      <div class="property-card">
+        <h3>${property.name}</h3>
+        <div class="kpi-row">
+          <span>Vendidos:</span>
+          <strong>${kpi.roomsSold}/${kpi.totalRooms}</strong>
+        </div>
+        <div class="kpi-row">
+          <span>Ocupação:</span>
+          <strong>${kpi.occupancy}%</strong>
+        </div>
+        <div class="kpi-row">
+          <span>ADR:</span>
+          <strong>R$ ${kpi.adr}</strong>
+        </div>
+        <button 
+          data-route="/property/${property.slug}" 
+          class="btn btn-primary">
+          Abrir Controle
+        </button>
+      </div>
+    `;
+  }
+
+  async calculateKPIs(properties) {
+    const kpis = {};
+    for (const property of properties) {
+      const db = new PropertyDatabase(property.key);
+      const reservations = await db.query('reservations', r => r.status === 'confirmed');
+      const inventory = await db.query('inventory');
+
+      kpis[property.key] = {
+        totalRooms: inventory.length,
+        roomsSold: reservations.length,
+        occupancy: (reservations.length / inventory.length * 100).toFixed(1),
+        adr: this.calculateADR(reservations)
+      };
+    }
+    return kpis;
+  }
+}
+```
+
+---
+
+## 🎯 Fase 4: Sync Service (Híbrido)
+
+### 4.1 Sync Configuration Page
+**Arquivos a criar:**
+```
+/master/
+  sync/
+    SyncConfigPage.js
+    SyncService.js
+    ConflictResolver.js
+    SyncQueue.js
+    SyncMonitor.js
+```
+
+**SyncService.js - Estrutura:**
+```javascript
+class SyncService {
+  constructor() {
+    this.queue = new SyncQueue();
+    this.config = this.loadConfig();
+    this.isRunning = false;
+  }
+
+  async sync(propertyKey) {
+    if (this.isRunning) return;
+    this.isRunning = true;
+
+    try {
+      // Delta sync
+      const delta = await this.calculateDelta(propertyKey);
+      await this.pushDelta(propertyKey, delta);
+      await this.pullChanges(propertyKey);
+      
+      this.logSuccess(propertyKey, delta);
+    } catch (error) {
+      this.logError(propertyKey, error);
+      await this.queue.retry(propertyKey);
+    } finally {
+      this.isRunning = false;
+    }
+  }
+
+  async calculateDelta(propertyKey) {
+    const db = new PropertyDatabase(propertyKey);
+    const lastSync = await this.getLastSyncTimestamp(propertyKey);
+    
+    const changes = await db.query('*', record => 
+      new Date(record._timestamp) > new Date(lastSync)
+    );
+
+    return {
+      timestamp: new Date().toISOString(),
+      changes: changes,
+      count: changes.length
+    };
+  }
+
+  async resolveConflict(local, remote) {
+    const policy = this.config.conflictPolicy;
+    
+    switch (policy) {
+      case 'cloud_wins':
+        return remote;
+      case 'last_write_wins':
+        return new Date(local._timestamp) > new Date(remote._timestamp) ? local : remote;
+      case 'merge':
+        return this.mergeRecords(local, remote);
+      default:
+        throw new Error('Invalid conflict policy');
+    }
+  }
+}
+```
+
+---
+
+## 🎯 Fase 5: OTA Management
+
+### 5.1 Over-The-Air Updates
+**Arquivos a criar:**
+```
+/master/
+  ota/
+    OTAManager.js
+    CompatibilityChecker.js
+    RollbackService.js
+    UpdateChannel.js
+```
+
+**OTAManager.js:**
+```javascript
+class OTAManager {
+  async checkForUpdates(propertyKey) {
+    const currentVersion = await this.getCurrentVersion(propertyKey);
+    const latestVersion = await this.fetchLatestVersion();
+    
+    if (this.compareVersions(latestVersion, currentVersion) > 0) {
+      const compatible = await this.checkCompatibility(propertyKey, latestVersion);
+      
+      if (compatible) {
+        return {
+          available: true,
+          version: latestVersion,
+          changes: await this.fetchChangelog(latestVersion)
+        };
+      } else {
+        return {
+          available: false,
+          reason: 'incompatible',
+          requiredMigrations: await this.getRequiredMigrations(currentVersion, latestVersion)
+        };
+      }
+    }
+    
+    return { available: false };
+  }
+
+  async applyUpdate(propertyKey, version) {
+    // Criar backup de segurança
+    await this.createRollbackPoint(propertyKey);
+    
+    try {
+      // Aplicar migrations
+      await this.runMigrations(propertyKey, version);
+      
+      // Atualizar código
+      await this.updateCode(propertyKey, version);
+      
+      // Verificar integridade
+      await this.verifyIntegrity(propertyKey);
+      
+      // Atualizar versão
+      await this.setVersion(propertyKey, version);
+      
+      return { success: true };
+    } catch (error) {
+      // Rollback automático
+      await this.rollback(propertyKey);
+      throw error;
+    }
+  }
+}
+```
+
+---
+
+## 🎯 Fase 6: Observability
+
+### 6.1 Logs, Métricas e Alertas
+**Arquivos a criar:**
+```
+/core/
+  observability/
+    Logger.js
+    MetricsCollector.js
+    AlertManager.js
+    TraceService.js
+```
+
+**MetricsCollector.js:**
+```javascript
+class MetricsCollector {
+  collect(metric) {
+    const metrics = {
+      // Performance
+      'page.load.time': () => performance.now(),
+      'api.response.time': (endpoint) => this.measureAPITime(endpoint),
+      
+      // Business
+      'sync.delta.size': (propertyKey) => this.getSyncDeltaSize(propertyKey),
+      'backup.success.rate': () => this.getBackupSuccessRate(),
+      
+      // Resources
+      'storage.usage': () => this.getStorageUsage(),
+      'memory.usage': () => performance.memory?.usedJSHeapSize || 0
+    };
+
+    return metrics[metric]?.() || null;
+  }
+
+  alert(condition, message) {
+    if (condition) {
+      window.alertManager.trigger({
+        level: 'warning',
+        message: message,
+        timestamp: new Date().toISOString()
+      });
+    }
+  }
+}
+```
+
+---
+
+## 📋 Cronograma de Implementação
+
+### Sprint 1 (Semana 1-2): Foundation
+- ✅ PropertyDatabase.js
+- ✅ SchemaManager.js
+- ✅ Router.js
+- ✅ Shell HTML/CSS
+- ✅ QA Baseline (screenshots + computed CSS)
+
+### Sprint 2 (Semana 3-4): Implementation Wizard
+- ✅ ImplementationWizard.js
+- ✅ PropertyProvisioner.js
+- ✅ AdminCreator.js
+- ✅ QA Wizard completo
+
+### Sprint 3 (Semana 5-6): Multi-Property Dashboard
+- ✅ MultiPropertyDashboard.js
+- ✅ KPICalculator.js
+- ✅ PropertyCard.js
+- ✅ QA Dashboard + navegação
+
+### Sprint 4 (Semana 7-8): Sync Service
+- ✅ SyncService.js
+- ✅ SyncConfigPage.js
+- ✅ ConflictResolver.js
+- ✅ QA Sync completo
+
+### Sprint 5 (Semana 9-10): OTA & Rollback
+- ✅ OTAManager.js
+- ✅ CompatibilityChecker.js
+- ✅ RollbackService.js
+- ✅ QA Updates + rollback
+
+### Sprint 6 (Semana 11-12): Observability & Polish ✅ CONCLUÍDA
+- ✅ Logger.js (níveis, categorias, export, persistência)
+- ✅ MetricsCollector.js (performance, recursos, análise P95/P99)
+- ✅ AlertManager.js (regras, handlers, cooldown, acknowledge)
+- ✅ observability.html (dashboard interativo)
+- ✅ QA Final + Performance (7/7 PASS, overhead <100ms)
+
+---
+
+## ✅ Critérios de Aceite (Checklist)
+
+### Foundation
+- [ ] PropertyDatabase isola dados corretamente por tenant
+- [ ] Router navega via /property/{slug} sem reload
+- [ ] Shell carrega páginas dinamicamente
+- [ ] Visual/funcional idêntico ao baseline (QA aprovado)
+
+### Implementation Wizard
+- [ ] Wizard cria propriedade com DB isolado
+- [ ] schema_version definido corretamente
+- [ ] Admin local criado e funcional
+- [ ] Módulos ativados conforme seleção
+- [ ] Backups agendados automaticamente
+- [ ] Auditoria registrada
+
+### Multi-Property Dashboard
+- [ ] Lista todas as propriedades
+- [ ] Exibe KPIs (vendidos/disponíveis/ocupação/ADR)
+- [ ] Botão "Abrir controle" navega para /property/{slug}
+- [ ] Performance aceitável (FCP < 2s)
+
+### Sync Service
+- [ ] Sync Config Page funcional
+- [ ] Delta sync calcula mudanças corretamente
+- [ ] Política de conflito aplicada
+- [ ] Logs e status visíveis
+- [ ] Retry automático em falhas
+
+### OTA
+- [ ] Verifica compatibilidade antes de atualizar
+- [ ] Rollback disponível e funcional
+- [ ] Migrations executadas corretamente
+- [ ] Integridade verificada pós-update
+
+### Observability
+- [ ] Logs estruturados e consultáveis
+- [ ] Métricas coletadas (performance, business)
+- [ ] Alertas disparados em falhas
+- [ ] Dashboard de monitoramento
+
+### QA Final
+- [ ] Todos os screenshots baseline vs pós-refactor idênticos
+- [ ] Computed CSS mantido
+- [ ] Navegação funcional em todos os fluxos
+- [ ] i18n funcionando (pt/en/es)
+- [ ] Modais e interações preservadas
+- [ ] FCP < 2s, peso CSS/JS não aumentou significativamente
+
+---
+
+## 🚀 Próximos Passos Imediatos
+
+1. **Criar branch de refactor**: `git checkout -b feature/saas-architecture-refactor`
+2. **QA Baseline**: Capturar screenshots e computed CSS do estado atual
+3. **Implementar PropertyDatabase.js**: Primeira classe da camada DAL
+4. **Implementar Router.js**: Sistema de roteamento SPA
+5. **Criar shell index.html**: Nova estrutura de carregamento
+
+---
+
+**📌 Importante**: Esta transformação é **não-regressiva**. Qualquer quebra visual ou funcional não planejada **bloqueia a entrega** até correção.
+

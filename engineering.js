@@ -1,22 +1,22 @@
-// Sample room data organized by floor
+﻿// Sample room data organized by floor
 const allRoomData = {
     "3": [
-        { room: '301', occupied: 'yes', sold: 'sold', dnd: 'yes', hvac: 'On', thermostat: 'Offline', roomTemp: '70°', hvacMode: 'Cool', humidity: 57, alert: false, lastUpdate: '5/29/23, 2:10 pm' },
-        { room: '302', occupied: 'yes', sold: 'sold', dnd: '--', hvac: 'On', thermostat: 'Offline', roomTemp: '68°', hvacMode: 'Cool', humidity: 55, alert: false, lastUpdate: '5/29/23, 2:10 pm' },
-        { room: '303', occupied: '--', sold: 'sold', dnd: '--', hvac: 'On', thermostat: 'Offline', roomTemp: '71°', hvacMode: 'Cool', humidity: 57, alert: false, lastUpdate: '5/29/23, 2:12 pm' },
+        { room: '301', occupied: 'yes', sold: 'sold', dnd: 'yes', hvac: 'On', thermostat: 'Offline', roomTemp: '70Â°', hvacMode: 'Cool', humidity: 57, alert: false, lastUpdate: '5/29/23, 2:10 pm' },
+        { room: '302', occupied: 'yes', sold: 'sold', dnd: '--', hvac: 'On', thermostat: 'Offline', roomTemp: '68Â°', hvacMode: 'Cool', humidity: 55, alert: false, lastUpdate: '5/29/23, 2:10 pm' },
+        { room: '303', occupied: '--', sold: 'sold', dnd: '--', hvac: 'On', thermostat: 'Offline', roomTemp: '71Â°', hvacMode: 'Cool', humidity: 57, alert: false, lastUpdate: '5/29/23, 2:12 pm' },
         { room: '304', occupied: '--', sold: '--', dnd: '--', hvac: 'Off', thermostat: 'Offline', roomTemp: '--', hvacMode: '--', humidity: 60, alert: true, alertType: 'highHumidity', lastUpdate: '5/29/23, 2:13 pm' },
         { room: '305', occupied: '--', sold: '--', dnd: '--', hvac: 'Off', thermostat: 'Offline', roomTemp: '--', hvacMode: '--', humidity: '--', alert: true, alertType: 'filterChange', lastUpdate: '5/29/23, 2:15 pm' },
         { room: '306', occupied: 'yes', sold: 'sold', dnd: 'yes', hvac: 'On', thermostat: 'Offline', roomTemp: '--', hvacMode: 'Fan', humidity: '--', alert: false, lastUpdate: '5/29/23, 2:16 pm' },
-        { room: '307', occupied: '--', sold: '--', dnd: '--', hvac: 'On', thermostat: 'Offline', roomTemp: '71°', hvacMode: 'Cool', humidity: 58, alert: false, lastUpdate: '5/29/23, 2:10 pm' },
+        { room: '307', occupied: '--', sold: '--', dnd: '--', hvac: 'On', thermostat: 'Offline', roomTemp: '71Â°', hvacMode: 'Cool', humidity: 58, alert: false, lastUpdate: '5/29/23, 2:10 pm' },
         { room: '308', occupied: 'yes', sold: 'sold', dnd: '--', hvac: 'Off', thermostat: 'Offline', roomTemp: '--', hvacMode: '--', humidity: '--', alert: true, alertType: 'doorWindowACOn', lastUpdate: '5/29/23, 2:10 pm' }
     ],
     "2": [
-        { room: '201', occupied: 'yes', sold: 'sold', dnd: '--', hvac: 'On', thermostat: 'Offline', roomTemp: '72°', hvacMode: 'Cool', humidity: 56, alert: false, lastUpdate: '5/29/23, 2:10 pm' },
-        { room: '202', occupied: '--', sold: '--', dnd: '--', hvac: 'On', thermostat: 'Offline', roomTemp: '69°', hvacMode: 'Cool', humidity: 54, alert: false, lastUpdate: '5/29/23, 2:11 pm' }
+        { room: '201', occupied: 'yes', sold: 'sold', dnd: '--', hvac: 'On', thermostat: 'Offline', roomTemp: '72Â°', hvacMode: 'Cool', humidity: 56, alert: false, lastUpdate: '5/29/23, 2:10 pm' },
+        { room: '202', occupied: '--', sold: '--', dnd: '--', hvac: 'On', thermostat: 'Offline', roomTemp: '69Â°', hvacMode: 'Cool', humidity: 54, alert: false, lastUpdate: '5/29/23, 2:11 pm' }
     ],
     "1": [
-        { room: '101', occupied: 'yes', sold: 'sold', dnd: 'yes', hvac: 'On', thermostat: 'Offline', roomTemp: '71°', hvacMode: 'Cool', humidity: 55, alert: false, lastUpdate: '5/29/23, 2:10 pm' },
-        { room: '102', occupied: '--', sold: 'sold', dnd: '--', hvac: 'On', thermostat: 'Offline', roomTemp: '70°', hvacMode: 'Cool', humidity: 56, alert: false, lastUpdate: '5/29/23, 2:12 pm' }
+        { room: '101', occupied: 'yes', sold: 'sold', dnd: 'yes', hvac: 'On', thermostat: 'Offline', roomTemp: '71Â°', hvacMode: 'Cool', humidity: 55, alert: false, lastUpdate: '5/29/23, 2:10 pm' },
+        { room: '102', occupied: '--', sold: 'sold', dnd: '--', hvac: 'On', thermostat: 'Offline', roomTemp: '70Â°', hvacMode: 'Cool', humidity: 56, alert: false, lastUpdate: '5/29/23, 2:12 pm' }
     ]
 };
 
@@ -99,8 +99,8 @@ function buildRowElement(room){
     const alertTypes = normalizeAlertTypes(room);
     const alertHtml = (alertTypes && alertTypes.length) ? alertTypes.map(at=>`<span class="alert-icon alert-type-${at}" data-alert-type="${at}" title="${escapeHtml(_alertTextMap[at] || getAlertText(at))}">${getAlertIconSvg(at)}</span>`).join(' ') : '--';
 
-    const occupiedHtml = (String(room.occupied || '').toLowerCase() === 'yes' || String(room.occupied || '').toLowerCase() === 'ocupado') ? `<div style="color:#ef4444">Ocupado</div>` : `<div>—</div>`;
-    const soldHtml = (String(room.sold || '').toLowerCase() === 'sold' || String(room.sold || '').toLowerCase() === 'vendido') ? `<div style="color:#22c55e">Vendido</div>` : `<div>—</div>`;
+    const occupiedHtml = (String(room.occupied || '').toLowerCase() === 'yes' || String(room.occupied || '').toLowerCase() === 'ocupado') ? `<div style="color:#ef4444">Ocupado</div>` : `<div>â€”</div>`;
+    const soldHtml = (String(room.sold || '').toLowerCase() === 'sold' || String(room.sold || '').toLowerCase() === 'vendido') ? `<div style="color:#22c55e">Vendido</div>` : `<div>â€”</div>`;
     row.innerHTML = `
         <div>${room.room}</div>
         ${occupiedHtml}
@@ -192,12 +192,12 @@ function updateRowElement(row, old, room){
         // 1 occupied
         if(old.occupied !== room.occupied) {
             const occ = String(room.occupied || '').toLowerCase();
-            ch[1].innerText = (occ === 'yes' || occ === 'ocupado') ? 'Ocupado' : '—';
+            ch[1].innerText = (occ === 'yes' || occ === 'ocupado') ? 'Ocupado' : 'â€”';
             ch[1].style.color = (occ === 'yes' || occ === 'ocupado') ? '#ef4444' : '';
         }
         if(old.sold !== room.sold) {
             const sold = String(room.sold || '').toLowerCase();
-            ch[2].innerText = (sold === 'sold' || sold === 'vendido') ? 'Vendido' : '—';
+            ch[2].innerText = (sold === 'sold' || sold === 'vendido') ? 'Vendido' : 'â€”';
             ch[2].style.color = (sold === 'sold' || sold === 'vendido') ? '#22c55e' : '';
         }
         if(old.dnd !== room.dnd) ch[3].innerText = room.dnd;
@@ -452,7 +452,7 @@ function updateRoomTemperature(room, temp) {
         const row = _roomRowMap[room];
         if (row) {
             const tempCell = row.children[6];
-            if (tempCell) tempCell.innerText = temp + '°C';
+            if (tempCell) tempCell.innerText = temp + 'Â°C';
         }
     } catch(e) {
         console.warn('Error updating room temperature:', e);
@@ -504,11 +504,11 @@ function updateRoomSetPoint(room, setPointC) {
     try {
         if (!_roomDataMap[room]) return;
         _roomDataMap[room].setPoint = setPointC;
-        // Optionally reflect visually: append ' (SP: xx°C)' in temp column
+        // Optionally reflect visually: append ' (SP: xxÂ°C)' in temp column
         const row = _roomRowMap[room];
         if (row) {
             const tempCell = row.children[6];
-            if (tempCell) tempCell.innerText = (_roomDataMap[room].roomTemp ? _roomDataMap[room].roomTemp : '--') + ' (SP: ' + setPointC + '°C)';
+            if (tempCell) tempCell.innerText = (_roomDataMap[room].roomTemp ? _roomDataMap[room].roomTemp : '--') + ' (SP: ' + setPointC + 'Â°C)';
         }
     } catch(e) { console.warn('Error updating room set point:', e); }
 }
@@ -597,7 +597,7 @@ function applyEngineeringTextsFromSTR(){
         if (!s) {
             s = {
                 engineeringTitle: 'ENGINEERING',
-                portalTitle: 'iLuxSys · Portal',
+                portalTitle: 'nexefii Â· Portal',
                 close: 'Close',
                 floorLabel: 'Floor',
                 roomLabel: 'Room',
@@ -625,7 +625,7 @@ function applyEngineeringTextsFromSTR(){
         // Header title and close button
         const headerTitle = document.getElementById('header-title');
         if (headerTitle) {
-            headerTitle.innerText = `${safe('portalTitle','iLuxSys · Portal')} · ${safe('engineeringTitle','ENGINEERING')}`;
+            headerTitle.innerText = `${safe('portalTitle','nexefii Â· Portal')} Â· ${safe('engineeringTitle','ENGINEERING')}`;
         }
         
         // Find and translate close button
@@ -671,7 +671,7 @@ function applyEngineeringTextsFromSTR(){
     const lang = localStorage.getItem('ilux_lang') || 'pt';
     const optAll = document.getElementById('opt-all-floors'); if(optAll) optAll.innerText = (s && s.allFloors) ? s.allFloors : (lang==='en'?'All floors':(lang==='es'?'Todos los pisos':'Todos os andares'));
     const btnPrev = document.getElementById('btn-prev'); if(btnPrev) btnPrev.innerText = (s && s.previous) ? s.previous : (lang==='en'?'Previous':(lang==='es'?'Anterior':'Anterior'));
-    const btnNext = document.getElementById('btn-next'); if(btnNext) btnNext.innerText = (s && s.next) ? s.next : (lang==='en'?'Next':(lang==='es'?'Siguiente':'Próximo'));
+    const btnNext = document.getElementById('btn-next'); if(btnNext) btnNext.innerText = (s && s.next) ? s.next : (lang==='en'?'Next':(lang==='es'?'Siguiente':'PrÃ³ximo'));
     const btnCsv = document.getElementById('btn-export-csv'); if(btnCsv) btnCsv.innerText = (s && s.exportCSV) ? s.exportCSV : (lang==='en'?'Export CSV':(lang==='es'?'Exportar CSV':'Exportar CSV'));
         
         // build alert text map once for performance and update icons
@@ -725,7 +725,7 @@ function applyEngineeringTexts(STR) {
         const set = (id, txt) => { const el = document.getElementById(id); if(el) el.innerText = txt; };
         set('engTitle', STR.engineeringTitle || 'ENGENHARIA');
         // header title and close button
-        const headerTitle = document.getElementById('header-title'); if (headerTitle) headerTitle.innerText = ((STR.portalTitle || 'iLuxSys · Portal') + ' · ' + (STR.engineeringTitle || 'ENGENHARIA'));
+        const headerTitle = document.getElementById('header-title'); if (headerTitle) headerTitle.innerText = ((STR.portalTitle || 'nexefii Â· Portal') + ' Â· ' + (STR.engineeringTitle || 'ENGENHARIA'));
         const closeBtn = Array.from(document.querySelectorAll('button')).find(b=>b.innerText && (b.innerText.toLowerCase().includes('fechar') || b.innerText.toLowerCase().includes('close') || b.innerText.toLowerCase().includes('salir')));
         if (closeBtn) closeBtn.innerText = STR.close || 'Close';
         set('lbl-floor', STR.floorLabel || 'Pavimento:');
@@ -747,7 +747,7 @@ function applyEngineeringTexts(STR) {
         set('col-lastupdate', STR.colLastUpdate || 'LAST UPDATE');
 
     // Icon style label
-    set('lbl-icon-style', STR.iconStyleLabel || 'Ícone');
+    set('lbl-icon-style', STR.iconStyleLabel || 'Ãcone');
 
         // update any alert icons with localized title
         try{
@@ -933,7 +933,7 @@ function showAlertPopover(iconEl, roomNumber){
         // close button
         const closeBtn = document.createElement('button');
         closeBtn.className = 'ap-close';
-        closeBtn.innerText = '✕';
+        closeBtn.innerText = 'âœ•';
         closeBtn.onclick = hideAlertPopover;
         pop.appendChild(closeBtn);
 
@@ -1061,7 +1061,7 @@ function exportEngineeringCSV(){
     try{
         const lang = localStorage.getItem('ilux_lang')||'pt';
         const headers = [
-            (typeof STR!== 'undefined' && STR.colRoom) ? STR.colRoom : (lang==='en'?'ROOM':(lang==='es'?'HABITACIÓN':'QUARTO')),
+            (typeof STR!== 'undefined' && STR.colRoom) ? STR.colRoom : (lang==='en'?'ROOM':(lang==='es'?'HABITACIÃ“N':'QUARTO')),
             (typeof STR!== 'undefined' && STR.colOccupied) ? STR.colOccupied : (lang==='en'?'OCCUPIED':(lang==='es'?'OCUPADO':'OCUPADO')),
             (typeof STR!== 'undefined' && STR.colSold) ? STR.colSold : (lang==='en'?'SOLD':(lang==='es'?'VENDIDO':'VENDIDO')),
             (typeof STR!== 'undefined' && STR.colDnd) ? STR.colDnd : 'DND',
@@ -1071,7 +1071,7 @@ function exportEngineeringCSV(){
             (typeof STR!== 'undefined' && STR.colHvacMode) ? STR.colHvacMode : 'HVAC MODE',
             (typeof STR!== 'undefined' && STR.colHumidity) ? STR.colHumidity : '% HUMIDITY',
             (typeof STR!== 'undefined' && STR.colAlert) ? STR.colAlert : 'ALERT',
-            (typeof STR!== 'undefined' && STR.colLastUpdate) ? STR.colLastUpdate : (lang==='en'?'LAST UPDATE':(lang==='es'?'ÚLTIMA ACTUALIZACIÓN':'ÚLTIMA ATUALIZAÇÃO'))
+            (typeof STR!== 'undefined' && STR.colLastUpdate) ? STR.colLastUpdate : (lang==='en'?'LAST UPDATE':(lang==='es'?'ÃšLTIMA ACTUALIZACIÃ“N':'ÃšLTIMA ATUALIZAÃ‡ÃƒO'))
         ];
         const rows = CURRENT_ROWS.map(r=>{
             const alerts = normalizeAlertTypes(r).map(t=> getAlertText(t)).join('; ');

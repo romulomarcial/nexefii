@@ -1,9 +1,9 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="pt-br">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>🧪 Property Dashboard - Quick Test</title>
+  <title>ðŸ§ª Property Dashboard - Quick Test</title>
   <style>
     * { margin: 0; padding: 0; box-sizing: border-box; }
     body {
@@ -113,34 +113,34 @@
 </head>
 <body>
   <div class="container">
-    <h1>🧪 Property Dashboard - Quick Test</h1>
-    <p class="subtitle">Teste rápido de integridade do sistema</p>
+    <h1>ðŸ§ª Property Dashboard - Quick Test</h1>
+    <p class="subtitle">Teste rÃ¡pido de integridade do sistema</p>
 
     <div class="test-section">
-      <h2>📦 1. Verificação de Arquivos</h2>
+      <h2>ðŸ“¦ 1. VerificaÃ§Ã£o de Arquivos</h2>
       <div id="fileTests"></div>
     </div>
 
     <div class="test-section">
-      <h2>🔐 2. Verificação de Autenticação</h2>
+      <h2>ðŸ” 2. VerificaÃ§Ã£o de AutenticaÃ§Ã£o</h2>
       <div id="authTests"></div>
     </div>
 
     <div class="test-section">
-      <h2>🏨 3. Verificação de Propriedades</h2>
+      <h2>ðŸ¨ 3. VerificaÃ§Ã£o de Propriedades</h2>
       <div id="propertyTests"></div>
     </div>
 
     <div class="test-section">
-      <h2>⚡ 4. Verificação de Sistema</h2>
+      <h2>âš¡ 4. VerificaÃ§Ã£o de Sistema</h2>
       <div id="systemTests"></div>
     </div>
 
     <div class="actions">
-      <button onclick="runAllTests()">🔄 Executar Testes</button>
-      <button onclick="clearStorage()">🗑️ Limpar LocalStorage</button>
-      <button onclick="seedData()">🌱 Criar Dados Teste</button>
-      <button onclick="window.location.href='index.html'">🏠 Ir para Index</button>
+      <button onclick="runAllTests()">ðŸ”„ Executar Testes</button>
+      <button onclick="clearStorage()">ðŸ—‘ï¸ Limpar LocalStorage</button>
+      <button onclick="seedData()">ðŸŒ± Criar Dados Teste</button>
+      <button onclick="window.location.href='index.html'">ðŸ  Ir para Index</button>
     </div>
   </div>
 
@@ -157,10 +157,10 @@
       div.className = `test-result ${type}`;
       
       const icon = {
-        success: '✅',
-        error: '❌',
-        warning: '⚠️',
-        info: 'ℹ️'
+        success: 'âœ…',
+        error: 'âŒ',
+        warning: 'âš ï¸',
+        info: 'â„¹ï¸'
       }[type];
       
       div.textContent = `${icon} ${message}`;
@@ -192,8 +192,8 @@
       });
 
       if (scriptsLoaded === 0) {
-        addResult('fileTests', 'AVISO: Esta página não carrega os scripts do sistema', 'warning');
-        addResult('fileTests', 'Execute os testes na página index.html', 'info');
+        addResult('fileTests', 'AVISO: Esta pÃ¡gina nÃ£o carrega os scripts do sistema', 'warning');
+        addResult('fileTests', 'Execute os testes na pÃ¡gina index.html', 'info');
       } else {
         addResult('fileTests', `${scriptsLoaded} scripts detectados`, 'success');
       }
@@ -202,7 +202,7 @@
       if (typeof PropertyDashboard !== 'undefined') {
         addResult('fileTests', 'PropertyDashboard carregado', 'success');
       } else {
-        addResult('fileTests', 'PropertyDashboard não encontrado (execute em index.html)', 'warning');
+        addResult('fileTests', 'PropertyDashboard nÃ£o encontrado (execute em index.html)', 'warning');
       }
     }
 
@@ -211,51 +211,51 @@
       container.innerHTML = '';
 
       try {
-        const usersRaw = localStorage.getItem('iluxsys_users');
+        const usersRaw = localStorage.getItem('nexefii_users');
         if (!usersRaw) {
-          addResult('authTests', 'Nenhum usuário encontrado no localStorage', 'error');
+          addResult('authTests', 'Nenhum usuÃ¡rio encontrado no localStorage', 'error');
           return;
         }
 
         const users = JSON.parse(usersRaw);
-        addResult('authTests', `${users.length} usuários encontrados`, 'success');
+        addResult('authTests', `${users.length} usuÃ¡rios encontrados`, 'success');
 
-        // Verificar usuários importantes
+        // Verificar usuÃ¡rios importantes
         const master = users.find(u => u.username === 'master');
         const admin = users.find(u => u.username === 'admin');
         const demo = users.find(u => u.username === 'demo');
 
         if (master) {
-          addResult('authTests', 'Usuário master: ✅', 'success');
+          addResult('authTests', 'UsuÃ¡rio master: âœ…', 'success');
           if (master.properties && Array.isArray(master.properties)) {
             addResult('authTests', `master.properties = ${JSON.stringify(master.properties)}`, 'info');
           }
         } else {
-          addResult('authTests', 'Usuário master: ❌ não encontrado', 'error');
+          addResult('authTests', 'UsuÃ¡rio master: âŒ nÃ£o encontrado', 'error');
         }
 
         if (admin) {
-          addResult('authTests', 'Usuário admin: ✅', 'success');
+          addResult('authTests', 'UsuÃ¡rio admin: âœ…', 'success');
         } else {
-          addResult('authTests', 'Usuário admin: ❌ não encontrado', 'error');
+          addResult('authTests', 'UsuÃ¡rio admin: âŒ nÃ£o encontrado', 'error');
         }
 
         if (demo) {
-          addResult('authTests', 'Usuário demo: ✅', 'success');
+          addResult('authTests', 'UsuÃ¡rio demo: âœ…', 'success');
           if (demo.properties && Array.isArray(demo.properties)) {
             addResult('authTests', `demo.properties = ${JSON.stringify(demo.properties)}`, 'info');
           }
         } else {
-          addResult('authTests', 'Usuário demo: ⚠️ não encontrado', 'warning');
+          addResult('authTests', 'UsuÃ¡rio demo: âš ï¸ nÃ£o encontrado', 'warning');
         }
 
-        // Verificar usuário atual
+        // Verificar usuÃ¡rio atual
         const currentUserRaw = localStorage.getItem('currentUser');
         if (currentUserRaw) {
           const currentUser = JSON.parse(currentUserRaw);
-          addResult('authTests', `Usuário logado: ${currentUser.username} (${currentUser.role})`, 'info');
+          addResult('authTests', `UsuÃ¡rio logado: ${currentUser.username} (${currentUser.role})`, 'info');
         } else {
-          addResult('authTests', 'Nenhum usuário logado', 'warning');
+          addResult('authTests', 'Nenhum usuÃ¡rio logado', 'warning');
         }
 
       } catch (e) {
@@ -268,7 +268,7 @@
       container.innerHTML = '';
 
       try {
-        const propsRaw = localStorage.getItem('iluxsys_properties');
+        const propsRaw = localStorage.getItem('nexefii_properties');
         if (!propsRaw) {
           addResult('propertyTests', 'Nenhuma propriedade encontrada', 'error');
           return;
@@ -281,8 +281,8 @@
 
         // Verificar cada propriedade
         propArray.forEach(prop => {
-          const deployed = prop.deployed ? '✅ IMPLANTADA' : '⏳ Não implantada';
-          const active = prop.active ? '✅ Ativa' : '❌ Inativa';
+          const deployed = prop.deployed ? 'âœ… IMPLANTADA' : 'â³ NÃ£o implantada';
+          const active = prop.active ? 'âœ… Ativa' : 'âŒ Inativa';
           
           const hasAllFields = 
             prop.key && 
@@ -294,29 +294,29 @@
 
           if (hasAllFields) {
             addResult('propertyTests', 
-              `${prop.name}: ${deployed}, ${active}, ${prop.modulesPurchased.length} módulos`, 
+              `${prop.name}: ${deployed}, ${active}, ${prop.modulesPurchased.length} mÃ³dulos`, 
               'success'
             );
           } else {
             addResult('propertyTests', 
-              `${prop.name}: ⚠️ Dados incompletos`, 
+              `${prop.name}: âš ï¸ Dados incompletos`, 
               'warning'
             );
           }
 
           // Verificar campos novos
           if (prop.roomCount) {
-            addResult('propertyTests', `  ➜ ${prop.roomCount} quartos`, 'info');
+            addResult('propertyTests', `  âžœ ${prop.roomCount} quartos`, 'info');
           }
           if (prop.location) {
-            addResult('propertyTests', `  ➜ ${prop.location.city}, ${prop.location.country}`, 'info');
+            addResult('propertyTests', `  âžœ ${prop.location.city}, ${prop.location.country}`, 'info');
           }
         });
 
         // Contar implantadas
         const deployed = propArray.filter(p => p.deployed && p.active);
         addResult('propertyTests', 
-          `${deployed.length} propriedades implantadas e ativas (visíveis no dashboard)`, 
+          `${deployed.length} propriedades implantadas e ativas (visÃ­veis no dashboard)`, 
           deployed.length > 0 ? 'success' : 'warning'
         );
 
@@ -329,11 +329,11 @@
       const container = document.getElementById('systemTests');
       container.innerHTML = '';
 
-      // Teste de localStorage disponível
+      // Teste de localStorage disponÃ­vel
       if (typeof Storage !== 'undefined') {
-        addResult('systemTests', 'LocalStorage: disponível', 'success');
+        addResult('systemTests', 'LocalStorage: disponÃ­vel', 'success');
       } else {
-        addResult('systemTests', 'LocalStorage: não disponível', 'error');
+        addResult('systemTests', 'LocalStorage: nÃ£o disponÃ­vel', 'error');
       }
 
       // Teste de uso de storage
@@ -348,10 +348,10 @@
         addResult('systemTests', `Uso de localStorage: ${mb} MB`, 'info');
         
         if (total > 4 * 1024 * 1024) {
-          addResult('systemTests', '⚠️ Uso alto de storage (> 4MB)', 'warning');
+          addResult('systemTests', 'âš ï¸ Uso alto de storage (> 4MB)', 'warning');
         }
       } catch (e) {
-        addResult('systemTests', 'Não foi possível calcular uso de storage', 'warning');
+        addResult('systemTests', 'NÃ£o foi possÃ­vel calcular uso de storage', 'warning');
       }
 
       // Teste de cache
@@ -359,13 +359,13 @@
         addResult('systemTests', 'PropertyDashboard: inicializado', 'success');
         addResult('systemTests', `Propriedades carregadas: ${PropertyDashboard.properties.length}`, 'info');
       } else {
-        addResult('systemTests', 'PropertyDashboard: não inicializado (execute em index.html)', 'info');
+        addResult('systemTests', 'PropertyDashboard: nÃ£o inicializado (execute em index.html)', 'info');
       }
 
       // Resumo final
       const total = testResults.pass + testResults.fail + testResults.warn;
       addResult('systemTests', 
-        `Resumo: ${testResults.pass} ✅ | ${testResults.fail} ❌ | ${testResults.warn} ⚠️ | Total: ${total}`, 
+        `Resumo: ${testResults.pass} âœ… | ${testResults.fail} âŒ | ${testResults.warn} âš ï¸ | Total: ${total}`, 
         testResults.fail > 0 ? 'error' : 'success'
       );
     }
@@ -379,20 +379,20 @@
     }
 
     function clearStorage() {
-      if (confirm('⚠️ Isso irá APAGAR TODOS os dados do localStorage. Continuar?')) {
+      if (confirm('âš ï¸ Isso irÃ¡ APAGAR TODOS os dados do localStorage. Continuar?')) {
         localStorage.clear();
-        alert('✅ LocalStorage limpo! Recarregue a página.');
+        alert('âœ… LocalStorage limpo! Recarregue a pÃ¡gina.');
         location.reload();
       }
     }
 
     function seedData() {
-      if (confirm('Isso irá criar dados de teste. Continuar?')) {
-        // Força re-seed
-        localStorage.removeItem('iluxsys_users');
-        localStorage.removeItem('iluxsys_properties');
+      if (confirm('Isso irÃ¡ criar dados de teste. Continuar?')) {
+        // ForÃ§a re-seed
+        localStorage.removeItem('nexefii_users');
+        localStorage.removeItem('nexefii_properties');
         
-        alert('✅ Dados removidos. Recarregue index.html para criar novos dados.');
+        alert('âœ… Dados removidos. Recarregue index.html para criar novos dados.');
       }
     }
 
@@ -401,3 +401,4 @@
   </script>
 </body>
 </html>
+

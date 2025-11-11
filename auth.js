@@ -1,4 +1,4 @@
-// BEGIN AUTO-INJECTED COMPAT SHIM - inserted by assistant
+﻿// BEGIN AUTO-INJECTED COMPAT SHIM - inserted by assistant
 if (typeof window.__ILUX_AUTH_COMPAT__ === 'undefined') {
   window.__ILUX_AUTH_COMPAT__ = true;
   window.NEXEFII = window.NEXEFII || {};
@@ -18,15 +18,29 @@ if (typeof window.__ILUX_AUTH_COMPAT__ === 'undefined') {
   try { NexefiiAuth = window.NexefiiAuth; IluxAuth = window.IluxAuth; } catch (e) { }
 }
 // END AUTO-INJECTED COMPAT SHIM
+// Ensure safeIsAuthenticated helper is available globally for legacy pages
+try {
+  if (typeof window !== 'undefined') {
+    window.safeIsAuthenticated = window.safeIsAuthenticated || function() {
+      try {
+        if (window.IluxAuth && typeof window.IluxAuth.isAuthenticated === 'function') return window.IluxAuth.isAuthenticated();
+        if (window.NexefiiAuth && typeof window.NexefiiAuth.isAuthenticated === 'function') return window.NexefiiAuth.isAuthenticated();
+      } catch (e) {
+        // ignore
+      }
+      return false;
+    };
+  }
+} catch (e) { /* ignore non-browser env */ }
 /**
- * iLuxSys Authentication System
+ * nexefii Authentication System
  * NEXEFII Authentication Module
  * Manages user registration, authorization, and authentication
  * Simple authentication for demo/development
  */
 
-const AUTH_STORAGE_KEY = 'iluxsys_users';
-const AUTH_SESSION_KEY = 'iluxsys_session';
+const AUTH_STORAGE_KEY = 'nexefii_users';
+const AUTH_SESSION_KEY = 'nexefii_session';
 
 const IluxAuth = {
   // Validate user credentials
@@ -54,7 +68,7 @@ const IluxAuth = {
 
     const user = users.find(u => u.email === email && u.password === password);
     if (!user) {
-      throw new Error('Email ou senha inválidos');
+      throw new Error('Email ou senha invÃ¡lidos');
     }
 
 
@@ -101,7 +115,7 @@ const IluxAuth = {
   setSession(session) {
     try {
       if (!session) return;
-      localStorage.setItem('iluxsys_session', JSON.stringify(session));
+      localStorage.setItem('nexefii_session', JSON.stringify(session));
       localStorage.setItem('nexefii_session', JSON.stringify(session));
     } catch (e) {
       console.warn('IluxAuth.setSession failed', e);
@@ -131,11 +145,11 @@ const MODULES = {
 const MODULE_NAMES = {
   pt: {
     engineering: 'Engenharia',
-    housekeeping: 'Governança',
+    housekeeping: 'GovernanÃ§a',
     alerts: 'Alertas',
     commercial: 'Comercial',
     marketing: 'Marketing',
-    reports: 'Relatórios',
+    reports: 'RelatÃ³rios',
     management: 'Gerencial'
   },
   en: {
@@ -148,7 +162,7 @@ const MODULE_NAMES = {
     management: 'Management'
   },
   es: {
-    engineering: 'Ingeniería',
+    engineering: 'IngenierÃ­a',
     housekeeping: 'Gobernanza',
     alerts: 'Alertas',
     commercial: 'Comercial',
@@ -165,9 +179,9 @@ function initializeAuth() {
   const adminExists = users.some(u => u.username === 'admin');
   if (!adminExists) {
     users.push({
-      id: generateUserId(),
-      fullName: 'Administrator',
-      email: 'admin@iluxsys.com',
+  id: generateUserId(),
+  fullName: 'Administrator',
+  email: 'admin@nexefii.com',
       phone: '',
       country: 'BR',
       propertyKey: null,
@@ -187,9 +201,9 @@ function initializeAuth() {
   const demoExists = users.some(u => u.username === 'demo');
   if (!demoExists) {
     users.push({
-      id: generateUserId(),
-      fullName: 'Demo User',
-      email: 'demo@iluxsys.com',
+  id: generateUserId(),
+  fullName: 'Demo User',
+  email: 'demo@nexefii.com',
       phone: '',
       country: 'BR',
       propertyKey: 'iluxSaoPaulo',
@@ -204,7 +218,7 @@ function initializeAuth() {
       approvedAt: new Date().toISOString()
     });
     saveUsers(users);
-    console.info('✅ Demo user created - Username: demo | Password: demo123 | Properties: São Paulo, Miami');
+    console.info('âœ… Demo user created - Username: demo | Password: demo123 | Properties: SÃ£o Paulo, Miami');
   }
 }
 
@@ -212,7 +226,7 @@ function initializeAuth() {
 function hashPassword(password) {
   // Basic hash - in production use proper hashing like bcrypt
   let hash = 0;
-  const str = password + 'iluxsys_salt_2025';
+  const str = password + 'nexefii_salt_2025';
   for (let i = 0; i < str.length; i++) {
     const char = str.charCodeAt(i);
     hash = ((hash << 5) - hash) + char;
@@ -381,16 +395,16 @@ User ID: ${user.id}
   };
   
   // Log to console (in production, this would call an email API)
-  console.log('📧 Registration Email Sent:', emailData);
+  console.log('ðŸ“§ Registration Email Sent:', emailData);
   
   // Store in a "sent emails" log for demo purposes
-  const emailLog = JSON.parse(localStorage.getItem('iluxsys_email_log') || '[]');
+  const emailLog = JSON.parse(localStorage.getItem('nexefii_email_log') || '[]');
   emailLog.push({
     ...emailData,
     sentAt: new Date().toISOString(),
     userId: user.id
   });
-  localStorage.setItem('iluxsys_email_log', JSON.stringify(emailLog));
+  localStorage.setItem('nexefii_email_log', JSON.stringify(emailLog));
   
   return emailData;
 }
@@ -585,4 +599,5 @@ if (typeof window !== 'undefined') {
     MODULE_NAMES
   };
 }
+
 

@@ -1,0 +1,48 @@
+Context:
+- I attempted to create and push a local commit with the QA fixes (puppeteer script timing/session fixes) but the runner environment doesn't have `git` available, so I couldn't run the commit/push here.
+
+What changed (high level):
+- qa/puppeteer-create-property.js  -> robust session seeding, router wait, increased timeouts
+- (Other migration/QA edits made earlier in the session: pages/wizard.html, pages/dashboard.html, shell.html, i18n files). Please run `git status` locally to see the full list.
+
+Recommended local commands (PowerShell):
+
+cd 'R:\Development\Projects\nexefii'
+
+# Inspect current changes
+git status
+
+git add -A
+
+git commit -m "qa: improve puppeteer create-property test and timing; seed session before load"
+
+# confirm branch
+git rev-parse --abbrev-ref HEAD
+
+# push to remote (adjust remote/branch if needed)
+git push origin fix/auth-guards-sprint7
+
+If you don't have this branch locally, create it first (if appropriate):
+# create and switch to branch
+git checkout -b fix/auth-guards-sprint7
+# then push
+git push -u origin fix/auth-guards-sprint7
+
+If git prompts for credentials, supply them (credential helper / SSH keys can avoid prompts).
+
+If you prefer I produce a .patch file you can apply, reply with "patch" and I'll generate a unified patch file of the changed files for you to apply with `git apply` or inspect before committing.
+
+If you want me to create the commit object and push it for you, I'll need a remote with git enabled in this environment (or you can provide an authenticated remote URL and permission). Right now, the runner lacks the `git` binary.
+
+If you already ran the commit locally and want me to verify or prepare a PR description, paste the `git log -1 --pretty=format:"%h %s"` output here and I'll prepare the PR body and checklist.
+
+Artifacts saved by the QA run (in the repo):
+- qa/puppeteer-create-property.png
+- qa/puppeteer-create-property.log
+- qa/puppeteer-requests.json
+
+Next steps (pick one):
+1) You run the git commands above locally and push (fastest).
+2) Reply "patch" and I will create a patch file you can apply locally.
+3) Provide access to a git-enabled runner here and I will create+push the commit from this environment.
+

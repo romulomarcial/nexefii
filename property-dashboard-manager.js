@@ -1,10 +1,10 @@
-/**
+﻿/**
  * Property Dashboard Manager
  * Sistema de gerenciamento de dashboard com foco em:
  * - Performance (cache, lazy loading)
- * - Escalabilidade (suporte a múltiplas propriedades)
- * - Segurança (sanitização, validação)
- * - UX (comparativos, métricas)
+ * - Escalabilidade (suporte a mÃºltiplas propriedades)
+ * - SeguranÃ§a (sanitizaÃ§Ã£o, validaÃ§Ã£o)
+ * - UX (comparativos, mÃ©tricas)
  */
 
 (function() {
@@ -23,7 +23,7 @@
       return div.innerHTML;
     },
 
-    // Valida se propriedade tem todos os dados obrigatórios
+    // Valida se propriedade tem todos os dados obrigatÃ³rios
     validatePropertyData: function(property) {
       const required = ['key', 'name', 'modulesPurchased', 'userCapacity', 'deployed', 'active'];
       const missing = required.filter(field => !property.hasOwnProperty(field));
@@ -42,14 +42,14 @@
       return true;
     },
 
-    // Valida permissões do usuário
+    // Valida permissÃµes do usuÃ¡rio
     validateUserPermissions: function(user, propertyKey) {
       if (!user) return false;
       
-      // Master e Admin têm acesso a tudo
+      // Master e Admin tÃªm acesso a tudo
       if (user.role === 'master' || user.role === 'admin') return true;
       
-      // Verifica se usuário tem acesso específico à propriedade
+      // Verifica se usuÃ¡rio tem acesso especÃ­fico Ã  propriedade
       if (user.properties && Array.isArray(user.properties)) {
         return user.properties.includes(propertyKey);
       }
@@ -111,7 +111,7 @@
       if (cached) return cached;
 
       try {
-        const raw = localStorage.getItem('iluxsys_properties');
+        const raw = localStorage.getItem('nexefii_properties');
         if (!raw) return {};
         
         const properties = JSON.parse(raw);
@@ -123,7 +123,7 @@
       }
     },
 
-    // Carrega usuário atual
+    // Carrega usuÃ¡rio atual
     loadCurrentUser: function() {
       const cacheKey = 'current_user';
       const cached = CacheManager.get(cacheKey);
@@ -142,7 +142,7 @@
       }
     },
 
-    // Filtra propriedades que o usuário tem permissão
+    // Filtra propriedades que o usuÃ¡rio tem permissÃ£o
     getAuthorizedProperties: function(user) {
       const allProperties = this.loadProperties();
       const authorized = [];
@@ -150,7 +150,7 @@
       for (const key in allProperties) {
         const property = allProperties[key];
         
-        // Verifica se propriedade está ativa, implantada e completa
+        // Verifica se propriedade estÃ¡ ativa, implantada e completa
         if (!property.active || !property.deployed) continue;
         if (!SecurityManager.validatePropertyData(property)) continue;
         if (!SecurityManager.validateUserPermissions(user, key)) continue;
@@ -161,7 +161,7 @@
       return authorized;
     },
 
-    // Carrega métricas simuladas (em produção, viria de API do PMS)
+    // Carrega mÃ©tricas simuladas (em produÃ§Ã£o, viria de API do PMS)
     loadPropertyMetrics: function(propertyKey) {
       const cacheKey = `metrics_${propertyKey}`;
       const cached = CacheManager.get(cacheKey);
@@ -172,16 +172,16 @@
       if (demoMetrics) {
         try {
           const metrics = JSON.parse(demoMetrics);
-          console.log(`[Dashboard] Usando métricas DEMO para ${propertyKey}`);
+          console.log(`[Dashboard] Usando mÃ©tricas DEMO para ${propertyKey}`);
           CacheManager.set(cacheKey, metrics);
           return metrics;
         } catch (e) {
-          console.warn(`[Dashboard] Erro ao parsear métricas demo:`, e);
+          console.warn(`[Dashboard] Erro ao parsear mÃ©tricas demo:`, e);
         }
       }
 
-      // PRIORIDADE 2: Simulação de métricas do PMS (fallback)
-      console.log(`[Dashboard] Usando métricas SIMULADAS para ${propertyKey}`);
+      // PRIORIDADE 2: SimulaÃ§Ã£o de mÃ©tricas do PMS (fallback)
+      console.log(`[Dashboard] Usando mÃ©tricas SIMULADAS para ${propertyKey}`);
       const properties = this.loadProperties();
       const property = properties[propertyKey];
       const roomCount = property?.roomCount || 50;
@@ -190,36 +190,36 @@
       const roomsSold = Math.floor(roomCount * occupancyRate / 100);
       const roomsAvailable = roomCount - roomsSold;
 
-      // Métricas avançadas do PMS
+      // MÃ©tricas avanÃ§adas do PMS
       const averageDailyRate = Math.floor(Math.random() * 200) + 300; // ADR: R$ 300-500
       const revenue = roomsSold * averageDailyRate;
       const revPAR = Math.floor(revenue / roomCount); // Revenue Per Available Room
       
-      // Métricas de forecast
+      // MÃ©tricas de forecast
       const forecastOccupancy = Math.min(100, occupancyRate + Math.floor(Math.random() * 10));
       const forecastRevenue = Math.floor(revenue * 1.15); // +15% estimado
 
-      // Métricas operacionais (difíceis de ver a olho nu)
+      // MÃ©tricas operacionais (difÃ­ceis de ver a olho nu)
       const checkInsToday = Math.floor(roomsSold * 0.3); // 30% check-in hoje
       const checkOutsToday = Math.floor(roomsSold * 0.25); // 25% check-out hoje
-      const stayovers = roomsSold - checkOutsToday; // Hóspedes que permanecem
+      const stayovers = roomsSold - checkOutsToday; // HÃ³spedes que permanecem
       const noShows = Math.floor(Math.random() * 3); // No-shows
-      const earlyCheckouts = Math.floor(Math.random() * 2); // Saídas antecipadas
+      const earlyCheckouts = Math.floor(Math.random() * 2); // SaÃ­das antecipadas
 
-      // Análise de tendência (comparativo com ontem)
+      // AnÃ¡lise de tendÃªncia (comparativo com ontem)
       const yesterdayOccupancy = occupancyRate - Math.floor(Math.random() * 10 - 5);
       const occupancyTrend = occupancyRate > yesterdayOccupancy ? 'up' : 
                              occupancyRate < yesterdayOccupancy ? 'down' : 'stable';
 
       const metrics = {
-        // Métricas básicas
+        // MÃ©tricas bÃ¡sicas
         occupancyRate,
         totalRooms: roomCount,
         roomsSold,
         roomsAvailable,
         revenue,
         
-        // Métricas avançadas do PMS
+        // MÃ©tricas avanÃ§adas do PMS
         adr: averageDailyRate, // Average Daily Rate
         revPAR, // Revenue Per Available Room
         
@@ -227,14 +227,14 @@
         forecastOccupancy,
         forecastRevenue,
         
-        // Operacionais (insights difíceis de visualizar)
+        // Operacionais (insights difÃ­ceis de visualizar)
         checkInsToday,
         checkOutsToday,
         stayovers,
         noShows,
         earlyCheckouts,
         
-        // Tendências
+        // TendÃªncias
         occupancyTrend,
         yesterdayOccupancy,
         occupancyChange: occupancyRate - yesterdayOccupancy,
@@ -244,7 +244,7 @@
         
         // Metadata
         lastUpdate: new Date().toISOString(),
-        dataSource: 'PMS_SIMULATION' // Em produção: 'PMS_API'
+        dataSource: 'PMS_SIMULATION' // Em produÃ§Ã£o: 'PMS_API'
       };
 
       CacheManager.set(cacheKey, metrics);
@@ -265,11 +265,11 @@
       }
 
       try {
-        // Em produção, usar sua própria API key do OpenWeatherMap
+        // Em produÃ§Ã£o, usar sua prÃ³pria API key do OpenWeatherMap
         // const API_KEY = 'SUA_API_KEY_AQUI';
         // const url = `https://api.openweathermap.org/data/2.5/weather?lat=${lat}&lon=${lng}&appid=${API_KEY}&units=metric&lang=pt_br`;
         
-        // Por enquanto, retornar dados simulados baseados na localização
+        // Por enquanto, retornar dados simulados baseados na localizaÃ§Ã£o
         const weather = this.getSimulatedWeather(property.location);
         CacheManager.set(cacheKey, weather);
         return weather;
@@ -279,15 +279,15 @@
       }
     },
 
-    // Clima simulado baseado na localização
+    // Clima simulado baseado na localizaÃ§Ã£o
     getSimulatedWeather: function(location) {
-      // Simulação baseada em clima típico da região
+      // SimulaÃ§Ã£o baseada em clima tÃ­pico da regiÃ£o
       const isTropical = location.coordinates.lat > -30 && location.coordinates.lat < 30;
       const isUS = location.country === 'USA';
       
       const temp = isTropical ? 
-        Math.floor(Math.random() * 10) + 24 : // 24-34°C
-        Math.floor(Math.random() * 15) + 15;  // 15-30°C
+        Math.floor(Math.random() * 10) + 24 : // 24-34Â°C
+        Math.floor(Math.random() * 15) + 15;  // 15-30Â°C
       
       const conditions = ['clear', 'clouds', 'rain', 'partly-cloudy'];
       const condition = conditions[Math.floor(Math.random() * conditions.length)];
@@ -311,7 +311,7 @@
         description: 'Ensolarado',
         humidity: 60,
         windSpeed: 10,
-        icon: '☀️'
+        icon: 'â˜€ï¸'
       };
     },
 
@@ -327,12 +327,12 @@
 
     getWeatherIcon: function(condition) {
       const icons = {
-        'clear': '☀️',
-        'clouds': '☁️',
-        'rain': '🌧️',
-        'partly-cloudy': '⛅'
+        'clear': 'â˜€ï¸',
+        'clouds': 'â˜ï¸',
+        'rain': 'ðŸŒ§ï¸',
+        'partly-cloudy': 'â›…'
       };
-      return icons[condition] || '🌤️';
+      return icons[condition] || 'ðŸŒ¤ï¸';
     }
   };
 
@@ -341,7 +341,7 @@
   // ========================================
 
   const MetricsCalculator = {
-    // Calcula comparativos entre propriedades com KPIs avançados do PMS
+    // Calcula comparativos entre propriedades com KPIs avanÃ§ados do PMS
     calculateComparative: function(properties) {
       if (!properties || properties.length === 0) return null;
 
@@ -380,7 +380,7 @@
         revPARSum: 0
       });
 
-      // Calcula médias
+      // Calcula mÃ©dias
       const count = metricsArray.length;
       const averages = {
         occupancyRate: Math.floor((totals.roomsSold / totals.totalRooms) * 100),
@@ -406,7 +406,7 @@
       };
     },
 
-    // Formata valor monetário
+    // Formata valor monetÃ¡rio
     formatCurrency: function(value, locale = 'pt-BR', currency = 'BRL') {
       return new Intl.NumberFormat(locale, {
         style: 'currency',
@@ -437,9 +437,9 @@
       // Carrega dados de clima
       const weather = await DataManager.loadWeatherData(property.key);
 
-      // Indicador de tendência
-      const trendIcon = metrics.occupancyTrend === 'up' ? '↗️' : 
-                        metrics.occupancyTrend === 'down' ? '↘️' : '→';
+      // Indicador de tendÃªncia
+      const trendIcon = metrics.occupancyTrend === 'up' ? 'â†—ï¸' : 
+                        metrics.occupancyTrend === 'down' ? 'â†˜ï¸' : 'â†’';
       const trendClass = metrics.occupancyTrend === 'up' ? 'trend-up' : 
                          metrics.occupancyTrend === 'down' ? 'trend-down' : 'trend-stable';
 
@@ -450,10 +450,10 @@
           <!-- Badge de clima -->
           <div class="weather-badge">
             <span class="weather-icon">${weather.icon}</span>
-            <span class="weather-temp">${weather.temp}°${weather.unit}</span>
+            <span class="weather-temp">${weather.temp}Â°${weather.unit}</span>
           </div>
 
-          <!-- Indicador de ocupação -->
+          <!-- Indicador de ocupaÃ§Ã£o -->
           <div class="occupancy-badge ${occClass}">
             <span class="occupancy-value">${metrics.occupancyRate}%</span>
             <span class="occupancy-trend ${trendClass}">${trendIcon}</span>
@@ -463,7 +463,7 @@
             <div class="hotel-header">
               <div class="hotel-title">${name}</div>
               <div class="hotel-location">
-                <span>📍</span>
+                <span>ðŸ“</span>
                 <span>${property.location.city}, ${property.location.state}</span>
               </div>
             </div>
@@ -471,7 +471,7 @@
             <!-- KPIs Principais do PMS -->
             <div class="pms-kpis">
               <div class="kpi-item">
-                <span class="kpi-icon">💰</span>
+                <span class="kpi-icon">ðŸ’°</span>
                 <div class="kpi-content">
                   <span class="kpi-label" data-i18n="dashboard.kpi.revenue">Receita Hoje</span>
                   <span class="kpi-value">${MetricsCalculator.formatCurrency(metrics.revenue)}</span>
@@ -479,16 +479,16 @@
               </div>
 
               <div class="kpi-item">
-                <span class="kpi-icon">🛏️</span>
+                <span class="kpi-icon">ðŸ›ï¸</span>
                 <div class="kpi-content">
                   <span class="kpi-label" data-i18n="dashboard.kpi.rooms">Quartos</span>
                   <span class="kpi-value">${metrics.roomsSold}/${metrics.totalRooms}</span>
-                  <span class="kpi-detail">${metrics.roomsAvailable} disponíveis</span>
+                  <span class="kpi-detail">${metrics.roomsAvailable} disponÃ­veis</span>
                 </div>
               </div>
 
               <div class="kpi-item">
-                <span class="kpi-icon">�</span>
+                <span class="kpi-icon">ï¿½</span>
                 <div class="kpi-content">
                   <span class="kpi-label">ADR / RevPAR</span>
                   <span class="kpi-value">${MetricsCalculator.formatCurrency(metrics.adr)}</span>
@@ -496,19 +496,19 @@
                 </div>
               </div>
 
-              <!-- Insights Operacionais (difíceis de ver a olho nu) -->
+              <!-- Insights Operacionais (difÃ­ceis de ver a olho nu) -->
               <div class="kpi-item operational">
-                <span class="kpi-icon">�</span>
+                <span class="kpi-icon">ï¿½</span>
                 <div class="kpi-content">
-                  <span class="kpi-label" data-i18n="dashboard.kpi.operations">Operações Hoje</span>
-                  <span class="kpi-value">${metrics.checkInsToday} check-ins • ${metrics.checkOutsToday} check-outs</span>
-                  <span class="kpi-detail">${metrics.stayovers} stayovers${metrics.noShows > 0 ? ` • ${metrics.noShows} no-shows` : ''}</span>
+                  <span class="kpi-label" data-i18n="dashboard.kpi.operations">OperaÃ§Ãµes Hoje</span>
+                  <span class="kpi-value">${metrics.checkInsToday} check-ins â€¢ ${metrics.checkOutsToday} check-outs</span>
+                  <span class="kpi-detail">${metrics.stayovers} stayovers${metrics.noShows > 0 ? ` â€¢ ${metrics.noShows} no-shows` : ''}</span>
                 </div>
               </div>
 
               ${metrics.alerts > 0 ? `
               <div class="kpi-item alert">
-                <span class="kpi-icon">⚠️</span>
+                <span class="kpi-icon">âš ï¸</span>
                 <div class="kpi-content">
                   <span class="kpi-label" data-i18n="dashboard.kpi.alerts">Alertas Ativos</span>
                   <span class="kpi-value">${metrics.alerts}</span>
@@ -520,12 +520,12 @@
             <!-- Forecast -->
             <div class="forecast-section">
               <div class="forecast-label">
-                <span>📈</span>
-                <span data-i18n="dashboard.forecast">Previsão (7 dias)</span>
+                <span>ðŸ“ˆ</span>
+                <span data-i18n="dashboard.forecast">PrevisÃ£o (7 dias)</span>
               </div>
               <div class="forecast-metrics">
                 <div class="forecast-item">
-                  <span class="forecast-metric">Ocupação: ${metrics.forecastOccupancy}%</span>
+                  <span class="forecast-metric">OcupaÃ§Ã£o: ${metrics.forecastOccupancy}%</span>
                   <span class="forecast-change ${metrics.forecastOccupancy > metrics.occupancyRate ? 'positive' : 'negative'}">
                     ${metrics.forecastOccupancy > metrics.occupancyRate ? '+' : ''}${metrics.forecastOccupancy - metrics.occupancyRate}%
                   </span>
@@ -542,7 +542,7 @@
               <span data-i18n="dashboard.openControl">Abrir Controle</span>
             </button>
             <button class="btn secondary" onclick="PropertyDashboard.openAutomation('${property.key}')">
-              <span data-i18n="dashboard.openAutomation">Central Virtual de Automação</span>
+              <span data-i18n="dashboard.openAutomation">Central Virtual de AutomaÃ§Ã£o</span>
             </button>
           </div>
         </div>
@@ -557,91 +557,91 @@
 
       return `
         <div class="comparative-dashboard-pms">
-          <h3 data-i18n="dashboard.comparative.title">📊 KPIs Consolidados - Todas as Propriedades</h3>
+          <h3 data-i18n="dashboard.comparative.title">ðŸ“Š KPIs Consolidados - Todas as Propriedades</h3>
           
           <div class="kpi-grid-comparative">
-            <!-- Ocupação -->
+            <!-- OcupaÃ§Ã£o -->
             <div class="kpi-card">
-              <div class="kpi-card-icon">📊</div>
-              <div class="kpi-card-label" data-i18n="dashboard.comparative.avgOccupancy">Ocupação Média</div>
+              <div class="kpi-card-icon">ðŸ“Š</div>
+              <div class="kpi-card-label" data-i18n="dashboard.comparative.avgOccupancy">OcupaÃ§Ã£o MÃ©dia</div>
               <div class="kpi-card-value">${averages.occupancyRate}%</div>
               <div class="kpi-card-detail">${totals.roomsSold} quartos ocupados de ${totals.totalRooms}</div>
             </div>
 
             <!-- Receita Total -->
             <div class="kpi-card revenue">
-              <div class="kpi-card-icon">💰</div>
+              <div class="kpi-card-icon">ðŸ’°</div>
               <div class="kpi-card-label" data-i18n="dashboard.comparative.totalRevenue">Receita Total Hoje</div>
               <div class="kpi-card-value">${MetricsCalculator.formatCurrency(totals.revenue)}</div>
-              <div class="kpi-card-detail">ADR Médio: ${MetricsCalculator.formatCurrency(averages.adr)}</div>
+              <div class="kpi-card-detail">ADR MÃ©dio: ${MetricsCalculator.formatCurrency(averages.adr)}</div>
             </div>
 
-            <!-- RevPAR Médio -->
+            <!-- RevPAR MÃ©dio -->
             <div class="kpi-card">
-              <div class="kpi-card-icon">📈</div>
-              <div class="kpi-card-label">RevPAR Médio</div>
+              <div class="kpi-card-icon">ðŸ“ˆ</div>
+              <div class="kpi-card-label">RevPAR MÃ©dio</div>
               <div class="kpi-card-value">${MetricsCalculator.formatCurrency(averages.revPAR)}</div>
               <div class="kpi-card-detail">Revenue Per Available Room</div>
             </div>
 
-            <!-- Operações Hoje -->
+            <!-- OperaÃ§Ãµes Hoje -->
             <div class="kpi-card operations">
-              <div class="kpi-card-icon">�</div>
-              <div class="kpi-card-label" data-i18n="dashboard.comparative.operations">Operações Hoje</div>
+              <div class="kpi-card-icon">ï¿½</div>
+              <div class="kpi-card-label" data-i18n="dashboard.comparative.operations">OperaÃ§Ãµes Hoje</div>
               <div class="kpi-card-value">${totals.checkInsToday + totals.checkOutsToday}</div>
               <div class="kpi-card-detail">
-                ${totals.checkInsToday} check-ins • ${totals.checkOutsToday} check-outs
+                ${totals.checkInsToday} check-ins â€¢ ${totals.checkOutsToday} check-outs
               </div>
             </div>
 
             <!-- Stayovers -->
             <div class="kpi-card">
-              <div class="kpi-card-icon">🏨</div>
+              <div class="kpi-card-icon">ðŸ¨</div>
               <div class="kpi-card-label" data-i18n="dashboard.comparative.stayovers">Stayovers</div>
               <div class="kpi-card-value">${totals.stayovers}</div>
-              <div class="kpi-card-detail">Hóspedes permanecendo</div>
+              <div class="kpi-card-detail">HÃ³spedes permanecendo</div>
             </div>
 
             <!-- Forecast -->
             <div class="kpi-card forecast">
-              <div class="kpi-card-icon">📅</div>
-              <div class="kpi-card-label" data-i18n="dashboard.comparative.forecast">Previsão 7 dias</div>
+              <div class="kpi-card-icon">ðŸ“…</div>
+              <div class="kpi-card-label" data-i18n="dashboard.comparative.forecast">PrevisÃ£o 7 dias</div>
               <div class="kpi-card-value">${MetricsCalculator.formatCurrency(totals.forecastRevenue)}</div>
-              <div class="kpi-card-detail">Ocupação prevista: ${averages.forecastOccupancy}%</div>
+              <div class="kpi-card-detail">OcupaÃ§Ã£o prevista: ${averages.forecastOccupancy}%</div>
             </div>
 
             ${totals.alerts > 0 ? `
             <div class="kpi-card alert">
-              <div class="kpi-card-icon">⚠️</div>
+              <div class="kpi-card-icon">âš ï¸</div>
               <div class="kpi-card-label" data-i18n="dashboard.comparative.totalAlerts">Alertas Ativos</div>
               <div class="kpi-card-value">${totals.alerts}</div>
-              <div class="kpi-card-detail" data-i18n="dashboard.comparative.requiresAttention">Requer atenção</div>
+              <div class="kpi-card-detail" data-i18n="dashboard.comparative.requiresAttention">Requer atenÃ§Ã£o</div>
             </div>
             ` : ''}
 
             ${totals.noShows > 0 ? `
             <div class="kpi-card warning">
-              <div class="kpi-card-icon">❌</div>
+              <div class="kpi-card-icon">âŒ</div>
               <div class="kpi-card-label">No-Shows</div>
               <div class="kpi-card-value">${totals.noShows}</div>
-              <div class="kpi-card-detail">Reservas não compareceram</div>
+              <div class="kpi-card-detail">Reservas nÃ£o compareceram</div>
             </div>
             ` : ''}
           </div>
 
-          <!-- Análise Comparativa de Performance -->
+          <!-- AnÃ¡lise Comparativa de Performance -->
           <div class="performance-analysis">
-            <h4>🏆 Análise de Performance</h4>
+            <h4>ðŸ† AnÃ¡lise de Performance</h4>
             <div class="performance-grid">
               <div class="performance-card best">
                 <div class="performance-header">
-                  <span class="performance-icon">👑</span>
+                  <span class="performance-icon">ðŸ‘‘</span>
                   <span class="performance-label" data-i18n="dashboard.comparative.bestPerformance">Melhor Desempenho</span>
                 </div>
                 <div class="performance-name">${SecurityManager.sanitizeHTML(best.property.name)}</div>
                 <div class="performance-metrics">
                   <div class="perf-metric">
-                    <span class="perf-label">Ocupação:</span>
+                    <span class="perf-label">OcupaÃ§Ã£o:</span>
                     <span class="perf-value">${best.metrics.occupancyRate}%</span>
                   </div>
                   <div class="perf-metric">
@@ -658,13 +658,13 @@
               ${worst.property.key !== best.property.key ? `
               <div class="performance-card improvement">
                 <div class="performance-header">
-                  <span class="performance-icon">�</span>
+                  <span class="performance-icon">ï¿½</span>
                   <span class="performance-label">Oportunidade de Melhoria</span>
                 </div>
                 <div class="performance-name">${SecurityManager.sanitizeHTML(worst.property.name)}</div>
                 <div class="performance-metrics">
                   <div class="perf-metric">
-                    <span class="perf-label">Ocupação:</span>
+                    <span class="perf-label">OcupaÃ§Ã£o:</span>
                     <span class="perf-value">${worst.metrics.occupancyRate}%</span>
                   </div>
                   <div class="perf-metric">
@@ -684,15 +684,15 @@
       `;
     },
 
-    // Converte código de módulo para nome amigável
+    // Converte cÃ³digo de mÃ³dulo para nome amigÃ¡vel
     getModuleName: function(moduleCode) {
       const modules = {
-        'engineering': '🔧 Engenharia',
-        'housekeeping': '🧹 Governança',
-        'alerts': '⚠️ Alertas',
-        'reservations': '📅 Reservas',
-        'pos': '💳 POS',
-        'analytics': '📊 Analytics'
+        'engineering': 'ðŸ”§ Engenharia',
+        'housekeeping': 'ðŸ§¹ GovernanÃ§a',
+        'alerts': 'âš ï¸ Alertas',
+        'reservations': 'ðŸ“… Reservas',
+        'pos': 'ðŸ’³ POS',
+        'analytics': 'ðŸ“Š Analytics'
       };
       return modules[moduleCode] || moduleCode;
     }
@@ -711,9 +711,9 @@
     init: function() {
       if (this.initialized) return;
 
-      console.log('🚀 Initializing Property Dashboard...');
+      console.log('ðŸš€ Initializing Property Dashboard...');
 
-      // Carrega usuário atual
+      // Carrega usuÃ¡rio atual
       this.currentUser = DataManager.loadCurrentUser();
       if (!this.currentUser) {
         console.error('No user logged in');
@@ -722,7 +722,7 @@
 
       // Carrega propriedades autorizadas
       this.properties = DataManager.getAuthorizedProperties(this.currentUser);
-      console.log(`✅ Found ${this.properties.length} authorized properties`);
+      console.log(`âœ… Found ${this.properties.length} authorized properties`);
 
       // Renderiza dashboard
       this.render();
@@ -741,21 +741,21 @@
       // Limpa container
       container.innerHTML = '';
 
-      // Se não há propriedades, mostra mensagem
+      // Se nÃ£o hÃ¡ propriedades, mostra mensagem
       if (this.properties.length === 0) {
         container.innerHTML = `
           <div class="empty-state">
-            <div class="empty-icon">🏨</div>
-            <h3 data-i18n="dashboard.noProperties">Nenhuma propriedade disponível</h3>
+            <div class="empty-icon">ðŸ¨</div>
+            <h3 data-i18n="dashboard.noProperties">Nenhuma propriedade disponÃ­vel</h3>
             <p data-i18n="dashboard.noPropertiesDesc">
-              Você não tem acesso a nenhuma propriedade implantada ou suas propriedades ainda estão em configuração.
+              VocÃª nÃ£o tem acesso a nenhuma propriedade implantada ou suas propriedades ainda estÃ£o em configuraÃ§Ã£o.
             </p>
           </div>
         `;
         return;
       }
 
-      // Renderiza cards de propriedades (assíncrono por causa do clima)
+      // Renderiza cards de propriedades (assÃ­ncrono por causa do clima)
       for (const property of this.properties) {
         const metrics = DataManager.loadPropertyMetrics(property.key);
         const cardHTML = await UIRenderer.renderPropertyCard(property, metrics);
@@ -767,13 +767,13 @@
         this.renderComparative();
       }
 
-      // Aplica traduções se i18n disponível
+      // Aplica traduÃ§Ãµes se i18n disponÃ­vel
       if (typeof applyI18n === 'function') {
         applyI18n();
       }
     },
 
-    // Renderiza seção comparativa
+    // Renderiza seÃ§Ã£o comparativa
     renderComparative: function() {
       const section = document.getElementById('compareSection');
       if (!section) return;
@@ -796,7 +796,7 @@
         return;
       }
 
-      // Chama função existente openControl
+      // Chama funÃ§Ã£o existente openControl
       if (typeof openControl === 'function') {
         openControl(property.name);
       } else {
@@ -804,7 +804,7 @@
       }
     },
 
-    // Abre Central Virtual de Automação (antigo RTI)
+    // Abre Central Virtual de AutomaÃ§Ã£o (antigo RTI)
     openAutomation: function(propertyKey) {
       const property = this.properties.find(p => p.key === propertyKey);
       if (!property) {
@@ -812,7 +812,7 @@
         return;
       }
 
-      // Chama função existente openRTI (renomeada conceitualmente)
+      // Chama funÃ§Ã£o existente openRTI (renomeada conceitualmente)
       if (typeof openRTI === 'function') {
         openRTI(property.name);
       } else {
@@ -828,7 +828,7 @@
         return;
       }
 
-      // Verifica se sistema de teste local está disponível
+      // Verifica se sistema de teste local estÃ¡ disponÃ­vel
       if (typeof masterCtrl !== 'undefined' && typeof masterCtrl.testPropertyLocally === 'function') {
         masterCtrl.testPropertyLocally(propertyKey);
       } else if (typeof MasterControlSystem !== 'undefined') {
@@ -838,19 +838,19 @@
         }
       } else {
         console.warn('Test locally system not available');
-        alert('Sistema de teste local não disponível nesta página.');
+        alert('Sistema de teste local nÃ£o disponÃ­vel nesta pÃ¡gina.');
       }
     },
 
-    // Atualiza métricas (refresh)
+    // Atualiza mÃ©tricas (refresh)
     refresh: function() {
-      console.log('🔄 Refreshing dashboard...');
+      console.log('ðŸ”„ Refreshing dashboard...');
       CacheManager.clear();
       this.properties = DataManager.getAuthorizedProperties(this.currentUser);
       this.render();
     },
 
-    // Invalida cache de propriedade específica
+    // Invalida cache de propriedade especÃ­fica
     invalidateProperty: function(propertyKey) {
       CacheManager.invalidate(propertyKey);
       this.refresh();
@@ -867,12 +867,12 @@
   // EVENT LISTENERS
   // ========================================
   
-  // Listener para atualização de dados demo
+  // Listener para atualizaÃ§Ã£o de dados demo
   window.addEventListener('demoDataUpdated', function(event) {
     const { propertyKey, timestamp } = event.detail;
-    console.log(`[Dashboard] 🎭 Dados demo atualizados para ${propertyKey}`, new Date(timestamp));
+    console.log(`[Dashboard] ðŸŽ­ Dados demo atualizados para ${propertyKey}`, new Date(timestamp));
     
-    // Limpar cache da propriedade específica
+    // Limpar cache da propriedade especÃ­fica
     CacheManager.clear(`metrics_${propertyKey}`);
     CacheManager.clear(`weather_${propertyKey}`);
     
@@ -889,6 +889,7 @@
     PropertyDashboard.init();
   }
 
-  console.log('✅ Property Dashboard Manager loaded');
+  console.log('âœ… Property Dashboard Manager loaded');
 
 })();
+

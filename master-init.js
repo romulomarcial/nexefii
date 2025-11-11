@@ -1,4 +1,4 @@
-/**
+﻿/**
  * Master System Initialization Script
  * Run this script to initialize or reset the Master Control System
  */
@@ -6,12 +6,12 @@
 (function() {
   'use strict';
 
-  console.log('🔐 Master System Initialization Script');
+  console.log('ðŸ” Master System Initialization Script');
   console.log('=====================================\n');
 
   // Check if IluxAuth is loaded
   if (typeof window.IluxAuth === 'undefined') {
-    console.error('❌ IluxAuth not loaded! Make sure auth.js is included.');
+    console.error('âŒ IluxAuth not loaded! Make sure auth.js is included.');
     return;
   }
 
@@ -23,20 +23,20 @@
   const masterUser = users.find(u => u.username === 'master');
   
   if (masterUser) {
-    console.log('✅ Master user found!');
+    console.log('âœ… Master user found!');
     console.log('   Username:', masterUser.username);
     console.log('   Email:', masterUser.email);
     console.log('   Role:', masterUser.role);
     console.log('   Status:', masterUser.status);
     console.log('   Created:', new Date(masterUser.createdAt).toLocaleString());
   } else {
-    console.log('⚠️  Master user not found! Creating...');
+    console.log('âš ï¸  Master user not found! Creating...');
     
     // Create master user manually if needed
     const newMaster = {
       id: 'usr_master_' + Date.now(),
-      fullName: 'Master Administrator',
-      email: 'master@iluxsys.com',
+  fullName: 'Master Administrator',
+  email: 'master@nexefii.com',
       phone: '+55 11 99999-9999',
       country: 'BR',
       propertyKey: null,
@@ -54,14 +54,20 @@
     };
     
     users.push(newMaster);
-    localStorage.setItem('iluxsys_users', JSON.stringify(users));
-    console.log('✅ Master user created successfully!');
+    // Prefer new key but keep legacy key for backward compatibility
+    localStorage.setItem('nexefii_users', JSON.stringify(users));
+    try {
+      localStorage.setItem('nexefii_users', JSON.stringify(users));
+    } catch (e) {
+      // ignore if localStorage write for legacy key fails
+    }
+    console.log('âœ… Master user created successfully!');
   }
 
   // Verify admin user
   const adminUser = users.find(u => u.username === 'admin');
   if (adminUser) {
-    console.log('\n✅ Admin user found!');
+    console.log('\nâœ… Admin user found!');
     console.log('   Username:', adminUser.username);
     console.log('   Email:', adminUser.email);
     console.log('   Role:', adminUser.role);
@@ -70,17 +76,17 @@
   // Initialize Master Control System storage if not exists
   if (!localStorage.getItem('master_backups')) {
     localStorage.setItem('master_backups', JSON.stringify([]));
-    console.log('\n✅ Master backups storage initialized');
+    console.log('\nâœ… Master backups storage initialized');
   }
 
   if (!localStorage.getItem('master_versions')) {
     localStorage.setItem('master_versions', JSON.stringify([]));
-    console.log('✅ Master versions storage initialized');
+    console.log('âœ… Master versions storage initialized');
   }
 
   if (!localStorage.getItem('master_logs')) {
     localStorage.setItem('master_logs', JSON.stringify([]));
-    console.log('✅ Master logs storage initialized');
+    console.log('âœ… Master logs storage initialized');
   }
 
   if (!localStorage.getItem('master_settings')) {
@@ -91,7 +97,7 @@
       logLevel: 'info'
     };
     localStorage.setItem('master_settings', JSON.stringify(defaultSettings));
-    console.log('✅ Master settings initialized');
+    console.log('âœ… Master settings initialized');
   }
 
   // Create initial version/snapshot
@@ -117,12 +123,12 @@
       },
       changes: {
         type: 'initial',
-        description: 'Versão inicial do sistema'
+        description: 'VersÃ£o inicial do sistema'
       }
     };
     versions.push(initialVersion);
     localStorage.setItem('master_versions', JSON.stringify(versions));
-    console.log('✅ Initial version snapshot created: v1.0.0');
+    console.log('âœ… Initial version snapshot created: v1.0.0');
   }
 
   // Add initialization log
@@ -143,7 +149,7 @@
   localStorage.setItem('master_logs', JSON.stringify(logs));
 
   // Display summary
-  console.log('\n📊 SYSTEM SUMMARY');
+  console.log('\nðŸ“Š SYSTEM SUMMARY');
   console.log('=================');
   console.log('Total Users:', users.length);
   console.log('Master Users:', users.filter(u => u.role === 'master').length);
@@ -162,7 +168,7 @@
   const totalSizeMB = (totalSize / 1024 / 1024).toFixed(2);
   console.log('Storage Used:', totalSizeMB, 'MB');
 
-  console.log('\n🔐 ACCESS CREDENTIALS');
+  console.log('\nðŸ” ACCESS CREDENTIALS');
   console.log('====================');
   console.log('Master User:');
   console.log('  URL: master-control.html');
@@ -173,9 +179,9 @@
   console.log('  Username: admin');
   console.log('  Password: admin12345!@#');
 
-  console.log('\n✅ Master System ready!');
-  console.log('📚 Read MASTER_CONTROL_README.md for full documentation');
-  console.log('🔒 Read CREDENTIALS.md for security guidelines\n');
+  console.log('\nâœ… Master System ready!');
+  console.log('ðŸ“š Read MASTER_CONTROL_README.md for full documentation');
+  console.log('ðŸ”’ Read CREDENTIALS.md for security guidelines\n');
 
 })();
 
@@ -193,7 +199,7 @@ window.MasterUtils = {
 
   // Show all users
   listUsers: function() {
-    const users = JSON.parse(localStorage.getItem('iluxsys_users') || '[]');
+    const users = JSON.parse(localStorage.getItem('nexefii_users') || localStorage.getItem('nexefii_users') || '[]');
     console.table(users.map(u => ({
       Username: u.username,
       Email: u.email,
@@ -238,30 +244,34 @@ window.MasterUtils = {
     const url = URL.createObjectURL(blob);
     const a = document.createElement('a');
     a.href = url;
-    a.download = `iluxsys_full_export_${Date.now()}.json`;
+  a.download = `nexefii_full_export_${Date.now()}.json`;
     a.click();
     
-    console.log('✅ Full system export downloaded!');
+    console.log('âœ… Full system export downloaded!');
   },
 
   // Clear all except master/admin
   resetDevelopment: function() {
-    if (!confirm('⚠️ This will delete all data except master/admin users! Continue?')) {
+    if (!confirm('âš ï¸ This will delete all data except master/admin users! Continue?')) {
       return;
     }
     
-    const users = JSON.parse(localStorage.getItem('iluxsys_users') || '[]');
+    const users = JSON.parse(localStorage.getItem('nexefii_users') || localStorage.getItem('nexefii_users') || '[]');
     const masterAdmin = users.filter(u => u.role === 'master' || u.role === 'admin');
     
     localStorage.clear();
-    localStorage.setItem('iluxsys_users', JSON.stringify(masterAdmin));
+    // Preserve master/admin users under the new key and also write legacy key for compatibility
+    localStorage.setItem('nexefii_users', JSON.stringify(masterAdmin));
+    try {
+      localStorage.setItem('nexefii_users', JSON.stringify(masterAdmin));
+    } catch (e) {}
     
-    console.log('✅ Development reset complete! Reload the page.');
+    console.log('âœ… Development reset complete! Reload the page.');
   },
 
   // Show help
   help: function() {
-    console.log('🔧 Master Utilities');
+    console.log('ðŸ”§ Master Utilities');
     console.log('==================\n');
     console.log('MasterUtils.quickBackup()      - Create full backup');
     console.log('MasterUtils.listUsers()        - Show all users');
@@ -272,4 +282,5 @@ window.MasterUtils = {
   }
 };
 
-console.log('\n💡 TIP: Type MasterUtils.help() for utility functions');
+console.log('\nðŸ’¡ TIP: Type MasterUtils.help() for utility functions');
+

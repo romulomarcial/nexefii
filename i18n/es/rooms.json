@@ -1,0 +1,19 @@
+{
+  "rmPageTitle": "🛏️ Gestión de Habitaciones",
+  "rmRefresh": "Actualizar",
+  "rmExport": "Exportar",
+  "rmVacant": "Vacantes",
+  "rmOccupied": "Ocupadas",
+  "rmDirty": "Sucias",
+  "rmOutOfOrder": "Fuera de Servicio",
+  "rmViewGrid": "Cuadrícula",
+  "rmViewList": "Lista",
+  "rmViewFloor": "Por Piso",
+  "rmFilterFloor": "Piso",
+  "rmAllFloors": "Todos",
+  "rmFilterStatus": "Estado",
+  "rmAllStatuses": "Todos",
+  "rmStatusVacant": "Vacante",
+  "rmStatusOccupied": "Ocupada",
+  "rmStatusDirty": "Sucia"
+}

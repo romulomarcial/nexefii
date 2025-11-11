@@ -1,0 +1,301 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>iLuxSys · Controle de Engenharia</title>
+    <link rel="stylesheet" href="style.css">
+    <style>
+        .engineering-grid {
+            display: grid;
+            gap: 1px;
+            background: var(--line);
+            border-radius: 8px;
+            overflow: hidden;
+        }
+        .grid-header {
+            display: grid;
+            grid-template-columns: repeat(11, 1fr);
+            background: var(--bg-alt);
+            padding: 12px;
+            font-weight: 500;
+        }
+        .room-row {
+            display: grid;
+            grid-template-columns: repeat(11, 1fr);
+            background: var(--bg);
+            padding: 12px;
+            align-items: center;
+        }
+        .room-row:hover {
+            background: var(--bg-hover);
+        }
+        .status-on {
+            color: #22c55e;
+        }
+        .status-off {
+            color: #ef4444;
+        }
+        .alert-icon {
+            color: #f59e0b;
+        }
+        .temp-normal {
+            color: #3b82f6;
+        }
+        .room-row {
+            cursor: pointer;
+            transition: background-color 0.2s;
+        }
+        .room-row:hover {
+            background: var(--bg-hover);
+        }
+        .room-row.selected {
+            background: rgba(59, 130, 246, 0.1);
+        }
+        .floor-nav {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+        }
+        .floor-nav select,
+        .floor-nav input {
+            padding: 6px 12px;
+            border-radius: 6px;
+            border: 1px solid var(--line);
+            background: var(--bg);
+        }
+        .floor-nav select {
+            min-width: 120px;
+        }
+        /* Toast styles for non-blocking localized messages */
+        .toast-container{
+            position: fixed;
+            right: 20px;
+            bottom: 20px;
+            display:flex;
+            flex-direction:column;
+            gap:8px;
+            z-index: 9999;
+            pointer-events: none;
+        }
+        .toast{
+            pointer-events: auto;
+            background: rgba(17,24,39,0.95);
+            color: #fff;
+            padding: 10px 14px;
+            border-radius: 8px;
+            box-shadow: 0 6px 18px rgba(2,6,23,0.2);
+            font-size: 14px;
+            opacity: 0;
+            transform: translateY(8px);
+            transition: opacity 240ms ease, transform 240ms ease;
+            max-width: 320px;
+        }
+        .toast.show{
+            opacity: 1;
+            transform: translateY(0);
+        }
+        /* Alert popover (details) */
+        .alert-popover{
+            position: absolute;
+            z-index: 10000;
+            min-width: 220px;
+            max-width: 360px;
+            background: #111827;
+            color: #fff;
+            border-radius: 8px;
+            box-shadow: 0 10px 30px rgba(2,6,23,0.4);
+            padding: 10px;
+            font-size: 13px;
+            pointer-events: auto;
+        }
+        .alert-popover h4{ margin: 0 0 8px 0; font-size:14px; }
+        .alert-popover .ap-item{ display:flex; gap:8px; align-items:flex-start; padding:6px 4px; border-radius:6px; }
+        .alert-popover .ap-item + .ap-item{ margin-top:6px; }
+        .alert-popover .ap-icon{ width:20px; height:20px; display:inline-flex; align-items:center; justify-content:center; border-radius:4px; background:rgba(255,255,255,0.06); }
+        .alert-popover .ap-text{ flex:1; }
+        .alert-popover .ap-time{ font-size:11px; color: #cbd5e1; margin-top:4px; }
+        .alert-popover .ap-close{ position:absolute; right:8px; top:6px; background:transparent; border:0; color: #94a3b8; cursor:pointer; }
+    /* Alert icon color coding */
+    .alert-icon.alert-type-highHumidity{ color: #f97316; }
+    .alert-icon.alert-type-doorWindowACOn{ color: #ef4444; }
+    .alert-icon.alert-type-filterChange{ color: #f59e0b; }
+    .alert-icon.alert-type-other{ color: #94a3b8; }
+    .alert-popover .ap-icon.type-highHumidity{ background: rgba(249,115,22,0.12); color: #f97316; }
+    .alert-popover .ap-icon.type-doorWindowACOn{ background: rgba(239,68,68,0.08); color: #ef4444; }
+    .alert-popover .ap-icon.type-filterChange{ background: rgba(245,158,11,0.08); color: #f59e0b; }
+    .alert-popover .ap-icon.type-other{ background: rgba(148,163,184,0.06); color: #94a3b8; }
+    </style>
+</head>
+<body>
+    <div id="loadingOverlay" class="loading-overlay">
+        <div class="loading-spinner"></div>
+    </div>
+    <header>
+        <div class="brand">
+            <img src="assets/Nexefii_logo_3d-official.png" alt="Nexefii">
+            <div id="header-title">iLuxSys · Controle de Engenharia</div>
+        </div>
+        <div style="display:flex;align-items:center;gap:8px">
+            <select id="langSelect" onchange="onLangChange(this.value)" style="padding:6px;border-radius:8px;border:1px solid var(--line)">
+                <option value="pt">Português</option>
+                <option value="en">English</option>
+                <option value="es">Español</option>
+            </select>
+            <button class="btn ghost" onclick="window.close()">Fechar</button>
+        </div>
+    </header>
+    <div class="container">
+        <div class="card">
+            <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:20px">
+                <h2 id="engTitle">Room Information - ENGINEERING</h2>
+                <div class="floor-nav">
+                    <div style="margin-right:12px;display:flex;align-items:center;gap:8px">
+                        <label for="floorSelect" id="lbl-floor">Pavimento:</label>
+                        <select id="floorSelect" class="form-select" onchange="changeFloor(this.value)">
+                            <option value="all" id="opt-all-floors">Todos os andares</option>
+                            <option value="3">3º Andar</option>
+                            <option value="2">2º Andar</option>
+                            <option value="1">1º Andar</option>
+                        </select>
+                    </div>
+                    <div style="display:flex;align-items:center;gap:8px">
+                        <label for="roomSearch" id="lbl-room">Quarto:</label>
+                        <input type="text" id="roomSearch" class="form-input" placeholder="Ex: 301" 
+                               style="width:80px;padding:6px;border-radius:6px;border:1px solid var(--line)">
+                        <button class="btn primary" id="btn-search" onclick="searchRoom()">Buscar</button>
+                    </div>
+                </div>
+            </div>
+            <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px;gap:12px;flex-wrap:wrap">
+                <div></div>
+                <label for="iconStyleSelect" id="lbl-icon-style" style="font-size:13px;margin-right:6px">Icon</label>
+                <select id="iconStyleSelect" onchange="setAlertIconStyle(this.value)" style="padding:6px;border-radius:6px;border:1px solid var(--line)">
+                    <option value="default">Default</option>
+                    <option value="detailed">Detailed</option>
+                    <option value="line">Line</option>
+                </select>
+                <button class="btn" id="btn-export-csv" onclick="exportEngineeringCSV()">Exportar CSV</button>
+            </div>
+            <div class="engineering-grid">
+                <div class="grid-header">
+                    <div id="col-room">ROOM</div>
+                    <div id="col-occupied">OCCUPIED</div>
+                    <div id="col-sold">SOLD</div>
+                    <div id="col-dnd">DND</div>
+                    <div id="col-hvac">HVAC</div>
+                    <div id="col-thermostat">THERMOSTAT</div>
+                    <div id="col-roomtemp">ROOM TEMP.</div>
+                    <div id="col-hvacmode">HVAC MODE</div>
+                    <div id="col-humidity">% HUMIDITY</div>
+                    <div id="col-alert">ALERT</div>
+                    <div id="col-lastupdate">LAST UPDATE</div>
+                </div>
+                <div id="roomRows">
+                    <!-- Room rows will be populated by JavaScript -->
+                </div>
+            </div>
+            <div style="display:flex;justify-content:space-between;align-items:center;margin-top:12px;gap:12px;flex-wrap:wrap">
+                <div id="page-info" class="sub">1 / 1</div>
+                <div style="display:flex;gap:8px">
+                    <button class="btn" id="btn-prev" onclick="prevPage()">Anterior</button>
+                    <button class="btn" id="btn-next" onclick="nextPage()">Próxima</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script src="app.js"></script>
+    <script src="thermostat-control.js"></script>
+    <script src="engineering.js"></script>
+    <div id="toastContainer" class="toast-container" aria-live="polite" aria-atomic="true"></div>
+    <div id="alertPopoverContainer" aria-hidden="true"></div>
+    <!-- Thermostat Modal -->
+    <div id="thermostatModal" class="thermostat-modal">
+        <div class="thermostat-container">
+            <div class="thermostat-header">
+                <button class="close-circle" onclick="closeThermostat()">&times;</button>
+                <!-- room selector for quick switch -->
+                <div style="display:flex;align-items:center;gap:8px;justify-content:center;width:100%">
+                    <label for="roomSelect" id="lbl-room-select" style="font-size:12px;margin-right:6px">Quarto</label>
+                    <select id="roomSelect" class="form-select" onchange="(window.thermostatControl && window.thermostatControl.switchRoom) ? window.thermostatControl.switchRoom(this.value) : null"></select>
+                    <button class="unit-toggle" id="unitToggle" onclick="toggleTempUnit()">°C</button>
+                </div>
+            </div>
+
+            <div class="room-info">
+                <div class="info-card">
+                    <div data-i18n="saleStatusLabel">Status Venda</div>
+                    <strong id="saleStatus">---</strong>
+                </div>
+                <div class="info-card">
+                    <div data-i18n="occStatusLabel">Status Ocupação</div>
+                    <strong id="occStatus">---</strong>
+                </div>
+            </div>
+
+                    <!-- Main temperature row: minus | set-point center | plus -->
+                    <div class="thermostat-main">
+                        <div class="temp-row" style="display:flex;align-items:center;justify-content:space-between;gap:12px">
+                            <button type="button" class="temp-btn minus" style="width:48px;height:48px;border-radius:24px" onpointerdown="adjustTemp(-0.5)">−</button>
+                            <div class="setpoint-center" style="text-align:center;flex:1">
+                                <div id="setPointDisplay" data-hvac="Off">23°C</div>
+                                <div id="roomTempSmall" style="font-size:12px;color:var(--muted);margin-top:6px">22°C</div>
+                                <div id="humidityDisplay" style="font-size:12px;color:var(--muted);margin-top:4px">Umidade: 45%</div>
+                            </div>
+                            <button type="button" class="temp-btn plus" style="width:48px;height:48px;border-radius:24px" onpointerdown="adjustTemp(0.5)">+</button>
+                        </div>
+
+                        <!-- Fan speed controls remain below -->
+                        <div class="fan-section" style="display:flex;flex-direction:column;align-items:center;margin-top:12px">
+                            <div class="control-buttons">
+                                <button class="control-btn" onclick="setFanSpeed('high')" id="btnHigh">
+                                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                                        <path d="M12 3v18M12 3l4 4M12 3L8 7M12 21l4-4M12 21l-4-4" stroke-width="2"/>
+                                    </svg>
+                                    <span data-i18n="fanHigh">Alto</span>
+                                </button>
+                                <button class="control-btn" onclick="setFanSpeed('medium')" id="btnMed">
+                                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                                        <path d="M12 7v10M12 7l4 4M12 7L8 11" stroke-width="2"/>
+                                    </svg>
+                                    <span data-i18n="fanMedium">Médio</span>
+                                </button>
+                                <button class="control-btn" onclick="setFanSpeed('low')" id="btnLow">
+                                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                                        <path d="M12 11v6M12 11l4 4M12 11l-4 4" stroke-width="2"/>
+                                    </svg>
+                                    <span data-i18n="fanLow">Baixo</span>
+                                </button>
+                            </div>
+                            <!-- AUTO button centered below the fan buttons, visually under the middle button -->
+                            <div style="margin-top:10px">
+                                <button class="auto-button" id="btnAuto" onclick="toggleAutoMode()">AUTO</button>
+                            </div>
+                        </div>
+                    </div>
+
+            <div class="status-icons">
+                <button class="status-btn privacy" onclick="togglePrivacy()" id="btnPrivacy">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                        <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8zm-1-6h2v2h-2zm0-8h2v6h-2z"/>
+                    </svg>
+                    <span data-i18n="privacyLabel">Privacy</span>
+                </button>
+                <button class="status-btn service" onclick="toggleService()" id="btnService">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                        <path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/>
+                    </svg>
+                    <span data-i18n="serviceLabel">Service</span>
+                </button>
+                <button class="status-btn collect" onclick="toggleCollectTray()" id="btnCollect">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                        <path d="M19 5v14H5V5h14m0-2H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2z"/>
+                        <path d="M14 9l-5 5-2-2"/>
+                    </svg>
+                    <span data-i18n="collectLabel">Collect</span>
+                </button>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

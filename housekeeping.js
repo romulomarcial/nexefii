@@ -1,4 +1,4 @@
-// Real-time housekeeping data from SIM_SUITES (access via window.parent or snapshot)
+﻿// Real-time housekeeping data from SIM_SUITES (access via window.parent or snapshot)
 let HK_CURRENT_FLOOR = "3";
 let HK_SUITES = [];
 // Pagination state
@@ -41,7 +41,7 @@ function hkPopulateGrid(rooms){
   const L = (typeof getStrings === 'function') ? getStrings(lang) : {};
   
   // Translation maps
-  const yesText = (lang==='en'?'Yes':(lang==='es'?'Sí':'Sim'));
+  const yesText = (lang==='en'?'Yes':(lang==='es'?'SÃ­':'Sim'));
   const soldText = (lang==='en'?'Sold':(lang==='es'?'Vendido':'Vendido'));
   const okText = (lang==='en'?'OK':(lang==='es'?'OK':'OK'));
   
@@ -185,7 +185,7 @@ async function hkLoadAndApplyI18N(requestedLang) {
 
 function hkApplyTexts(S, langParam) {
     console.log('[HK] hkApplyTexts called with lang:', langParam, 'S keys:', S ? Object.keys(S).length : 0);
-    const title = (langParam==='en' ? 'iLuxSys · Housekeeping Control' : (langParam==='es' ? 'iLuxSys · Control de Gobernanza' : 'iLuxSys · Controle de Governança'));
+    const title = (langParam==='en' ? 'nexefii Â· Housekeeping Control' : (langParam==='es' ? 'nexefii Â· Control de Gobernanza' : 'nexefii Â· Controle de GovernanÃ§a'));
     const headerEl = document.getElementById('header-title');
     if(headerEl) {
         headerEl.textContent = title;
@@ -193,12 +193,12 @@ function hkApplyTexts(S, langParam) {
     }
     const hkTitleEl = document.getElementById('hkTitle');
     if(hkTitleEl) {
-        hkTitleEl.textContent = 'Room Information - ' + (S.housekeepingTitle || 'GOVERNANÇA');
+        hkTitleEl.textContent = 'Room Information - ' + (S.housekeepingTitle || 'GOVERNANÃ‡A');
         console.log('[HK] Set hkTitle to:', hkTitleEl.textContent);
     }
     // column labels
     const set = (id, txt)=>{ const el=document.getElementById(id); if(el) el.textContent = txt; };
-    set('col-room', (S && S.colRoom) ? S.colRoom : (langParam==='en'?'ROOM':(langParam==='es'?'HABITACIÓN':'QUARTO')));
+    set('col-room', (S && S.colRoom) ? S.colRoom : (langParam==='en'?'ROOM':(langParam==='es'?'HABITACIÃ“N':'QUARTO')));
     set('col-occupied', (S && S.colOccupied) ? S.colOccupied : (langParam==='en'?'OCCUPIED':(langParam==='es'?'OCUPADO':'OCUPADO')));
     set('col-sold', (S && S.colSold) ? S.colSold : (langParam==='en'?'SOLD':(langParam==='es'?'VENDIDO':'VENDIDO')));
     set('col-dnd', (S && S.hkDnd) ? S.hkDnd : (langParam==='en'?'DND':(langParam==='es'?'DND':'DND')));
@@ -206,16 +206,16 @@ function hkApplyTexts(S, langParam) {
   // Rename to COLLECT TRAY and merge time columns into one
   const collectTray = (S && S.collectTray) ? S.collectTray : (langParam==='en'?'Collect Tray':(langParam==='es'?'Recoger Bandeja':'Coletar Bandeja'));
   set('col-callservice', String(collectTray).toUpperCase());
-  const serviceTime = (S && S.serviceTime) ? S.serviceTime : (langParam==='en'?'Service Time':(langParam==='es'?'Hora Servicio':'Hora Serviço'));
-  const lastUpdate = (S && S.colLastUpdate) ? S.colLastUpdate : (langParam==='en'?'Last Update':(langParam==='es'?'Última Actualización':'Última Atualização'));
+  const serviceTime = (S && S.serviceTime) ? S.serviceTime : (langParam==='en'?'Service Time':(langParam==='es'?'Hora Servicio':'Hora ServiÃ§o'));
+  const lastUpdate = (S && S.colLastUpdate) ? S.colLastUpdate : (langParam==='en'?'Last Update':(langParam==='es'?'Ãšltima ActualizaciÃ³n':'Ãšltima AtualizaÃ§Ã£o'));
   set('col-servicetime', `${String(serviceTime).toUpperCase()} / ${String(lastUpdate).toUpperCase()}`);
     set('lbl-floor', (S && S.floorLabel) ? S.floorLabel : (langParam==='en'?'Floor':(langParam==='es'?'Piso':'Pavimento:')));
-    set('lbl-room', (S && S.roomLabel) ? S.roomLabel : (langParam==='en'?'Room:':(langParam==='es'?'Habitación:':'Quarto:')));
+    set('lbl-room', (S && S.roomLabel) ? S.roomLabel : (langParam==='en'?'Room:':(langParam==='es'?'HabitaciÃ³n:':'Quarto:')));
     const btn = document.getElementById('btn-search'); if(btn) btn.textContent = (S && S.search) ? S.search : (langParam==='en'?'Search':(langParam==='es'?'Buscar':'Buscar'));
     const closeBtn = document.querySelector('header button.btn.ghost'); if(closeBtn) closeBtn.textContent = (S && S.close) ? S.close : (langParam==='en'?'Close':(langParam==='es'?'Cerrar':'Fechar'));
   const optAll = document.getElementById('opt-all-floors'); if(optAll) optAll.textContent = (S && S.allFloors) ? S.allFloors : (langParam==='en'?'All floors':(langParam==='es'?'Todos los pisos':'Todos os andares'));
   const btnPrev = document.getElementById('btn-prev'); if(btnPrev) btnPrev.textContent = (S && S.previous) ? S.previous : (langParam==='en'?'Previous':(langParam==='es'?'Anterior':'Anterior'));
-  const btnNext = document.getElementById('btn-next'); if(btnNext) btnNext.textContent = (S && S.next) ? S.next : (langParam==='en'?'Next':(langParam==='es'?'Siguiente':'Próximo'));
+  const btnNext = document.getElementById('btn-next'); if(btnNext) btnNext.textContent = (S && S.next) ? S.next : (langParam==='en'?'Next':(langParam==='es'?'Siguiente':'PrÃ³ximo'));
   const btnCsv = document.getElementById('btn-export-csv'); if(btnCsv) btnCsv.textContent = (S && S.exportCSV) ? S.exportCSV : (langParam==='en'?'Export CSV':(langParam==='es'?'Exportar CSV':'Exportar CSV'));
 }
 
@@ -343,15 +343,15 @@ function hkExportCSV(){
     const lang = localStorage.getItem('ilux_lang')||'pt';
     let S = null; try{ const c=localStorage.getItem('i18n_cache'); if(c){ const p=JSON.parse(c); S = (p[lang] && p[lang].app) ? p[lang].app : null; } }catch(_){ S=null; }
     const headers = [
-      (S && S.colRoom) ? S.colRoom : (lang==='en'?'ROOM':(lang==='es'?'HABITACIÓN':'QUARTO')),
+      (S && S.colRoom) ? S.colRoom : (lang==='en'?'ROOM':(lang==='es'?'HABITACIÃ“N':'QUARTO')),
       (S && S.colOccupied) ? S.colOccupied : (lang==='en'?'OCCUPIED':(lang==='es'?'OCUPADO':'OCUPADO')),
       (S && S.colSold) ? S.colSold : (lang==='en'?'SOLD':(lang==='es'?'VENDIDO':'VENDIDO')),
       (S && S.hkDnd) ? S.hkDnd : 'DND',
       (S && S.hkMur) ? S.hkMur : 'MUR',
       ((S && S.collectTray) ? S.collectTray : (lang==='en'?'Collect Tray':(lang==='es'?'Recoger Bandeja':'Coletar Bandeja'))),
-      `${((S && S.serviceTime) ? S.serviceTime : (lang==='en'?'Service Time':(lang==='es'?'Hora Servicio':'Hora Serviço')))} / ${((S && S.colLastUpdate) ? S.colLastUpdate : (lang==='en'?'Last Update':(lang==='es'?'Última Actualización':'Última Atualização')))} `.toUpperCase()
+      `${((S && S.serviceTime) ? S.serviceTime : (lang==='en'?'Service Time':(lang==='es'?'Hora Servicio':'Hora ServiÃ§o')))} / ${((S && S.colLastUpdate) ? S.colLastUpdate : (lang==='en'?'Last Update':(lang==='es'?'Ãšltima ActualizaciÃ³n':'Ãšltima AtualizaÃ§Ã£o')))} `.toUpperCase()
     ];
-    const yesText = (lang==='en'?'Yes':(lang==='es'?'Sí':'Sim'));
+    const yesText = (lang==='en'?'Yes':(lang==='es'?'SÃ­':'Sim'));
     const soldText = (lang==='en'?'Sold':(lang==='es'?'Vendido':'Vendido'));
     const okText = (lang==='en'?'OK':(lang==='es'?'OK':'OK'));
     const toVal = (key, r)=>{
@@ -386,3 +386,4 @@ function hkExportCSV(){
   }catch(e){ console.warn('CSV export failed', e); }
 }
 window.hkExportCSV = hkExportCSV;
+

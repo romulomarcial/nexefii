@@ -1,9 +1,9 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="pt-br">
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>iLuxSys · Gerenciar Alertas</title>
+  <title>nexefii Â· Gerenciar Alertas</title>
   <link rel="stylesheet" href="style.css">
   <script src="auth.js"></script>
   <script>
@@ -13,7 +13,7 @@
     }
     // Module permission check
     if (!((window.IluxAuth && IluxAuth.hasModuleAccess) ? IluxAuth.hasModuleAccess('alerts') : true)) {
-      alert('Você não tem permissão para acessar o módulo de Alertas.');
+      alert('VocÃª nÃ£o tem permissÃ£o para acessar o mÃ³dulo de Alertas.');
       window.location.href = 'index.html';
     }
   </script>
@@ -40,13 +40,13 @@
   </div>
   <header>
     <div class="brand">
-      <img src="assets/logo_iluxsys.png">
+      <img src="assets/Nexefii_logo_3d-official.png" alt="Nexefii">
     </div>
     <div style="display:flex;align-items:center;gap:8px">
       <select id="langSelect" onchange="changeLanguage(this.value)" style="padding:6px;border-radius:8px;border:1px solid var(--line)">
-        <option value="pt">Português</option>
+        <option value="pt">PortuguÃªs</option>
         <option value="en">English</option>
-        <option value="es">Español</option>
+        <option value="es">EspaÃ±ol</option>
       </select>
       <button class="btn ghost" onclick="window.close()">Fechar</button>
     </div>
@@ -60,9 +60,9 @@
             <label for="floorSelect" id="lbl-floor">Pavimento:</label>
             <select id="floorSelect" class="form-select" onchange="alertsChangeFloor(this.value)">
               <option value="all" id="opt-all-floors">Todos os andares</option>
-              <option value="3">3º Andar</option>
-              <option value="2">2º Andar</option>
-              <option value="1">1º Andar</option>
+              <option value="3">3Âº Andar</option>
+              <option value="2">2Âº Andar</option>
+              <option value="1">1Âº Andar</option>
             </select>
           </div>
           <div style="display:flex;align-items:center;gap:8px">
@@ -75,7 +75,7 @@
             <select id="typeSelect" class="form-select" onchange="alertsChangeType(this.value)">
               <option value="all" id="opt-type-all">Todos</option>
               <option value="offline" id="opt-type-offline">Termostato Desconectado</option>
-              <option value="maintenance" id="opt-type-maintenance">Manutenção HVAC</option>
+              <option value="maintenance" id="opt-type-maintenance">ManutenÃ§Ã£o HVAC</option>
               <option value="humidity" id="opt-type-humidity">Umidade Alta</option>
             </select>
           </div>
@@ -99,7 +99,7 @@
       <div style="display:flex;justify-content:flex-end;align-items:center;gap:8px;margin-top:12px">
         <button class="btn" id="btn-prev" onclick="alertsPrevPage()">Anterior</button>
         <div id="page-info" class="muted">1 / 1</div>
-        <button class="btn" id="btn-next" onclick="alertsNextPage()">Próximo</button>
+        <button class="btn" id="btn-next" onclick="alertsNextPage()">PrÃ³ximo</button>
       </div>
     </div>
   </div>
@@ -132,3 +132,4 @@
   </script>
   </body>
   </html>
+

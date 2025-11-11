@@ -1,20 +1,20 @@
-# 🚀 Guia Rápido de Integração - Master Control V3
+﻿# ðŸš€ Guia RÃ¡pido de IntegraÃ§Ã£o - Master Control V3
 
-## 📋 Checklist de Integração
+## ðŸ“‹ Checklist de IntegraÃ§Ã£o
 
-### 1️⃣ Arquivos para Adicionar ao Projeto
+### 1ï¸âƒ£ Arquivos para Adicionar ao Projeto
 
 ```
-iluxsys/
-├── master-control-v3.css          ✅ NOVO - Estilos V3
-├── master-control-v3.js           ✅ NOVO - Lógica V3
-├── i18n-master-control-v3-pt.json ✅ NOVO - Traduções PT
-├── i18n-master-control-v3-en.json ✅ NOVO - Traduções EN
-├── i18n-master-control-v3-es.json ✅ NOVO - Traduções ES
-└── MASTER_CONTROL_V3_README.md    ✅ NOVO - Documentação
+nexefii/
+â”œâ”€â”€ master-control-v3.css          âœ… NOVO - Estilos V3
+â”œâ”€â”€ master-control-v3.js           âœ… NOVO - LÃ³gica V3
+â”œâ”€â”€ i18n-master-control-v3-pt.json âœ… NOVO - TraduÃ§Ãµes PT
+â”œâ”€â”€ i18n-master-control-v3-en.json âœ… NOVO - TraduÃ§Ãµes EN
+â”œâ”€â”€ i18n-master-control-v3-es.json âœ… NOVO - TraduÃ§Ãµes ES
+â””â”€â”€ MASTER_CONTROL_V3_README.md    âœ… NOVO - DocumentaÃ§Ã£o
 ```
 
-### 2️⃣ Modificar master-control.html
+### 2ï¸âƒ£ Modificar master-control.html
 
 **No `<head>`, adicionar:**
 ```html
@@ -26,11 +26,11 @@ iluxsys/
 <script src="master-control-v3.js"></script>
 ```
 
-**As tabs já foram reestruturadas no HTML!** ✅
+**As tabs jÃ¡ foram reestruturadas no HTML!** âœ…
 
-### 3️⃣ Integrar i18n V3
+### 3ï¸âƒ£ Integrar i18n V3
 
-**Opção A: Merge Manual**
+**OpÃ§Ã£o A: Merge Manual**
 ```javascript
 // No master-control.js, atualizar loadI18N():
 async loadI18N(locale = 'pt') {
@@ -44,7 +44,7 @@ async loadI18N(locale = 'pt') {
   // Deep merge
   const mergedTranslations = this.deepMerge(
     mainI18n[locale],
-    v3I18n.master // ← Importante: v3I18n tem root "master"
+    v3I18n.master // â† Importante: v3I18n tem root "master"
   );
   
   this.translations = mergedTranslations;
@@ -52,39 +52,39 @@ async loadI18N(locale = 'pt') {
 }
 ```
 
-**Opção B: Arquivo Único (Recomendado)**
+**OpÃ§Ã£o B: Arquivo Ãšnico (Recomendado)**
 - Merge os 3 arquivos JSON manualmente em `i18n.json`
 - Adicionar as chaves de `master.dashboard`, `master.settings`, `master.maintenance`, etc.
 
-### 4️⃣ Testar Navegação
+### 4ï¸âƒ£ Testar NavegaÃ§Ã£o
 
 1. **Abrir master-control.html**
 2. **Verificar 9 tabs:**
    - [ ] Dashboard
    - [ ] Backups (com subtabs)
    - [ ] Releases
-   - [ ] Usuários
+   - [ ] UsuÃ¡rios
    - [ ] Logs
-   - [ ] Configurações
-   - [ ] Manutenção
-   - [ ] Internacionalização
-   - [ ] Métricas
+   - [ ] ConfiguraÃ§Ãµes
+   - [ ] ManutenÃ§Ã£o
+   - [ ] InternacionalizaÃ§Ã£o
+   - [ ] MÃ©tricas
 
-3. **Clicar em botões "?"** → Help panel deve aparecer
-4. **Trocar idioma** na aba i18n → Interface deve atualizar
-5. **Testar subtabs de Backups** → Property / General Structure
+3. **Clicar em botÃµes "?"** â†’ Help panel deve aparecer
+4. **Trocar idioma** na aba i18n â†’ Interface deve atualizar
+5. **Testar subtabs de Backups** â†’ Property / General Structure
 
-### 5️⃣ Conectar Funções ao Backend
+### 5ï¸âƒ£ Conectar FunÃ§Ãµes ao Backend
 
 **Editar `master-control.js` para conectar:**
 
 ```javascript
-// Exemplo: Botão de Full Backup em Property Backups
+// Exemplo: BotÃ£o de Full Backup em Property Backups
 document.getElementById('btnPropertyFullBackup')?.addEventListener('click', () => {
   if (enterpriseBackup && typeof enterpriseBackup.createPropertyBackup === 'function') {
     const propertyId = document.getElementById('propertyBackupSelect').value;
     if (!propertyId || propertyId === 'all') {
-      showNotification('Selecione uma propriedade específica', 'warning');
+      showNotification('Selecione uma propriedade especÃ­fica', 'warning');
       return;
     }
     enterpriseBackup.createPropertyBackup(propertyId, { type: 'full' });
@@ -94,14 +94,14 @@ document.getElementById('btnPropertyFullBackup')?.addEventListener('click', () =
 // Exemplo: Limpar Cache
 document.getElementById('btnClearCache')?.addEventListener('click', async () => {
   if (await confirmAction('Deseja limpar todo o cache?')) {
-    clearCache(); // ← Função já implementada em master-control-v3.js
+    clearCache(); // â† FunÃ§Ã£o jÃ¡ implementada em master-control-v3.js
   }
 });
 ```
 
 ---
 
-## 🎨 Personalização de Cores
+## ðŸŽ¨ PersonalizaÃ§Ã£o de Cores
 
 **Editar `master-control-v3.css`:**
 
@@ -115,7 +115,7 @@ document.getElementById('btnClearCache')?.addEventListener('click', async () => 
   --color-neutral: #64748b;    /* Cinza */
 }
 
-/* Botão de ajuda */
+/* BotÃ£o de ajuda */
 .btn-help {
   border-color: var(--color-primary);
   color: var(--color-primary);
@@ -124,17 +124,17 @@ document.getElementById('btnClearCache')?.addEventListener('click', async () => 
 
 ---
 
-## 🌐 Adicionar Novo Idioma (ex: Francês)
+## ðŸŒ Adicionar Novo Idioma (ex: FrancÃªs)
 
 1. **Criar `i18n-master-control-v3-fr.json`**
 2. **Copiar estrutura de `-pt.json`**
 3. **Traduzir todas as strings**
-4. **Adicionar botão no HTML:**
+4. **Adicionar botÃ£o no HTML:**
 
 ```html
 <button class="language-btn" data-lang="fr">
-  <span class="flag">🇫🇷</span>
-  <span data-i18n="i18n.languages.fr">Français</span>
+  <span class="flag">ðŸ‡«ðŸ‡·</span>
+  <span data-i18n="i18n.languages.fr">FranÃ§ais</span>
 </button>
 ```
 
@@ -142,7 +142,7 @@ document.getElementById('btnClearCache')?.addEventListener('click', async () => 
 
 ---
 
-## 📊 Conectar Métricas Reais
+## ðŸ“Š Conectar MÃ©tricas Reais
 
 **Editar `master-control-v3.js`:**
 
@@ -166,18 +166,18 @@ function updateMetrics() {
   document.getElementById('propertyBackupsTotalSize').textContent = `${totalSize} MB`;
 }
 
-// Chamar ao carregar página
+// Chamar ao carregar pÃ¡gina
 updateMetrics();
 ```
 
 ---
 
-## ⚠️ Breaking Changes (V2 → V3)
+## âš ï¸ Breaking Changes (V2 â†’ V3)
 
-| V2 | V3 | Ação |
+| V2 | V3 | AÃ§Ã£o |
 |----|----|----|
 | `tab-overview` | `tab-dashboard` | Renomear ID |
-| `tab-backup` | `tab-backups` (consolidado) | Migrar conteúdo |
+| `tab-backup` | `tab-backups` (consolidado) | Migrar conteÃºdo |
 | `tab-property-backups` | Subtab de `tab-backups` | Mover para subtab |
 | `tab-general-backups` | Subtab de `tab-backups` | Mover para subtab |
 | `tab-system` | `tab-settings` + `tab-maintenance` | Dividir |
@@ -185,64 +185,65 @@ updateMetrics();
 
 ---
 
-## ✅ Critérios de Aceite - Validação Final
+## âœ… CritÃ©rios de Aceite - ValidaÃ§Ã£o Final
 
-- [ ] **Navegação**: 9 tabs visíveis e funcionais
+- [ ] **NavegaÃ§Ã£o**: 9 tabs visÃ­veis e funcionais
 - [ ] **Backups**: Subtabs Property/General funcionando
-- [ ] **Ajuda**: Botões "?" exibindo help panels
-- [ ] **Breadcrumbs**: Presentes em todas as seções
+- [ ] **Ajuda**: BotÃµes "?" exibindo help panels
+- [ ] **Breadcrumbs**: Presentes em todas as seÃ§Ãµes
 - [ ] **Idiomas**: pt/en/es traduzidos e funcionais
 - [ ] **Responsivo**: Layout adaptado em mobile
-- [ ] **Métricas**: Dados reais sendo exibidos
-- [ ] **Manutenção**: Limpar cache funcionando
-- [ ] **Settings**: Salvar configurações persistindo
-- [ ] **Notificações**: Feedback visual em ações
+- [ ] **MÃ©tricas**: Dados reais sendo exibidos
+- [ ] **ManutenÃ§Ã£o**: Limpar cache funcionando
+- [ ] **Settings**: Salvar configuraÃ§Ãµes persistindo
+- [ ] **NotificaÃ§Ãµes**: Feedback visual em aÃ§Ãµes
 
 ---
 
-## 🐛 Troubleshooting
+## ðŸ› Troubleshooting
 
-### Problema: Traduções não aparecem
-**Solução:**
+### Problema: TraduÃ§Ãµes nÃ£o aparecem
+**SoluÃ§Ã£o:**
 ```javascript
 // Verificar se i18n V3 foi carregado
 console.log(masterCtrl.translations);
 // Deve conter: dashboard, backups, settings, maintenance, i18n, metrics
 ```
 
-### Problema: Botões "?" não funcionam
-**Solução:**
+### Problema: BotÃµes "?" nÃ£o funcionam
+**SoluÃ§Ã£o:**
 ```javascript
 // Verificar se master-control-v3.js foi carregado
 console.log(typeof initHelpSystem);
 // Deve retornar: "function"
 ```
 
-### Problema: CSS não aplicado
-**Solução:**
+### Problema: CSS nÃ£o aplicado
+**SoluÃ§Ã£o:**
 ```html
-<!-- Verificar ordem de importação -->
+<!-- Verificar ordem de importaÃ§Ã£o -->
 <link rel="stylesheet" href="style.css">
 <link rel="stylesheet" href="master-control-v3.css"> <!-- Depois! -->
 ```
 
-### Problema: Subtabs não aparecem
-**Solução:**
+### Problema: Subtabs nÃ£o aparecem
+**SoluÃ§Ã£o:**
 ```javascript
 // Verificar se subnav existe no HTML
 const subnav = document.getElementById('backupSubnav');
-console.log(subnav); // Não deve ser null
+console.log(subnav); // NÃ£o deve ser null
 ```
 
 ---
 
-## 📞 Suporte
+## ðŸ“ž Suporte
 
-**Dúvidas?** Consulte:
-- [MASTER_CONTROL_V3_README.md](./MASTER_CONTROL_V3_README.md) - Documentação completa
+**DÃºvidas?** Consulte:
+- [MASTER_CONTROL_V3_README.md](./MASTER_CONTROL_V3_README.md) - DocumentaÃ§Ã£o completa
 - [ENTERPRISE_BACKUP_SYSTEM_README.md](./ENTERPRISE_BACKUP_SYSTEM_README.md) - Backend de backups
-- [I18N_SYSTEM_README.md](./I18N_SYSTEM_README.md) - Sistema de traduções
+- [I18N_SYSTEM_README.md](./I18N_SYSTEM_README.md) - Sistema de traduÃ§Ãµes
 
 ---
 
-**Boa sorte com a integração! 🚀**
+**Boa sorte com a integraÃ§Ã£o! ðŸš€**
+

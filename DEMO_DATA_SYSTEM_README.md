@@ -1,33 +1,33 @@
-# 🎭 Sistema de Dados Demo - IluxSys
+﻿# ðŸŽ­ Sistema de Dados Demo - nexefii
 
 **Data**: 07/11/2025  
-**Versão**: 1.0.0  
-**Status**: ✅ Implementado e Testado
+**VersÃ£o**: 1.0.0  
+**Status**: âœ… Implementado e Testado
 
 ---
 
-## 📋 Visão Geral
+## ðŸ“‹ VisÃ£o Geral
 
-Sistema completo para inserir dados fake em propriedades de demonstração, simulando integrações reais com PMS, reservas, housekeeping, engenharia e outros módulos. Atualiza automaticamente os KPIs do dashboard em tempo real.
-
----
-
-## 🎯 Objetivo
-
-Permitir demonstrações realistas do sistema IluxSys sem necessidade de integrações reais, com dados que se atualizam periodicamente para simular ambiente de produção.
+Sistema completo para inserir dados fake em propriedades de demonstraÃ§Ã£o, simulando integraÃ§Ãµes reais com PMS, reservas, housekeeping, engenharia e outros mÃ³dulos. Atualiza automaticamente os KPIs do dashboard em tempo real.
 
 ---
 
-## 📁 Arquivos Implementados
+## ðŸŽ¯ Objetivo
 
-### ✨ Novo Arquivo
+Permitir demonstraÃ§Ãµes realistas do sistema nexefii sem necessidade de integraÃ§Ãµes reais, com dados que se atualizam periodicamente para simular ambiente de produÃ§Ã£o.
+
+---
+
+## ðŸ“ Arquivos Implementados
+
+### âœ¨ Novo Arquivo
 
 **`demo-data-generator.js`** (750 linhas)
-- **Localização**: `r:\Development\Projects\iluxsys\demo-data-generator.js`
+- **LocalizaÃ§Ã£o**: `r:\Development\Projects\nexefii\demo-data-generator.js`
 - **Classe Principal**: `DemoDataGenerator`
 - **Exportado Como**: `window.DemoDataGenerator`
 
-#### Métodos Públicos:
+#### MÃ©todos PÃºblicos:
 
 ```javascript
 // Inserir dados fake completos
@@ -49,19 +49,19 @@ DemoDataGenerator.getDemoStatus(propertyKey)
 #### Dados Gerados:
 
 1. **Reservas** (`pms_reservations_{propertyKey}`)
-   - 90 dias de histórico
+   - 90 dias de histÃ³rico
    - 30 dias de forecast futuro
    - Status: confirmed, in_house, checked_out, no_show
-   - Ocupação variável: 40% a 95%
+   - OcupaÃ§Ã£o variÃ¡vel: 40% a 95%
    - Sazonalidade + fim de semana
 
-2. **Inventário de Quartos** (`pms_inventory_{propertyKey}`)
+2. **InventÃ¡rio de Quartos** (`pms_inventory_{propertyKey}`)
    - Total de quartos conforme `property.roomCount`
    - Tipos: standard, deluxe, suite, executive
    - Status: available, occupied, maintenance
    - Clean status: clean, dirty, cleaning
 
-3. **Métricas PMS** (`pms_metrics_{propertyKey}`)
+3. **MÃ©tricas PMS** (`pms_metrics_{propertyKey}`)
    - occupancyRate, totalRooms, roomsSold, roomsAvailable
    - revenue, averageDailyRate (ADR), revPAR
    - checkInsToday, checkOutsToday, stayovers
@@ -70,13 +70,13 @@ DemoDataGenerator.getDemoStatus(propertyKey)
    - occupancyTrend (up/down/stable)
 
 4. **Housekeeping** (`housekeeping_tasks_{propertyKey}`)
-   - Tarefas por quarto não limpo
+   - Tarefas por quarto nÃ£o limpo
    - Tipos: checkout_clean, daily_clean
    - Prioridades: normal, high
    - Status: pending, in_progress
 
 5. **Engenharia** (`engineering_orders_{propertyKey}`)
-   - 5-15 ordens de serviço ativas
+   - 5-15 ordens de serviÃ§o ativas
    - Categorias: HVAC, Plumbing, Electrical, etc.
    - Prioridades: low, normal, high, urgent
    - Status: open, in_progress, pending_parts, completed
@@ -86,23 +86,23 @@ DemoDataGenerator.getDemoStatus(propertyKey)
    - Tipos: maintenance, reservation, housekeeping, system
    - Severidade: info, warning, error
 
-7. **Hóspedes** (`guests_{propertyKey}`)
-   - Perfis únicos baseados nas reservas
+7. **HÃ³spedes** (`guests_{propertyKey}`)
+   - Perfis Ãºnicos baseados nas reservas
    - Loyalty tiers: Bronze, Silver, Gold, Platinum
-   - Histórico de estadias e gastos
-   - Preferências e idioma
+   - HistÃ³rico de estadias e gastos
+   - PreferÃªncias e idioma
 
-### 📝 Arquivos Modificados
+### ðŸ“ Arquivos Modificados
 
 #### 1. **`properties.js`**
 
-**Alterações**:
+**AlteraÃ§Ãµes**:
 - Adicionado campo `isDemo: boolean` em todas as propriedades
-- iluxSaoPaulo: `isDemo: false` (produção)
+- iluxSaoPaulo: `isDemo: false` (produÃ§Ã£o)
 - iluxMiami: `isDemo: true` (demo)
 - iluxRioDeJaneiro: `isDemo: true` (demo)
 
-**Função `upsertProperty()` estendida** para suportar campo `isDemo`
+**FunÃ§Ã£o `upsertProperty()` estendida** para suportar campo `isDemo`
 
 ```javascript
 {
@@ -117,17 +117,17 @@ DemoDataGenerator.getDemoStatus(propertyKey)
 
 #### 2. **`master-control.js`**
 
-**Alterações**:
-- Botão "🎭 Inserir Dados" adicionado ao modal de publicação
-- Visível apenas quando `property.isDemo === true`
-- Posicionado ao lado do botão "Testar Localmente"
+**AlteraÃ§Ãµes**:
+- BotÃ£o "ðŸŽ­ Inserir Dados" adicionado ao modal de publicaÃ§Ã£o
+- VisÃ­vel apenas quando `property.isDemo === true`
+- Posicionado ao lado do botÃ£o "Testar Localmente"
 
-**Localização**: Linha ~3502 (modal de publicação)
+**LocalizaÃ§Ã£o**: Linha ~3502 (modal de publicaÃ§Ã£o)
 
 ```javascript
 ${property.isDemo ? `
 <button onclick="masterCtrl.insertDemoData('${property.key}')">
-  <span>🎭</span>
+  <span>ðŸŽ­</span>
   <span>Inserir Dados</span>
 </button>
 ` : ''}
@@ -135,24 +135,24 @@ ${property.isDemo ? `
 
 #### 3. **`property-publish-helpers.js`**
 
-**Alterações**:
-- Nova função `MasterControlSystem.prototype.insertDemoData(propertyKey)`
-- Modal de confirmação com checkbox para auto-refresh
+**AlteraÃ§Ãµes**:
+- Nova funÃ§Ã£o `MasterControlSystem.prototype.insertDemoData(propertyKey)`
+- Modal de confirmaÃ§Ã£o com checkbox para auto-refresh
 - Lista completa de dados a serem gerados
-- Integração com `window.DemoDataGenerator`
+- IntegraÃ§Ã£o com `window.DemoDataGenerator`
 
 **Fluxo**:
 1. Verifica se propriedade existe
-2. Avisa se não for demo (mas permite continuar)
-3. Exibe modal de confirmação
-4. Usuário escolhe se quer auto-refresh
+2. Avisa se nÃ£o for demo (mas permite continuar)
+3. Exibe modal de confirmaÃ§Ã£o
+4. UsuÃ¡rio escolhe se quer auto-refresh
 5. Chama `DemoDataGenerator.insertDemoData()`
 6. Exibe toast de sucesso/erro
 7. Recarrega dashboard automaticamente
 
 #### 4. **`property-dashboard-manager.js`**
 
-**Alterações Principais**:
+**AlteraÃ§Ãµes Principais**:
 
 **A) `loadPropertyMetrics()` modificado**:
 ```javascript
@@ -162,8 +162,8 @@ if (demoMetrics) {
   return JSON.parse(demoMetrics); // USA DADOS DEMO
 }
 
-// PRIORIDADE 2: Simulação (fallback)
-// ... código de simulação existente
+// PRIORIDADE 2: SimulaÃ§Ã£o (fallback)
+// ... cÃ³digo de simulaÃ§Ã£o existente
 ```
 
 **B) Event Listener adicionado**:
@@ -176,36 +176,36 @@ window.addEventListener('demoDataUpdated', function(event) {
 });
 ```
 
-**Benefícios**:
+**BenefÃ­cios**:
 - Dashboard atualiza automaticamente ao inserir dados
-- Cache invalidado para forçar reload dos dados demo
+- Cache invalidado para forÃ§ar reload dos dados demo
 - Sem necessidade de F5 manual
 
 #### 5. **`js/translations/dashboard.json`**
 
-**Novas Traduções**:
+**Novas TraduÃ§Ãµes**:
 
-**Português (pt)**:
+**PortuguÃªs (pt)**:
 ```json
 {
-  "insertDemoData": "🎭 Inserir Dados",
+  "insertDemoData": "ðŸŽ­ Inserir Dados",
   "demo": {
-    "title": "Inserir Dados de Demonstração",
-    "dataGenerated": "Dados que serão gerados:",
+    "title": "Inserir Dados de DemonstraÃ§Ã£o",
+    "dataGenerated": "Dados que serÃ£o gerados:",
     "autoRefresh": "Atualizar dados automaticamente a cada 5 minutos",
-    "insertButton": "🎭 Inserir Dados",
-    "success": "✅ Dados inseridos com sucesso!",
-    // ... mais traduções
+    "insertButton": "ðŸŽ­ Inserir Dados",
+    "success": "âœ… Dados inseridos com sucesso!",
+    // ... mais traduÃ§Ãµes
   }
 }
 ```
 
-**Inglês (en)**: "Insert Data", "Insert Demo Data", etc.  
-**Espanhol (es)**: "Insertar Datos", "Insertar Datos de Demostración", etc.
+**InglÃªs (en)**: "Insert Data", "Insert Demo Data", etc.  
+**Espanhol (es)**: "Insertar Datos", "Insertar Datos de DemostraciÃ³n", etc.
 
 #### 6. **`index.html`** e **`master-control.html`**
 
-**Alterações**:
+**AlteraÃ§Ãµes**:
 - Script `demo-data-generator.js` adicionado antes do `property-dashboard-manager.js`
 
 ```html
@@ -216,20 +216,20 @@ window.addEventListener('demoDataUpdated', function(event) {
 
 ---
 
-## 🚀 Como Usar
+## ðŸš€ Como Usar
 
-### Método 1: Via Master Control Panel
+### MÃ©todo 1: Via Master Control Panel
 
 1. Abra `master-control.html`
 2. Login como `master` / `Master2025!@#$`
 3. Clique em uma propriedade demo (iluxMiami ou iluxRioDeJaneiro)
-4. No modal, verá botão **"🎭 Inserir Dados"** ao lado de "Testar Localmente"
-5. Clique no botão
+4. No modal, verÃ¡ botÃ£o **"ðŸŽ­ Inserir Dados"** ao lado de "Testar Localmente"
+5. Clique no botÃ£o
 6. Confirme e escolha se quer auto-refresh
 7. Aguarde mensagem de sucesso
 8. Dados inseridos! Dashboard atualiza automaticamente
 
-### Método 2: Via Console JavaScript
+### MÃ©todo 2: Via Console JavaScript
 
 ```javascript
 // Inserir dados com auto-refresh
@@ -254,119 +254,119 @@ DemoDataGenerator.stopAllAutoRefresh();
 
 ---
 
-## 🔄 Sistema de Auto-Refresh
+## ðŸ”„ Sistema de Auto-Refresh
 
-**Configuração**:
+**ConfiguraÃ§Ã£o**:
 - Intervalo: 5 minutos (300.000 ms)
-- Configurável em: `demo-data-generator.js` → `CONFIG.updateInterval`
+- ConfigurÃ¡vel em: `demo-data-generator.js` â†’ `CONFIG.updateInterval`
 
 **Como Funciona**:
 1. Ao inserir dados, pode-se marcar checkbox "Auto-refresh"
-2. Timer é criado com `setInterval()`
+2. Timer Ã© criado com `setInterval()`
 3. A cada 5 minutos, chama `insertDemoData()` novamente
-4. Gera novos dados frescos (ocupação varia, etc.)
+4. Gera novos dados frescos (ocupaÃ§Ã£o varia, etc.)
 5. Dispara evento `demoDataUpdated`
 6. Dashboard atualiza automaticamente
 
 **Gerenciamento**:
 - Timers armazenados em `Map<propertyKey, intervalId>`
-- Função `stopAutoRefresh()` para parar timer específico
-- Função `stopAllAutoRefresh()` para parar todos
-- Apenas 1 timer ativo por propriedade (evita duplicação)
+- FunÃ§Ã£o `stopAutoRefresh()` para parar timer especÃ­fico
+- FunÃ§Ã£o `stopAllAutoRefresh()` para parar todos
+- Apenas 1 timer ativo por propriedade (evita duplicaÃ§Ã£o)
 
 ---
 
-## 📊 Integração com Dashboard
+## ðŸ“Š IntegraÃ§Ã£o com Dashboard
 
 ### Fluxo de Dados:
 
 ```
-1. Usuário clica "Inserir Dados"
-   ↓
+1. UsuÃ¡rio clica "Inserir Dados"
+   â†“
 2. DemoDataGenerator.insertDemoData()
-   ↓
+   â†“
 3. Gera dados e salva no localStorage
-   ↓
+   â†“
 4. Dispara evento 'demoDataUpdated'
-   ↓
+   â†“
 5. property-dashboard-manager.js ouve evento
-   ↓
-6. CacheManager.clear() para forçar reload
-   ↓
+   â†“
+6. CacheManager.clear() para forÃ§ar reload
+   â†“
 7. PropertyDashboard.refresh()
-   ↓
+   â†“
 8. loadPropertyMetrics() busca dados demo
-   ↓
+   â†“
 9. Dashboard renderiza com dados fake
-   ↓
-10. KPIs atualizados! 🎉
+   â†“
+10. KPIs atualizados! ðŸŽ‰
 ```
 
 ### Prioridade de Dados:
 
 ```javascript
 loadPropertyMetrics(propertyKey) {
-  // 1º: Dados demo (se existirem)
+  // 1Âº: Dados demo (se existirem)
   const demo = localStorage.getItem(`pms_metrics_${propertyKey}`);
   if (demo) return JSON.parse(demo);
   
-  // 2º: Simulação (fallback)
+  // 2Âº: SimulaÃ§Ã£o (fallback)
   return generateSimulatedMetrics();
 }
 ```
 
 ---
 
-## 🎨 Interface Visual
+## ðŸŽ¨ Interface Visual
 
-### Botão "Inserir Dados"
+### BotÃ£o "Inserir Dados"
 
-**Aparência**:
-- Ícone: 🎭 (máscara de teatro)
+**AparÃªncia**:
+- Ãcone: ðŸŽ­ (mÃ¡scara de teatro)
 - Cor: Verde (`#10b981`)
 - Borda: 2px solid verde
 - Hover: Fundo verde claro (`#d1fae5`)
 
 **Posicionamento**:
-- Ao lado do botão "Testar Localmente"
-- Mesmo estilo visual (consistência)
-- Só aparece para propriedades com `isDemo: true`
+- Ao lado do botÃ£o "Testar Localmente"
+- Mesmo estilo visual (consistÃªncia)
+- SÃ³ aparece para propriedades com `isDemo: true`
 
-### Modal de Confirmação
+### Modal de ConfirmaÃ§Ã£o
 
-**Seções**:
+**SeÃ§Ãµes**:
 
 1. **Header**:
-   - 🎭 (emoji grande)
-   - Título: "Inserir Dados de Demonstração"
+   - ðŸŽ­ (emoji grande)
+   - TÃ­tulo: "Inserir Dados de DemonstraÃ§Ã£o"
    - Nome da propriedade
 
 2. **Lista de Dados** (caixa azul):
-   - ✅ Reservas (90 dias + 30 futuro)
-   - ✅ Inventário de quartos (X quartos)
-   - ✅ Métricas PMS
-   - ✅ Tarefas de Housekeeping
-   - ✅ Ordens de Engenharia
-   - ✅ Alertas do sistema
-   - ✅ Perfis de hóspedes
+   - âœ… Reservas (90 dias + 30 futuro)
+   - âœ… InventÃ¡rio de quartos (X quartos)
+   - âœ… MÃ©tricas PMS
+   - âœ… Tarefas de Housekeeping
+   - âœ… Ordens de Engenharia
+   - âœ… Alertas do sistema
+   - âœ… Perfis de hÃ³spedes
 
 3. **Auto-Refresh** (caixa amarela):
-   - ☑️ Checkbox para habilitar
-   - Descrição: "Atualizar automaticamente a cada 5 minutos"
-   - Explicação: Simula sistema real
+   - â˜‘ï¸ Checkbox para habilitar
+   - DescriÃ§Ã£o: "Atualizar automaticamente a cada 5 minutos"
+   - ExplicaÃ§Ã£o: Simula sistema real
 
-4. **Botões**:
-   - ❌ Cancelar (cinza)
-   - 🎭 Inserir Dados (verde, gradiente)
+4. **BotÃµes**:
+   - âŒ Cancelar (cinza)
+   - ðŸŽ­ Inserir Dados (verde, gradiente)
 
 ---
 
-## 🌐 Internacionalização
+## ðŸŒ InternacionalizaÃ§Ã£o
 
 **Idiomas Suportados**:
-- 🇧🇷 Português (pt)
-- 🇺🇸 Inglês (en)
-- 🇪🇸 Espanhol (es)
+- ðŸ‡§ðŸ‡· PortuguÃªs (pt)
+- ðŸ‡ºðŸ‡¸ InglÃªs (en)
+- ðŸ‡ªðŸ‡¸ Espanhol (es)
 
 **Chaves Principais**:
 ```
@@ -382,67 +382,67 @@ dashboard.demo.error
 
 **Uso**:
 ```javascript
-// No código, use chaves i18n para textos
+// No cÃ³digo, use chaves i18n para textos
 const title = i18n.t('dashboard.demo.title');
 ```
 
 ---
 
-## 💾 Estrutura de Armazenamento (localStorage)
+## ðŸ’¾ Estrutura de Armazenamento (localStorage)
 
 ### Chaves Criadas:
 
 ```javascript
-// Métricas PMS
-`pms_metrics_${propertyKey}` → Object { occupancyRate, revenue, ... }
+// MÃ©tricas PMS
+`pms_metrics_${propertyKey}` â†’ Object { occupancyRate, revenue, ... }
 
 // Reservas
-`pms_reservations_${propertyKey}` → Array<Reservation>
+`pms_reservations_${propertyKey}` â†’ Array<Reservation>
 
-// Inventário
-`pms_inventory_${propertyKey}` → Array<Room>
+// InventÃ¡rio
+`pms_inventory_${propertyKey}` â†’ Array<Room>
 
 // Housekeeping
-`housekeeping_tasks_${propertyKey}` → Array<Task>
+`housekeeping_tasks_${propertyKey}` â†’ Array<Task>
 
 // Engenharia
-`engineering_orders_${propertyKey}` → Array<WorkOrder>
+`engineering_orders_${propertyKey}` â†’ Array<WorkOrder>
 
 // Alertas
-`alerts_${propertyKey}` → Array<Alert>
+`alerts_${propertyKey}` â†’ Array<Alert>
 
-// Hóspedes
-`guests_${propertyKey}` → Array<Guest>
+// HÃ³spedes
+`guests_${propertyKey}` â†’ Array<Guest>
 ```
 
 ### Tamanho Estimado:
 
-- 1 propriedade com 50 quartos, 90 dias de histórico:
+- 1 propriedade com 50 quartos, 90 dias de histÃ³rico:
   - Reservas: ~150 KB
-  - Inventário: ~10 KB
-  - Métricas: ~2 KB
+  - InventÃ¡rio: ~10 KB
+  - MÃ©tricas: ~2 KB
   - Housekeeping: ~5 KB
   - Engenharia: ~3 KB
   - Alertas: ~1 KB
-  - Hóspedes: ~20 KB
+  - HÃ³spedes: ~20 KB
   - **TOTAL: ~191 KB por propriedade**
 
 ---
 
-## 🧪 Testando o Sistema
+## ðŸ§ª Testando o Sistema
 
-### Teste Básico:
+### Teste BÃ¡sico:
 
 1. **F5** em `master-control.html`
 2. Clique em "iLux Miami" (propriedade demo)
-3. Veja botão "🎭 Inserir Dados"
+3. Veja botÃ£o "ðŸŽ­ Inserir Dados"
 4. Clique e confirme
-5. Aguarde toast "✅ Dados inseridos com sucesso!"
+5. Aguarde toast "âœ… Dados inseridos com sucesso!"
 
 ### Teste de Auto-Refresh:
 
 1. Insira dados com checkbox marcado
-2. Abra Console: `F12 → Console`
+2. Abra Console: `F12 â†’ Console`
 3. Digite: `DemoDataGenerator.getDemoStatus('iluxMiami')`
 4. Veja: `isAutoRefreshActive: true`
 5. Aguarde 5 minutos
@@ -454,8 +454,8 @@ const title = i18n.t('dashboard.demo.title');
 2. Abra `index.html`
 3. Login: `master` / `Master2025!@#$`
 4. Veja KPIs atualizados com dados demo
-5. Verifique card de iluxMiami com métricas realistas
-6. Dados agora vêm do localStorage, não da simulação
+5. Verifique card de iluxMiami com mÃ©tricas realistas
+6. Dados agora vÃªm do localStorage, nÃ£o da simulaÃ§Ã£o
 
 ### Teste de Limpeza:
 
@@ -469,12 +469,12 @@ DemoDataGenerator.getDemoStatus('iluxMiami');
 
 // Refresh dashboard
 PropertyDashboard.refresh();
-// Volta para simulação
+// Volta para simulaÃ§Ã£o
 ```
 
 ---
 
-## 🔧 Configurações Avançadas
+## ðŸ”§ ConfiguraÃ§Ãµes AvanÃ§adas
 
 ### Alterar Intervalo de Auto-Refresh:
 
@@ -494,8 +494,8 @@ const CONFIG = {
 
 ```javascript
 const CONFIG = {
-  dateRange: 90, // dias de histórico (padrão: 90)
-  futureRange: 30, // dias de forecast (padrão: 30)
+  dateRange: 90, // dias de histÃ³rico (padrÃ£o: 90)
+  futureRange: 30, // dias de forecast (padrÃ£o: 30)
 };
 ```
 
@@ -512,23 +512,23 @@ this.generateYourNewModule(propertyKey, property);
 ```
 
 ```javascript
-// Criar nova função:
+// Criar nova funÃ§Ã£o:
 generateYourNewModule: function(propertyKey, property) {
   const data = []; // Gerar seus dados
   localStorage.setItem(`your_module_${propertyKey}`, JSON.stringify(data));
-  console.log(`[DemoData] ✅ Seu módulo gerado`);
+  console.log(`[DemoData] âœ… Seu mÃ³dulo gerado`);
 }
 ```
 
 ---
 
-## 🐛 Troubleshooting
+## ðŸ› Troubleshooting
 
-### Problema: Botão não aparece
+### Problema: BotÃ£o nÃ£o aparece
 
-**Causa**: Propriedade não marcada como demo
+**Causa**: Propriedade nÃ£o marcada como demo
 
-**Solução**:
+**SoluÃ§Ã£o**:
 ```javascript
 // No properties.js, certifique-se:
 {
@@ -538,20 +538,20 @@ generateYourNewModule: function(propertyKey, property) {
 }
 ```
 
-### Problema: Dados não atualizam no dashboard
+### Problema: Dados nÃ£o atualizam no dashboard
 
-**Causa**: Cache não invalidado
+**Causa**: Cache nÃ£o invalidado
 
-**Solução**:
+**SoluÃ§Ã£o**:
 ```javascript
 // Limpar cache manualmente
 CacheManager.clear('metrics_suaPropriedade');
 PropertyDashboard.refresh();
 ```
 
-### Problema: Auto-refresh não funciona
+### Problema: Auto-refresh nÃ£o funciona
 
-**Causa**: Timer não iniciado
+**Causa**: Timer nÃ£o iniciado
 
 **Verificar**:
 ```javascript
@@ -566,7 +566,7 @@ DemoDataGenerator.startAutoRefresh('suaPropriedade');
 
 **Causa**: Muitos dados acumulados
 
-**Solução**:
+**SoluÃ§Ã£o**:
 ```javascript
 // Limpar dados antigos
 DemoDataGenerator.clearDemoData('propriedade1');
@@ -578,49 +578,50 @@ localStorage.clear();
 
 ---
 
-## 📈 Roadmap Futuro
+## ðŸ“ˆ Roadmap Futuro
 
 ### v1.1 (Planejado):
 - [ ] Configurar intervalos personalizados por propriedade
 - [ ] UI para gerenciar auto-refreshes ativos
 - [ ] Export/import de datasets demo
-- [ ] Templates de dados pré-configurados
+- [ ] Templates de dados prÃ©-configurados
 
 ### v1.2 (Planejado):
-- [ ] Gerar dados baseados em padrões reais (ML)
-- [ ] Variação sazonal mais realista
-- [ ] Simulação de eventos especiais
-- [ ] Integração com calendário local
+- [ ] Gerar dados baseados em padrÃµes reais (ML)
+- [ ] VariaÃ§Ã£o sazonal mais realista
+- [ ] SimulaÃ§Ã£o de eventos especiais
+- [ ] IntegraÃ§Ã£o com calendÃ¡rio local
 
 ### v2.0 (Futuro):
-- [ ] Backend para persistência de dados demo
-- [ ] Compartilhamento de datasets entre usuários
+- [ ] Backend para persistÃªncia de dados demo
+- [ ] Compartilhamento de datasets entre usuÃ¡rios
 - [ ] Versionamento de datasets
 - [ ] Analytics de uso de dados demo
 
 ---
 
-## 📄 Licença
+## ðŸ“„ LicenÃ§a
 
-Proprietário - IluxSys © 2025
+ProprietÃ¡rio - nexefii Â© 2025
 
 ---
 
-## 👥 Autores
+## ðŸ‘¥ Autores
 
-**IluxSys Development Team**  
+**nexefii Development Team**  
 Data: 07/11/2025  
-Versão: 1.0.0
+VersÃ£o: 1.0.0
 
 ---
 
-## 📞 Suporte
+## ðŸ“ž Suporte
 
-Para dúvidas ou problemas:
-- 📧 Email: dev@iluxsys.com
-- 📖 Docs: Este arquivo
-- 🐛 Issues: Reportar bugs ao time de desenvolvimento
+Para dÃºvidas ou problemas:
+- ðŸ“§ Email: dev@nexefii.com
+- ðŸ“– Docs: Este arquivo
+- ðŸ› Issues: Reportar bugs ao time de desenvolvimento
 
 ---
 
-**Última Atualização**: 07/11/2025 - 17:00 BRT
+**Ãšltima AtualizaÃ§Ã£o**: 07/11/2025 - 17:00 BRT
+

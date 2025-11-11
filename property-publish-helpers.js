@@ -1,16 +1,16 @@
-/**
- * Funções auxiliares para teste local e publicação de propriedades
- * Este arquivo complementa o master-control.js com funções mais simples
+﻿/**
+ * FunÃ§Ãµes auxiliares para teste local e publicaÃ§Ã£o de propriedades
+ * Este arquivo complementa o master-control.js com funÃ§Ãµes mais simples
  */
 
-// Aguardar masterCtrl estar disponível e adicionar as funções
+// Aguardar masterCtrl estar disponÃ­vel e adicionar as funÃ§Ãµes
 (function() {
   console.log('[property-publish-helpers] Carregando helpers...');
   
-  // Função para esperar masterCtrl estar disponível
+  // FunÃ§Ã£o para esperar masterCtrl estar disponÃ­vel
   const waitForMasterCtrl = () => {
     if (window.masterCtrl) {
-      console.log('[property-publish-helpers] masterCtrl encontrado, adicionando funções...');
+      console.log('[property-publish-helpers] masterCtrl encontrado, adicionando funÃ§Ãµes...');
       addHelperFunctions();
     } else {
       console.log('[property-publish-helpers] Aguardando masterCtrl...');
@@ -26,8 +26,8 @@
   
   const property = window.IluxProps.getProperty(propertyKey);
   if (!property) {
-    console.error('[testPropertyLocally] Propriedade não encontrada:', propertyKey);
-    this.showToast('Propriedade não encontrada!', 'error');
+    console.error('[testPropertyLocally] Propriedade nÃ£o encontrada:', propertyKey);
+    this.showToast('Propriedade nÃ£o encontrada!', 'error');
     return;
   }
 
@@ -35,9 +35,9 @@
 
   // Verificar se generateLocalTestHTML existe
   if (typeof generateLocalTestHTML !== 'function') {
-    console.error('[testPropertyLocally] generateLocalTestHTML não está disponível!');
+    console.error('[testPropertyLocally] generateLocalTestHTML nÃ£o estÃ¡ disponÃ­vel!');
     console.log('[testPropertyLocally] Tipo de generateLocalTestHTML:', typeof generateLocalTestHTML);
-    this.showToast('❌ Gerador de teste não carregado! Verifique se property-local-test-generator.js está carregado.', 'error');
+    this.showToast('âŒ Gerador de teste nÃ£o carregado! Verifique se property-local-test-generator.js estÃ¡ carregado.', 'error');
     return;
   }
 
@@ -51,7 +51,7 @@
     testWindow.document.write(testHTML);
     testWindow.document.close();
     console.log('[testPropertyLocally] Janela de teste aberta com sucesso!');
-    this.showToast('✅ Teste local aberto em nova janela!', 'success');
+    this.showToast('âœ… Teste local aberto em nova janela!', 'success');
   } else {
     console.warn('[testPropertyLocally] Popup bloqueado, fazendo download...');
     // Download se popup bloqueado
@@ -65,25 +65,25 @@
     document.body.removeChild(a);
     URL.revokeObjectURL(url);
     console.log('[testPropertyLocally] Download iniciado');
-    this.showToast('📥 Arquivo de teste baixado! Abra o arquivo HTML para testar.', 'info');
+    this.showToast('ðŸ“¥ Arquivo de teste baixado! Abra o arquivo HTML para testar.', 'info');
   }
 };
 
-// CONFIRMAÇÃO DE PUBLICAÇÃO
+// CONFIRMAÃ‡ÃƒO DE PUBLICAÃ‡ÃƒO
 window.masterCtrl.confirmPublishProperty = function(propertyKey) {
-  console.log('[confirmPublishProperty] Iniciando publicação para:', propertyKey);
+  console.log('[confirmPublishProperty] Iniciando publicaÃ§Ã£o para:', propertyKey);
   
   const property = window.IluxProps.getProperty(propertyKey);
   if (!property) {
-    console.error('[confirmPublishProperty] Propriedade não encontrada:', propertyKey);
-    this.showToast('Propriedade não encontrada!', 'error');
+    console.error('[confirmPublishProperty] Propriedade nÃ£o encontrada:', propertyKey);
+    this.showToast('Propriedade nÃ£o encontrada!', 'error');
     return;
   }
 
   console.log('[confirmPublishProperty] Propriedade encontrada:', property);
-  console.log('[confirmPublishProperty] Abrindo modal de confirmação...');
+  console.log('[confirmPublishProperty] Abrindo modal de confirmaÃ§Ã£o...');
 
-  // Criar modal de confirmação
+  // Criar modal de confirmaÃ§Ã£o
   const modal = document.createElement('div');
   modal.className = 'modal-overlay';
   modal.style.cssText = 'position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.7); display: flex; align-items: center; justify-content: center; z-index: 10001;';
@@ -93,16 +93,16 @@ window.masterCtrl.confirmPublishProperty = function(propertyKey) {
   
   modalContent.innerHTML = `
     <div style="text-align: center; margin-bottom: 30px;">
-      <div style="font-size: 64px; margin-bottom: 20px;">⚠️</div>
-      <h2 style="margin: 0 0 15px 0; color: #2d3748; font-size: 28px;">Confirmar Publicação na Web</h2>
+      <div style="font-size: 64px; margin-bottom: 20px;">âš ï¸</div>
+      <h2 style="margin: 0 0 15px 0; color: #2d3748; font-size: 28px;">Confirmar PublicaÃ§Ã£o na Web</h2>
       <p style="color: #718096; font-size: 16px; line-height: 1.6;">
-        Você está prestes a publicar a propriedade <strong>${property.name}</strong> no ambiente de produção.
+        VocÃª estÃ¡ prestes a publicar a propriedade <strong>${property.name}</strong> no ambiente de produÃ§Ã£o.
       </p>
     </div>
 
     <div style="background: #fef3c7; border-left: 4px solid #f59e0b; padding: 20px; border-radius: 8px; margin-bottom: 25px;">
       <h4 style="margin: 0 0 10px 0; color: #92400e; display: flex; align-items: center; gap: 8px;">
-        <span>📋</span> Checklist de Validação
+        <span>ðŸ“‹</span> Checklist de ValidaÃ§Ã£o
       </h4>
       <div style="color: #78350f;">
         <label style="display: flex; align-items: center; gap: 10px; margin-bottom: 12px; cursor: pointer;">
@@ -111,11 +111,11 @@ window.masterCtrl.confirmPublishProperty = function(propertyKey) {
         </label>
         <label style="display: flex; align-items: center; gap: 10px; margin-bottom: 12px; cursor: pointer;">
           <input type="checkbox" class="publish-check" style="width: 18px; height: 18px; cursor: pointer;">
-          <span>Todos os módulos estão configurados corretamente</span>
+          <span>Todos os mÃ³dulos estÃ£o configurados corretamente</span>
         </label>
         <label style="display: flex; align-items: center; gap: 10px; margin-bottom: 12px; cursor: pointer;">
           <input type="checkbox" class="publish-check" style="width: 18px; height: 18px; cursor: pointer;">
-          <span>Estou ciente que a URL <strong>https://${property.key}.iluxsys.com</strong> será criada</span>
+          <span>Estou ciente que a URL <strong>https://${property.key}.nexefii.com</strong> serÃ¡ criada</span>
         </label>
         <label style="display: flex; align-items: center; gap: 10px; cursor: pointer;">
           <input type="checkbox" class="publish-check" style="width: 18px; height: 18px; cursor: pointer;">
@@ -126,10 +126,10 @@ window.masterCtrl.confirmPublishProperty = function(propertyKey) {
 
     <div style="display: flex; gap: 15px; justify-content: center;">
       <button id="cancelPublishBtn" style="padding: 14px 28px; border: 2px solid #e2e8f0; background: white; border-radius: 8px; font-weight: 600; cursor: pointer; color: #4a5568; font-size: 16px;">
-        ❌ Cancelar
+        âŒ Cancelar
       </button>
       <button id="confirmPublishBtn" disabled style="padding: 14px 28px; border: none; background: #cbd5e0; color: white; border-radius: 8px; font-weight: 600; cursor: not-allowed; font-size: 16px;">
-        🚀 Confirmar Publicação
+        ðŸš€ Confirmar PublicaÃ§Ã£o
       </button>
     </div>
   `;
@@ -159,10 +159,10 @@ window.masterCtrl.confirmPublishProperty = function(propertyKey) {
 
   checkboxes.forEach(cb => cb.addEventListener('change', updateButton));
 
-  // Botão cancelar
+  // BotÃ£o cancelar
   cancelBtn.onclick = () => modal.remove();
 
-  // Botão confirmar
+  // BotÃ£o confirmar
   confirmBtn.onclick = () => {
     if (!confirmBtn.disabled) {
       modal.remove();
@@ -180,28 +180,28 @@ window.masterCtrl.confirmPublishProperty = function(propertyKey) {
 
 // INSERIR DADOS FAKE
 window.masterCtrl.insertDemoData = function(propertyKey) {
-  console.log('[insertDemoData] Iniciando inserção para:', propertyKey);
+  console.log('[insertDemoData] Iniciando inserÃ§Ã£o para:', propertyKey);
   
   const property = window.IluxProps.getProperty(propertyKey);
   if (!property) {
-    console.error('[insertDemoData] Propriedade não encontrada:', propertyKey);
-    this.showToast('Propriedade não encontrada!', 'error');
+    console.error('[insertDemoData] Propriedade nÃ£o encontrada:', propertyKey);
+    this.showToast('Propriedade nÃ£o encontrada!', 'error');
     return;
   }
 
   console.log('[insertDemoData] Propriedade encontrada:', property);
 
-  // Verificar se DemoDataGenerator está disponível
+  // Verificar se DemoDataGenerator estÃ¡ disponÃ­vel
   if (typeof window.DemoDataGenerator === 'undefined') {
-    console.error('[insertDemoData] DemoDataGenerator não está disponível!');
+    console.error('[insertDemoData] DemoDataGenerator nÃ£o estÃ¡ disponÃ­vel!');
     console.log('[insertDemoData] window.DemoDataGenerator:', window.DemoDataGenerator);
-    this.showToast('❌ Sistema de dados fake não carregado! Verifique se demo-data-generator.js está carregado.', 'error');
+    this.showToast('âŒ Sistema de dados fake nÃ£o carregado! Verifique se demo-data-generator.js estÃ¡ carregado.', 'error');
     return;
   }
 
-  console.log('[insertDemoData] DemoDataGenerator disponível, abrindo modal...');
+  console.log('[insertDemoData] DemoDataGenerator disponÃ­vel, abrindo modal...');
 
-  // Mostrar modal de confirmação
+  // Mostrar modal de confirmaÃ§Ã£o
   const modal = document.createElement('div');
   modal.className = 'modal-overlay';
   modal.style.cssText = 'position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.7); display: flex; align-items: center; justify-content: center; z-index: 10001;';
@@ -211,8 +211,8 @@ window.masterCtrl.insertDemoData = function(propertyKey) {
   
   modalContent.innerHTML = `
     <div style="text-align: center; margin-bottom: 30px;">
-      <div style="font-size: 64px; margin-bottom: 20px;">🎭</div>
-      <h2 style="margin: 0 0 15px 0; color: #2d3748; font-size: 28px;">Inserir Dados de Demonstração</h2>
+      <div style="font-size: 64px; margin-bottom: 20px;">ðŸŽ­</div>
+      <h2 style="margin: 0 0 15px 0; color: #2d3748; font-size: 28px;">Inserir Dados de DemonstraÃ§Ã£o</h2>
       <p style="color: #718096; font-size: 16px; line-height: 1.6;">
         Propriedade: <strong>${property.name}</strong>
       </p>
@@ -220,22 +220,22 @@ window.masterCtrl.insertDemoData = function(propertyKey) {
 
     <div style="background: #e0f2fe; border-left: 4px solid #0284c7; padding: 20px; border-radius: 8px; margin-bottom: 25px;">
       <h4 style="margin: 0 0 10px 0; color: #0c4a6e; display: flex; align-items: center; gap: 8px;">
-        <span>📊</span> Dados que serão gerados:
+        <span>ðŸ“Š</span> Dados que serÃ£o gerados:
       </h4>
       <div style="color: #075985; line-height: 1.8;">
-        ✅ Reservas (90 dias de histórico + 30 futuro)<br>
-        ✅ Inventário de quartos (${property.roomCount} quartos)<br>
-        ✅ Métricas PMS (ocupação, receita, ADR, RevPAR)<br>
-        ✅ Tarefas de Housekeeping<br>
-        ✅ Ordens de Engenharia<br>
-        ✅ Alertas do sistema<br>
-        ✅ Perfis de hóspedes
+        âœ… Reservas (90 dias de histÃ³rico + 30 futuro)<br>
+        âœ… InventÃ¡rio de quartos (${property.roomCount} quartos)<br>
+        âœ… MÃ©tricas PMS (ocupaÃ§Ã£o, receita, ADR, RevPAR)<br>
+        âœ… Tarefas de Housekeeping<br>
+        âœ… Ordens de Engenharia<br>
+        âœ… Alertas do sistema<br>
+        âœ… Perfis de hÃ³spedes
       </div>
     </div>
 
     <div style="background: #fef3c7; border-left: 4px solid #f59e0b; padding: 20px; border-radius: 8px; margin-bottom: 25px;">
       <h4 style="margin: 0 0 10px 0; color: #92400e; display: flex; align-items: center; gap: 8px;">
-        <span>🔄</span> Atualização Automática
+        <span>ðŸ”„</span> AtualizaÃ§Ã£o AutomÃ¡tica
       </h4>
       <div style="color: #78350f;">
         <label style="display: flex; align-items: center; gap: 10px; cursor: pointer;">
@@ -250,10 +250,10 @@ window.masterCtrl.insertDemoData = function(propertyKey) {
 
     <div style="display: flex; gap: 15px; justify-content: center;">
       <button id="cancelDemoBtn" style="padding: 14px 28px; border: 2px solid #e2e8f0; background: white; border-radius: 8px; font-weight: 600; cursor: pointer; color: #4a5568; font-size: 16px;">
-        ❌ Cancelar
+        âŒ Cancelar
       </button>
       <button id="confirmDemoBtn" style="padding: 14px 28px; border: none; background: linear-gradient(135deg, #10b981 0%, #059669 100%); color: white; border-radius: 8px; font-weight: 600; cursor: pointer; font-size: 16px; box-shadow: 0 4px 12px rgba(16, 185, 129, 0.4);">
-        🎭 Inserir Dados
+        ðŸŽ­ Inserir Dados
       </button>
     </div>
   `;
@@ -261,16 +261,16 @@ window.masterCtrl.insertDemoData = function(propertyKey) {
   modal.appendChild(modalContent);
   document.body.appendChild(modal);
 
-  // Botão cancelar
+  // BotÃ£o cancelar
   modalContent.querySelector('#cancelDemoBtn').onclick = () => modal.remove();
 
-  // Botão confirmar
+  // BotÃ£o confirmar
   modalContent.querySelector('#confirmDemoBtn').onclick = () => {
     const autoRefresh = modalContent.querySelector('#autoRefreshCheck').checked;
     modal.remove();
     
     // Mostrar loading
-    this.showToast('🎭 Gerando dados fake...', 'info');
+    this.showToast('ðŸŽ­ Gerando dados fake...', 'info');
     
     // Inserir dados (pequeno delay para UX)
     setTimeout(() => {
@@ -278,7 +278,7 @@ window.masterCtrl.insertDemoData = function(propertyKey) {
       
       if (result.success) {
         const autoRefreshMsg = autoRefresh ? ' (auto-refresh ativado)' : '';
-        this.showToast(`✅ Dados inseridos com sucesso!${autoRefreshMsg}`, 'success');
+        this.showToast(`âœ… Dados inseridos com sucesso!${autoRefreshMsg}`, 'success');
         
         // Recarregar dashboard se estiver aberto
         if (typeof window.PropertyDashboard !== 'undefined' && window.PropertyDashboard.refresh) {
@@ -287,7 +287,7 @@ window.masterCtrl.insertDemoData = function(propertyKey) {
           }, 500);
         }
       } else {
-        this.showToast(`❌ Erro ao inserir dados: ${result.error}`, 'error');
+        this.showToast(`âŒ Erro ao inserir dados: ${result.error}`, 'error');
       }
     }, 300);
   };
@@ -300,9 +300,10 @@ window.masterCtrl.insertDemoData = function(propertyKey) {
   });
 };
 
-    console.log('[property-publish-helpers] ✅ Funções adicionadas com sucesso!');
+    console.log('[property-publish-helpers] âœ… FunÃ§Ãµes adicionadas com sucesso!');
   };
   
   // Iniciar espera pelo masterCtrl
   waitForMasterCtrl();
 })();
+

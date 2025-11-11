@@ -1,58 +1,58 @@
-# NEXEFII Shell - Application Container
+﻿# NEXEFII Shell - Application Container
 
-## 📋 Visão Geral
+## ðŸ“‹ VisÃ£o Geral
 
-O **Shell** é o container principal da aplicação NEXEFII, responsável por:
+O **Shell** Ã© o container principal da aplicaÃ§Ã£o NEXEFII, responsÃ¡vel por:
 
-- ✅ **Gestão de sessão** - Autenticação e contexto do usuário
-- ✅ **Roteamento SPA** - Navegação sem reload usando Router.js
-- ✅ **Contexto multi-tenant** - Property context injection automático
-- ✅ **Carregamento dinâmico** - Lazy loading de páginas e módulos
-- ✅ **UI Framework** - Header, breadcrumbs, property badge, footer
-- ✅ **Estado global** - Gerenciamento centralizado via `window.NEXEFII`
+- âœ… **GestÃ£o de sessÃ£o** - AutenticaÃ§Ã£o e contexto do usuÃ¡rio
+- âœ… **Roteamento SPA** - NavegaÃ§Ã£o sem reload usando Router.js
+- âœ… **Contexto multi-tenant** - Property context injection automÃ¡tico
+- âœ… **Carregamento dinÃ¢mico** - Lazy loading de pÃ¡ginas e mÃ³dulos
+- âœ… **UI Framework** - Header, breadcrumbs, property badge, footer
+- âœ… **Estado global** - Gerenciamento centralizado via `window.NEXEFII`
 
-## 🏗️ Arquitetura
+## ðŸ—ï¸ Arquitetura
 
 ```
-┌─────────────────────────────────────────────────────────────┐
-│                      SHELL.HTML                              │
-│  ┌───────────────────────────────────────────────────────┐  │
-│  │  Header (Logo, Breadcrumbs, Property Badge, User)    │  │
-│  └───────────────────────────────────────────────────────┘  │
-│                                                              │
-│  ┌───────────────────────────────────────────────────────┐  │
-│  │            #app (Dynamic Content)                     │  │
-│  │  ┌─────────────────────────────────────────────────┐  │  │
-│  │  │  pages/home.html                                │  │  │
-│  │  │  pages/dashboard.html                           │  │  │
-│  │  │  pages/settings.html                            │  │  │
-│  │  │  pages/rooms.html                               │  │  │
-│  │  │  pages/reservations.html                        │  │  │
-│  │  └─────────────────────────────────────────────────┘  │  │
-│  └───────────────────────────────────────────────────────┘  │
-│                                                              │
-│  ┌───────────────────────────────────────────────────────┐  │
-│  │  Footer (Copyright, Links)                           │  │
-│  └───────────────────────────────────────────────────────┘  │
-└─────────────────────────────────────────────────────────────┘
-         ▲                    ▲                    ▲
-         │                    │                    │
+â”Œâ”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”
+â”‚                      SHELL.HTML                              â”‚
+â”‚  â”Œâ”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”  â”‚
+â”‚  â”‚  Header (Logo, Breadcrumbs, Property Badge, User)    â”‚  â”‚
+â”‚  â””â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”˜  â”‚
+â”‚                                                              â”‚
+â”‚  â”Œâ”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”  â”‚
+â”‚  â”‚            #app (Dynamic Content)                     â”‚  â”‚
+â”‚  â”‚  â”Œâ”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”  â”‚  â”‚
+â”‚  â”‚  â”‚  pages/home.html                                â”‚  â”‚  â”‚
+â”‚  â”‚  â”‚  pages/dashboard.html                           â”‚  â”‚  â”‚
+â”‚  â”‚  â”‚  pages/settings.html                            â”‚  â”‚  â”‚
+â”‚  â”‚  â”‚  pages/rooms.html                               â”‚  â”‚  â”‚
+â”‚  â”‚  â”‚  pages/reservations.html                        â”‚  â”‚  â”‚
+â”‚  â”‚  â””â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”˜  â”‚  â”‚
+â”‚  â””â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”˜  â”‚
+â”‚                                                              â”‚
+â”‚  â”Œâ”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”  â”‚
+â”‚  â”‚  Footer (Copyright, Links)                           â”‚  â”‚
+â”‚  â””â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”˜  â”‚
+â””â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”˜
+         â–²                    â–²                    â–²
+         â”‚                    â”‚                    â”‚
     Router.js          PropertyDatabase.js    PWA Assets
 ```
 
-## 🚀 Quick Start
+## ðŸš€ Quick Start
 
-### 1. Configurar Sessão Demo
+### 1. Configurar SessÃ£o Demo
 
 ```bash
 # Abrir no navegador
 http://localhost:8000/setup-demo.html
 ```
 
-Clique em **"Criar Sessão Demo"** - isso cria:
+Clique em **"Criar SessÃ£o Demo"** - isso cria:
 - User: `demo@nexefii.com`
-- Property 1: `Hotel Demo` (50 quartos, 75% ocupação)
-- Property 2: `Resort Paradise` (120 quartos, 92% ocupação)
+- Property 1: `Hotel Demo` (50 quartos, 75% ocupaÃ§Ã£o)
+- Property 2: `Resort Paradise` (120 quartos, 92% ocupaÃ§Ã£o)
 
 ### 2. Acessar Shell
 
@@ -60,91 +60,91 @@ Clique em **"Criar Sessão Demo"** - isso cria:
 http://localhost:8000/shell.html
 ```
 
-Você verá:
+VocÃª verÃ¡:
 - Lista de propriedades na home
-- Navegação SPA funcionando
-- Property context automático
+- NavegaÃ§Ã£o SPA funcionando
+- Property context automÃ¡tico
 
-## 📁 Estrutura de Arquivos
+## ðŸ“ Estrutura de Arquivos
 
 ```
-iluxsys/
-├── shell.html                    # Container principal (ESTE ARQUIVO)
-├── setup-demo.html               # Utilitário para criar sessão demo
-├── core/
-│   ├── router/
-│   │   └── Router.js            # SPA Router
-│   └── database/
-│       └── PropertyDatabase.js  # Data isolation
-├── pages/                        # Páginas dinâmicas
-│   ├── home.html                # Lista de properties
-│   ├── dashboard.html           # Dashboard da property
-│   ├── settings.html            # Configurações
-│   ├── rooms.html               # Gestão de quartos
-│   ├── reservations.html        # Gestão de reservas
-│   └── help.html                # Central de ajuda
-├── manifest.json                # PWA manifest
-├── service-worker.js            # Offline caching
-└── pwa-installer.js             # PWA installation
+nexefii/
+â”œâ”€â”€ shell.html                    # Container principal (ESTE ARQUIVO)
+â”œâ”€â”€ setup-demo.html               # UtilitÃ¡rio para criar sessÃ£o demo
+â”œâ”€â”€ core/
+â”‚   â”œâ”€â”€ router/
+â”‚   â”‚   â””â”€â”€ Router.js            # SPA Router
+â”‚   â””â”€â”€ database/
+â”‚       â””â”€â”€ PropertyDatabase.js  # Data isolation
+â”œâ”€â”€ pages/                        # PÃ¡ginas dinÃ¢micas
+â”‚   â”œâ”€â”€ home.html                # Lista de properties
+â”‚   â”œâ”€â”€ dashboard.html           # Dashboard da property
+â”‚   â”œâ”€â”€ settings.html            # ConfiguraÃ§Ãµes
+â”‚   â”œâ”€â”€ rooms.html               # GestÃ£o de quartos
+â”‚   â”œâ”€â”€ reservations.html        # GestÃ£o de reservas
+â”‚   â””â”€â”€ help.html                # Central de ajuda
+â”œâ”€â”€ manifest.json                # PWA manifest
+â”œâ”€â”€ service-worker.js            # Offline caching
+â””â”€â”€ pwa-installer.js             # PWA installation
 ```
 
-## 🎯 Fluxo de Navegação
+## ðŸŽ¯ Fluxo de NavegaÃ§Ã£o
 
-### 1. Inicialização
+### 1. InicializaÃ§Ã£o
 
 ```javascript
 // shell.html loads
 initShell()
-  → loadUserSession()      // Load from localStorage
-  → initRouter()           // Setup routes + guards
-  → router.start()         // Handle current URL
+  â†’ loadUserSession()      // Load from localStorage
+  â†’ initRouter()           // Setup routes + guards
+  â†’ router.start()         // Handle current URL
 ```
 
-### 2. Navegação para Property
+### 2. NavegaÃ§Ã£o para Property
 
 ```
 User clicks: "Hotel Demo"
-  ↓
+  â†“
 Router.navigate('/property/hotel-demo/dashboard')
-  ↓
-Auth Guard → Check session (PASS)
-  ↓
-Property Resolver → Find property by slug (FOUND)
-  ↓
-Property Access Guard → Check user.properties.includes(property.id) (PASS)
-  ↓
-Context Middleware → Update breadcrumbs, property badge
-  ↓
-Route Handler → loadPage('dashboard', property)
-  ↓
+  â†“
+Auth Guard â†’ Check session (PASS)
+  â†“
+Property Resolver â†’ Find property by slug (FOUND)
+  â†“
+Property Access Guard â†’ Check user.properties.includes(property.id) (PASS)
+  â†“
+Context Middleware â†’ Update breadcrumbs, property badge
+  â†“
+Route Handler â†’ loadPage('dashboard', property)
+  â†“
 Fetch /pages/dashboard.html
-  ↓
+  â†“
 Inject property context:
   - window.NEXEFII.currentProperty = property
   - window.NEXEFII.currentDB = new PropertyDatabase(property.key)
-  ↓
+  â†“
 Call initDashboardPage(property)
-  ↓
+  â†“
 Page loads stats from PropertyDatabase
 ```
 
-### 3. Navegação Interna (Mesma Property)
+### 3. NavegaÃ§Ã£o Interna (Mesma Property)
 
 ```
-User clicks: "Configurações"
-  ↓
+User clicks: "ConfiguraÃ§Ãµes"
+  â†“
 Router.navigate('/property/hotel-demo/settings')
-  ↓
-Guards → All pass (property já resolvida)
-  ↓
+  â†“
+Guards â†’ All pass (property jÃ¡ resolvida)
+  â†“
 loadPage('settings', property)
-  ↓
+  â†“
 Database context mantido (mesma property)
 ```
 
-## 🔐 Sistema de Sessão
+## ðŸ” Sistema de SessÃ£o
 
-### Estrutura da Sessão
+### Estrutura da SessÃ£o
 
 ```javascript
 // localStorage.getItem('nexefii_session')
@@ -158,8 +158,8 @@ Database context mantido (mesma property)
       key: "hotel-demo",           // PropertyDatabase key
       slug: "hotel-demo",          // URL slug
       name: "Hotel Demo",
-      description: "Hotel de demonstração",
-      icon: "🏨",
+      description: "Hotel de demonstraÃ§Ã£o",
+      icon: "ðŸ¨",
       stats: {
         rooms: 50,
         occupancy: 75,
@@ -170,7 +170,7 @@ Database context mantido (mesma property)
 }
 ```
 
-### Criar Sessão Manualmente
+### Criar SessÃ£o Manualmente
 
 ```javascript
 const user = {
@@ -183,7 +183,7 @@ const user = {
       key: "my-hotel",
       slug: "my-hotel",
       name: "My Hotel",
-      icon: "🏨",
+      icon: "ðŸ¨",
       stats: { rooms: 30, occupancy: 80, reservations: 24 }
     }
   ]
@@ -193,22 +193,22 @@ localStorage.setItem('nexefii_session', JSON.stringify(user));
 window.location.href = '/shell.html';
 ```
 
-## 🌍 Estado Global (`window.NEXEFII`)
+## ðŸŒ Estado Global (`window.NEXEFII`)
 
 ```javascript
 window.NEXEFII = {
   router: Router,                    // Router instance
   currentProperty: Property,         // Contexto da property atual
   currentDB: PropertyDatabase,       // Database da property atual
-  currentUser: User,                 // Usuário logado
-  pageModules: Map                   // Cache de módulos de página
+  currentUser: User,                 // UsuÃ¡rio logado
+  pageModules: Map                   // Cache de mÃ³dulos de pÃ¡gina
 };
 ```
 
-### Acessar em Páginas
+### Acessar em PÃ¡ginas
 
 ```javascript
-// Em qualquer página (ex: dashboard.html)
+// Em qualquer pÃ¡gina (ex: dashboard.html)
 async function initDashboardPage(property) {
   // Acessar database da property
   const db = window.NEXEFII.currentDB;
@@ -218,13 +218,13 @@ async function initDashboardPage(property) {
   const router = window.NEXEFII.router;
   router.navigate('/property/hotel-demo/settings');
   
-  // Acessar usuário
+  // Acessar usuÃ¡rio
   const user = window.NEXEFII.currentUser;
   console.log(`User: ${user.name}`);
 }
 ```
 
-## 📄 Criar Nova Página
+## ðŸ“„ Criar Nova PÃ¡gina
 
 ### 1. Criar arquivo HTML
 
@@ -236,8 +236,8 @@ async function initDashboardPage(property) {
     .my-title { font-size: 2rem; font-weight: 700; }
   </style>
 
-  <h1 class="my-title">Minha Página</h1>
-  <div id="content">Conteúdo carrega aqui</div>
+  <h1 class="my-title">Minha PÃ¡gina</h1>
+  <div id="content">ConteÃºdo carrega aqui</div>
 </div>
 
 <script>
@@ -265,46 +265,46 @@ router.route('/property/:slug/my-page', async (ctx) => {
   await loadPage('my-page', ctx.property);
 }, { 
   name: 'my-page',
-  meta: { title: 'Minha Página' }
+  meta: { title: 'Minha PÃ¡gina' }
 });
 ```
 
 ### 3. Navegar
 
 ```html
-<!-- Link em qualquer página -->
+<!-- Link em qualquer pÃ¡gina -->
 <a href="/property/hotel-demo/my-page" data-router-link>
-  Minha Página
+  Minha PÃ¡gina
 </a>
 ```
 
-## 🎨 UI Components
+## ðŸŽ¨ UI Components
 
 ### Header
 
-- **Logo**: Clicável, navega para home (`/`)
-- **Breadcrumbs**: Atualizado automaticamente (Início > Property > Página)
-- **Property Badge**: Mostra property ativa com ícone
-- **User Menu**: Avatar + nome do usuário
+- **Logo**: ClicÃ¡vel, navega para home (`/`)
+- **Breadcrumbs**: Atualizado automaticamente (InÃ­cio > Property > PÃ¡gina)
+- **Property Badge**: Mostra property ativa com Ã­cone
+- **User Menu**: Avatar + nome do usuÃ¡rio
 
 ### Loading State
 
 ```javascript
-// Automático ao carregar páginas
+// AutomÃ¡tico ao carregar pÃ¡ginas
 showLoading(); // Spinner + "Carregando..."
 ```
 
 ### Error State
 
 ```javascript
-// Automático em caso de erro
+// AutomÃ¡tico em caso de erro
 await loadPage('error', null, {
   title: 'Erro ao Carregar',
-  message: 'Descrição do erro'
+  message: 'DescriÃ§Ã£o do erro'
 });
 ```
 
-## 🔧 Configuração de Rotas
+## ðŸ”§ ConfiguraÃ§Ã£o de Rotas
 
 ### Rota Simples
 
@@ -352,21 +352,21 @@ router.route('/property/:slug/reports', async (ctx) => {
 });
 ```
 
-## 📊 Performance
+## ðŸ“Š Performance
 
-### Métricas Medidas
+### MÃ©tricas Medidas
 
-| Operação | Tempo | vs Reload |
+| OperaÃ§Ã£o | Tempo | vs Reload |
 |----------|-------|-----------|
-| **Navegação SPA** | 10-50ms | **98% faster** |
+| **NavegaÃ§Ã£o SPA** | 10-50ms | **98% faster** |
 | **Page Load (cached)** | 20-100ms | **96% faster** |
 | **Property Context Switch** | 5-15ms | **99% faster** |
 | **Traditional Page Reload** | 500-2000ms | Baseline |
 
-### Cache de Páginas
+### Cache de PÃ¡ginas
 
 ```javascript
-// TODO: Implementar cache de páginas
+// TODO: Implementar cache de pÃ¡ginas
 window.NEXEFII.pageCache = new Map();
 
 async function fetchPageContent(pageName) {
@@ -380,12 +380,12 @@ async function fetchPageContent(pageName) {
 }
 ```
 
-## 🛡️ Segurança
+## ðŸ›¡ï¸ SeguranÃ§a
 
 ### Auth Guard
 
 ```javascript
-// Verifica se usuário está autenticado
+// Verifica se usuÃ¡rio estÃ¡ autenticado
 router.setAuthGuard(async () => {
   const isAuthenticated = !!window.NEXEFII.currentUser;
   if (!isAuthenticated) {
@@ -398,7 +398,7 @@ router.setAuthGuard(async () => {
 ### Property Access Guard
 
 ```javascript
-// Verifica se usuário tem acesso à property
+// Verifica se usuÃ¡rio tem acesso Ã  property
 router.setPropertyAccessGuard(async (property) => {
   const userProperties = window.NEXEFII.currentUser?.properties || [];
   return userProperties.some(p => p.id === property.id);
@@ -407,37 +407,37 @@ router.setPropertyAccessGuard(async (property) => {
 
 ### XSS Protection
 
-- ✅ Nunca usar `innerHTML` com dados de usuário sem sanitização
-- ✅ Usar `textContent` para texto puro
-- ✅ Validar inputs antes de salvar no PropertyDatabase
+- âœ… Nunca usar `innerHTML` com dados de usuÃ¡rio sem sanitizaÃ§Ã£o
+- âœ… Usar `textContent` para texto puro
+- âœ… Validar inputs antes de salvar no PropertyDatabase
 
 ```javascript
-// ❌ INSEGURO
+// âŒ INSEGURO
 element.innerHTML = userInput;
 
-// ✅ SEGURO
+// âœ… SEGURO
 element.textContent = userInput;
 
-// ✅ SEGURO (HTML validado)
+// âœ… SEGURO (HTML validado)
 element.innerHTML = DOMPurify.sanitize(userInput);
 ```
 
-## 🧪 Testando
+## ðŸ§ª Testando
 
 ### Teste Manual
 
 ```bash
-# 1. Criar sessão demo
+# 1. Criar sessÃ£o demo
 open http://localhost:8000/setup-demo.html
 
 # 2. Acessar shell
 open http://localhost:8000/shell.html
 
-# 3. Testar navegação
-- Clicar em "Hotel Demo" → Dashboard carrega
-- Clicar em "Resort Paradise" → Contexto muda
-- Usar back/forward do browser → Funciona
-- Inspecionar window.NEXEFII → Estado correto
+# 3. Testar navegaÃ§Ã£o
+- Clicar em "Hotel Demo" â†’ Dashboard carrega
+- Clicar em "Resort Paradise" â†’ Contexto muda
+- Usar back/forward do browser â†’ Funciona
+- Inspecionar window.NEXEFII â†’ Estado correto
 ```
 
 ### Teste de Isolamento
@@ -461,79 +461,79 @@ async function testIsolation() {
 testIsolation();
 ```
 
-## 📈 Business Value
+## ðŸ“ˆ Business Value
 
 ### Desenvolvimento
 
-- **Desenvolvimento modular**: Cada página é independente
-- **Time-to-market**: Adicionar nova página = 30 minutos (vs 4 horas tradicional)
-- **Manutenção**: Mudanças isoladas, sem side effects
-- **Onboarding**: Estrutura clara, fácil de entender
+- **Desenvolvimento modular**: Cada pÃ¡gina Ã© independente
+- **Time-to-market**: Adicionar nova pÃ¡gina = 30 minutos (vs 4 horas tradicional)
+- **ManutenÃ§Ã£o**: MudanÃ§as isoladas, sem side effects
+- **Onboarding**: Estrutura clara, fÃ¡cil de entender
 
 ### Performance
 
-- **Navegação 98% mais rápida**: 10-50ms vs 500-2000ms
-- **UX aprimorada**: Zero flickering, transições suaves
+- **NavegaÃ§Ã£o 98% mais rÃ¡pida**: 10-50ms vs 500-2000ms
+- **UX aprimorada**: Zero flickering, transiÃ§Ãµes suaves
 - **Offline-first**: Funciona sem internet (PWA + Service Worker)
-- **Memória**: Property context limpo ao trocar properties
+- **MemÃ³ria**: Property context limpo ao trocar properties
 
 ### Custos
 
-- **-80% infraestrutura**: SPA = 1 servidor vs múltiplas páginas
-- **-60% bandwidth**: Só JSON trafega (vs HTML completo)
-- **+35% retenção**: UX rápida = menor bounce rate
+- **-80% infraestrutura**: SPA = 1 servidor vs mÃºltiplas pÃ¡ginas
+- **-60% bandwidth**: SÃ³ JSON trafega (vs HTML completo)
+- **+35% retenÃ§Ã£o**: UX rÃ¡pida = menor bounce rate
 
 ### ROI
 
-| Métrica | Antes (Multi-page) | Depois (Shell) | Ganho |
+| MÃ©trica | Antes (Multi-page) | Depois (Shell) | Ganho |
 |---------|-------------------|----------------|-------|
-| **Navegação** | 500-2000ms | 10-50ms | **98% faster** |
+| **NavegaÃ§Ã£o** | 500-2000ms | 10-50ms | **98% faster** |
 | **Deploy** | 4 horas | 30 minutos | **87% faster** |
-| **Bugs** | 40/mês | 12/mês | **70% reduction** |
+| **Bugs** | 40/mÃªs | 12/mÃªs | **70% reduction** |
 | **Bounce rate** | 45% | 28% | **-37% bounce** |
 
 **Economia anual estimada**: R$ 180.000/ano
-- Desenvolvimento: -50 horas/mês = R$ 120k/ano
+- Desenvolvimento: -50 horas/mÃªs = R$ 120k/ano
 - Infraestrutura: -80% custo = R$ 40k/ano
 - Suporte: -70% tickets = R$ 20k/ano
 
-## 🗺️ Roadmap
+## ðŸ—ºï¸ Roadmap
 
 ### v1.0.0 (ATUAL)
-- ✅ Shell com header, footer, breadcrumbs
-- ✅ Integração Router + PropertyDatabase
-- ✅ Loading states + error handling
-- ✅ Property context injection
-- ✅ Sessão de usuário
-- ✅ Páginas demo (home, dashboard, help)
+- âœ… Shell com header, footer, breadcrumbs
+- âœ… IntegraÃ§Ã£o Router + PropertyDatabase
+- âœ… Loading states + error handling
+- âœ… Property context injection
+- âœ… SessÃ£o de usuÃ¡rio
+- âœ… PÃ¡ginas demo (home, dashboard, help)
 
 ### v1.1.0 (Sprint 3-4)
-- ⏳ Nested routes (`/property/:slug/rooms/:id`)
-- ⏳ Page transitions (fade, slide)
-- ⏳ Cache de páginas
-- ⏳ Prefetch de rotas
+- â³ Nested routes (`/property/:slug/rooms/:id`)
+- â³ Page transitions (fade, slide)
+- â³ Cache de pÃ¡ginas
+- â³ Prefetch de rotas
 
 ### v1.2.0 (Sprint 5-6)
-- ⏳ User menu dropdown
-- ⏳ Theme switcher (light/dark)
-- ⏳ Notificações in-app
-- ⏳ Quick search (Cmd+K)
+- â³ User menu dropdown
+- â³ Theme switcher (light/dark)
+- â³ NotificaÃ§Ãµes in-app
+- â³ Quick search (Cmd+K)
 
 ### v2.0.0 (Sprint 7+)
-- ⏳ Módulos dinâmicos (lazy load JS)
-- ⏳ Web Workers para tasks pesadas
-- ⏳ Real-time updates (WebSockets)
-- ⏳ Offline queue (sync quando online)
+- â³ MÃ³dulos dinÃ¢micos (lazy load JS)
+- â³ Web Workers para tasks pesadas
+- â³ Real-time updates (WebSockets)
+- â³ Offline queue (sync quando online)
 
-## 🐛 Troubleshooting
+## ðŸ› Troubleshooting
 
 ### "Property not found"
 
-**Causa**: Slug incorreto ou property não existe na sessão do usuário
+**Causa**: Slug incorreto ou property nÃ£o existe na sessÃ£o do usuÃ¡rio
 
-**Solução**:
+**SoluÃ§Ã£o**:
 ```javascript
-// Verificar properties do usuário
+// Verificar properties do usuÃ¡rio
 const user = JSON.parse(localStorage.getItem('nexefii_session'));
 console.log('User properties:', user.properties);
 
@@ -544,18 +544,18 @@ console.log('User properties:', user.properties);
 
 ### "Acesso Negado"
 
-**Causa**: Usuário não tem permissão para acessar a property
+**Causa**: UsuÃ¡rio nÃ£o tem permissÃ£o para acessar a property
 
-**Solução**:
+**SoluÃ§Ã£o**:
 ```javascript
-// Adicionar property ao usuário
+// Adicionar property ao usuÃ¡rio
 const user = JSON.parse(localStorage.getItem('nexefii_session'));
 user.properties.push({
   id: 3,
   key: 'new-hotel',
   slug: 'new-hotel',
   name: 'New Hotel',
-  icon: '🏨'
+  icon: 'ðŸ¨'
 });
 localStorage.setItem('nexefii_session', JSON.stringify(user));
 location.reload();
@@ -563,40 +563,41 @@ location.reload();
 
 ### "Failed to load page"
 
-**Causa**: Arquivo HTML da página não existe
+**Causa**: Arquivo HTML da pÃ¡gina nÃ£o existe
 
-**Solução**:
+**SoluÃ§Ã£o**:
 ```bash
 # Verificar se arquivo existe
 ls pages/my-page.html
 
-# Criar página se não existir
-# Ver seção "Criar Nova Página"
+# Criar pÃ¡gina se nÃ£o existir
+# Ver seÃ§Ã£o "Criar Nova PÃ¡gina"
 ```
 
 ### "Router not starting"
 
-**Causa**: Sessão inválida ou não existe
+**Causa**: SessÃ£o invÃ¡lida ou nÃ£o existe
 
-**Solução**:
+**SoluÃ§Ã£o**:
 ```bash
-# Recriar sessão
+# Recriar sessÃ£o
 open http://localhost:8000/setup-demo.html
 ```
 
-## 📚 Referências
+## ðŸ“š ReferÃªncias
 
 - [Router.js Documentation](core/router/README_Router.md)
 - [PropertyDatabase Documentation](core/database/README_PropertyDatabase.md)
 - [PWA Documentation](README_PWA.md)
 
-## 👥 Contribuindo
+## ðŸ‘¥ Contribuindo
 
-1. Criar nova página em `pages/`
+1. Criar nova pÃ¡gina em `pages/`
 2. Adicionar rota no `shell.html`
-3. Testar navegação e isolamento
+3. Testar navegaÃ§Ã£o e isolamento
 4. Documentar no README
 
-## 📄 Licença
+## ðŸ“„ LicenÃ§a
 
-© 2025 NEXEFII. Todos os direitos reservados.
+Â© 2025 NEXEFII. Todos os direitos reservados.
+

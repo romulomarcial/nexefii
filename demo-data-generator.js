@@ -1,7 +1,7 @@
-/**
- * Demo Data Generator - IluxSys
- * Gera dados fake realistas para propriedades de demonstração
- * Preenche PMS, reservas, inventário, métricas, KPIs e integrações
+﻿/**
+ * Demo Data Generator - nexefii
+ * Gera dados fake realistas para propriedades de demonstraÃ§Ã£o
+ * Preenche PMS, reservas, inventÃ¡rio, mÃ©tricas, KPIs e integraÃ§Ãµes
  * Atualiza periodicamente para simular sistema em tempo real
  * 
  * @version 1.0.0
@@ -11,13 +11,13 @@
 (function() {
   'use strict';
 
-  // ==================== CONFIGURAÇÕES ====================
+  // ==================== CONFIGURAÃ‡Ã•ES ====================
   const CONFIG = {
     updateInterval: 5 * 60 * 1000, // 5 minutos
-    dateRange: 90, // dias para histórico
+    dateRange: 90, // dias para histÃ³rico
     futureRange: 30, // dias para forecast
     guestNames: [
-      'João Silva', 'Maria Santos', 'Pedro Oliveira', 'Ana Costa', 'Carlos Souza',
+      'JoÃ£o Silva', 'Maria Santos', 'Pedro Oliveira', 'Ana Costa', 'Carlos Souza',
       'Fernanda Lima', 'Roberto Alves', 'Juliana Rodrigues', 'Marcos Pereira', 'Patricia Martins',
       'John Smith', 'Emma Johnson', 'Michael Brown', 'Sophia Davis', 'James Wilson',
       'Olivia Martinez', 'William Garcia', 'Isabella Rodriguez', 'David Lee', 'Mia Anderson'
@@ -28,7 +28,7 @@
       { type: 'suite', name: 'Suite', rate: 890 },
       { type: 'executive', name: 'Executive Suite', rate: 1250 }
     ],
-    countries: ['Brasil', 'USA', 'Argentina', 'Chile', 'México', 'Colômbia', 'Canadá', 'UK', 'França', 'Espanha'],
+    countries: ['Brasil', 'USA', 'Argentina', 'Chile', 'MÃ©xico', 'ColÃ´mbia', 'CanadÃ¡', 'UK', 'FranÃ§a', 'Espanha'],
     channels: ['Booking.com', 'Expedia', 'Direct', 'Airbnb', 'TripAdvisor', 'Hotels.com', 'Phone', 'Walk-in']
   };
 
@@ -39,27 +39,27 @@
       this.lastUpdate = new Map(); // propertyKey -> timestamp
     }
 
-    // ==================== MÉTODOS PÚBLICOS ====================
+    // ==================== MÃ‰TODOS PÃšBLICOS ====================
 
     /**
      * Insere dados fake completos para uma propriedade
      * @param {string} propertyKey - Chave da propriedade
-     * @param {boolean} autoRefresh - Ativar atualização automática
+     * @param {boolean} autoRefresh - Ativar atualizaÃ§Ã£o automÃ¡tica
      */
     insertDemoData(propertyKey, autoRefresh = true) {
       console.log(`[DemoData] Inserindo dados fake para ${propertyKey}...`);
       
       const property = this.getProperty(propertyKey);
       if (!property) {
-        console.error(`[DemoData] Propriedade ${propertyKey} não encontrada`);
+        console.error(`[DemoData] Propriedade ${propertyKey} nÃ£o encontrada`);
         return { success: false, error: 'property_not_found' };
       }
 
-      // Sistema agora permite inserir dados em QUALQUER propriedade (demo ou não)
+      // Sistema agora permite inserir dados em QUALQUER propriedade (demo ou nÃ£o)
       console.log(`[DemoData] Gerando dados para: ${property.name} (isDemo: ${property.isDemo || false})`);
 
       try {
-        // Gerar dados para todos os módulos
+        // Gerar dados para todos os mÃ³dulos
         this.generateReservations(propertyKey, property);
         this.generateInventory(propertyKey, property);
         this.generatePMSMetrics(propertyKey, property);
@@ -76,7 +76,7 @@
           this.startAutoRefresh(propertyKey);
         }
 
-        console.log(`[DemoData] ✅ Dados inseridos com sucesso para ${propertyKey}`);
+        console.log(`[DemoData] âœ… Dados inseridos com sucesso para ${propertyKey}`);
         
         // Disparar evento para dashboard
         window.dispatchEvent(new CustomEvent('demoDataUpdated', { 
@@ -117,12 +117,12 @@
 
       this.lastUpdate.delete(propertyKey);
       
-      console.log(`[DemoData] ✅ Dados limpos: ${keysToRemove.length} chaves removidas`);
+      console.log(`[DemoData] âœ… Dados limpos: ${keysToRemove.length} chaves removidas`);
       return { success: true, removedKeys: keysToRemove.length };
     }
 
     /**
-     * Inicia atualização automática periódica
+     * Inicia atualizaÃ§Ã£o automÃ¡tica periÃ³dica
      */
     startAutoRefresh(propertyKey) {
       // Parar timer existente
@@ -130,7 +130,7 @@
 
       const intervalId = setInterval(() => {
         console.log(`[DemoData] Auto-refresh para ${propertyKey}...`);
-        this.insertDemoData(propertyKey, false); // Não reiniciar timer
+        this.insertDemoData(propertyKey, false); // NÃ£o reiniciar timer
       }, CONFIG.updateInterval);
 
       this.timers.set(propertyKey, intervalId);
@@ -138,7 +138,7 @@
     }
 
     /**
-     * Para atualização automática
+     * Para atualizaÃ§Ã£o automÃ¡tica
      */
     stopAutoRefresh(propertyKey) {
       if (this.timers.has(propertyKey)) {
@@ -174,9 +174,9 @@
         const date = new Date(today);
         date.setDate(date.getDate() + dayOffset);
 
-        // Ocupação variável (40% a 95%)
+        // OcupaÃ§Ã£o variÃ¡vel (40% a 95%)
         const baseOccupancy = 0.65;
-        const seasonality = Math.sin(dayOffset / 30) * 0.15; // Variação sazonal
+        const seasonality = Math.sin(dayOffset / 30) * 0.15; // VariaÃ§Ã£o sazonal
         const dayOfWeekFactor = [6, 7].includes(date.getDay()) ? 0.15 : 0; // Fim de semana mais cheio
         const occupancyRate = Math.min(0.95, Math.max(0.40, baseOccupancy + seasonality + dayOfWeekFactor));
         
@@ -190,7 +190,7 @@
           checkOut.setDate(checkOut.getDate() + stayLength);
 
           const roomType = CONFIG.roomTypes[Math.floor(Math.random() * CONFIG.roomTypes.length)];
-          const rateVariation = (Math.random() * 0.3) - 0.15; // ±15%
+          const rateVariation = (Math.random() * 0.3) - 0.15; // Â±15%
           const dailyRate = Math.round(roomType.rate * (1 + rateVariation));
           const totalRevenue = dailyRate * stayLength;
 
@@ -226,11 +226,11 @@
       // Salvar no localStorage
       const storageKey = `pms_reservations_${propertyKey}`;
       localStorage.setItem(storageKey, JSON.stringify(reservations));
-      console.log(`[DemoData] ✅ ${reservations.length} reservas geradas`);
+      console.log(`[DemoData] âœ… ${reservations.length} reservas geradas`);
     }
 
     /**
-     * Gera inventário de quartos
+     * Gera inventÃ¡rio de quartos
      */
     generateInventory(propertyKey, property) {
       const roomCount = property.roomCount || 50;
@@ -241,7 +241,7 @@
         const floor = Math.floor((i - 1) / 10) + 1;
         const roomNumber = (floor * 100) + ((i - 1) % 10) + 1;
 
-        // Status: 80% disponível, 15% ocupado, 5% manutenção
+        // Status: 80% disponÃ­vel, 15% ocupado, 5% manutenÃ§Ã£o
         const rand = Math.random();
         let status = 'available';
         if (rand < 0.15) status = 'occupied';
@@ -268,17 +268,17 @@
 
       const storageKey = `pms_inventory_${propertyKey}`;
       localStorage.setItem(storageKey, JSON.stringify(inventory));
-      console.log(`[DemoData] ✅ ${inventory.length} quartos gerados`);
+      console.log(`[DemoData] âœ… ${inventory.length} quartos gerados`);
     }
 
     /**
-     * Gera métricas PMS para dashboard
+     * Gera mÃ©tricas PMS para dashboard
      */
     generatePMSMetrics(propertyKey, property) {
       const roomCount = property.roomCount || 50;
       const today = new Date();
 
-      // Calcular métricas baseadas nas reservas
+      // Calcular mÃ©tricas baseadas nas reservas
       const reservations = this.getReservations(propertyKey);
       
       // Hoje
@@ -312,7 +312,7 @@
       const forecastOccupancy = Math.round(occupancyRate + (Math.random() * 10 - 5));
       const forecastRevenue = Math.round(todayRevenue * (1 + (Math.random() * 0.2 - 0.1)));
 
-      // Tendência
+      // TendÃªncia
       const yesterdayOccupancy = Math.round(occupancyRate - (Math.random() * 10 - 5));
       const occupancyChange = occupancyRate - yesterdayOccupancy;
       const occupancyTrend = occupancyChange > 2 ? 'up' : occupancyChange < -2 ? 'down' : 'stable';
@@ -344,7 +344,7 @@
 
       const storageKey = `pms_metrics_${propertyKey}`;
       localStorage.setItem(storageKey, JSON.stringify(metrics));
-      console.log(`[DemoData] ✅ Métricas PMS geradas`);
+      console.log(`[DemoData] âœ… MÃ©tricas PMS geradas`);
       
       return metrics;
     }
@@ -380,18 +380,18 @@
 
       const storageKey = `housekeeping_tasks_${propertyKey}`;
       localStorage.setItem(storageKey, JSON.stringify(tasks));
-      console.log(`[DemoData] ✅ ${tasks.length} tarefas de housekeeping geradas`);
+      console.log(`[DemoData] âœ… ${tasks.length} tarefas de housekeeping geradas`);
     }
 
     /**
-     * Gera ordens de serviço de engenharia
+     * Gera ordens de serviÃ§o de engenharia
      */
     generateEngineering(propertyKey, property) {
       const workOrders = [];
       const categories = ['HVAC', 'Plumbing', 'Electrical', 'Furniture', 'Appliances', 'General Maintenance'];
       const priorities = ['low', 'normal', 'high', 'urgent'];
 
-      // 5-15 ordens de serviço ativas
+      // 5-15 ordens de serviÃ§o ativas
       const orderCount = Math.floor(Math.random() * 10) + 5;
 
       for (let i = 0; i < orderCount; i++) {
@@ -418,7 +418,7 @@
 
       const storageKey = `engineering_orders_${propertyKey}`;
       localStorage.setItem(storageKey, JSON.stringify(workOrders));
-      console.log(`[DemoData] ✅ ${workOrders.length} ordens de engenharia geradas`);
+      console.log(`[DemoData] âœ… ${workOrders.length} ordens de engenharia geradas`);
     }
 
     /**
@@ -453,17 +453,17 @@
 
       const storageKey = `alerts_${propertyKey}`;
       localStorage.setItem(storageKey, JSON.stringify(alerts));
-      console.log(`[DemoData] ✅ ${alerts.length} alertas gerados`);
+      console.log(`[DemoData] âœ… ${alerts.length} alertas gerados`);
     }
 
     /**
-     * Gera perfis de hóspedes
+     * Gera perfis de hÃ³spedes
      */
     generateGuests(propertyKey, property) {
       const guests = [];
       const reservations = this.getReservations(propertyKey);
 
-      // Criar perfil para cada hóspede único
+      // Criar perfil para cada hÃ³spede Ãºnico
       const uniqueGuests = new Map();
       reservations.forEach(r => {
         if (!uniqueGuests.has(r.guestEmail)) {
@@ -489,10 +489,10 @@
 
       const storageKey = `guests_${propertyKey}`;
       localStorage.setItem(storageKey, JSON.stringify(guests));
-      console.log(`[DemoData] ✅ ${guests.length} perfis de hóspedes gerados`);
+      console.log(`[DemoData] âœ… ${guests.length} perfis de hÃ³spedes gerados`);
     }
 
-    // ==================== MÉTODOS AUXILIARES ====================
+    // ==================== MÃ‰TODOS AUXILIARES ====================
 
     getProperty(propertyKey) {
       if (window.IluxProps && typeof window.IluxProps.getProperty === 'function') {
@@ -520,7 +520,7 @@
     }
 
     /**
-     * Obtém status de uma propriedade demo
+     * ObtÃ©m status de uma propriedade demo
      */
     getDemoStatus(propertyKey) {
       const hasData = !!localStorage.getItem(`pms_metrics_${propertyKey}`);
@@ -539,6 +539,7 @@
 
   // ==================== EXPORTAR ====================
   window.DemoDataGenerator = new DemoDataGenerator();
-  console.log('[DemoData] 🎭 Demo Data Generator carregado');
+  console.log('[DemoData] ðŸŽ­ Demo Data Generator carregado');
 
 })();
+

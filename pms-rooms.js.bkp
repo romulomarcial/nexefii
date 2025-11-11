@@ -1,0 +1,619 @@
+// PMS Room Management Controller
+// Handles room status, housekeeping, maintenance and visual representation
+
+// Utility: Render PMS module switcher dynamically for i18n/scale
+function renderPMSModuleSwitcher(modules, current, i18nDict) {
+  const sel = document.getElementById('pmsModuleSwitcher');
+  if (!sel) return;
+  console.info('[renderPMSModuleSwitcher] Chamado. modules:', modules, 'current:', current, 'i18nDict:', i18nDict);
+  sel.innerHTML = '';
+  modules.forEach(mod => {
+    const opt = document.createElement('option');
+    opt.value = mod.value;
+    opt.selected = mod.value === current;
+    // Emoji + label from i18n
+    opt.textContent = `${mod.emoji} ${(i18nDict[mod.i18nKey] || mod.fallback)}`;
+    sel.appendChild(opt);
+  });
+}
+
+class RoomManagementController {
+  constructor() {
+    this.propertyKey = 'property_default';
+    this.inventory = window.getHotelInventory(this.propertyKey);
+    this.engine = window.getReservationEngine(this.propertyKey);
+    this.lang = localStorage.getItem('ilux_lang') || 'pt';
+    this.i18n = {};
+    
+    this.currentView = 'grid';
+    this.filterFloor = '';
+    this.filterStatus = '';
+    this.searchQuery = '';
+    
+    this.selectedRoom = null;
+    
+    this.init();
+  }
+
+  async init() {
+    try {
+      await this.loadI18n();
+    } catch (e) { console.warn('[RoomManagement] i18n load error', e); }
+
+    // Render module switcher dynamically for i18n/scale
+    const mods = [
+      { value: 'pms-reservations.html', i18nKey: 'resPageTitle', emoji: '📅', fallback: 'Reservas' },
+      { value: 'pms-frontdesk.html', i18nKey: 'fdTitle', emoji: '🔑', fallback: 'Check-in / Check-out' },
+      { value: 'pms-rooms.html', i18nKey: 'rmPageTitle', emoji: '🛏️', fallback: 'Gestão de Quartos' }
+    ];
+    try {
+      const session = window.IluxAuth && IluxAuth.getCurrentSession ? ((window.IluxAuth && IluxAuth.getCurrentSession) ? IluxAuth.getCurrentSession() : (window.NexefiiAuth && NexefiiAuth.getCurrentSession ? ((window.NexefiiAuth && NexefiiAuth.getCurrentSession) ? NexefiiAuth.getCurrentSession() : (window.IluxAuth && IluxAuth.getCurrentSession ? IluxAuth.getCurrentSession() : null)) : null)) : null;
+      if (session && session.role === 'master') {
+        mods.unshift({ value: 'master-control.html', i18nKey: 'masterControl', emoji: '🔐', fallback: 'Master Control' });
+      }
+    } catch(e){}
+    renderPMSModuleSwitcher(mods, 'pms-rooms.html', this.i18n);
+
+    try {
+      this.applyI18n();
+    } catch (e) { console.warn('[RoomManagement] applyI18n error', e); }
+    
+    this.setupEventListeners();
+    this.populateFloorFilter();
+    this.renderStats();
+    this.renderRooms();
+    
+    // Auto refresh every 30s
+    setInterval(() => this.renderStats(), 30000);
+  }
+
+  async loadI18n() {
+    try {
+      const res = await fetch('i18n.json');
+      const data = await res.json();
+      this.i18n = (data[this.lang] && data[this.lang].app) || {};
+    } catch (e) { console.warn('i18n load failed', e); }
+  }
+
+  t(key, fallback = '') { return this.i18n[key] || fallback || key; }
+
+  applyI18n() {
+    const dict = this.i18n || {};
+    let count = 0;
+    document.querySelectorAll('[data-i18n]').forEach(el => {
+      const k = el.getAttribute('data-i18n');
+      if (dict[k]) { el.textContent = dict[k]; count++; }
+    });
+    document.querySelectorAll('[data-i18n-placeholder]').forEach(el => {
+      const k = el.getAttribute('data-i18n-placeholder');
+      if (dict[k]) { el.setAttribute('placeholder', dict[k]); count++; }
+    });
+    console.info('[RoomManagement] i18n applied to elements:', count);
+  }
+
+  setupEventListeners() {
+    // View toggles
+    document.querySelectorAll('.view-toggle-btn').forEach(btn => {
+      btn.addEventListener('click', (e) => {
+        const view = e.currentTarget.dataset.view;
+        this.switchView(view);
+      });
+    });
+
+    // Filters
+    const filterFloor = document.getElementById('filterFloor');
+    const filterStatus = document.getElementById('filterStatus');
+    const searchRooms = document.getElementById('searchRooms');
+
+    if (filterFloor) {
+      filterFloor.addEventListener('change', () => {
+        this.filterFloor = filterFloor.value;
+        this.renderRooms();
+      });
+    }
+
+    if (filterStatus) {
+      filterStatus.addEventListener('change', () => {
+        this.filterStatus = filterStatus.value;
+        this.renderRooms();
+      });
+    }
+
+    if (searchRooms) {
+      searchRooms.addEventListener('input', (e) => {
+        this.searchQuery = e.target.value.toLowerCase();
+        this.renderRooms();
+      });
+    }
+
+    // Refresh button
+    const btnRefresh = document.getElementById('btnRefreshRooms');
+    if (btnRefresh) {
+      btnRefresh.addEventListener('click', () => {
+        this.renderStats();
+        this.renderRooms();
+      });
+    }
+
+    // Export button
+    const btnExport = document.getElementById('btnExportRooms');
+    if (btnExport) {
+      btnExport.addEventListener('click', () => this.exportRooms());
+    }
+
+    // Modals
+    const closeDetailModal = document.getElementById('closeRoomDetailModal');
+    if (closeDetailModal) {
+      closeDetailModal.addEventListener('click', () => this.closeRoomDetailModal());
+    }
+
+    const closeChangeStatusModal = document.getElementById('closeChangeStatusModal');
+    if (closeChangeStatusModal) {
+      closeChangeStatusModal.addEventListener('click', () => this.closeChangeStatusModal());
+    }
+
+    const btnCancelChangeStatus = document.getElementById('btnCancelChangeStatus');
+    if (btnCancelChangeStatus) {
+      btnCancelChangeStatus.addEventListener('click', () => this.closeChangeStatusModal());
+    }
+
+    // Change status form
+    const changeStatusForm = document.getElementById('changeStatusForm');
+    if (changeStatusForm) {
+      changeStatusForm.addEventListener('submit', (e) => {
+        e.preventDefault();
+        this.submitChangeStatus();
+      });
+    }
+
+    // Room detail actions
+    const btnChangeStatus = document.getElementById('btnChangeStatus');
+    if (btnChangeStatus) {
+      btnChangeStatus.addEventListener('click', () => this.openChangeStatusModal());
+    }
+
+    const btnRequestCleaning = document.getElementById('btnRequestCleaning');
+    if (btnRequestCleaning) {
+      btnRequestCleaning.addEventListener('click', () => this.requestCleaning());
+    }
+
+    const btnBlockRoom = document.getElementById('btnBlockRoom');
+    if (btnBlockRoom) {
+      btnBlockRoom.addEventListener('click', () => this.blockRoom());
+    }
+  }
+
+  populateFloorFilter() {
+    const filterFloor = document.getElementById('filterFloor');
+    if (!filterFloor) return;
+
+    const floors = [...new Set(this.inventory.rooms.map(r => r.floor))].sort((a, b) => a - b);
+    floors.forEach(floor => {
+      const opt = document.createElement('option');
+      opt.value = floor;
+      opt.textContent = `${this.t('rmFloor', 'Andar')} ${floor}`;
+      filterFloor.appendChild(opt);
+    });
+  }
+
+  renderStats() {
+    const rooms = this.inventory.rooms;
+    const vacant = rooms.filter(r => r.status === 'vacant').length;
+    const vacantClean = rooms.filter(r => r.status === 'vacant' && r.cleaningStatus === 'clean').length;
+    const occupied = rooms.filter(r => r.status === 'occupied').length;
+    const dirty = rooms.filter(r => r.cleaningStatus === 'dirty').length;
+    const ooo = rooms.filter(r => r.status === 'out_of_order' || r.status === 'out_of_service').length;
+    const occupancyPercent = rooms.length > 0 ? Math.round((occupied / rooms.length) * 100) : 0;
+
+    this.setText('statVacantValue', vacant);
+    this.setText('statVacantClean', vacantClean);
+    this.setText('statOccupiedValue', occupied);
+    this.setText('statOccupiedPercent', `${occupancyPercent}%`);
+    this.setText('statDirtyValue', dirty);
+    this.setText('statOOOValue', ooo);
+  }
+
+  renderRooms() {
+    if (this.currentView === 'grid') {
+      this.renderGridView();
+    } else if (this.currentView === 'list') {
+      this.renderListView();
+    } else if (this.currentView === 'floor') {
+      this.renderFloorView();
+    }
+  }
+
+  renderGridView() {
+    const container = document.getElementById('roomsGridView');
+    if (!container) return;
+
+    const rooms = this.getFilteredRooms();
+    
+    if (rooms.length === 0) {
+      container.innerHTML = `<div class="empty-state"><p>${this.t('rmNoRooms', 'Nenhum quarto encontrado')}</p></div>`;
+      return;
+    }
+
+    container.innerHTML = rooms.map(room => this.renderRoomCard(room)).join('');
+
+    // Add click listeners
+    container.querySelectorAll('.room-card').forEach(card => {
+      card.addEventListener('click', () => {
+        const roomId = card.dataset.roomId;
+        this.openRoomDetail(roomId);
+      });
+    });
+  }
+
+  renderRoomCard(room) {
+    const statusClass = this.getRoomStatusClass(room);
+    const statusLabel = this.getRoomStatusLabel(room);
+    const cleaningLabel = this.getCleaningStatusLabel(room);
+    const reservation = this.engine.reservations.find(r => r.roomNumber === room.number && r.status === 'checked_in');
+    const guestName = reservation ? reservation.guestName : '';
+
+    return `
+      <div class="room-card ${statusClass}" data-room-id="${room.id}">
+        <div class="room-number">${room.number}</div>
+        <div class="room-type">${this.getRoomTypeLabel(room.roomType)}</div>
+        <div class="room-status">
+          <span class="status-badge ${statusClass}">${statusLabel}</span>
+        </div>
+        <div class="room-cleaning">
+          <span class="cleaning-badge ${room.cleaningStatus}">${cleaningLabel}</span>
+        </div>
+        ${guestName ? `<div class="room-guest">👤 ${guestName}</div>` : ''}
+      </div>
+    `;
+  }
+
+  renderListView() {
+    const tbody = document.getElementById('roomsTableBody');
+    if (!tbody) return;
+
+    const rooms = this.getFilteredRooms();
+
+    if (rooms.length === 0) {
+      tbody.innerHTML = `<tr><td colspan="8" style="text-align:center;padding:40px;color:var(--muted);">${this.t('rmNoRooms', 'Nenhum quarto encontrado')}</td></tr>`;
+      return;
+    }
+
+    tbody.innerHTML = rooms.map(room => this.renderRoomRow(room)).join('');
+
+    // Add click listeners
+    tbody.querySelectorAll('tr').forEach(row => {
+      const roomId = row.dataset.roomId;
+      if (roomId) {
+        row.style.cursor = 'pointer';
+        row.addEventListener('click', () => this.openRoomDetail(roomId));
+      }
+    });
+  }
+
+  renderRoomRow(room) {
+    const statusClass = this.getRoomStatusClass(room);
+    const statusLabel = this.getRoomStatusLabel(room);
+    const cleaningLabel = this.getCleaningStatusLabel(room);
+    const reservation = this.engine.reservations.find(r => r.roomNumber === room.number && r.status === 'checked_in');
+    const guestName = reservation ? reservation.guestName : '-';
+    const checkOut = reservation ? reservation.checkOutDate : '-';
+
+    return `
+      <tr data-room-id="${room.id}">
+        <td><strong>${room.number}</strong></td>
+        <td>${room.floor}</td>
+        <td>${this.getRoomTypeLabel(room.roomType)}</td>
+        <td><span class="status-badge ${statusClass}">${statusLabel}</span></td>
+        <td><span class="cleaning-badge ${room.cleaningStatus}">${cleaningLabel}</span></td>
+        <td>${guestName}</td>
+        <td>${checkOut !== '-' ? this.formatDate(checkOut) : '-'}</td>
+        <td>
+          <button class="btn-icon" onclick="event.stopPropagation(); roomMgmt.openRoomDetail('${room.id}')" title="${this.t('rmView', 'Ver')}">👁️</button>
+        </td>
+      </tr>
+    `;
+  }
+
+  renderFloorView() {
+    const container = document.getElementById('roomsFloorView');
+    if (!container) return;
+
+    const rooms = this.getFilteredRooms();
+    const floors = [...new Set(rooms.map(r => r.floor))].sort((a, b) => b - a);
+
+    if (floors.length === 0) {
+      container.innerHTML = `<div class="empty-state"><p>${this.t('rmNoRooms', 'Nenhum quarto encontrado')}</p></div>`;
+      return;
+    }
+
+    container.innerHTML = floors.map(floor => {
+      const floorRooms = rooms.filter(r => r.floor === floor);
+      return `
+        <div class="floor-section">
+          <h3 class="floor-title">${this.t('rmFloor', 'Andar')} ${floor}</h3>
+          <div class="floor-rooms">
+            ${floorRooms.map(room => this.renderRoomCard(room)).join('')}
+          </div>
+        </div>
+      `;
+    }).join('');
+
+    // Add click listeners
+    container.querySelectorAll('.room-card').forEach(card => {
+      card.addEventListener('click', () => {
+        const roomId = card.dataset.roomId;
+        this.openRoomDetail(roomId);
+      });
+    });
+  }
+
+  getFilteredRooms() {
+    let rooms = [...this.inventory.rooms];
+
+    // Filter by floor
+    if (this.filterFloor) {
+      rooms = rooms.filter(r => r.floor === parseInt(this.filterFloor));
+    }
+
+    // Filter by status
+    if (this.filterStatus) {
+      rooms = rooms.filter(r => r.status === this.filterStatus);
+    }
+
+    // Search
+    if (this.searchQuery) {
+      rooms = rooms.filter(r => 
+        r.number.toLowerCase().includes(this.searchQuery) ||
+        r.roomType.toLowerCase().includes(this.searchQuery)
+      );
+    }
+
+    return rooms.sort((a, b) => {
+      if (a.floor !== b.floor) return a.floor - b.floor;
+      return a.number.localeCompare(b.number);
+    });
+  }
+
+  switchView(view) {
+    this.currentView = view;
+
+    // Update active button
+    document.querySelectorAll('.view-toggle-btn').forEach(btn => {
+      btn.classList.toggle('active', btn.dataset.view === view);
+    });
+
+    // Show/hide views
+    document.getElementById('roomsGridView').style.display = view === 'grid' ? 'grid' : 'none';
+    document.getElementById('roomsListView').style.display = view === 'list' ? 'block' : 'none';
+    document.getElementById('roomsFloorView').style.display = view === 'floor' ? 'block' : 'none';
+
+    this.renderRooms();
+  }
+
+  openRoomDetail(roomId) {
+    const room = this.inventory.rooms.find(r => r.id === roomId);
+    if (!room) return;
+
+    this.selectedRoom = room;
+
+    const modal = document.getElementById('roomDetailModal');
+    const title = document.getElementById('roomDetailTitle');
+    const info = document.getElementById('roomDetailInfo');
+
+    if (!modal || !title || !info) return;
+
+    title.textContent = `${this.t('rmRoom', 'Quarto')} ${room.number}`;
+
+    const reservation = this.engine.reservations.find(r => r.roomNumber === room.number && r.status === 'checked_in');
+    const guestInfo = reservation ? `
+      <div class="detail-row">
+        <strong>${this.t('rmGuest', 'Hóspede')}:</strong>
+        <span>${reservation.guestName}</span>
+      </div>
+      <div class="detail-row">
+        <strong>${this.t('rmCheckOut', 'Check-out')}:</strong>
+        <span>${this.formatDate(reservation.checkOutDate)}</span>
+      </div>
+    ` : '';
+
+    info.innerHTML = `
+      <div class="detail-row">
+        <strong>${this.t('rmType', 'Tipo')}:</strong>
+        <span>${this.getRoomTypeLabel(room.roomType)}</span>
+      </div>
+      <div class="detail-row">
+        <strong>${this.t('rmFloor', 'Andar')}:</strong>
+        <span>${room.floor}</span>
+      </div>
+      <div class="detail-row">
+        <strong>${this.t('rmStatus', 'Status')}:</strong>
+        <span class="status-badge ${this.getRoomStatusClass(room)}">${this.getRoomStatusLabel(room)}</span>
+      </div>
+      <div class="detail-row">
+        <strong>${this.t('rmCleaning', 'Limpeza')}:</strong>
+        <span class="cleaning-badge ${room.cleaningStatus}">${this.getCleaningStatusLabel(room)}</span>
+      </div>
+      ${guestInfo}
+      ${room.notes ? `
+      <div class="detail-row">
+        <strong>${this.t('rmNotes', 'Observações')}:</strong>
+        <span>${room.notes}</span>
+      </div>
+      ` : ''}
+    `;
+
+    modal.style.display = 'flex';
+  }
+
+  closeRoomDetailModal() {
+    const modal = document.getElementById('roomDetailModal');
+    if (modal) modal.style.display = 'none';
+    this.selectedRoom = null;
+  }
+
+  openChangeStatusModal() {
+    if (!this.selectedRoom) return;
+
+    const modal = document.getElementById('changeStatusModal');
+    const roomIdInput = document.getElementById('changeStatusRoomId');
+    const statusSelect = document.getElementById('newRoomStatus');
+
+    if (!modal || !roomIdInput || !statusSelect) return;
+
+    roomIdInput.value = this.selectedRoom.id;
+    statusSelect.value = this.selectedRoom.status;
+
+    modal.style.display = 'flex';
+  }
+
+  closeChangeStatusModal() {
+    const modal = document.getElementById('changeStatusModal');
+    if (modal) modal.style.display = 'none';
+  }
+
+  submitChangeStatus() {
+    const roomId = document.getElementById('changeStatusRoomId').value;
+    const newStatus = document.getElementById('newRoomStatus').value;
+    const reason = document.getElementById('statusReason').value;
+
+    const room = this.inventory.rooms.find(r => r.id === roomId);
+    if (!room) return;
+
+    room.status = newStatus;
+    if (reason) room.notes = reason;
+    room.lastUpdated = new Date().toISOString();
+
+    this.inventory.saveRooms();
+
+    this.closeChangeStatusModal();
+    this.closeRoomDetailModal();
+    this.renderStats();
+    this.renderRooms();
+
+    alert(this.t('rmStatusChanged', 'Status alterado com sucesso!'));
+  }
+
+  requestCleaning() {
+    if (!this.selectedRoom) return;
+
+    this.selectedRoom.cleaningStatus = 'cleaning';
+    this.selectedRoom.lastUpdated = new Date().toISOString();
+    this.inventory.saveRooms();
+
+    this.closeRoomDetailModal();
+    this.renderStats();
+    this.renderRooms();
+
+    alert(this.t('rmCleaningRequested', 'Limpeza solicitada com sucesso!'));
+  }
+
+  blockRoom() {
+    if (!this.selectedRoom) return;
+
+    const reason = prompt(this.t('rmBlockReasonPrompt', 'Motivo do bloqueio:'));
+    if (!reason) return;
+
+    this.selectedRoom.status = 'out_of_order';
+    this.selectedRoom.notes = reason;
+    this.selectedRoom.lastUpdated = new Date().toISOString();
+    this.inventory.saveRooms();
+
+    this.closeRoomDetailModal();
+    this.renderStats();
+    this.renderRooms();
+
+    alert(this.t('rmRoomBlocked', 'Quarto bloqueado com sucesso!'));
+  }
+
+  exportRooms() {
+    const rooms = this.getFilteredRooms();
+    const csv = this.generateCSV(rooms);
+    const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
+    const link = document.createElement('a');
+    const url = URL.createObjectURL(blob);
+    link.setAttribute('href', url);
+    link.setAttribute('download', `rooms_${new Date().toISOString().split('T')[0]}.csv`);
+    link.style.visibility = 'hidden';
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+  }
+
+  generateCSV(rooms) {
+    const headers = ['Quarto', 'Andar', 'Tipo', 'Status', 'Limpeza', 'Hóspede', 'Check-out'];
+    const rows = rooms.map(room => {
+      const reservation = this.engine.reservations.find(r => r.roomNumber === room.number && r.status === 'checked_in');
+      return [
+        room.number,
+        room.floor,
+        this.getRoomTypeLabel(room.roomType),
+        this.getRoomStatusLabel(room),
+        this.getCleaningStatusLabel(room),
+        reservation ? reservation.guestName : '-',
+        reservation ? this.formatDate(reservation.checkOutDate) : '-'
+      ];
+    });
+    return [headers, ...rows].map(row => row.join(',')).join('\n');
+  }
+
+  getRoomStatusClass(room) {
+    const statusMap = {
+      'vacant': 'vacant',
+      'occupied': 'occupied',
+      'dirty': 'dirty',
+      'clean': 'clean',
+      'out_of_order': 'out-of-order',
+      'out_of_service': 'out-of-service'
+    };
+    return statusMap[room.status] || 'vacant';
+  }
+
+  getRoomStatusLabel(room) {
+    const statusMap = {
+      'vacant': this.t('rmStatusVacant', 'Vago'),
+      'occupied': this.t('rmStatusOccupied', 'Ocupado'),
+      'dirty': this.t('rmStatusDirty', 'Sujo'),
+      'clean': this.t('rmStatusClean', 'Limpo'),
+      'out_of_order': this.t('rmStatusOutOfOrder', 'Fora de Ordem'),
+      'out_of_service': this.t('rmStatusOutOfService', 'Fora de Serviço')
+    };
+    return statusMap[room.status] || room.status;
+  }
+
+  getCleaningStatusLabel(room) {
+    const statusMap = {
+      'clean': this.t('rmCleaningClean', 'Limpo'),
+      'dirty': this.t('rmCleaningDirty', 'Sujo'),
+      'cleaning': this.t('rmCleaningInProgress', 'Em Limpeza'),
+      'inspected': this.t('rmCleaningInspected', 'Inspecionado')
+    };
+    return statusMap[room.cleaningStatus] || room.cleaningStatus;
+  }
+
+  getRoomTypeLabel(type) {
+    const typeMap = {
+      'standard': this.t('resStandard', 'Standard'),
+      'deluxe': this.t('resDeluxe', 'Deluxe'),
+      'suite': this.t('resSuite', 'Suíte')
+    };
+    return typeMap[type] || type;
+  }
+
+  formatDate(dateStr) {
+    if (!dateStr) return '-';
+    const [y, m, d] = dateStr.split('-');
+    return `${d}/${m}/${y}`;
+  }
+
+  setText(id, value) {
+    const el = document.getElementById(id);
+    if (el) el.textContent = value;
+  }
+}
+
+// Initialize
+let roomMgmt;
+document.addEventListener('DOMContentLoaded', () => {
+  roomMgmt = new RoomManagementController();
+  window.roomMgmt = roomMgmt; // Make available globally for inline handlers
+});

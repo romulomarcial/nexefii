@@ -1,0 +1,19 @@
+{
+  "rmPageTitle": "🛏️ Gestão de Quartos",
+  "rmRefresh": "Atualizar",
+  "rmExport": "Exportar",
+  "rmVacant": "Vagos",
+  "rmOccupied": "Ocupados",
+  "rmDirty": "Sujos",
+  "rmOutOfOrder": "Fora de Serviço",
+  "rmViewGrid": "Grade",
+  "rmViewList": "Lista",
+  "rmViewFloor": "Por Andar",
+  "rmFilterFloor": "Andar",
+  "rmAllFloors": "Todos",
+  "rmFilterStatus": "Status",
+  "rmAllStatuses": "Todos",
+  "rmStatusVacant": "Vago",
+  "rmStatusOccupied": "Ocupado",
+  "rmStatusDirty": "Sujo"
+}

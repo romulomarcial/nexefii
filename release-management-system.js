@@ -1,4 +1,4 @@
-/**
+﻿/**
  * Release Management & Rollback System
  * Semantic versioning, safe deployment, automated rollback
  * 
@@ -182,7 +182,7 @@ class ReleaseManagementSystem {
   generateSBOM() {
     // Software Bill of Materials
     return [
-      { name: 'IluxSys Core', version: '2.5.0', license: 'Proprietary' },
+      { name: 'nexefii Core', version: '2.5.0', license: 'Proprietary' },
       { name: 'LocalStorage API', version: 'Web Standard', license: 'W3C' }
     ];
   }
@@ -540,19 +540,19 @@ class ReleaseManagementSystem {
       targetRelease: target ? { id: target.id, version: target.version, created_at: target.created_at, name: target.name } : null,
       currentRelease: current ? { id: current.id, version: current.version, created_at: current.created_at, name: current.name } : null,
       steps: [
-        'Entrar em modo de manutenção',
-        'Criar backup de segurança',
+        'Entrar em modo de manutenÃ§Ã£o',
+        'Criar backup de seguranÃ§a',
         'Executar migrations backward',
         'Restaurar arquivos da release alvo',
-        'Executar verificações de saúde pós-rollback',
-        'Sair do modo de manutenção'
+        'Executar verificaÃ§Ãµes de saÃºde pÃ³s-rollback',
+        'Sair do modo de manutenÃ§Ã£o'
       ],
       backwardMigrations: (current && current.migrations && Array.isArray(current.migrations.backward)) ? current.migrations.backward : [],
       estimated_duration_ms: 15 * 60 * 1000,
       prerequisites: [
-        'Release anterior disponível',
-        'Migrations backward disponíveis',
-        'Armazenamento de backup acessível'
+        'Release anterior disponÃ­vel',
+        'Migrations backward disponÃ­veis',
+        'Armazenamento de backup acessÃ­vel'
       ]
     };
     return plan;
@@ -672,3 +672,4 @@ class ReleaseManagementSystem {
 if (typeof window !== 'undefined') {
   window.ReleaseManagementSystem = ReleaseManagementSystem;
 }
+

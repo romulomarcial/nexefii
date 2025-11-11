@@ -1,0 +1,19 @@
+{
+  "rmPageTitle": "🛏️ Room Management",
+  "rmRefresh": "Refresh",
+  "rmExport": "Export",
+  "rmVacant": "Vacant",
+  "rmOccupied": "Occupied",
+  "rmDirty": "Dirty",
+  "rmOutOfOrder": "Out of Service",
+  "rmViewGrid": "Grid",
+  "rmViewList": "List",
+  "rmViewFloor": "By Floor",
+  "rmFilterFloor": "Floor",
+  "rmAllFloors": "All",
+  "rmFilterStatus": "Status",
+  "rmAllStatuses": "All",
+  "rmStatusVacant": "Vacant",
+  "rmStatusOccupied": "Occupied",
+  "rmStatusDirty": "Dirty"
+}

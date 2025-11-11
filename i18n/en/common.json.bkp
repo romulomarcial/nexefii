@@ -1,0 +1,21 @@
+{
+  "languages": {"pt":"Português","en":"English","es":"Español"},
+  "home": {
+    "title": "Welcome to NEXEFII",
+    "subtitle": "Advanced hotel management system. Select a property to get started.",
+    "newPropertyBtn": "New Property",
+    "empty": {"title": "No Properties Found", "message": "You don't have any properties registered yet.", "cta": "Add First Property"},
+    "card": {
+      "noModules": "No modules",
+      "defaultDescription": "Click to open the control panel",
+      "stats": {"rooms": "Rooms", "occupancy": "Occupancy", "reservations": "Reservations"}
+    }
+  }
+  ,
+  "footer": {
+    "copy": "© 2025 NEXEFII. All rights reserved.",
+    "help": "Help",
+    "privacy": "Privacy",
+    "terms": "Terms"
+  }
+}

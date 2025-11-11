@@ -9,7 +9,7 @@ const fs = require('fs');
 const path = require('path');
 
 const PORT = parseInt(process.env.PORT || '8004', 10);
-const ROOT = __dirname; // r:\Development\Projects\iluxsys
+const ROOT = __dirname; // r:\Development\Projects\nexefii
 
 const MIME = {
   '.html': 'text/html; charset=utf-8',
@@ -91,3 +91,4 @@ server.listen(PORT, () => {
   console.log(`NEXEFII dev server running at http://localhost:${PORT}/`);
   console.log(`Serving from ${ROOT}`);
 });
+

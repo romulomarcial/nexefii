@@ -8,6 +8,21 @@
   <link rel="alternate icon" href="favicon.ico">
   <link rel="stylesheet" href="style.css">
   <link rel="stylesheet" href="master-control-v3.css">
+  <script>
+    // Lightweight IluxProps shim so headless checks and migration pages can read properties
+    (function(){
+      try {
+        if (!window.IluxProps) {
+          window.IluxProps = {
+            listProperties: function(){ try { const m = JSON.parse(localStorage.getItem('nexefii_properties')||'{}'); return Object.keys(m).map(k=>m[k]); } catch(e){ return []; } },
+            getProperty: function(k){ try{ const m = JSON.parse(localStorage.getItem('nexefii_properties')||'{}'); return m[k] || null;}catch(e){return null}},
+            upsertProperty: function(p){ try{ const m = JSON.parse(localStorage.getItem('nexefii_properties')||'{}'); m[p.key]=p; localStorage.setItem('nexefii_properties', JSON.stringify(m)); return p;}catch(e){return null}},
+            deleteProperty: function(k){ try{ const m = JSON.parse(localStorage.getItem('nexefii_properties')||'{}'); delete m[k]; localStorage.setItem('nexefii_properties', JSON.stringify(m)); return true;}catch(e){return false}}
+          };
+        }
+      } catch (e) { /* ignore */ }
+    })();
+  </script>
   <style>
     /* Deployment Wizard Enhancements */
     .check-card {
@@ -2401,3 +2416,4 @@
   <script src="property-publish-helpers.js"></script>
 </body>
 </html>
+

@@ -1,0 +1,40 @@
+{
+  "dashboard": {
+    "title": "Panel",
+    "subtitle": "Resumen de la propiedad",
+    "loading": "Cargando propiedades...",
+    "noProperties": "No hay propiedades disponibles",
+    "noPropertiesDesc": "Cree u obtenga acceso a una propiedad para ver métricas.",
+    "openControl": "Abrir Control",
+    "openAutomation": "Centro Virtual de Automatización",
+    "forecast": "Pronóstico 7 días",
+    "comparative": {
+      "title": "📊 KPIs Consolidados - Todas las Propiedades",
+      "avgOccupancy": "Ocupación Promedio",
+      "totalRevenue": "Ingresos Totales Hoy",
+      "operations": "Operaciones Hoy",
+      "stayovers": "Stayovers",
+      "forecast": "Pronóstico 7 días",
+      "totalAlerts": "Alertas Activas",
+      "requiresAttention": "Requiere atención",
+      "bestPerformance": "Mejor Desempeño"
+    },
+    "kpi": {
+      "revenue": "Ingresos Hoy",
+      "rooms": "Habitaciones",
+      "operations": "Operaciones Hoy",
+      "alerts": "Alertas Activas"
+    },
+    "reservas": {
+      "recentes": "Reservas Recientes",
+      "verTodas": "Ver Todas"
+    },
+    "acoes": {
+      "rapidas": "Acciones Rápidas",
+      "quartos": "Habitaciones",
+      "novaReserva": "Nueva Reserva",
+      "hospedes": "Huéspedes",
+      "configuracoes": "Configuraciones"
+    }
+  }
+}

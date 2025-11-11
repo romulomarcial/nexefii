@@ -1,0 +1,647 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Router.js - Test Suite</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+      background: #1a1a1a;
+      color: #ffffff;
+      padding: 20px;
+    }
+
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+
+    h1 {
+      background: linear-gradient(135deg, #E42121, #ff6b6b);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      font-size: 2.5rem;
+      margin-bottom: 10px;
+    }
+
+    .subtitle {
+      color: #999;
+      margin-bottom: 30px;
+    }
+
+    .stats {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 15px;
+      margin-bottom: 30px;
+    }
+
+    .stat-card {
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      border-radius: 12px;
+      padding: 20px;
+    }
+
+    .stat-value {
+      font-size: 2rem;
+      font-weight: 700;
+      margin-bottom: 5px;
+    }
+
+    .stat-label {
+      color: #999;
+      font-size: 0.9rem;
+    }
+
+    .stat-card.passed .stat-value { color: #00ff88; }
+    .stat-card.failed .stat-value { color: #ff4444; }
+    .stat-card.total .stat-value { color: #6b9eff; }
+
+    .test-section {
+      background: rgba(255, 255, 255, 0.03);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      border-radius: 12px;
+      padding: 20px;
+      margin-bottom: 20px;
+    }
+
+    .test-section h2 {
+      font-size: 1.3rem;
+      margin-bottom: 15px;
+      color: #E42121;
+    }
+
+    .test-item {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 10px;
+      margin-bottom: 8px;
+      background: rgba(0, 0, 0, 0.2);
+      border-radius: 8px;
+      border-left: 3px solid transparent;
+    }
+
+    .test-item.passed {
+      border-left-color: #00ff88;
+    }
+
+    .test-item.failed {
+      border-left-color: #ff4444;
+    }
+
+    .test-icon {
+      font-size: 1.2rem;
+      min-width: 24px;
+    }
+
+    .test-name {
+      flex: 1;
+      font-size: 0.95rem;
+    }
+
+    .test-time {
+      color: #999;
+      font-size: 0.85rem;
+    }
+
+    .test-error {
+      color: #ff6b6b;
+      font-size: 0.85rem;
+      margin-top: 5px;
+      padding-left: 34px;
+    }
+
+    .controls {
+      display: flex;
+      gap: 10px;
+      margin-bottom: 30px;
+    }
+
+    .btn {
+      background: linear-gradient(135deg, #E42121, #ff4444);
+      color: white;
+      border: none;
+      padding: 12px 24px;
+      border-radius: 8px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+
+    .btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 5px 20px rgba(228, 33, 33, 0.4);
+    }
+
+    .btn:active {
+      transform: translateY(0);
+    }
+
+    .btn.secondary {
+      background: rgba(255, 255, 255, 0.1);
+    }
+
+    .btn.secondary:hover {
+      background: rgba(255, 255, 255, 0.15);
+      box-shadow: 0 5px 20px rgba(255, 255, 255, 0.1);
+    }
+
+    .debug-log {
+      background: #000;
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      border-radius: 8px;
+      padding: 15px;
+      max-height: 300px;
+      overflow-y: auto;
+      font-family: 'Courier New', monospace;
+      font-size: 0.85rem;
+      margin-top: 20px;
+    }
+
+    .debug-log .log-item {
+      margin-bottom: 5px;
+      padding: 5px;
+      border-radius: 4px;
+    }
+
+    .debug-log .log-item.info { color: #6b9eff; }
+    .debug-log .log-item.success { color: #00ff88; }
+    .debug-log .log-item.error { color: #ff4444; }
+    .debug-log .log-item.warn { color: #ffaa00; }
+
+    @keyframes fadeIn {
+      from {
+        opacity: 0;
+        transform: translateY(10px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    .test-item {
+      animation: fadeIn 0.3s ease-out;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>🧭 Router.js Test Suite</h1>
+    <p class="subtitle">Comprehensive testing for multi-tenant SPA routing</p>
+
+    <div class="stats">
+      <div class="stat-card total">
+        <div class="stat-value" id="totalTests">0</div>
+        <div class="stat-label">Total Tests</div>
+      </div>
+      <div class="stat-card passed">
+        <div class="stat-value" id="passedTests">0</div>
+        <div class="stat-label">Passed</div>
+      </div>
+      <div class="stat-card failed">
+        <div class="stat-value" id="failedTests">0</div>
+        <div class="stat-label">Failed</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-value" id="duration">0ms</div>
+        <div class="stat-label">Duration</div>
+      </div>
+    </div>
+
+    <div class="controls">
+      <button class="btn" onclick="runAllTests()">▶️ Run All Tests</button>
+      <button class="btn secondary" onclick="clearResults()">🗑️ Clear Results</button>
+      <button class="btn secondary" onclick="toggleDebugLog()">📋 Toggle Debug Log</button>
+    </div>
+
+    <div id="testSections"></div>
+
+    <div class="debug-log" id="debugLog" style="display: none;"></div>
+  </div>
+
+  <script src="Router.js"></script>
+  <script>
+    // Test framework
+    let totalTests = 0;
+    let passedTests = 0;
+    let failedTests = 0;
+    let startTime = 0;
+    let testResults = [];
+
+    function assert(condition, message) {
+      if (!condition) {
+        throw new Error(message || 'Assertion failed');
+      }
+    }
+
+    function log(message, type = 'info') {
+      const debugLog = document.getElementById('debugLog');
+      const item = document.createElement('div');
+      item.className = `log-item ${type}`;
+      item.textContent = `[${new Date().toLocaleTimeString()}] ${message}`;
+      debugLog.appendChild(item);
+      debugLog.scrollTop = debugLog.scrollHeight;
+    }
+
+    function toggleDebugLog() {
+      const debugLog = document.getElementById('debugLog');
+      debugLog.style.display = debugLog.style.display === 'none' ? 'block' : 'none';
+    }
+
+    function clearResults() {
+      document.getElementById('testSections').innerHTML = '';
+      document.getElementById('debugLog').innerHTML = '';
+      totalTests = 0;
+      passedTests = 0;
+      failedTests = 0;
+      updateStats();
+    }
+
+    function updateStats() {
+      document.getElementById('totalTests').textContent = totalTests;
+      document.getElementById('passedTests').textContent = passedTests;
+      document.getElementById('failedTests').textContent = failedTests;
+      
+      if (startTime) {
+        const duration = Date.now() - startTime;
+        document.getElementById('duration').textContent = `${duration}ms`;
+      }
+    }
+
+    function addTestResult(section, name, passed, error = null, time = 0) {
+      totalTests++;
+      if (passed) passedTests++;
+      else failedTests++;
+
+      testResults.push({ section, name, passed, error, time });
+
+      // Find or create section
+      let sectionEl = document.querySelector(`[data-section="${section}"]`);
+      if (!sectionEl) {
+        sectionEl = document.createElement('div');
+        sectionEl.className = 'test-section';
+        sectionEl.dataset.section = section;
+        sectionEl.innerHTML = `<h2>${section}</h2>`;
+        document.getElementById('testSections').appendChild(sectionEl);
+      }
+
+      // Add test item
+      const item = document.createElement('div');
+      item.className = `test-item ${passed ? 'passed' : 'failed'}`;
+      item.innerHTML = `
+        <div class="test-icon">${passed ? '✅' : '❌'}</div>
+        <div class="test-name">${name}</div>
+        <div class="test-time">${time.toFixed(2)}ms</div>
+        ${error ? `<div class="test-error">${error}</div>` : ''}
+      `;
+      sectionEl.appendChild(item);
+
+      updateStats();
+    }
+
+    async function runTest(section, name, testFn) {
+      const start = performance.now();
+      try {
+        await testFn();
+        const time = performance.now() - start;
+        addTestResult(section, name, true, null, time);
+        log(`✅ ${name}`, 'success');
+      } catch (error) {
+        const time = performance.now() - start;
+        addTestResult(section, name, false, error.message, time);
+        log(`❌ ${name}: ${error.message}`, 'error');
+      }
+    }
+
+    // Mock properties for testing
+    const mockProperties = [
+      { id: 1, key: 'hotel-abc', slug: 'hotel-abc', name: 'Hotel ABC' },
+      { id: 2, key: 'hotel-xyz', slug: 'hotel-xyz', name: 'Hotel XYZ' },
+      { id: 3, key: 'resort-paradise', slug: 'resort-paradise', name: 'Paradise Resort' }
+    ];
+
+    // Mock authentication
+    let isAuthenticated = true;
+    let currentUser = { id: 1, name: 'Test User', properties: [1, 2] };
+
+    // ============================================================
+    // TEST SUITES
+    // ============================================================
+
+    async function runAllTests() {
+      clearResults();
+      startTime = Date.now();
+      log('🚀 Starting Router.js test suite...', 'info');
+
+      await testRouteMatching();
+      await testPropertyResolution();
+      await testAuthGuards();
+      await testPropertyAccessGuards();
+      await testRouteGuards();
+      await testMiddleware();
+      await testNavigation();
+      await testNamedRoutes();
+      await testHooks();
+      await testNotFound();
+      await testQueryParams();
+      await testStaticMethods();
+
+      log(`✅ Test suite completed: ${passedTests}/${totalTests} passed`, 'success');
+    }
+
+    // Test 1: Route Matching
+    async function testRouteMatching() {
+      await runTest('Route Matching', 'Simple route (/)', async () => {
+        const router = Router.create();
+        let called = false;
+        router.route('/', () => { called = true; });
+        await router._handleRoute('/');
+        assert(called, 'Handler should be called');
+      });
+
+      await runTest('Route Matching', 'Route with single param (/property/:slug)', async () => {
+        const router = Router.create();
+        let params = null;
+        router.route('/property/:slug', (ctx) => { params = ctx.params; });
+        await router._handleRoute('/property/hotel-abc');
+        assert(params?.slug === 'hotel-abc', 'Should extract slug parameter');
+      });
+
+      await runTest('Route Matching', 'Route with multiple params', async () => {
+        const router = Router.create();
+        let params = null;
+        router.route('/property/:slug/rooms/:roomId', (ctx) => { params = ctx.params; });
+        await router._handleRoute('/property/hotel-abc/rooms/101');
+        assert(params?.slug === 'hotel-abc' && params?.roomId === '101', 'Should extract all params');
+      });
+
+      await runTest('Route Matching', 'Route with nested params', async () => {
+        const router = Router.create();
+        let params = null;
+        router.route('/property/:slug/pms/reservations/:id', (ctx) => { params = ctx.params; });
+        await router._handleRoute('/property/hotel-abc/pms/reservations/R12345');
+        assert(params?.slug === 'hotel-abc' && params?.id === 'R12345', 'Should extract nested params');
+      });
+    }
+
+    // Test 2: Property Resolution
+    async function testPropertyResolution() {
+      await runTest('Property Resolution', 'Resolve existing property', async () => {
+        const router = Router.create();
+        router.setPropertyResolver(async (slug) => {
+          return mockProperties.find(p => p.slug === slug);
+        });
+        
+        let property = null;
+        router.route('/property/:slug', (ctx) => { property = ctx.property; });
+        await router._handleRoute('/property/hotel-abc');
+        
+        assert(property?.name === 'Hotel ABC', 'Should resolve property by slug');
+      });
+
+      await runTest('Property Resolution', 'Handle non-existent property', async () => {
+        const router = Router.create();
+        router.setPropertyResolver(async (slug) => {
+          return mockProperties.find(p => p.slug === slug);
+        });
+        
+        let notFoundCalled = false;
+        router.notFound(() => { notFoundCalled = true; });
+        router.route('/property/:slug', () => {});
+        
+        await router._handleRoute('/property/non-existent');
+        assert(notFoundCalled, 'Should call notFound handler for non-existent property');
+      });
+    }
+
+    // Test 3: Auth Guards
+    async function testAuthGuards() {
+      await runTest('Auth Guards', 'Allow authenticated user', async () => {
+        const router = Router.create();
+        router.setAuthGuard(async () => isAuthenticated);
+        
+        let called = false;
+        router.route('/dashboard', () => { called = true; });
+        await router._handleRoute('/dashboard');
+        
+        assert(called, 'Should allow authenticated user');
+      });
+
+      await runTest('Auth Guards', 'Block unauthenticated user', async () => {
+        const router = Router.create();
+        isAuthenticated = false;
+        router.setAuthGuard(async () => isAuthenticated);
+        
+        let called = false;
+        router.route('/dashboard', () => { called = true; });
+        await router._handleRoute('/dashboard');
+        
+        isAuthenticated = true; // Reset
+        assert(!called, 'Should block unauthenticated user');
+      });
+    }
+
+    // Test 4: Property Access Guards
+    async function testPropertyAccessGuards() {
+      await runTest('Property Access Guards', 'Allow access to owned property', async () => {
+        const router = Router.create();
+        router.setPropertyResolver(async (slug) => mockProperties.find(p => p.slug === slug));
+        router.setPropertyAccessGuard(async (property) => {
+          return currentUser.properties.includes(property.id);
+        });
+        
+        let called = false;
+        router.route('/property/:slug', () => { called = true; });
+        await router._handleRoute('/property/hotel-abc'); // User owns property 1
+        
+        assert(called, 'Should allow access to owned property');
+      });
+
+      await runTest('Property Access Guards', 'Block access to non-owned property', async () => {
+        const router = Router.create();
+        router.setPropertyResolver(async (slug) => mockProperties.find(p => p.slug === slug));
+        router.setPropertyAccessGuard(async (property) => {
+          return currentUser.properties.includes(property.id);
+        });
+        
+        let called = false;
+        router.route('/property/:slug', () => { called = true; });
+        await router._handleRoute('/property/resort-paradise'); // User doesn't own property 3
+        
+        assert(!called, 'Should block access to non-owned property');
+      });
+    }
+
+    // Test 5: Route Guards
+    async function testRouteGuards() {
+      await runTest('Route Guards', 'Pass guard', async () => {
+        const router = Router.create();
+        const requiresAdmin = async () => currentUser.name === 'Test User';
+        
+        let called = false;
+        router.route('/admin', () => { called = true; }, { guards: [requiresAdmin] });
+        await router._handleRoute('/admin');
+        
+        assert(called, 'Should pass guard and execute handler');
+      });
+
+      await runTest('Route Guards', 'Fail guard', async () => {
+        const router = Router.create();
+        const requiresAdmin = async () => currentUser.name === 'Admin User';
+        
+        let called = false;
+        router.route('/admin', () => { called = true; }, { guards: [requiresAdmin] });
+        await router._handleRoute('/admin');
+        
+        assert(!called, 'Should fail guard and not execute handler');
+      });
+    }
+
+    // Test 6: Middleware
+    async function testMiddleware() {
+      await runTest('Middleware', 'Global middleware execution', async () => {
+        const router = Router.create();
+        let middlewareCalled = false;
+        router.use(async () => { middlewareCalled = true; });
+        router.route('/test', () => {});
+        await router._handleRoute('/test');
+        
+        assert(middlewareCalled, 'Global middleware should be called');
+      });
+
+      await runTest('Middleware', 'Route-specific middleware', async () => {
+        const router = Router.create();
+        let middlewareCalled = false;
+        const middleware = async () => { middlewareCalled = true; };
+        router.route('/test', () => {}, { middleware: [middleware] });
+        await router._handleRoute('/test');
+        
+        assert(middlewareCalled, 'Route middleware should be called');
+      });
+
+      await runTest('Middleware', 'Middleware execution order', async () => {
+        const router = Router.create();
+        const order = [];
+        router.use(async () => { order.push('global'); });
+        const routeMiddleware = async () => { order.push('route'); };
+        router.route('/test', () => { order.push('handler'); }, { middleware: [routeMiddleware] });
+        await router._handleRoute('/test');
+        
+        assert(
+          order[0] === 'global' && order[1] === 'route' && order[2] === 'handler',
+          'Middleware should execute in correct order'
+        );
+      });
+    }
+
+    // Test 7: Navigation
+    async function testNavigation() {
+      await runTest('Navigation', 'Build URL from pattern', () => {
+        const url = Router.buildUrl('/property/:slug/rooms/:roomId', {
+          slug: 'hotel-abc',
+          roomId: '101'
+        });
+        assert(url === '/property/hotel-abc/rooms/101', 'Should build correct URL');
+      });
+
+      await runTest('Navigation', 'Parse URL to params', () => {
+        const params = Router.parseUrl(
+          '/property/hotel-abc/rooms/101',
+          '/property/:slug/rooms/:roomId'
+        );
+        assert(params.slug === 'hotel-abc' && params.roomId === '101', 'Should parse URL correctly');
+      });
+    }
+
+    // Test 8: Named Routes
+    async function testNamedRoutes() {
+      await runTest('Named Routes', 'Find route by name', async () => {
+        const router = Router.create();
+        router.route('/dashboard', () => {}, { name: 'dashboard' });
+        
+        const route = router.routes.find(r => r.name === 'dashboard');
+        assert(route !== undefined, 'Should find route by name');
+      });
+    }
+
+    // Test 9: Hooks
+    async function testHooks() {
+      await runTest('Hooks', 'Before navigate hook', async () => {
+        const router = Router.create({ mode: 'hash' }); // Use hash mode to avoid pushState issues
+        let hookCalled = false;
+        router.beforeEach(async () => { hookCalled = true; });
+        router.route('/test', () => {});
+        await router.navigate('/test');
+        
+        assert(hookCalled, 'Before navigate hook should be called');
+      });
+
+      await runTest('Hooks', 'After navigate hook', async () => {
+        const router = Router.create({ mode: 'hash' }); // Use hash mode to avoid pushState issues
+        let hookCalled = false;
+        router.afterEach(async () => { hookCalled = true; });
+        router.route('/test', () => {});
+        await router.navigate('/test');
+        
+        assert(hookCalled, 'After navigate hook should be called');
+      });
+    }
+
+    // Test 10: 404 Handling
+    async function testNotFound() {
+      await runTest('404 Handling', 'Call notFound handler', async () => {
+        const router = Router.create();
+        let notFoundCalled = false;
+        router.notFound(() => { notFoundCalled = true; });
+        await router._handleRoute('/non-existent-route');
+        
+        assert(notFoundCalled, 'notFound handler should be called for unmatched route');
+      });
+    }
+
+    // Test 11: Query Params
+    async function testQueryParams() {
+      await runTest('Query Params', 'Parse query parameters', () => {
+        // Test URLSearchParams parsing directly (avoid window.location mock issues)
+        const testUrl = 'http://localhost:8000/test?filter=available&sort=asc';
+        const url = new URL(testUrl);
+        const params = new URLSearchParams(url.search);
+        
+        const query = {};
+        for (const [key, value] of params.entries()) {
+          query[key] = value;
+        }
+        
+        assert(query.filter === 'available' && query.sort === 'asc', 'Should parse query params');
+      });
+    }
+
+    // Test 12: Static Methods
+    async function testStaticMethods() {
+      await runTest('Static Methods', 'Router.create() factory', () => {
+        const router = Router.create({ debug: true });
+        assert(router instanceof Router, 'Should create Router instance');
+        assert(router.debug === true, 'Should apply options');
+      });
+
+      await runTest('Static Methods', 'Path normalization', () => {
+        const router = Router.create();
+        assert(router._normalizePath('test') === '/test', 'Should add leading slash');
+        assert(router._normalizePath('/test/') === '/test', 'Should remove trailing slash');
+        assert(router._normalizePath('#/test') === '/test', 'Should remove hash');
+      });
+    }
+  </script>
+</body>
+</html>

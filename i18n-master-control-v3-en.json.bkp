@@ -1,0 +1,256 @@
+{
+  "master": {
+    "breadcrumb": {
+      "home": "Home",
+      "dashboard": "Dashboard",
+      "backups": "Backups",
+      "releases": "Releases",
+      "users": "Users",
+      "logs": "Logs",
+      "settings": "Settings",
+      "maintenance": "Maintenance",
+      "i18n": "Internationalization",
+      "metrics": "Metrics"
+    },
+    "tabs": {
+      "dashboard": "Dashboard",
+      "backups": "Backups",
+      "releases": "Releases & Rollback",
+      "users": "Users",
+      "logs": "Logs & Audit",
+      "settings": "Settings",
+      "maintenance": "Maintenance",
+      "i18n": "Internationalization",
+      "metrics": "Metrics"
+    },
+    "dashboard": {
+      "title": "Dashboard",
+      "help": {
+        "pt": "System usage and status overview.",
+        "en": "System usage and status overview.",
+        "es": "System usage and status overview."
+      }
+    },
+    "backups": {
+      "title": "Backups",
+      "help": {
+        "pt": "Create and restore backups for the app and properties.",
+        "en": "Create and restore backups for the app and properties.",
+        "es": "Create and restore backups for the app and properties."
+      },
+      "propertyBackups": {
+        "tab": "Property Backups",
+        "title": "Property Backups",
+        "help": {
+          "pt": "Create isolated backups per property and restore specific points.",
+          "en": "Create isolated backups per property and restore specific points.",
+          "es": "Create isolated backups per property and restore specific points."
+        },
+        "metrics": {
+          "totalBackups": "Total Backups",
+          "last24h": "Last 24h",
+          "successRate": "Success Rate",
+          "totalSize": "Total Size"
+        },
+        "actions": {
+          "full": "Full Backup",
+          "incremental": "Incremental",
+          "selective": "Selective",
+          "scheduler": "Scheduler",
+          "restoreWizard": "Restore Wizard"
+        },
+        "filters": {
+          "allProperties": "All Properties",
+          "allTypes": "All Types",
+          "typeFull": "Full",
+          "typeIncremental": "Incremental",
+          "typeSelective": "Selective",
+          "search": "🔍 Search backup..."
+        }
+      },
+      "generalStructure": {
+        "tab": "General Structure",
+        "title": "General Structure",
+        "help": {
+          "pt": "Ensures safe rollback of code and layout updates.",
+          "en": "Ensures safe rollback of code and layout updates.",
+          "es": "Ensures safe rollback of code and layout updates."
+        },
+        "metrics": {
+          "totalBackups": "Structure Backups",
+          "components": "Components",
+          "totalSize": "Total Size",
+          "lastBackup": "Last Backup"
+        },
+        "actions": {
+          "create": "Create Backup",
+          "restore": "Restore",
+          "compare": "Compare"
+        },
+        "componentsTitle": "Structure Components",
+        "components": {
+          "stylesheets": "Stylesheets",
+          "scripts": "Scripts",
+          "i18n": "Translations",
+          "templates": "Templates",
+          "migrations": "Migrations",
+          "assets": "Assets"
+        }
+      }
+    },
+    "releases": {
+      "title": "Releases & Rollback",
+      "help": {
+        "pt": "Manages official releases and enables reverting to previous ones.",
+        "en": "Manages official releases and enables reverting to previous ones.",
+        "es": "Manages official releases and enables reverting to previous ones."
+      }
+    },
+    "users": {
+      "title": "Users",
+      "help": {
+        "pt": "Manage users, permissions and access levels.",
+        "en": "Manage users, permissions and access levels.",
+        "es": "Manage users, permissions and access levels."
+      }
+    },
+    "logs": {
+      "title": "Logs & Audit",
+      "help": {
+        "pt": "Records all system activity for detailed auditing.",
+        "en": "Records all system activity for detailed auditing.",
+        "es": "Records all system activity for detailed auditing."
+      }
+    },
+    "settings": {
+      "title": "Settings",
+      "help": {
+        "pt": "Configure system behavior and backup policies.",
+        "en": "Configure system behavior and backup policies.",
+        "es": "Configure system behavior and backup policies."
+      },
+      "backupPolicies": "Backup Policies",
+      "autoBackup": "Automatic Backup",
+      "backupAuto": {
+        "disabled": "Disabled",
+        "daily": "Daily",
+        "weekly": "Weekly",
+        "monthly": "Monthly"
+      },
+      "retention": "Backup Retention (days)",
+      "compress": "Compress backups automatically",
+      "encrypt": "Encrypt sensitive backups",
+      "systemBehavior": "System Behavior",
+      "logLevel": "Log Level",
+      "logLevels": {
+        "error": "Error",
+        "warning": "Warning",
+        "info": "Info",
+        "debug": "Debug"
+      },
+      "autoVersioning": "Automatic Versioning",
+      "enabled": "Enabled",
+      "disabled": "Disabled",
+      "doubleConfirm": "Double confirmation for critical actions",
+      "storage": "Storage",
+      "used": "Used",
+      "available": "Available",
+      "total": "Total",
+      "save": "Save Settings"
+    },
+    "maintenance": {
+      "title": "Maintenance",
+      "help": {
+        "pt": "System maintenance and recovery tools.",
+        "en": "System maintenance and recovery tools.",
+        "es": "System maintenance and recovery tools."
+      },
+      "cache": {
+        "title": "Cache Management",
+        "description": "Clears temporary cache and optimizes performance.",
+        "clear": "Clear Cache",
+        "clearI18n": "Clear i18n Cache"
+      },
+      "database": {
+        "title": "Database Optimization",
+        "description": "Compacts and optimizes data structures.",
+        "optimize": "Optimize Now",
+        "analyze": "Analyze Integrity"
+      },
+      "integrity": {
+        "title": "Integrity Repair",
+        "description": "Detects and fixes data inconsistencies.",
+        "repair": "Repair",
+        "validate": "Validate"
+      },
+      "reset": {
+        "title": "System Reset",
+        "description": "⚠️ Restores system to initial state. Irreversible action!",
+        "execute": "Complete Reset"
+      },
+      "backup": {
+        "recommendation": "Recommendation:",
+        "message": "Always create a backup before performing maintenance operations.",
+        "quick": "Quick Backup"
+      }
+    },
+    "i18n": {
+      "title": "Internationalization",
+      "help": {
+        "pt": "Select language and verify interface translations.",
+        "en": "Select language and verify interface translations.",
+        "es": "Select language and verify interface translations."
+      },
+      "languageSelector": "Language Selector",
+      "languages": {
+        "pt": "Portuguese",
+        "en": "English",
+        "es": "Spanish"
+      },
+      "status": {
+        "title": "Translation Status"
+      },
+      "test": {
+        "title": "Test Translation",
+        "key": "Translation Key",
+        "keyPlaceholder": "master.title",
+        "execute": "Test"
+      }
+    },
+    "metrics": {
+      "title": "Metrics",
+      "help": {
+        "pt": "Monitors performance and storage usage of backups.",
+        "en": "Monitors performance and storage usage of backups.",
+        "es": "Monitors performance and storage usage of backups."
+      },
+      "performance": {
+        "title": "Backup Performance",
+        "avgDuration": "Average Time",
+        "fastest": "Fastest",
+        "slowest": "Slowest"
+      },
+      "storage": {
+        "title": "Storage Usage",
+        "propertyBackups": "Property Backups",
+        "generalBackups": "General Structure",
+        "total": "Total"
+      },
+      "compression": {
+        "title": "Compression",
+        "rate": "Average Rate",
+        "savedSpace": "Saved Space"
+      },
+      "failures": {
+        "title": "Failure Analysis",
+        "total": "Total Failures",
+        "last7days": "Last 7 days",
+        "successRate": "Success Rate"
+      },
+      "charts": {
+        "title": "Charts",
+        "placeholder": "Performance charts will be displayed here."
+      }
+    }
+  }
+}

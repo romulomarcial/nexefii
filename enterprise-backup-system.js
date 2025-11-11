@@ -1,4 +1,4 @@
-/**
+﻿/**
  * Enterprise Backup System
  * Multi-tenant backup, general structure backup, release management & rollback
  * 
@@ -48,7 +48,7 @@ class EnterpriseBackupSystem {
     // Initialize defaults
     this.initializeDefaults();
     
-    console.info('✅ Enterprise Backup System initialized');
+    console.info('âœ… Enterprise Backup System initialized');
   }
   
   loadData() {
@@ -203,7 +203,7 @@ class EnterpriseBackupSystem {
             backupData.metadata.compression_ratio = (compressedSize / sizeBytes).toFixed(2);
             backupData.metadata.compressed_size = compressedSize;
             backupData._compressedPayload = Array.from(new Uint8Array(compressed));
-            console.info(`Compression: ${sizeBytes} → ${compressedSize} bytes (${backupData.metadata.compression_ratio}x)`);
+            console.info(`Compression: ${sizeBytes} â†’ ${compressedSize} bytes (${backupData.metadata.compression_ratio}x)`);
           } else {
             console.warn('CompressionStream not available, simulating compression');
             backupData.metadata.compression_ratio = 0.6; // Simulated
@@ -610,7 +610,7 @@ class EnterpriseBackupSystem {
     try {
       this.audit('general_backup', 'info', 'Starting general structure backup', { backupId });
       
-      // Components selecionados (padrão: todos)
+      // Components selecionados (padrÃ£o: todos)
       const selectedComponents = options.components || ['stylesheets', 'scripts', 'i18n', 'templates', 'migrations', 'shared_assets'];
       
       const backupData = {
@@ -620,7 +620,7 @@ class EnterpriseBackupSystem {
         createdBy: options.createdBy || (this.currentUser?.id || 'system'),
         // UI-friendly optional fields
         version: options.version || `v${Date.now()}`,
-        description: options.description || 'Backup automático da estrutura geral',
+        description: options.description || 'Backup automÃ¡tico da estrutura geral',
         created_by: options.createdBy || (this.currentUser?.id || 'system'),
         components: selectedComponents,
         
@@ -742,7 +742,7 @@ class EnterpriseBackupSystem {
         throw new Error(`Backup ${backupId} not found`);
       }
       
-      // Criar backup de segurança antes de restaurar (se solicitado)
+      // Criar backup de seguranÃ§a antes de restaurar (se solicitado)
       if (options.createSafetyBackup) {
         this.audit('general_restore', 'info', 'Creating safety backup before restore');
         await this.createGeneralBackup({
@@ -826,7 +826,7 @@ class EnterpriseBackupSystem {
         version: backup.version,
         restoredComponents,
         duration_ms: Date.now() - startTime,
-        requiresReload: true // Indica que a página precisa ser recarregada
+        requiresReload: true // Indica que a pÃ¡gina precisa ser recarregada
       };
       
     } catch (error) {
@@ -843,7 +843,7 @@ class EnterpriseBackupSystem {
     // Capture CSS files from localStorage e DOM
     const styles = {};
     
-    // Tentar capturar conteúdo das tags <style> e <link>
+    // Tentar capturar conteÃºdo das tags <style> e <link>
     try {
       document.querySelectorAll('style').forEach((styleTag, idx) => {
         styles[`inline-style-${idx}`] = {
@@ -868,7 +868,7 @@ class EnterpriseBackupSystem {
   }
   
   captureScripts() {
-    // Capture JS files metadata e código crítico
+    // Capture JS files metadata e cÃ³digo crÃ­tico
     const scripts = {};
     
     try {
@@ -886,7 +886,7 @@ class EnterpriseBackupSystem {
         };
       });
       
-      // Adicionar versão de módulos críticos do localStorage
+      // Adicionar versÃ£o de mÃ³dulos crÃ­ticos do localStorage
       ['app.js', 'master-control.js', 'enterprise-backup-system.js', 'i18n.js'].forEach(file => {
         if (!scripts[file]) {
           scripts[file] = {
@@ -949,7 +949,7 @@ class EnterpriseBackupSystem {
     };
     
     try {
-      // Capturar estrutura básica do DOM
+      // Capturar estrutura bÃ¡sica do DOM
       templates.main_structure = {
         title: document.title,
         meta_tags: Array.from(document.querySelectorAll('meta')).map(meta => ({
@@ -990,7 +990,7 @@ class EnterpriseBackupSystem {
   }
   
   captureMigrations() {
-    // Capture histórico de migrações e versões de schema
+    // Capture histÃ³rico de migraÃ§Ãµes e versÃµes de schema
     const migrations = {
       applied: [],
       pending: [],
@@ -998,13 +998,13 @@ class EnterpriseBackupSystem {
     };
     
     try {
-      // Tentar obter histórico de migrações do localStorage
+      // Tentar obter histÃ³rico de migraÃ§Ãµes do localStorage
       const migrationHistory = localStorage.getItem('migration_history');
       if (migrationHistory) {
         migrations.applied = JSON.parse(migrationHistory);
       }
       
-      // Versão do schema atual
+      // VersÃ£o do schema atual
       migrations.schema_version = localStorage.getItem('schema_version') || '1.0.0';
       
     } catch (e) {
@@ -1015,7 +1015,7 @@ class EnterpriseBackupSystem {
   }
   
   captureSharedAssets() {
-    // Capture assets compartilhados (logos, ícones, etc)
+    // Capture assets compartilhados (logos, Ã­cones, etc)
     const assets = {
       logos: [],
       icons: [],
@@ -1073,7 +1073,7 @@ class EnterpriseBackupSystem {
   }
   
   getCurrentPlatformVersion() {
-    return 'IluxSys v2.5.0'; // Read from app metadata
+    return 'nexefii v2.5.0'; // Read from app metadata
   }
   
   getSchemaVersion(tenantId) {
@@ -1483,3 +1483,4 @@ class EnterpriseBackupSystem {
 if (typeof window !== 'undefined') {
   window.EnterpriseBackupSystem = EnterpriseBackupSystem;
 }
+
