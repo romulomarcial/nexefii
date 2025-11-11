@@ -1,0 +1,2403 @@
+﻿<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title id="pageTitle">Master Control Panel - NEXEFII</title>
+  <link rel="icon" type="image/svg+xml" href="favicon.svg">
+  <link rel="alternate icon" href="favicon.ico">
+  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="master-control-v3.css">
+  <style>
+    /* Deployment Wizard Enhancements */
+    .check-card {
+      transition: transform 0.3s ease, box-shadow 0.3s ease !important;
+    }
+    .check-card:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 6px 20px rgba(0,0,0,0.15) !important;
+    }
+    .checkbox-label {
+      transition: background-color 0.2s ease, transform 0.1s ease !important;
+    }
+    .checkbox-label:hover {
+      background-color: #f8f9fa !important;
+      transform: scale(1.02);
+    }
+    /* Wizard sidebar steps */
+    .wizard-step {
+      transition: all 0.3s ease !important;
+      cursor: default;
+    }
+    .wizard-step.active {
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%) !important;
+      color: white !important;
+      box-shadow: 0 2px 8px rgba(102, 126, 234, 0.3) !important;
+    }
+    .wizard-step:not(.active) {
+      background: #f0f0f0 !important;
+      color: #666 !important;
+    }
+    .deployment-log::-webkit-scrollbar {
+      width: 8px;
+    }
+    .deployment-log::-webkit-scrollbar-track {
+      background: #0a0a0a;
+    }
+    .deployment-log::-webkit-scrollbar-thumb {
+      background: #00ff00;
+      border-radius: 4px;
+    }
+    .deployment-log::-webkit-scrollbar-thumb:hover {
+      background: #00cc00;
+    }
+  </style>
+</head>
+<body>
+  <div class="master-container">
+    <!-- Header -->
+    <div class="master-header">
+    <div class="header-left">
+  <h1><span class="icon">🔐</span> <span data-i18n="title">Painel Master</span></h1>
+  <span class="master-badge" data-i18n="badge">SUPER ADMIN</span>
+      </div>
+  <div class="header-right">
+    <span class="user-info" id="masterUserInfo">Master User</span>
+  <button class="btn btn-danger" id="btnLogoutMaster"><span class="icon">🚪</span> <span data-i18n="logout">Sair</span></button>
+      </div>
+    </div>
+
+    <!-- Navigation Tabs -->
+    <div class="master-tabs">
+  <button class="tab-btn active" data-tab="dashboard"><span class="icon">📊</span> <span data-i18n="tabs.dashboard">Dashboard</span></button>
+  <button class="tab-btn" data-tab="backups"><span class="icon">💾</span> <span data-i18n="tabs.backups">Backups</span></button>
+  <button class="tab-btn" data-tab="releases"><span class="icon">🚀</span> <span data-i18n="tabs.releases">Releases & Rollback</span></button>
+  <button class="tab-btn" data-tab="users"><span class="icon">👥</span> <span data-i18n="tabs.users">Usuários</span></button>
+  <button class="tab-btn" data-tab="properties"><span class="icon">🏨</span> <span data-i18n="tabs.properties">Propriedades</span></button>
+  <button class="tab-btn" data-tab="logs"><span class="icon">�</span> <span data-i18n="tabs.logs">Logs & Auditoria</span></button>
+  <button class="tab-btn" data-tab="settings"><span class="icon">⚙️</span> <span data-i18n="tabs.settings">Configurações</span></button>
+  <button class="tab-btn" data-tab="maintenance"><span class="icon">🔧</span> <span data-i18n="tabs.maintenance">Manutenção</span></button>
+  <button class="tab-btn" data-tab="i18n"><span class="icon">🌐</span> <span data-i18n="tabs.i18n">Internacionalização</span></button>
+  <button class="tab-btn" data-tab="metrics"><span class="icon">�</span> <span data-i18n="tabs.metrics">Métricas</span></button>
+    </div>
+
+    <!-- Dashboard Tab (formerly Overview) -->
+    <div class="tab-content active" id="tab-dashboard">
+      <!-- Breadcrumb -->
+      <div class="breadcrumb">
+        <span class="icon">🏠</span> <span data-i18n="breadcrumb.dashboard">Dashboard</span>
+      </div>
+      
+      <!-- Section Header with Help -->
+      <div class="section-header">
+        <h2><span class="icon">📊</span> <span data-i18n="dashboard.title">Dashboard</span></h2>
+        <button class="btn-help" data-help="dashboard" title="Ajuda">
+          <span class="icon">❓</span>
+        </button>
+      </div>
+      
+      <!-- Help Panel -->
+      <div class="help-panel" id="help-dashboard" style="display:none;">
+        <div class="help-content">
+          <p data-i18n="dashboard.help.pt">Resumo de uso e status do sistema.</p>
+        </div>
+      </div>
+      
+      <div class="dashboard-grid">
+        <!-- System Stats -->
+        <div class="master-card">
+          <h3><span class="icon">📈</span> <span data-i18n="overview.statsTitle">Estatísticas do Sistema</span></h3>
+          <div class="stat-grid">
+            <div class="stat-item">
+              <span class="stat-label" data-i18n="overview.totalUsers">Total de Usuários</span>
+              <span class="stat-value" id="totalUsers">0</span>
+            </div>
+            <div class="stat-item">
+              <span class="stat-label" data-i18n="overview.activeUsers">Usuários Ativos</span>
+              <span class="stat-value" id="activeUsers">0</span>
+            </div>
+            <div class="stat-item">
+              <span class="stat-label" data-i18n="overview.properties">Propriedades</span>
+              <span class="stat-value" id="totalProperties">0</span>
+            </div>
+            <div class="stat-item">
+              <span class="stat-label" data-i18n="overview.backups">Backups</span>
+              <span class="stat-value" id="totalBackups">0</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Quick Actions -->
+        <div class="master-card">
+          <div class="section-header">
+            <h3><span class="icon">⚡</span> <span data-i18n="overview.quickActions">Ações Rápidas</span></h3>
+            <button class="btn-help" data-help="quick-actions" title="Ajuda">
+              <span class="icon">❓</span>
+            </button>
+          </div>
+          
+          <!-- Help Panel for Quick Actions -->
+          <div class="help-panel" id="help-quick-actions" style="display:none;">
+            <div class="help-content">
+              <h4>Ações Rápidas - Backup de Estrutura Geral:</h4>
+              <p><strong>⚡ Ações Rápidas:</strong> Botões de acesso rápido para operações comuns de backup da <strong>estrutura geral do sistema</strong>.</p>
+              
+              <p><strong>O que é Estrutura Geral?</strong></p>
+              <ul>
+                <li><strong>Stylesheets (CSS):</strong> Todos os estilos do sistema</li>
+                <li><strong>Scripts (JS):</strong> Código JavaScript principal</li>
+                <li><strong>Traduções (i18n):</strong> Arquivos de idiomas</li>
+                <li><strong>Templates (HTML):</strong> Estrutura de páginas</li>
+                <li><strong>Configurações Globais:</strong> Settings do sistema</li>
+              </ul>
+              
+              <p><strong>Botões Disponíveis:</strong></p>
+              <ul>
+                <li><strong>💾 Backup Completo:</strong> Cria backup completo da estrutura geral do sistema (CSS, JS, i18n, templates, configs)</li>
+                <li><strong>📦 Backup Incremental:</strong> Backup apenas das mudanças desde o último backup completo da estrutura</li>
+                <li><strong>📋 Ver Backups:</strong> Abre lista de todos os backups de estrutura geral criados</li>
+                <li><strong>📤 Exportar Tudo:</strong> Exporta todos os dados do sistema em formato JSON para download</li>
+              </ul>
+              
+              <p><strong>Quando Usar:</strong></p>
+              <ul>
+                <li><strong>Backup Completo:</strong> Antes de atualizações, mudanças importantes, ou semanalmente</li>
+                <li><strong>Backup Incremental:</strong> Diariamente ou após pequenas alterações</li>
+                <li><strong>Ver Backups:</strong> Para restaurar versão anterior ou verificar histórico</li>
+                <li><strong>Exportar Tudo:</strong> Para armazenamento externo ou migração</li>
+              </ul>
+              
+              <p><em>💡 Dica: Estes backups são diferentes dos "Property Backups" (por propriedade). Use ações rápidas para backup da estrutura global do sistema!</em></p>
+            </div>
+          </div>
+          
+          <div class="quick-actions">
+            <button class="btn btn-primary" id="btnQuickFull" onclick="masterCtrl.createQuickGeneralBackup('full')"><span class="icon">💾</span> <span data-i18n="overview.fullBackup">Backup Completo</span></button>
+            <button class="btn btn-primary" id="btnQuickInc" onclick="masterCtrl.createQuickGeneralBackup('incremental')"><span class="icon">📦</span> <span data-i18n="overview.incBackup">Backup Incremental</span></button>
+            <button class="btn" id="btnQuickView" onclick="masterCtrl.viewGeneralBackups()"><span class="icon">📋</span> <span data-i18n="overview.viewBackups">Ver Backups</span></button>
+            <button class="btn" id="btnQuickExport" onclick="masterCtrl.exportAllData()"><span class="icon">📤</span> <span data-i18n="overview.exportAll">Exportar Tudo</span></button>
+          </div>
+        </div>
+
+        <!-- Recent Activity -->
+        <div class="master-card full-width">
+          <h3><span class="icon">🕐</span> <span data-i18n="overview.recentActivity">Atividade Recente</span></h3>
+          <div class="activity-list" id="recentActivity">
+            <!-- Activity items will be rendered here -->
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Backups Tab (Consolidated: Property + General Structure) -->
+    <div class="tab-content" id="tab-backups">
+      <!-- Breadcrumb -->
+      <div class="breadcrumb">
+        <span class="icon">🏠</span> <span data-i18n="breadcrumb.home">Início</span> 
+        <span class="separator">›</span>
+        <span data-i18n="breadcrumb.backups">Backups</span>
+      </div>
+      
+      <!-- Section Header with Help -->
+      <div class="section-header">
+        <h2><span class="icon">💾</span> <span data-i18n="backups.title">Backups</span></h2>
+        <button class="btn-help" data-help="backups" title="Ajuda">
+          <span class="icon">❓</span>
+        </button>
+      </div>
+      
+      <!-- Help Panel -->
+      <div class="help-panel" id="help-backups" style="display:none;">
+        <div class="help-content">
+          <p data-i18n="backups.help.pt">Área de criação e restauração de backups da aplicação e das propriedades.</p>
+        </div>
+      </div>
+      
+      <!-- Backup Sub-Navigation -->
+      <div class="backup-section">
+        <div class="backup-subnav" id="backupSubnav">
+          <button class="btn subnav-btn active" data-target="section-property-backups">
+            <span class="icon">🏨</span> <span data-i18n="backups.propertyBackups.tab">Property Backups</span>
+          </button>
+          <button class="btn subnav-btn" data-target="section-general-structure">
+            <span class="icon">🏗️</span> <span data-i18n="backups.generalStructure.tab">General Structure</span>
+          </button>
+        </div>
+        
+        <!-- Property Backups Section -->
+        <div class="master-card" id="section-property-backups">
+          <!-- Sub-section Header with Help -->
+          <div class="section-header">
+            <h3><span class="icon">🏨</span> <span data-i18n="backups.propertyBackups.title">Property Backups</span></h3>
+            <button class="btn-help" data-help="property-backups" title="Ajuda">
+              <span class="icon">❓</span>
+            </button>
+          </div>
+          
+          <!-- Help Panel -->
+          <div class="help-panel" id="help-property-backups" style="display:none;">
+            <div class="help-content">
+              <h4>Property Backups - Tipos de Backup:</h4>
+              <p><strong> Full Backup:</strong> Cria uma cópia completa de todos os dados da propriedade (reservas, inventário, configurações). Ideal para backup inicial ou restauração completa.</p>
+              <p><strong> Incremental:</strong> Salva apenas as alterações desde o último backup. Mais rápido e ocupa menos espaço. Requer um Full Backup inicial.</p>
+              <p><em>Os backups são salvos localmente em: ../bkp/property/full_bkp/ ou ../bkp/property/incremental/</em></p>
+            </div>
+          </div>
+
+          <!-- Property Selection -->
+          <div class="form-group" style="margin-bottom: 20px;">
+            <label style="font-weight: bold;"><span class="icon">🏨</span> Selecionar Propriedade</label>
+            <select id="propertyBackupSelect" class="select" style="width: 100%;">
+              <option value="">-- Selecione uma propriedade --</option>
+            </select>
+          </div>
+          
+          <!-- Property Backup Actions -->
+          <div class="actions-row">
+            <button class="btn btn-primary" id="btnPropertyFullBackup">
+              <span class="icon">💾</span> Full Backup
+            </button>
+            <button class="btn" id="btnPropertyIncrementalBackup">
+              <span class="icon">📦</span> Incremental
+            </button>
+          </div>
+          
+          <!-- Property Backups Catalog -->
+          <div id="propertyBackupsCatalog" class="backups-catalog">
+            <!-- Property backup cards will be rendered here -->
+          </div>
+        </div>
+        
+        <!-- General Structure Section -->
+        <div class="master-card" id="section-general-structure" style="display:none;">
+          <!-- Sub-section Header with Help -->
+          <div class="section-header">
+            <h3><span class="icon">🏗️</span> Backup de Estrutura Geral</h3>
+            <button class="btn-help" data-help="general-structure" title="Ajuda">
+              <span class="icon">❓</span>
+            </button>
+          </div>
+          
+          <!-- Help Panel -->
+          <div class="help-panel" id="help-general-structure" style="display:none;">
+            <div class="help-content">
+              <h4>General Structure Backups - Tipos de Backup:</h4>
+              <p><strong> Full Backup:</strong> Backup completo de todos os usuários, configurações globais e estrutura do sistema. Recomendado para backup periódico completo.</p>
+              <p><strong> Snapshot:</strong> Captura rápida do estado atual do sistema em um ponto específico no tempo. Ideal para testes ou antes de grandes mudanças.</p>
+              <p><em>Os backups são salvos localmente em: ../bkp/full_bkp/ ou ../bkp/snapshot/</em></p>
+            </div>
+          </div>
+
+          
+          <!-- General Structure Actions -->
+          <div class="actions-row">
+            <button class="btn btn-primary" id="btnGeneralFullBackup">
+              <span class="icon">�</span> Full Backup
+            </button>
+            <button class="btn" id="btnGeneralSnapshot">
+              <span class="icon">�</span> Snapshot
+            </button>
+          </div>              </label>
+              <label class="checkbox-label">
+                <input type="checkbox" value="shared_assets" checked>
+                <span><span class="icon">🖼️</span> <span data-i18n="backups.generalStructure.components.assets">Assets</span></span>
+              </label>
+            </div>
+          </div>
+          
+          <!-- General Structure Catalog -->
+          <div id="generalBackupsCatalog" class="backups-catalog">
+            <!-- General structure backup cards will be rendered here -->
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Backup & Restore Tab (OLD - TO BE REMOVED) -->
+    <div class="tab-content" id="tab-backup" style="display:none;">
+      <div class="backup-section">
+        <div class="backup-subnav" id="backupSubnav">
+          <button class="btn subnav-btn active" data-target="section-create">🛠️ <span data-i18n="backup.createTitle">Criar Backup</span></button>
+          <button class="btn subnav-btn" data-target="section-scheduling">⏱️ <span data-i18n="backup.scheduling.title">Agendamento por Propriedade</span></button>
+          <button class="btn subnav-btn" data-target="section-history">📋 <span data-i18n="backup.historyTitle">Histórico de Backups</span></button>
+          <button class="btn subnav-btn" data-target="section-restore">♻️ <span data-i18n="backup.restoreTitle">Restaurar Backup</span></button>
+          <button class="btn subnav-btn" data-target="section-exports">📤 <span data-i18n="backup.exports.title">Exportações</span></button>
+        </div>
+        <div class="master-card" id="section-create">
+          <h3><span class="icon">💾</span> <span data-i18n="backup.createTitle">Criar Backup</span></h3>
+          <div class="backup-options">
+            <div class="option-group">
+              <h4 data-i18n="backup.backupType">Tipo de Backup</h4>
+              <label class="radio-label">
+                <input type="radio" name="backupType" value="full" checked>
+                <span><span class="icon">🗄️</span> <span data-i18n="backup.full">Completo (Todos os dados)</span></span>
+              </label>
+              <label class="radio-label">
+                <input type="radio" name="backupType" value="incremental">
+                <span><span class="icon">📦</span> <span data-i18n="backup.incremental">Incremental (Apenas alterações)</span></span>
+              </label>
+              <label class="radio-label">
+                <input type="radio" name="backupType" value="selective">
+                <span><span class="icon">🎯</span> <span data-i18n="backup.selective">Seletivo (Escolher módulos)</span></span>
+              </label>
+            </div>
+
+            <div class="option-group" id="selectiveOptions" style="display:none;">
+              <h4><span data-i18n="backup.selectModules">Selecionar Módulos</span></h4>
+              <label class="checkbox-label">
+                <input type="checkbox" value="users" checked>
+                <span><span class="icon">👥</span> <span data-i18n="backup.users">Usuários</span></span>
+              </label>
+              <label class="checkbox-label">
+                <input type="checkbox" value="reservations" checked>
+                <span><span class="icon">📅</span> <span data-i18n="backup.reservations">Reservas</span></span>
+              </label>
+              <label class="checkbox-label">
+                <input type="checkbox" value="inventory" checked>
+                <span><span class="icon">🏨</span> <span data-i18n="backup.inventory">Inventário</span></span>
+              </label>
+              <label class="checkbox-label">
+                <input type="checkbox" value="configurations" checked>
+                <span><span class="icon">⚙️</span> <span data-i18n="backup.configurations">Configurações</span></span>
+              </label>
+            </div>
+
+            <div class="option-group">
+              <h4>Alcance do Backup</h4>
+              <label class="radio-label">
+                <input type="radio" name="backupScope" value="global" checked>
+                <span><span class="icon">🌐</span> <span data-i18n="backup.scopeGlobal">Global (todas as propriedades)</span></span>
+              </label>
+              <label class="radio-label">
+                <input type="radio" name="backupScope" value="property">
+                <span><span class="icon">🏨</span> <span data-i18n="backup.scopeProperty">Somente uma propriedade</span></span>
+              </label>
+              <div class="form-group" id="backupPropertyGroup" style="margin-top:8px; display:none;">
+                <label><span class="icon">🏷️</span> <span data-i18n="backup.selectProperty">Selecionar Propriedade</span></label>
+                <select id="backupPropertySelect" class="select">
+                  <option value="">--</option>
+                </select>
+              </div>
+            </div>
+
+            <div class="option-group">
+              <h4><span data-i18n="backup.extraOptions">Opções Adicionais</span></h4>
+              <label class="checkbox-label">
+                <input type="checkbox" id="includeAttachments" checked>
+                <span><span class="icon">📎</span> <span data-i18n="backup.includeAttachments">Incluir anexos</span></span>
+              </label>
+              <label class="checkbox-label">
+                <input type="checkbox" id="compressBackup" checked>
+                <span><span class="icon">🗜️</span> <span data-i18n="backup.compress">Comprimir backup</span></span>
+              </label>
+              <label class="checkbox-label">
+                <input type="checkbox" id="encryptBackup">
+                <span><span class="icon">🔒</span> <span data-i18n="backup.encrypt">Criptografar backup</span></span>
+              </label>
+            </div>
+
+            <button class="btn btn-primary btn-large" id="btnCreateBackup"><span class="icon">💾</span> <span data-i18n="backup.createNow">Criar Backup Agora</span></button>
+          </div>
+        </div>
+
+        <div class="master-card" id="section-scheduling">
+          <div class="card-header" style="display:flex;justify-content:space-between;align-items:center;gap:8px;">
+            <h3 style="margin:0;"><span class="icon">⏱️</span> <span data-i18n="backup.scheduling.title">Agendamento por Propriedade</span></h3>
+            <button class="btn" id="btnScheduleHelp" title="Ajuda / Help">❓</button>
+          </div>
+          <div id="scheduleHelp" style="display:none; margin:12px 0;" class="help-panel">
+            <ul>
+              <li>Use a busca para encontrar propriedades rapidamente.</li>
+              <li>Selecione várias propriedades para ações em massa (agendar, desabilitar, executar, exportar).</li>
+              <li>Clique em ✏️ para editar frequência e horário de um agendamento.</li>
+              <li>Atalhos: / foca a busca, E edita, R executa, Delete desabilita selecionadas.</li>
+            </ul>
+          </div>
+          <div class="schedules-list" id="propertySchedules">
+            <!-- Per-property schedules will be rendered here -->
+          </div>
+        </div>
+
+        <div class="master-card" id="section-history">
+          <h3><span class="icon">📋</span> <span data-i18n="backup.historyTitle">Histórico de Backups</span></h3>
+          <div class="backup-list" id="backupList">
+            <!-- Backup items will be rendered here -->
+          </div>
+        </div>
+
+        <div class="master-card" id="section-restore">
+          <h3><span class="icon">♻️</span> <span data-i18n="backup.restoreTitle">Restaurar Backup</span></h3>
+          <div class="restore-section">
+            <div class="form-group">
+              <label data-i18n="backup.selectBackup">Selecionar Backup</label>
+              <select id="selectBackupToRestore" class="select">
+                <option value="">-- Escolha um backup --</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label data-i18n="backup.restoreType">Tipo de Restauração</label>
+              <select id="restoreType" class="select">
+                <option value="full" data-i18n="backup.restoreTypes.full">Completa (Sobrescrever tudo)</option>
+                <option value="merge" data-i18n="backup.restoreTypes.merge">Mesclar (Preservar dados novos)</option>
+                <option value="selective" data-i18n="backup.restoreTypes.selective">Seletiva (Escolher módulos)</option>
+              </select>
+            </div>
+            <div class="alert alert-warning" id="restoreWarning">
+              ⚠️ <strong>Atenção:</strong> A restauração completa irá sobrescrever todos os dados atuais. Recomendamos criar um backup antes de restaurar.
+            </div>
+            <button class="btn btn-danger btn-large" id="btnRestoreBackup"><span class="icon">♻️</span> <span data-i18n="backup.restoreNow">Restaurar Backup</span></button>
+          </div>
+        </div>
+
+        <div class="master-card" id="section-exports">
+          <div class="card-header" style="display:flex;justify-content:space-between;align-items:center;gap:8px;">
+            <h3 style="margin:0;"><span class="icon">📤</span> <span data-i18n="backup.exports.title">Exportações</span></h3>
+            <button class="btn" id="btnRefreshExports"><span class="icon">🔄</span> <span data-i18n="backup.exports.refresh">Atualizar</span></button>
+          </div>
+          <div class="alert" style="margin:12px 0; display:block; color:#475569;">
+            <small>💡 <span data-i18n="backup.exports.serverNote">As exportações salvas aparecem aqui quando o servidor de desenvolvimento está ativo.</span></small>
+          </div>
+          <div id="exportsList">
+            <!-- Exports list will be rendered here -->
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Users Tab -->
+    <div class="tab-content" id="tab-users">
+      <div class="users-section">
+        <div class="master-card">
+          <div class="section-header">
+            <h3><span class="icon">👥</span> <span data-i18n="users.title">Gestão de Usuários</span></h3>
+            <button class="btn-help" data-help="users" title="Ajuda">
+              <span class="icon">❓</span>
+            </button>
+          </div>
+          
+          <!-- Help Panel -->
+          <div class="help-panel" id="help-users" style="display:none;">
+            <div class="help-content">
+              <h4>Gestão de Usuários - Controle de Acesso:</h4>
+              <p><strong>👥 Usuários:</strong> Controle completo de usuários, permissões e acesso ao sistema.</p>
+              
+              <p><strong>Níveis de Acesso:</strong></p>
+              <ul>
+                <li><strong>Master:</strong> Acesso total ao sistema, incluindo este painel</li>
+                <li><strong>Admin:</strong> Gerenciamento de propriedades e usuários da empresa</li>
+                <li><strong>Manager:</strong> Gestão operacional de propriedades específicas</li>
+                <li><strong>User:</strong> Acesso básico às funcionalidades da propriedade</li>
+              </ul>
+              
+              <p><strong>Status:</strong></p>
+              <ul>
+                <li><strong>Ativo:</strong> Usuário pode fazer login normalmente</li>
+                <li><strong>Pendente:</strong> Aguardando ativação ou aprovação</li>
+                <li><strong>Suspenso:</strong> Acesso temporariamente bloqueado</li>
+              </ul>
+              
+              <p><strong>Propriedades:</strong> Atribua propriedades específicas aos usuários para controlar acesso</p>
+              
+              <p><em>🔒 Segurança: Sempre use senhas fortes e revise permissões regularmente</em></p>
+            </div>
+          </div>
+          
+          <div class="card-header">
+            <button class="btn btn-primary" id="btnCreateUser"><span class="icon">➕</span> <span data-i18n="users.create">Criar Usuário</span></button>
+          </div>
+          <div class="filters-row">
+            <input type="text" id="searchUsers" data-i18n-placeholder="users.search" placeholder="🔍 Buscar usuário..." class="search-input">
+            <select id="filterUserRole" class="select">
+              <option value="" data-i18n="users.allLevels">Todos os Níveis</option>
+              <option value="master" data-i18n="users.roleMaster">Master</option>
+              <option value="admin" data-i18n="users.roleAdmin">Admin</option>
+              <option value="manager" data-i18n="users.roleManager">Manager</option>
+              <option value="user" data-i18n="users.roleUser">User</option>
+            </select>
+            <select id="filterUserStatus" class="select">
+              <option value="" data-i18n="users.allStatus">Todos os Status</option>
+              <option value="active" data-i18n="users.statusActive">Ativo</option>
+              <option value="pending" data-i18n="users.statusPending">Pendente</option>
+              <option value="suspended" data-i18n="users.statusSuspended">Suspenso</option>
+            </select>
+          </div>
+          <div class="users-table-container">
+            <table class="master-table">
+              <thead>
+                <tr>
+                  <th data-i18n="users.cols.user">Usuário</th>
+                  <th data-i18n="users.cols.email">Email</th>
+                  <th data-i18n="users.cols.role">Nível</th>
+                  <th data-i18n="users.cols.status">Status</th>
+                  <th data-i18n="users.cols.lastAccess">Último Acesso</th>
+                  <th data-i18n="users.cols.properties">Propriedades</th>
+                  <th data-i18n="users.cols.actions">Ações</th>
+                </tr>
+              </thead>
+              <tbody id="usersTableBody">
+                <!-- Users will be rendered here -->
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Settings Tab (NEW) -->
+    <div class="tab-content" id="tab-settings">
+      <!-- Section Header with Help -->
+      <div class="section-header">
+        <h2><span class="icon">⚙️</span> <span data-i18n="settings.title">Configurações</span></h2>
+        <button class="btn-help" data-help="settings" title="Ajuda">
+          <span class="icon">❓</span>
+        </button>
+      </div>
+      
+      <!-- Help Panel -->
+      <div class="help-panel" id="help-settings" style="display:none;">
+        <div class="help-content">
+          <h4>Configurações do Sistema:</h4>
+          <p><strong>⚙️ Configurações:</strong> Controle comportamento global do sistema, políticas de backup e preferências.</p>
+          
+          <p><strong>Políticas de Backup:</strong></p>
+          <ul>
+            <li><strong>Backup Automático:</strong> Define frequência de backups programados</li>
+            <li><strong>Retenção:</strong> Quantos dias manter backups antes de limpar automaticamente</li>
+            <li><strong>Compressão:</strong> Reduz tamanho dos arquivos de backup</li>
+            <li><strong>Criptografia:</strong> Protege dados sensíveis nos backups</li>
+          </ul>
+          
+          <p><strong>Comportamento do Sistema:</strong></p>
+          <ul>
+            <li><strong>Nível de Log:</strong> Controla verbosidade dos logs (Error/Warning/Info/Debug)</li>
+            <li><strong>Versionamento:</strong> Habilita/desabilita controle de versões automático</li>
+          </ul>
+          
+          <p><em>💡 Dica: Configure backup automático semanal com retenção de 30 dias para segurança ideal</em></p>
+        </div>
+      </div>
+      
+      <div class="system-grid">
+        <!-- Backup Policies -->
+        <div class="master-card">
+          <h3><span class="icon">💾</span> <span data-i18n="settings.backupPolicies">Políticas de Backup</span></h3>
+          <div class="settings-list">
+            <div class="setting-item">
+              <label data-i18n="settings.autoBackup">Backup Automático</label>
+              <select id="autoBackupFrequency" class="select">
+                <option value="disabled" data-i18n="settings.backupAuto.disabled">Desabilitado</option>
+                <option value="daily" data-i18n="settings.backupAuto.daily">Diário</option>
+                <option value="weekly" data-i18n="settings.backupAuto.weekly">Semanal</option>
+                <option value="monthly" data-i18n="settings.backupAuto.monthly">Mensal</option>
+              </select>
+            </div>
+            <div class="setting-item">
+              <label data-i18n="settings.retention">Retenção de Backups (dias)</label>
+              <input type="number" id="backupRetention" value="30" min="1" class="input">
+            </div>
+            <div class="setting-item">
+              <label>
+                <input type="checkbox" id="compressBackups" checked>
+                <span data-i18n="settings.compress">Comprimir backups automaticamente</span>
+              </label>
+            </div>
+            <div class="setting-item">
+              <label>
+                <input type="checkbox" id="encryptBackups">
+                <span data-i18n="settings.encrypt">Criptografar backups sensíveis</span>
+              </label>
+            </div>
+          </div>
+        </div>
+
+        <!-- System Behavior -->
+        <div class="master-card">
+          <h3><span class="icon">⚙️</span> <span data-i18n="settings.systemBehavior">Comportamento do Sistema</span></h3>
+          <div class="settings-list">
+            <div class="setting-item">
+              <label data-i18n="settings.logLevel">Nível de Log</label>
+              <select id="logLevel" class="select">
+                <option value="error" data-i18n="settings.logLevels.error">Erro</option>
+                <option value="warning" data-i18n="settings.logLevels.warning">Aviso</option>
+                <option value="info" data-i18n="settings.logLevels.info" selected>Info</option>
+                <option value="debug" data-i18n="settings.logLevels.debug">Debug</option>
+              </select>
+            </div>
+            <div class="setting-item">
+              <label data-i18n="settings.autoVersioning">Versionamento Automático</label>
+              <select id="autoVersioning" class="select">
+                <option value="enabled" selected data-i18n="settings.enabled">Habilitado</option>
+                <option value="disabled" data-i18n="settings.disabled">Desabilitado</option>
+              </select>
+            </div>
+            <div class="setting-item">
+              <label>
+                <input type="checkbox" id="doubleConfirmation" checked>
+                <span data-i18n="settings.doubleConfirm">Confirmação dupla para ações críticas</span>
+              </label>
+            </div>
+          </div>
+        </div>
+
+        <!-- Storage Management -->
+        <div class="master-card full-width">
+          <h3><span class="icon">🗄️</span> <span data-i18n="settings.storage">Armazenamento</span></h3>
+          <div class="storage-info">
+            <div class="storage-bar">
+              <div class="storage-used" id="storageUsedBar" style="width: 0%"></div>
+            </div>
+            <div class="storage-stats">
+              <div><span data-i18n="settings.used">Usado</span>: <strong id="storageUsed">0 MB</strong></div>
+              <div><span data-i18n="settings.available">Disponível</span>: <strong id="storageAvailable">5 MB</strong></div>
+              <div><span data-i18n="settings.total">Total</span>: <strong id="storageTotal">5 MB</strong></div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Save Button -->
+        <div class="master-card full-width">
+          <button class="btn btn-primary btn-large" id="btnSaveSettings" onclick="window.masterCtrl.saveSettings()">
+            <span class="icon">💾</span> <span data-i18n="settings.save">Salvar Configurações</span>
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Maintenance Tab (NEW) -->
+    <div class="tab-content" id="tab-maintenance">
+      <!-- Section Header with Help -->
+      <div class="section-header">
+        <h2><span class="icon">🔧</span> <span data-i18n="maintenance.title">Manutenção</span></h2>
+        <button class="btn-help" data-help="maintenance" title="Ajuda">
+          <span class="icon">❓</span>
+        </button>
+      </div>
+      
+      <!-- Help Panel -->
+      <div class="help-panel" id="help-maintenance" style="display:none;">
+        <div class="help-content">
+          <h4>Manutenção do Sistema:</h4>
+          <p><strong>🔧 Manutenção:</strong> Ferramentas para otimização, limpeza e recuperação do sistema.</p>
+          
+          <p><strong>Operações Disponíveis:</strong></p>
+          <ul>
+            <li><strong>🗑️ Limpar Cache:</strong> Remove dados temporários para liberar espaço e melhorar performance</li>
+            <li><strong>⚡ Otimizar Banco:</strong> Compacta e reorganiza estruturas de dados do localStorage</li>
+            <li><strong>🔍 Verificar Integridade:</strong> Valida consistência dos dados armazenados</li>
+            <li><strong>🧹 Limpar Logs:</strong> Remove logs antigos mantendo apenas período recente</li>
+            <li><strong>📊 Reindexar:</strong> Reconstrói índices para melhorar velocidade de busca</li>
+          </ul>
+          
+          <p><strong>Quando Usar:</strong></p>
+          <ul>
+            <li>Sistema lento ou travando</li>
+            <li>localStorage próximo do limite (5-10MB)</li>
+            <li>Após importar/restaurar backups grandes</li>
+            <li>Manutenção preventiva mensal</li>
+          </ul>
+          
+          <p><em>⚠️ Importante: Faça backup antes de operações de limpeza ou otimização</em></p>
+        </div>
+      </div>
+      
+      <div class="maintenance-grid">          <!-- Help Panel -->
+          <div class="help-panel" id="help-maintenance" style="display:none;">
+            <div class="help-content">
+              <h4>Manutenção do Sistema:</h4>
+              <p><strong>🔧 Manutenção:</strong> Ferramentas para otimização, limpeza e recuperação do sistema.</p>
+              
+              <p><strong>Operações Disponíveis:</strong></p>
+              <ul>
+                <li><strong>🗑️ Limpar Cache:</strong> Remove dados temporários para liberar espaço e melhorar performance</li>
+                <li><strong>⚡ Otimizar Banco:</strong> Compacta e reorganiza estruturas de dados do localStorage</li>
+                <li><strong>🔍 Verificar Integridade:</strong> Valida consistência dos dados armazenados</li>
+                <li><strong>🧹 Limpar Logs:</strong> Remove logs antigos mantendo apenas período recente</li>
+                <li><strong>📊 Reindexar:</strong> Reconstrói índices para melhorar velocidade de busca</li>
+              </ul>
+              
+              <p><strong>Quando Usar:</strong></p>
+              <ul>
+                <li>Sistema lento ou travando</li>
+                <li>localStorage próximo do limite (5-10MB)</li>
+                <li>Após importar/restaurar backups grandes</li>
+                <li>Manutenção preventiva mensal</li>
+              </ul>
+              
+              <p><em>⚠️ Importante: Faça backup antes de operações de limpeza ou otimização</em></p>
+            </div>
+          </div>
+        
+        <!-- Cache Management -->
+        <div class="master-card">
+          <h3><span class="icon">🗑️</span> <span data-i18n="maintenance.cache.title">Gerenciamento de Cache</span></h3>
+          <p data-i18n="maintenance.cache.description">Limpa cache temporário e otimiza performance.</p>
+          <div class="maintenance-actions">
+            <button class="btn btn-warning" id="btnClearCache" onclick="window.masterCtrl.clearCache()">
+              <span class="icon">🗑️</span> <span data-i18n="maintenance.cache.clear">Limpar Cache</span>
+            </button>
+            <button class="btn" id="btnClearI18nCache" onclick="window.masterCtrl.clearI18nCache()">
+              <span class="icon">🌐</span> <span data-i18n="maintenance.cache.clearI18n">Limpar Cache i18n</span>
+            </button>
+          </div>
+        </div>
+
+        <!-- Database Optimization -->
+        <div class="master-card">
+          <h3><span class="icon">⚡</span> <span data-i18n="maintenance.database.title">Otimização de Banco</span></h3>
+          <p data-i18n="maintenance.database.description">Compacta e otimiza estruturas de dados.</p>
+          <div class="maintenance-actions">
+            <button class="btn btn-primary" id="btnOptimizeDb" onclick="window.masterCtrl.optimizeDatabase()">
+              <span class="icon">⚡</span> <span data-i18n="maintenance.database.optimize">Otimizar Agora</span>
+            </button>
+            <button class="btn" id="btnAnalyzeDb" onclick="window.masterCtrl.optimizeDatabase()">
+              <span class="icon">🔍</span> <span data-i18n="maintenance.database.analyze">Analisar Integridade</span>
+            </button>
+          </div>
+        </div>
+
+        <!-- Integrity Repair -->
+        <div class="master-card">
+          <h3><span class="icon">🔧</span> <span data-i18n="maintenance.integrity.title">Reparação de Integridade</span></h3>
+          <p data-i18n="maintenance.integrity.description">Detecta e corrige inconsistências de dados.</p>
+          <div class="maintenance-actions">
+            <button class="btn btn-secondary" id="btnRepairIntegrity" onclick="window.masterCtrl.repairIntegrity()">
+              <span class="icon">🔧</span> <span data-i18n="maintenance.integrity.repair">Reparar</span>
+            </button>
+            <button class="btn" id="btnValidateIntegrity" onclick="window.masterCtrl.repairIntegrity()">
+              <span class="icon">✅</span> <span data-i18n="maintenance.integrity.validate">Validar</span>
+            </button>
+          </div>
+        </div>
+
+        <!-- System Reset -->
+        <div class="master-card">
+          <h3><span class="icon">🔴</span> <span data-i18n="maintenance.reset.title">Reset do Sistema</span></h3>
+          <p data-i18n="maintenance.reset.description">⚠️ Restaura o sistema ao estado inicial. Ação irreversível!</p>
+          <div class="maintenance-actions">
+            <button class="btn btn-danger" id="btnResetSystem" onclick="window.masterCtrl.resetSystem()">
+              <span class="icon">🔴</span> <span data-i18n="maintenance.reset.execute">Reset Completo</span>
+            </button>
+          </div>
+        </div>
+
+        <!-- Backup Before Actions -->
+        <div class="master-card full-width">
+          <div class="alert alert-info">
+            <span class="icon">💡</span>
+            <strong data-i18n="maintenance.backup.recommendation">Recomendação:</strong>
+            <span data-i18n="maintenance.backup.message">Sempre crie um backup antes de executar operações de manutenção.</span>
+            <button class="btn btn-sm" id="btnQuickBackupMaintenance" onclick="window.masterCtrl.createBackup('full')">
+              <span class="icon">💾</span> <span data-i18n="maintenance.backup.quick">Backup Rápido</span>
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Internationalization Tab (NEW) -->
+    <div class="tab-content" id="tab-i18n">
+    <!-- Section Header with Help -->
+      <div class="section-header">
+        <h2><span class="icon">🌐</span> <span data-i18n="i18n.title">Internacionalização</span></h2>
+        <button class="btn-help" data-help="i18n" title="Ajuda">
+          <span class="icon">❓</span>
+        </button>
+      </div>
+      
+      <!-- Help Panel -->
+      <div class="help-panel" id="help-i18n" style="display:none;">
+        <div class="help-content">
+          <h4>Internacionalização (i18n):</h4>
+          <p><strong>🌐 i18n:</strong> Gerenciamento de idiomas e traduções da interface do sistema.</p>
+          
+          <p><strong>Idiomas Suportados:</strong></p>
+          <ul>
+            <li><strong>🇧🇷 Português:</strong> Idioma padrão do sistema</li>
+            <li><strong>🇺🇸 English:</strong> Inglês internacional</li>
+            <li><strong>🇪🇸 Español:</strong> Espanhol</li>
+          </ul>
+          
+          <p><strong>Funcionalidades:</strong></p>
+          <ul>
+            <li><strong>Trocar Idioma:</strong> Altera interface instantaneamente</li>
+            <li><strong>Status de Traduções:</strong> Progresso de completude por idioma</li>
+            <li><strong>Chaves Faltantes:</strong> Identifica traduções pendentes</li>
+            <li><strong>Validar:</strong> Verifica consistência entre idiomas</li>
+            <li><strong>Exportar/Importar:</strong> JSON de traduções para edição externa</li>
+          </ul>
+          
+          <p><em>💡 Dica: Arquivos de tradução ficam em js/translations/*.json</em></p>
+        </div>
+      </div>
+      
+      <div class="i18n-grid">
+        <!-- Language Selector -->
+        <div class="master-card">
+          <h3><span class="icon">🌍</span> <span data-i18n="i18n.languageSelector">Seletor de Idioma</span></h3>
+          <div class="language-options">
+            <button class="language-btn active" data-lang="pt">
+              <span class="flag">🇧🇷</span>
+              <span data-i18n="i18n.languages.pt">Português</span>
+            </button>
+            <button class="language-btn" data-lang="en">
+              <span class="flag">🇺🇸</span>
+              <span data-i18n="i18n.languages.en">English</span>
+            </button>
+            <button class="language-btn" data-lang="es">
+              <span class="flag">🇪🇸</span>
+              <span data-i18n="i18n.languages.es">Español</span>
+            </button>
+          </div>
+        </div>
+
+        <!-- Translation Status -->
+        <div class="master-card">
+          <h3><span class="icon">📊</span> <span data-i18n="i18n.status.title">Status de Traduções</span></h3>
+          <div class="translation-stats">
+            <div class="stat-item">
+              <span class="flag">🇧🇷</span>
+              <span data-i18n="i18n.languages.pt">Português</span>
+              <div class="progress-bar"><div class="progress-fill" style="width:100%"></div></div>
+              <span class="stat-value">100%</span>
+            </div>
+            <div class="stat-item">
+              <span class="flag">🇺🇸</span>
+              <span data-i18n="i18n.languages.en">English</span>
+              <div class="progress-bar"><div class="progress-fill" style="width:100%"></div></div>
+              <span class="stat-value">100%</span>
+            </div>
+            <div class="stat-item">
+              <span class="flag">🇪🇸</span>
+              <span data-i18n="i18n.languages.es">Español</span>
+              <div class="progress-bar"><div class="progress-fill" style="width:100%"></div></div>
+              <span class="stat-value">100%</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Test Translation -->
+        <div class="master-card">
+          <h3><span class="icon">🧪</span> <span data-i18n="i18n.test.title">Testar Tradução</span></h3>
+          <div class="test-section">
+            <div class="form-group">
+              <label data-i18n="i18n.test.key">Chave de Tradução</label>
+              <input type="text" id="testI18nKey" class="input" placeholder="master.title" data-i18n-placeholder="i18n.test.keyPlaceholder">
+            </div>
+            <button class="btn btn-primary" id="btnTestI18n">
+              <span class="icon">🔍</span> <span data-i18n="i18n.test.execute">Testar</span>
+            </button>
+            <div id="testI18nResult" class="test-result" style="display:none;">
+              <!-- Test results will appear here -->
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Metrics Tab (NEW) -->
+    <div class="tab-content" id="tab-metrics">
+      <!-- Section Header with Help -->
+      <div class="section-header">
+        <h2><span class="icon">📈</span> <span data-i18n="metrics.title">Métricas</span></h2>
+        <button class="btn-help" data-help="metrics" title="Ajuda">
+          <span class="icon">❓</span>
+        </button>
+      </div>
+      
+      <!-- Help Panel -->
+      <div class="help-panel" id="help-metrics" style="display:none;">
+        <div class="help-content">
+          <h4>Métricas e Analytics:</h4>
+          <p><strong>📈 Métricas:</strong> Dashboard de monitoramento de performance, uso de storage e análise de backups.</p>
+          
+          <p><strong>Indicadores Disponíveis:</strong></p>
+          <ul>
+            <li><strong>⚡ Performance:</strong> Tempo médio, mais rápido e mais lento de backups</li>
+            <li><strong>💽 Storage:</strong> Espaço usado por Property/General backups e total</li>
+            <li><strong>🗜️ Compressão:</strong> Taxa de compressão e espaço economizado</li>
+            <li><strong>❌ Falhas:</strong> Total de falhas e taxa de sucesso</li>
+          </ul>
+          
+          <p><strong>Como Interpretar:</strong></p>
+          <ul>
+            <li>Tempo médio > 5s: Considere otimizar tamanho dos dados</li>
+            <li>Storage > 80%: Hora de limpar backups antigos</li>
+            <li>Taxa de falhas > 10%: Investigar problemas de consistência</li>
+            <li>Compressão < 20%: Dados já comprimidos ou binários</li>
+          </ul>
+          
+          <p><em>📊 Analytics: Use essas métricas para otimizar estratégia de backup</em></p>
+        </div>
+      </div>
+      
+      <div class="metrics-grid">
+        <!-- Backup Performance -->
+        <div class="master-card">
+          <h3><span class="icon">⚡</span> <span data-i18n="metrics.performance.title">Performance de Backup</span></h3>
+          <div class="stat-grid">
+            <div class="stat-item">
+              <span class="stat-label" data-i18n="metrics.performance.avgDuration">Tempo Médio</span>
+              <span class="stat-value" id="metricsAvgDuration">0s</span>
+            </div>
+            <div class="stat-item">
+              <span class="stat-label" data-i18n="metrics.performance.fastest">Mais Rápido</span>
+              <span class="stat-value" id="metricsFastest">0s</span>
+            </div>
+            <div class="stat-item">
+              <span class="stat-label" data-i18n="metrics.performance.slowest">Mais Lento</span>
+              <span class="stat-value" id="metricsSlowest">0s</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Storage Metrics -->
+        <div class="master-card">
+          <h3><span class="icon">💽</span> <span data-i18n="metrics.storage.title">Uso de Storage</span></h3>
+          <div class="stat-grid">
+            <div class="stat-item">
+              <span class="stat-label" data-i18n="metrics.storage.propertyBackups">Property Backups</span>
+              <span class="stat-value" id="metricsPropertyStorage">0 MB</span>
+            </div>
+            <div class="stat-item">
+              <span class="stat-label" data-i18n="metrics.storage.generalBackups">General Structure</span>
+              <span class="stat-value" id="metricsGeneralStorage">0 MB</span>
+            </div>
+            <div class="stat-item">
+              <span class="stat-label" data-i18n="metrics.storage.total">Total</span>
+              <span class="stat-value" id="metricsTotalStorage">0 MB</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Compression Stats -->
+        <div class="master-card">
+          <h3><span class="icon">🗜️</span> <span data-i18n="metrics.compression.title">Compressão</span></h3>
+          <div class="stat-grid">
+            <div class="stat-item">
+              <span class="stat-label" data-i18n="metrics.compression.rate">Taxa Média</span>
+              <span class="stat-value" id="metricsCompressionRate">0%</span>
+            </div>
+            <div class="stat-item">
+              <span class="stat-label" data-i18n="metrics.compression.savedSpace">Espaço Economizado</span>
+              <span class="stat-value" id="metricsSavedSpace">0 MB</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Failure Analysis -->
+        <div class="master-card">
+          <h3><span class="icon">❌</span> <span data-i18n="metrics.failures.title">Análise de Falhas</span></h3>
+          <div class="stat-grid">
+            <div class="stat-item">
+              <span class="stat-label" data-i18n="metrics.failures.total">Total de Falhas</span>
+              <span class="stat-value" id="metricsFailures">0</span>
+            </div>
+            <div class="stat-item">
+              <span class="stat-label" data-i18n="metrics.failures.last7days">Últimos 7 dias</span>
+              <span class="stat-value" id="metricsFailuresLast7">0</span>
+            </div>
+            <div class="stat-item">
+              <span class="stat-label" data-i18n="metrics.failures.successRate">Taxa de Sucesso</span>
+              <span class="stat-value" id="metricsSuccessRate">100%</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Charts Placeholder -->
+        <div class="master-card full-width">
+          <h3><span class="icon">📊</span> <span data-i18n="metrics.charts.title">Gráficos</span></h3>
+          <div class="charts-container">
+            <p data-i18n="metrics.charts.placeholder">Gráficos de performance serão exibidos aqui.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- System Tab (OLD - DEPRECATED) -->
+    <div class="tab-content" id="tab-system" style="display:none;">
+      <div class="system-grid">
+        <div class="master-card">
+          <h3 data-i18n="system.settingsTitle">⚙️ Configurações do Sistema</h3>
+          <div class="settings-list">
+            <div class="setting-item">
+              <label data-i18n="system.autoBackup">Backup Automático</label>
+              <select id="autoBackupFrequency" class="select">
+                <option value="disabled" data-i18n="system.backupAutoOptions.disabled">Desabilitado</option>
+                <option value="daily" data-i18n="system.backupAutoOptions.daily">Diário</option>
+                <option value="weekly" data-i18n="system.backupAutoOptions.weekly">Semanal</option>
+                <option value="monthly" data-i18n="system.backupAutoOptions.monthly">Mensal</option>
+              </select>
+            </div>
+            <div class="setting-item">
+              <label data-i18n="system.retention">Retenção de Backups (dias)</label>
+              <input type="number" id="backupRetention" value="30" min="1" class="input">
+            </div>
+            <div class="setting-item">
+              <label data-i18n="system.autoVersioning">Versionamento Automático</label>
+              <select id="autoVersioning" class="select">
+                <option value="enabled">Habilitado</option>
+                <option value="disabled">Desabilitado</option>
+              </select>
+            </div>
+            <div class="setting-item">
+              <label data-i18n="system.logLevel">Nível de Log</label>
+              <select id="logLevel" class="select">
+                <option value="error" data-i18n="system.logLevels.error">Erro</option>
+                <option value="warning" data-i18n="system.logLevels.warning">Aviso</option>
+                <option value="info" data-i18n="system.logLevels.info">Info</option>
+                <option value="debug" data-i18n="system.logLevels.debug">Debug</option>
+              </select>
+            </div>
+            <button class="btn btn-primary" id="btnSaveSystemSettings" data-i18n="system.saveSettings">💾 Salvar Configurações</button>
+          </div>
+        </div>
+
+        <div class="master-card">
+          <h3><span class="icon">🗄️</span> <span data-i18n="system.storageTitle">Armazenamento</span></h3>
+          <div class="storage-info">
+            <div class="storage-bar">
+              <div class="storage-used" id="storageUsedBar" style="width: 0%"></div>
+            </div>
+            <div class="storage-stats">
+              <span data-i18n="system.used">Usado</span>: <strong id="storageUsed">0 MB</strong>
+              <span data-i18n="system.available">Disponível</span>: <strong id="storageAvailable">5 MB</strong>
+              <span data-i18n="system.total">Total</span>: <strong id="storageTotal">5 MB</strong>
+            </div>
+          </div>
+        </div>
+
+        <div class="master-card">
+          <h3><span class="icon">🔧</span> <span data-i18n="system.maintenanceTitle">Manutenção</span></h3>
+          <div class="maintenance-actions">
+            <button class="btn" onclick="masterCtrl.clearCache()"><span class="icon">🗑️</span> <span data-i18n="system.clearCache">Limpar Cache</span></button>
+            <button class="btn" onclick="masterCtrl.optimizeDatabase()"><span class="icon">⚡</span> <span data-i18n="system.optimizeDb">Otimizar Banco</span></button>
+            <button class="btn" onclick="masterCtrl.repairIntegrity()"><span class="icon">🔧</span> <span data-i18n="system.repairIntegrity">Reparar Integridade</span></button>
+            <button class="btn btn-danger" onclick="masterCtrl.resetSystem()"><span class="icon">🔴</span> <span data-i18n="system.resetSystem">Reset Sistema</span></button>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- Properties Management Tab (NEW) -->
+    <div class="tab-content" id="tab-properties">
+      <!-- Breadcrumb -->
+      <div class="breadcrumb">
+        <span class="icon">🏠</span> <span data-i18n="breadcrumb.home">Início</span> 
+        <span class="separator">›</span> 
+        <span data-i18n="tabs.properties">Propriedades</span>
+      </div>
+
+      <!-- Section Header with Help -->
+      <div class="section-header">
+        <h2><span class="icon">🏨</span> <span data-i18n="properties.title">Gestão de Propriedades</span></h2>
+        <button class="btn-help" data-help="properties" title="Ajuda">
+          <span class="icon">❓</span>
+        </button>
+      </div>
+
+      <!-- Help Panel -->
+      <div class="help-panel" id="help-properties" style="display:none;">
+        <div class="help-content">
+          <h4>Gestão de Propriedades:</h4>
+          <p><strong>📋 Visão Geral:</strong> Módulo completo para gerenciar todas as propriedades (hotéis) cadastradas no sistema.</p>
+          
+          <p><strong>Funcionalidades Disponíveis:</strong></p>
+          <ul>
+            <li><strong>➕ Criar Propriedade:</strong> Adicionar nova propriedade com configurações personalizadas</li>
+            <li><strong>✏️ Editar Propriedade:</strong> Modificar informações e módulos adquiridos</li>
+            <li><strong>🚀 Implantar:</strong> Wizard de implantação para deploy de propriedade em produção</li>
+            <li><strong>🗑️ Deletar:</strong> Remover propriedade (requer confirmação)</li>
+          </ul>
+          
+          <p><strong>Informações Exibidas:</strong></p>
+          <ul>
+            <li><strong>Property ID:</strong> Identificador único (primary key)</li>
+            <li><strong>Nome:</strong> Nome da propriedade</li>
+            <li><strong>Módulos:</strong> Módulos adquiridos (Engineering, Housekeeping, Alerts, etc.)</li>
+            <li><strong>Capacidade:</strong> Limite de usuários (30, 50, 100+)</li>
+            <li><strong>Status:</strong> Ativo/Inativo</li>
+          </ul>
+          
+          <p><strong>Wizard de Implantação:</strong></p>
+          <p>O botão "🚀 Implantar" inicia um wizard multi-step que guia o processo de deploy:</p>
+          <ul>
+            <li><strong>Step 1 - Validação:</strong> Verifica configurações e requisitos</li>
+            <li><strong>Step 2 - Configuração:</strong> Define parâmetros de deploy</li>
+            <li><strong>Step 3 - Execução:</strong> Realiza implantação com feedback em tempo real</li>
+          </ul>
+          
+          <p><strong>⚠️ Importante:</strong></p>
+          <ul>
+            <li>Cada propriedade tem um <strong>ID único</strong> que serve como primary key no banco</li>
+            <li>Módulos adquiridos determinam funcionalidades disponíveis na propriedade</li>
+            <li>Capacidade de usuários limita quantos usuários podem ser criados</li>
+            <li>Implantação deve ser feita com cuidado em ambiente de produção</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="properties-section">
+        
+        <!-- Actions Bar -->
+        <div class="master-card">
+          <div class="actions-bar" style="display: flex; gap: 12px; align-items: center; flex-wrap: wrap;">
+            <button class="btn btn-primary" id="btnCreateProperty">
+              <span class="icon">➕</span> <span data-i18n="properties.create">Criar Propriedade</span>
+            </button>
+            <button class="btn" id="btnRefreshProperties">
+              <span class="icon">🔄</span> <span data-i18n="properties.refresh">Atualizar Lista</span>
+            </button>
+            <div style="flex: 1;"></div>
+            <div class="search-box">
+              <input type="text" id="searchProperties" placeholder="Buscar propriedades..." data-i18n-placeholder="properties.search">
+            </div>
+          </div>
+        </div>
+
+        <!-- Properties Table -->
+        <div class="master-card">
+          <h3><span class="icon">📋</span> <span data-i18n="properties.listTitle">Propriedades Cadastradas</span></h3>
+          
+          <div class="table-container">
+            <table class="data-table" id="propertiesTable">
+              <thead>
+                <tr>
+                  <th data-i18n="properties.table.id">Property ID</th>
+                  <th data-i18n="properties.table.name">Nome</th>
+                  <th data-i18n="properties.table.modules">Módulos Adquiridos</th>
+                  <th data-i18n="properties.table.capacity">Capacidade</th>
+                  <th data-i18n="properties.table.link">Link</th>
+                  <th data-i18n="properties.table.status">Status</th>
+                  <th data-i18n="properties.table.actions">Ações</th>
+                </tr>
+              </thead>
+              <tbody id="propertiesTableBody">
+                <!-- Populated by JavaScript -->
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+
+
+    <!-- Logs Tab -->
+    <div class="tab-content" id="tab-logs">
+      <div class="logs-section">
+        <div class="master-card">
+          <div class="section-header">
+            <h3><span class="icon">📝</span> <span data-i18n="logs.title">Logs de Auditoria</span></h3>
+            <button class="btn-help" data-help="logs" title="Ajuda">
+              <span class="icon">❓</span>
+            </button>
+          </div>
+          
+          <!-- Help Panel -->
+          <div class="help-panel" id="help-logs" style="display:none;">
+            <div class="help-content">
+              <h4>Logs de Auditoria:</h4>
+              <p><strong>📝 Logs:</strong> Registro detalhado de todas as ações realizadas no sistema para auditoria e troubleshooting.</p>
+              
+              <p><strong>Tipos de Log:</strong></p>
+              <ul>
+                <li><strong>🔴 Error:</strong> Erros críticos que impedem operações</li>
+                <li><strong>⚠️ Warning:</strong> Avisos sobre situações anormais</li>
+                <li><strong>ℹ️ Info:</strong> Informações sobre operações realizadas</li>
+                <li><strong>🐛 Debug:</strong> Detalhes técnicos para desenvolvimento</li>
+              </ul>
+              
+              <p><strong>Ações Logadas:</strong></p>
+              <ul>
+                <li>Login/Logout de usuários</li>
+                <li>Criação/Edição/Deleção de backups</li>
+                <li>Deploy/Rollback de releases</li>
+                <li>Mudanças em configurações</li>
+                <li>Operações de manutenção</li>
+                <li>Erros e exceções do sistema</li>
+              </ul>
+              
+              <p><strong>Filtros:</strong> Use filtros para encontrar eventos específicos por tipo, usuário ou período</p>
+              
+              <p><em>🔍 Investigação: Logs são essenciais para rastrear problemas e identificar uso indevido</em></p>
+            </div>
+          </div>
+          
+          <div class="card-header">
+            <button class="btn" onclick="masterCtrl.exportLogs()"><span class="icon">📤</span> <span data-i18n="logs.export">Exportar Logs</span></button>
+          </div>
+          <div class="filters-row">
+            <select id="filterLogType" class="select">
+              <option value="" data-i18n="logs.allTypes">Todos os Tipos</option>
+              <option value="auth" data-i18n="logs.auth">Autenticação</option>
+              <option value="backup" data-i18n="logs.backup">Backup</option>
+              <option value="restore" data-i18n="logs.restore">Restore</option>
+              <option value="user" data-i18n="logs.user">Usuário</option>
+              <option value="system" data-i18n="logs.system">Sistema</option>
+            </select>
+            <select id="filterLogLevel" class="select">
+              <option value="" data-i18n="logs.allLevels">Todos os Níveis</option>
+              <option value="info" data-i18n="logs.info">Info</option>
+              <option value="warning" data-i18n="logs.warning">Aviso</option>
+              <option value="error" data-i18n="logs.error">Erro</option>
+              <option value="critical" data-i18n="logs.critical">Crítico</option>
+            </select>
+            <input type="date" id="filterLogDate" class="input">
+          </div>
+          <div class="logs-list" id="logsList">
+            <!-- Logs will be rendered here -->
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Versions Tab -->
+    <div class="tab-content" id="tab-versions">
+      <div class="versions-section">
+        <div class="master-card">
+          <div class="section-header">
+            <h3><span class="icon">🗂️</span> <span data-i18n="versions.title">Controle de Versões</span></h3>
+            <button class="btn-help" data-help="versions" title="Ajuda">
+              <span class="icon">❓</span>
+            </button>
+          </div>
+          
+          <!-- Help Panel -->
+          <div class="help-panel" id="help-versions" style="display:none;">
+            <div class="help-content">
+              <h4>Controle de Versões:</h4>
+              <p><strong>🗂️ Versões:</strong> Sistema de snapshots para marcar pontos importantes na história do sistema.</p>
+              
+              <p><strong>O que são Marcos (Snapshots)?</strong></p>
+              <ul>
+                <li><strong>📸 Snapshot:</strong> Captura completa do estado do sistema em um momento específico</li>
+                <li><strong>Marco:</strong> Ponto de referência nomeado (ex: "Antes da Migração 2024")</li>
+                <li><strong>Timestamp:</strong> Data e hora exata da captura</li>
+              </ul>
+              
+              <p><strong>Quando Criar Marcos:</strong></p>
+              <ul>
+                <li>Antes de atualizações importantes</li>
+                <li>Após configurações críticas</li>
+                <li>Marcos mensais para histórico</li>
+                <li>Antes de testes que podem afetar dados</li>
+                <li>Pontos de auditoria regulatória</li>
+              </ul>
+              
+              <p><strong>Diferença de Backups:</strong></p>
+              <ul>
+                <li><strong>Backup:</strong> Dados operacionais (reservas, inventário)</li>
+                <li><strong>Versão:</strong> Estado completo do sistema (configs, estrutura, dados)</li>
+              </ul>
+              
+              <p><em>📌 Dica: Use nomes descritivos para facilitar identificação futura</em></p>
+            </div>
+          </div>
+          
+          <div class="card-header">
+            <button class="btn btn-primary" id="btnCreateVersion"><span class="icon">📸</span> <span data-i18n="versions.create">Criar Marco (Snapshot)</span></button>
+          </div>
+          <div class="version-timeline" id="versionTimeline">
+            <!-- Version items will be rendered here -->
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Property Backups Tab (NEW) -->
+    <div class="tab-content" id="tab-property-backups">
+      <div class="enterprise-backup-section">
+        <!-- Dashboard Metrics -->
+        <div class="master-card">
+          <div class="section-header">
+            <h3><span class="icon">📊</span> <span data-i18n="propertyBackups.metricsTitle">Métricas de Backup por Propriedade</span></h3>
+            <button class="btn-help" data-help="property-backups" title="Ajuda">
+              <span class="icon">❓</span>
+            </button>
+          </div>
+          
+          <!-- Help Panel -->
+          <div class="help-panel" id="help-property-backups" style="display:none;">
+            <div class="help-content">
+              <h4>Backups por Propriedade - Estratégia Empresarial:</h4>
+              <p><strong>🏢 Property Backups:</strong> Backups individualizados para cada propriedade gerenciada no sistema.</p>
+              
+              <p><strong>Tipos de Backup:</strong></p>
+              <ul>
+                <li><strong>💾 Completo (Full):</strong> Cópia total de todos os dados da propriedade</li>
+                <li><strong>📦 Incremental:</strong> Apenas mudanças desde último backup (mais rápido)</li>
+              </ul>
+              
+              <p><strong>Quando Usar:</strong></p>
+              <ul>
+                <li><strong>Full:</strong> Primeira vez, início do mês, após grandes mudanças</li>
+                <li><strong>Incremental:</strong> Diariamente, antes de operações importantes</li>
+              </ul>
+              
+              <p><strong>Boas Práticas:</strong></p>
+              <ul>
+                <li>Faça Full Backup mensalmente</li>
+                <li>Incremental diário para dados críticos</li>
+                <li>Verifique integridade (checksum) regularmente</li>
+                <li>Mantenha pelo menos 3 gerações de backup</li>
+              </ul>
+              
+              <p><strong>Métricas Importantes:</strong></p>
+              <ul>
+                <li><strong>Taxa de Sucesso:</strong> Deve estar acima de 95%</li>
+                <li><strong>Tempo Médio:</strong> Monitore aumentos repentinos</li>
+                <li><strong>Storage Total:</strong> Planeje capacidade com base no crescimento</li>
+              </ul>
+              
+              <p><em>💡 Dica: Use Incremental diariamente e Full semanalmente para equilíbrio entre segurança e espaço</em></p>
+            </div>
+          </div>
+          <div class="stat-grid" id="tenantBackupMetrics">
+            <div class="stat-item">
+              <span class="stat-label" data-i18n="propertyBackups.totalBackups">Total de Backups</span>
+              <span class="stat-value" id="tbTotalCount">0</span>
+            </div>
+            <div class="stat-item">
+              <span class="stat-label" data-i18n="propertyBackups.last24h">Últimas 24h</span>
+              <span class="stat-value" id="tbLast24h">0</span>
+            </div>
+            <div class="stat-item">
+              <span class="stat-label" data-i18n="propertyBackups.successRate">Taxa de Sucesso</span>
+              <span class="stat-value" id="tbSuccessRate">0%</span>
+            </div>
+            <div class="stat-item">
+              <span class="stat-label" data-i18n="propertyBackups.avgDuration">Tempo Médio</span>
+              <span class="stat-value" id="tbAvgDuration">0s</span>
+            </div>
+            <div class="stat-item">
+              <span class="stat-label" data-i18n="propertyBackups.avgSize">Tamanho Médio</span>
+              <span class="stat-value" id="tbAvgSize">0 MB</span>
+            </div>
+            <div class="stat-item">
+              <span class="stat-label" data-i18n="propertyBackups.totalStorage">Storage Total</span>
+              <span class="stat-value" id="tbTotalStorage">0 MB</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Quick Actions -->
+        <div class="master-card">
+          <h3><span class="icon">⚡</span> <span data-i18n="propertyBackups.quickActions">Ações Rápidas</span></h3>
+          <div class="backup-actions">
+            <div class="form-group">
+              <label data-i18n="propertyBackups.selectProperty">Selecionar Propriedade</label>
+              <select id="tbPropertySelect" class="select">
+                <option value="">-- Selecione --</option>
+              </select>
+            </div>
+            <div class="action-buttons">
+              <button class="btn btn-primary" id="btnTenantFullBackup"><span class="icon">💾</span> <span data-i18n="propertyBackups.createFull">Backup Completo</span></button>
+              <button class="btn btn-primary" id="btnTenantIncrementalBackup"><span class="icon">📦</span> <span data-i18n="propertyBackups.createIncremental">Backup Incremental</span></button>
+              <button class="btn" id="btnTenantViewCatalog"><span class="icon">📋</span> <span data-i18n="propertyBackups.viewCatalog">Ver Catálogo</span></button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Backup Catalog -->
+        <div class="master-card full-width">
+          <div class="card-header">
+            <h3><span class="icon">📚</span> <span data-i18n="propertyBackups.catalogTitle">Catálogo de Backups</span></h3>
+            <div class="card-actions">
+              <input type="text" id="tbSearchInput" class="input" placeholder="Buscar por propriedade..." data-i18n-placeholder="propertyBackups.search">
+              <select id="tbFilterType" class="select">
+                <option value="all" data-i18n="propertyBackups.filterAll">Todos</option>
+                <option value="full" data-i18n="propertyBackups.filterFull">Completo</option>
+                <option value="incremental" data-i18n="propertyBackups.filterIncremental">Incremental</option>
+              </select>
+            </div>
+          </div>
+          <div class="table-container">
+            <table class="master-table" id="tenantBackupTable">
+              <thead>
+                <tr>
+                  <th data-i18n="propertyBackups.tableProperty">Propriedade</th>
+                  <th data-i18n="propertyBackups.tableType">Tipo</th>
+                  <th data-i18n="propertyBackups.tableDate">Data/Hora</th>
+                  <th data-i18n="propertyBackups.tableSize">Tamanho</th>
+                  <th data-i18n="propertyBackups.tableChecksum">Checksum</th>
+                  <th data-i18n="propertyBackups.tableActions">Ações</th>
+                </tr>
+              </thead>
+              <tbody id="tenantBackupTableBody">
+                <tr><td colspan="6" class="text-center" data-i18n="propertyBackups.noData">Nenhum backup encontrado</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <!-- Restore Wizard -->
+        <div class="master-card full-width" id="tenantRestoreWizard" style="display:none;">
+          <h3><span class="icon">♻️</span> <span data-i18n="propertyBackups.restoreTitle">Assistente de Restauração</span></h3>
+          <div class="wizard-steps">
+            <div class="wizard-step active" data-step="1">
+              <div class="step-header">
+                <span class="step-number">1</span>
+                <span class="step-title" data-i18n="propertyBackups.step1">Selecionar Escopo</span>
+              </div>
+              <div class="step-content">
+                <div class="form-group">
+                  <label data-i18n="propertyBackups.restoreMode">Modo de Restauração</label>
+                  <div class="radio-group">
+                    <label class="radio-label">
+                      <input type="radio" name="restoreMode" value="full" checked>
+                      <span><span class="icon">🗄️</span> <span data-i18n="propertyBackups.modeFull">Completo (substitui tudo)</span></span>
+                    </label>
+                    <label class="radio-label">
+                      <input type="radio" name="restoreMode" value="selective">
+                      <span><span class="icon">🎯</span> <span data-i18n="propertyBackups.modeSelective">Seletivo (escolher módulos)</span></span>
+                    </label>
+                    <label class="radio-label">
+                      <input type="radio" name="restoreMode" value="merge">
+                      <span><span class="icon">🔀</span> <span data-i18n="propertyBackups.modeMerge">Merge (combinar dados)</span></span>
+                    </label>
+                  </div>
+                </div>
+                <div id="selectiveModules" style="display:none;">
+                  <label data-i18n="propertyBackups.selectModules">Selecionar Módulos</label>
+                  <div class="checkbox-group">
+                    <label><input type="checkbox" value="users"> <span data-i18n="propertyBackups.moduleUsers">Usuários</span></label>
+                    <label><input type="checkbox" value="properties"> <span data-i18n="propertyBackups.moduleProperties">Propriedades</span></label>
+                    <label><input type="checkbox" value="settings"> <span data-i18n="propertyBackups.moduleSettings">Configurações</span></label>
+                    <label><input type="checkbox" value="assets"> <span data-i18n="propertyBackups.moduleAssets">Assets</span></label>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="wizard-step" data-step="2">
+              <div class="step-header">
+                <span class="step-number">2</span>
+                <span class="step-title" data-i18n="propertyBackups.step2">Ponto de Restauração</span>
+              </div>
+              <div class="step-content">
+                <p data-i18n="propertyBackups.selectedBackup">Backup Selecionado:</p>
+                <div id="selectedBackupInfo" class="info-box"></div>
+              </div>
+            </div>
+            <div class="wizard-step" data-step="3">
+              <div class="step-header">
+                <span class="step-number">3</span>
+                <span class="step-title" data-i18n="propertyBackups.step3">Validar & Executar</span>
+              </div>
+              <div class="step-content">
+                <div class="form-group">
+                  <label>
+                    <input type="checkbox" id="validateBeforeRestore" checked>
+                    <span data-i18n="propertyBackups.validateFirst">Validar integridade antes de restaurar</span>
+                  </label>
+                </div>
+                <div class="form-group">
+                  <label>
+                    <input type="checkbox" id="createSafetyBackup" checked>
+                    <span data-i18n="propertyBackups.safetyBackup">Criar backup de segurança antes de restaurar</span>
+                  </label>
+                </div>
+                <div id="validationResults" class="results-box" style="display:none;"></div>
+              </div>
+            </div>
+          </div>
+          <div class="wizard-actions">
+            <button class="btn btn-secondary" id="btnCancelRestore"><span class="icon">❌</span> <span data-i18n="common.cancel">Cancelar</span></button>
+            <button class="btn" id="btnPrevStep" style="display:none;"><span class="icon">◀️</span> <span data-i18n="common.previous">Anterior</span></button>
+            <button class="btn btn-primary" id="btnNextStep"><span class="icon">▶️</span> <span data-i18n="common.next">Próximo</span></button>
+            <button class="btn btn-success" id="btnExecuteRestore" style="display:none;"><span class="icon">✅</span> <span data-i18n="propertyBackups.execute">Executar Restauração</span></button>
+          </div>
+        </div>
+
+        <!-- Scheduling Configuration -->
+        <div class="master-card full-width">
+          <h3><span class="icon">⏱️</span> <span data-i18n="propertyBackups.schedulingTitle">Agendamento de Backups</span></h3>
+          <div class="scheduling-config">
+            <div class="form-group">
+              <label data-i18n="propertyBackups.scheduleProperty">Propriedade</label>
+              <select id="schedulePropertySelect" class="select">
+                <option value="">-- Selecione --</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label data-i18n="propertyBackups.scheduleType">Tipo de Backup</label>
+              <select id="scheduleBackupType" class="select">
+                <option value="incremental" data-i18n="propertyBackups.scheduleIncremental">Incremental (diário)</option>
+                <option value="full" data-i18n="propertyBackups.scheduleFull">Completo (semanal)</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label data-i18n="propertyBackups.scheduleFrequency">Frequência</label>
+              <input type="text" id="scheduleFrequency" class="input" placeholder="0 2 * * *" data-i18n-placeholder="propertyBackups.cronExample">
+              <small data-i18n="propertyBackups.cronHelp">Formato cron: minuto hora dia mês dia-da-semana</small>
+            </div>
+            <div class="form-group">
+              <label data-i18n="propertyBackups.retention">Política de Retenção</label>
+              <div class="retention-config">
+                <input type="number" id="retentionDaily" class="input" value="7" min="1"> <span data-i18n="propertyBackups.retentionDays">dias (diários)</span>
+                <input type="number" id="retentionWeekly" class="input" value="4" min="1"> <span data-i18n="propertyBackups.retentionWeeks">semanas (semanais)</span>
+                <input type="number" id="retentionMonthly" class="input" value="3" min="1"> <span data-i18n="propertyBackups.retentionMonths">meses (mensais)</span>
+              </div>
+            </div>
+            <button class="btn btn-primary" id="btnSaveSchedule"><span class="icon">💾</span> <span data-i18n="common.save">Salvar Configuração</span></button>
+          </div>
+          <div class="schedule-list" id="scheduleList">
+            <h4 data-i18n="propertyBackups.activeSchedules">Agendamentos Ativos</h4>
+            <div id="scheduleListContent"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- General Structure Backups Tab (NEW) -->
+    <div class="tab-content" id="tab-general-backups">
+      <div class="enterprise-backup-section">
+        <!-- Dashboard Metrics -->
+        <div class="master-card">
+          <div class="section-header">
+            <h3><span class="icon">📊</span> <span data-i18n="generalBackups.metricsTitle">Métricas de Estrutura Geral</span></h3>
+            <button class="btn-help" data-help="general-backups" title="Ajuda">
+              <span class="icon">❓</span>
+            </button>
+          </div>
+          
+          <!-- Help Panel -->
+          <div class="help-panel" id="help-general-backups" style="display:none;">
+            <div class="help-content">
+              <h4>Backups de Estrutura Geral - Sistema Global:</h4>
+              <p><strong>🏗️ General Backups:</strong> Backup dos componentes globais do sistema (CSS, JS, traduções, configs).</p>
+              
+              <p><strong>Componentes do Sistema:</strong></p>
+              <ul>
+                <li><strong>🎨 CSS Global:</strong> Estilos compartilhados por todas as propriedades</li>
+                <li><strong>⚙️ JavaScript Core:</strong> Lógica principal do sistema</li>
+                <li><strong>🌐 i18n (Traduções):</strong> Arquivos de idiomas (pt, en, es)</li>
+                <li><strong>📦 Migrations:</strong> Scripts de atualização de banco de dados</li>
+                <li><strong>🖼️ Assets:</strong> Imagens, ícones, fontes compartilhados</li>
+                <li><strong>🔧 Configs:</strong> Configurações globais do sistema</li>
+              </ul>
+              
+              <p><strong>Quando Fazer Backup Geral:</strong></p>
+              <ul>
+                <li>Antes de atualizações de sistema (deploy)</li>
+                <li>Após customizações de CSS/JS</li>
+                <li>Antes de migrations críticas</li>
+                <li>Ao adicionar novos idiomas</li>
+                <li>Backups trimestrais de auditoria</li>
+              </ul>
+              
+              <p><strong>Versionamento:</strong></p>
+              <ul>
+                <li>Use SemVer: <code>v2.5.0</code> (Major.Minor.Patch)</li>
+                <li>Tags descritivas: "Pre-Migration-Q4-2024"</li>
+                <li>Descrições claras do que mudou</li>
+              </ul>
+              
+              <p><em>⚠️ Importante: Backup de estrutura geral é essencial antes de qualquer deploy de código</em></p>
+            </div>
+          </div>
+          <div class="stat-grid" id="generalBackupMetrics">
+            <div class="stat-item">
+              <span class="stat-label" data-i18n="generalBackups.totalBackups">Total de Backups</span>
+              <span class="stat-value" id="gbTotalCount">0</span>
+            </div>
+            <div class="stat-item">
+              <span class="stat-label" data-i18n="generalBackups.lastBackup">Último Backup</span>
+              <span class="stat-value" id="gbLastBackup">-</span>
+            </div>
+            <div class="stat-item">
+              <span class="stat-label" data-i18n="generalBackups.totalSize">Tamanho Total</span>
+              <span class="stat-value" id="gbTotalSize">0 MB</span>
+            </div>
+            <div class="stat-item">
+              <span class="stat-label" data-i18n="generalBackups.components">Componentes</span>
+              <span class="stat-value" id="gbComponentCount">0</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Create General Backup -->
+        <div class="master-card">
+          <h3><span class="icon">🏗️</span> <span data-i18n="generalBackups.createTitle">Criar Backup de Estrutura</span></h3>
+          <div class="backup-config">
+            <div class="form-group">
+              <label data-i18n="generalBackups.selectComponents">Selecionar Componentes</label>
+              <div class="checkbox-group">
+                <label><input type="checkbox" value="css" checked> <span data-i18n="generalBackups.componentCSS">CSS Global (style.css)</span></label>
+                <label><input type="checkbox" value="js" checked> <span data-i18n="generalBackups.componentJS">JavaScript Core</span></label>
+                <label><input type="checkbox" value="i18n" checked> <span data-i18n="generalBackups.componentI18n">Traduções (i18n)</span></label>
+                <label><input type="checkbox" value="migrations" checked> <span data-i18n="generalBackups.componentMigrations">Migrations</span></label>
+                <label><input type="checkbox" value="assets" checked> <span data-i18n="generalBackups.componentAssets">Assets Compartilhados</span></label>
+                <label><input type="checkbox" value="config" checked> <span data-i18n="generalBackups.componentConfig">Configurações Globais</span></label>
+              </div>
+            </div>
+            <div class="form-group">
+              <label data-i18n="generalBackups.version">Versão/Tag</label>
+              <input type="text" id="gbVersionTag" class="input" placeholder="v2.5.0" data-i18n-placeholder="generalBackups.versionExample">
+            </div>
+            <div class="form-group">
+              <label data-i18n="generalBackups.description">Descrição</label>
+              <textarea id="gbDescription" class="input" rows="3" placeholder="Backup antes de atualização de novembro" data-i18n-placeholder="generalBackups.descriptionExample"></textarea>
+            </div>
+            <button class="btn btn-primary" id="btnCreateGeneralBackup"><span class="icon">💾</span> <span data-i18n="generalBackups.create">Criar Backup</span></button>
+          </div>
+        </div>
+
+        <!-- General Backup Catalog -->
+        <div class="master-card full-width">
+          <div class="card-header">
+            <h3><span class="icon">📚</span> <span data-i18n="generalBackups.catalogTitle">Catálogo de Backups de Estrutura</span></h3>
+            <div class="card-actions">
+              <input type="text" id="gbSearchInput" class="input" placeholder="Buscar..." data-i18n-placeholder="generalBackups.search">
+            </div>
+          </div>
+          <div class="table-container">
+            <table class="master-table" id="generalBackupTable">
+              <thead>
+                <tr>
+                  <th data-i18n="generalBackups.tableVersion">Versão</th>
+                  <th data-i18n="generalBackups.tableDate">Data/Hora</th>
+                  <th data-i18n="generalBackups.tableComponents">Componentes</th>
+                  <th data-i18n="generalBackups.tableSize">Tamanho</th>
+                  <th data-i18n="generalBackups.tableChecksum">Checksum</th>
+                  <th data-i18n="generalBackups.tableActions">Ações</th>
+                </tr>
+              </thead>
+              <tbody id="generalBackupTableBody">
+                <tr><td colspan="6" class="text-center" data-i18n="generalBackups.noData">Nenhum backup encontrado</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <!-- Restore General Structure -->
+        <div class="master-card full-width" id="generalRestorePanel" style="display:none;">
+          <h3><span class="icon">♻️</span> <span data-i18n="generalBackups.restoreTitle">Restaurar Estrutura Geral</span></h3>
+          <div class="restore-info" id="gbRestoreInfo"></div>
+          <div class="form-group">
+            <label>
+              <input type="checkbox" id="gbValidateIntegrity" checked>
+              <span data-i18n="generalBackups.validateIntegrity">Validar integridade do backup</span>
+            </label>
+          </div>
+          <div class="form-group">
+            <label>
+              <input type="checkbox" id="gbCreateSafetyBackup" checked>
+              <span data-i18n="generalBackups.safetyBackup">Criar backup de segurança da estrutura atual</span>
+            </label>
+          </div>
+          <div class="alert alert-warning">
+            <span class="icon">⚠️</span>
+            <span data-i18n="generalBackups.restoreWarning">ATENÇÃO: Restaurar a estrutura geral afetará TODOS os clientes. Esta operação deve ser realizada em janela de manutenção.</span>
+          </div>
+          <div class="restore-actions">
+            <button class="btn btn-secondary" id="btnCancelGeneralRestore"><span class="icon">❌</span> <span data-i18n="common.cancel">Cancelar</span></button>
+            <button class="btn btn-danger" id="btnExecuteGeneralRestore"><span class="icon">✅</span> <span data-i18n="generalBackups.executeRestore">Executar Restauração</span></button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Releases & Rollback Tab (NEW) -->
+    <div class="tab-content" id="tab-releases">
+      <div class="enterprise-backup-section">
+        <!-- Release Metrics -->
+        <div class="master-card">
+          <div class="section-header">
+            <h3><span class="icon">📊</span> <span data-i18n="releases.metricsTitle">Métricas de Releases</span></h3>
+            <button class="btn-help" data-help="release-metrics" title="Ajuda">
+              <span class="icon">❓</span>
+            </button>
+          </div>
+          
+          <!-- Help Panel -->
+          <div class="help-panel" id="help-release-metrics" style="display:none;">
+            <div class="help-content">
+              <h4>Métricas de Releases - Dashboard:</h4>
+              <p><strong>📊 Métricas:</strong> Visão geral rápida do estado atual do sistema de releases.</p>
+              
+              <p><strong>Indicadores:</strong></p>
+              <ul>
+                <li><strong>Versão Ativa:</strong> Release atualmente em produção</li>
+                <li><strong>Total de Releases:</strong> Número total de releases criadas</li>
+                <li><strong>Último Deploy:</strong> Data e hora do último deploy realizado</li>
+                <li><strong>Rollbacks:</strong> Quantidade de vezes que foi necessário reverter versão</li>
+              </ul>
+              
+              <p><em>💡 Monitoramento: Um alto número de rollbacks pode indicar problemas no processo de QA</em></p>
+            </div>
+          </div>
+          
+          <div class="stat-grid" id="releaseMetrics">
+            <div class="stat-item">
+              <span class="stat-label" data-i18n="releases.activeVersion">Versão Ativa</span>
+              <span class="stat-value" id="rmActiveVersion">-</span>
+            </div>
+            <div class="stat-item">
+              <span class="stat-label" data-i18n="releases.totalReleases">Total de Releases</span>
+              <span class="stat-value" id="rmTotalReleases">0</span>
+            </div>
+            <div class="stat-item">
+              <span class="stat-label" data-i18n="releases.lastDeploy">Último Deploy</span>
+              <span class="stat-value" id="rmLastDeploy">-</span>
+            </div>
+            <div class="stat-item">
+              <span class="stat-label" data-i18n="releases.rollbackCount">Rollbacks</span>
+              <span class="stat-value" id="rmRollbackCount">0</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Create Release -->
+        <div class="master-card">
+          <div class="section-header">
+            <h3><span class="icon">🚀</span> <span data-i18n="releases.createTitle">Criar Nova Release</span></h3>
+            <button class="btn-help" data-help="create-release" title="Ajuda">
+              <span class="icon">❓</span>
+            </button>
+          </div>
+          
+          <!-- Help Panel -->
+          <div class="help-panel" id="help-create-release" style="display:none;">
+            <div class="help-content">
+              <h4>Criar Nova Release - Como Funciona:</h4>
+              <p><strong>📦 Release:</strong> Uma release é uma versão empacotada do sistema com mudanças específicas, pronta para deploy.</p>
+              
+              <p><strong>Versionamento Semântico (SemVer):</strong></p>
+              <ul>
+                <li><strong>MAJOR</strong> (1.x.x): Mudanças incompatíveis, breaking changes</li>
+                <li><strong>MINOR</strong> (x.1.x): Novas funcionalidades compatíveis</li>
+                <li><strong>PATCH</strong> (x.x.1): Correções de bugs e hotfixes</li>
+              </ul>
+              
+              <p><strong>Canais de Deploy:</strong></p>
+              <ul>
+                <li><strong>Development:</strong> Ambiente de testes internos</li>
+                <li><strong>Staging:</strong> Ambiente de homologação pré-produção</li>
+                <li><strong>Production:</strong> Ambiente de produção para clientes</li>
+              </ul>
+              
+              <p><strong>Migrations:</strong> Scripts SQL/NoSQL para atualizar estrutura de dados (forward = aplicar, backward = reverter)</p>
+              
+              <p><em>💡 Dica: Sempre teste em Development antes de promover para Staging/Production</em></p>
+            </div>
+          </div>
+          
+          <div class="release-form">
+            <div class="form-group">
+              <label data-i18n="releases.version">Versão (Semântica)</label>
+              <input type="text" id="releaseVersion" class="input" placeholder="2.6.0" data-i18n-placeholder="releases.versionExample">
+              <small data-i18n="releases.versionHelp">Formato: MAJOR.MINOR.PATCH (ex: 2.6.0)</small>
+            </div>
+            <div class="form-group">
+              <label data-i18n="releases.name">Nome da Release</label>
+              <input type="text" id="releaseName" class="input" placeholder="November Update" data-i18n-placeholder="releases.nameExample">
+            </div>
+            <div class="form-group">
+              <label data-i18n="releases.channel">Canal</label>
+              <select id="releaseChannel" class="select">
+                <option value="dev" data-i18n="releases.channelDev">Development</option>
+                <option value="staging" data-i18n="releases.channelStaging">Staging</option>
+                <option value="prod" data-i18n="releases.channelProd">Production</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label data-i18n="releases.changelog">Changelog</label>
+              <textarea id="releaseChangelog" class="input" rows="4" placeholder="- Nova funcionalidade X&#10;- Correção de bug Y&#10;- Melhoria de performance Z" data-i18n-placeholder="releases.changelogExample"></textarea>
+            </div>
+            <div class="form-group">
+              <label data-i18n="releases.migrations">Migrations (SQL/NoSQL)</label>
+              <textarea id="releaseMigrations" class="input" rows="3" placeholder='[{"id": "001", "type": "forward", "sql": "ALTER TABLE..."}]' data-i18n-placeholder="releases.migrationsExample"></textarea>
+              <small data-i18n="releases.migrationsHelp">JSON array de migrations (forward/backward)</small>
+            </div>
+            <div class="form-group">
+              <label data-i18n="releases.files">Arquivos Alterados</label>
+              <textarea id="releaseFiles" class="input" rows="2" placeholder="style.css, master-control.js, properties.js" data-i18n-placeholder="releases.filesExample"></textarea>
+            </div>
+            <button class="btn btn-primary" id="btnCreateRelease"><span class="icon">📦</span> <span data-i18n="releases.create">Criar Release</span></button>
+          </div>
+        </div>
+
+        <!-- Release Timeline -->
+        <div class="master-card full-width">
+          <div class="card-header">
+            <h3><span class="icon">🕐</span> <span data-i18n="releases.timelineTitle">Timeline de Releases</span></h3>
+            <button class="btn-help" data-help="release-timeline" title="Ajuda">
+              <span class="icon">❓</span>
+            </button>
+            <div class="card-actions">
+              <select id="releaseFilterChannel" class="select">
+                <option value="all" data-i18n="releases.filterAll">Todos os Canais</option>
+                <option value="dev" data-i18n="releases.channelDev">Development</option>
+                <option value="staging" data-i18n="releases.channelStaging">Staging</option>
+                <option value="prod" data-i18n="releases.channelProd">Production</option>
+              </select>
+            </div>
+          </div>
+          
+          <!-- Help Panel -->
+          <div class="help-panel" id="help-release-timeline" style="display:none;">
+            <div class="help-content">
+              <h4>Timeline de Releases - Gerenciamento:</h4>
+              <p><strong>📋 Timeline:</strong> Histórico cronológico de todas as releases criadas e deployadas no sistema.</p>
+              
+              <p><strong>Ações Disponíveis:</strong></p>
+              <ul>
+                <li><strong>🚀 Deploy:</strong> Ativar uma release específica</li>
+                <li><strong>↩️ Rollback:</strong> Reverter para versão anterior em caso de problemas</li>
+                <li><strong>📊 Detalhes:</strong> Ver changelog completo, migrations e arquivos alterados</li>
+                <li><strong>🗑️ Deletar:</strong> Remover release (apenas se não estiver ativa)</li>
+              </ul>
+              
+              <p><strong>Status:</strong></p>
+              <ul>
+                <li><strong class="badge-success">Ativa:</strong> Release atualmente em uso</li>
+                <li><strong class="badge-warning">Staged:</strong> Pronta para deploy</li>
+                <li><strong class="badge-info">Archived:</strong> Release antiga arquivada</li>
+              </ul>
+              
+              <p><em>⚠️ Importante: Rollback executa migrations backward automaticamente</em></p>
+            </div>
+          </div>
+          
+          <div class="release-timeline" id="releaseTimeline">
+            <!-- Release items will be rendered here -->
+          </div>
+        </div>
+
+        <!-- Feature Flags -->
+        <div class="master-card full-width">
+          <div class="card-header">
+            <h3><span class="icon">🚩</span> <span data-i18n="releases.featureFlagsTitle">Feature Flags</span></h3>
+            <button class="btn-help" data-help="feature-flags" title="Ajuda">
+              <span class="icon">❓</span>
+            </button>
+            <button class="btn btn-primary" id="btnCreateFeatureFlag"><span class="icon">➕</span> <span data-i18n="releases.createFlag">Nova Flag</span></button>
+          </div>
+          
+          <!-- Help Panel -->
+          <div class="help-panel" id="help-feature-flags" style="display:none;">
+            <div class="help-content">
+              <h4>Feature Flags - Controle de Funcionalidades:</h4>
+              <p><strong>🚩 Feature Flag:</strong> Mecanismo para ativar/desativar funcionalidades sem fazer novo deploy.</p>
+              
+              <p><strong>Casos de Uso:</strong></p>
+              <ul>
+                <li><strong>Rollout Gradual:</strong> Liberar funcionalidade para 10%, depois 50%, depois 100%</li>
+                <li><strong>A/B Testing:</strong> Testar duas versões diferentes da mesma feature</li>
+                <li><strong>Kill Switch:</strong> Desativar rapidamente uma feature com problemas</li>
+                <li><strong>Beta Testing:</strong> Liberar apenas para clientes específicos</li>
+              </ul>
+              
+              <p><strong>Rollout Percentual:</strong></p>
+              <ul>
+                <li><strong>0%:</strong> Feature desativada para todos</li>
+                <li><strong>25%:</strong> Ativa para 25% dos usuários aleatoriamente</li>
+                <li><strong>100%:</strong> Ativa para todos os usuários</li>
+              </ul>
+              
+              <p><strong>Clientes Alvo:</strong> Especifique IDs de clientes/propriedades para ativar seletivamente</p>
+              
+              <p><em>💡 Best Practice: Remover flags antigas após funcionalidade estabilizada</em></p>
+            </div>
+          </div>
+          
+          <div class="table-container">
+            <table class="master-table" id="featureFlagsTable">
+              <thead>
+                <tr>
+                  <th data-i18n="releases.flagName">Nome</th>
+                  <th data-i18n="releases.flagStatus">Status</th>
+                  <th data-i18n="releases.flagRollout">Rollout %</th>
+                  <th data-i18n="releases.flagTenants">Clientes Alvo</th>
+                  <th data-i18n="releases.flagActions">Ações</th>
+                </tr>
+              </thead>
+              <tbody id="featureFlagsTableBody">
+                <tr><td colspan="5" class="text-center" data-i18n="releases.noFlags">Nenhuma feature flag configurada</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <!-- Rollback Panel -->
+        <div class="master-card full-width" id="rollbackPanel" style="display:none;">
+          <h3><span class="icon">⏪</span> <span data-i18n="releases.rollbackTitle">Rollback de Emergência</span></h3>
+          <div class="rollback-info" id="rollbackInfo"></div>
+          <div class="form-group">
+            <label>
+              <input type="checkbox" id="rollbackMaintenanceMode" checked>
+              <span data-i18n="releases.maintenanceMode">Ativar modo de manutenção durante rollback</span>
+            </label>
+          </div>
+          <div class="form-group">
+            <label>
+              <input type="checkbox" id="rollbackRunMigrations" checked>
+              <span data-i18n="releases.runBackwardMigrations">Executar migrations backwards</span>
+            </label>
+          </div>
+          <div class="alert alert-danger">
+            <span class="icon">🚨</span>
+            <span data-i18n="releases.rollbackWarning">ATENÇÃO: Rollback é uma operação crítica. Verifique o plano de rollback antes de executar.</span>
+          </div>
+          <div id="rollbackPlan" class="rollback-plan"></div>
+          <div class="rollback-actions">
+            <button class="btn btn-secondary" id="btnCancelRollback"><span class="icon">❌</span> <span data-i18n="common.cancel">Cancelar</span></button>
+            <button class="btn btn-danger" id="btnExecuteRollback"><span class="icon">⏪</span> <span data-i18n="releases.executeRollback">Executar Rollback</span></button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- Toasts (aria-live) -->
+  <div id="toastContainer" class="toast-container" aria-live="polite" aria-atomic="true"></div>
+
+  <!-- Accessible Confirm Modal -->
+  <div id="confirmModal" class="modal" style="display:none;" role="dialog" aria-modal="true" aria-labelledby="confirmTitle" aria-describedby="confirmMessage">
+    <div class="modal-content" style="max-width:520px;">
+      <div class="modal-header">
+        <h2 id="confirmTitle">Confirmação</h2>
+        <button class="modal-close" aria-label="Fechar" onclick="(function(){ document.getElementById('confirmModal').style.display='none'; })()">&times;</button>
+      </div>
+      <div class="modal-body">
+        <p id="confirmMessage">Tem certeza?</p>
+      </div>
+      <div class="form-actions" style="padding: 0 16px 16px; display:flex; gap:8px; justify-content:flex-end;">
+        <button id="btnConfirmCancel" class="btn btn-secondary">Cancelar</button>
+        <button id="btnConfirmOk" class="btn btn-danger">Confirmar</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Create User Modal -->
+  <div id="createUserModal" class="modal" style="display:none;">
+    <div class="modal-content" style="max-width:600px;">
+      <div class="modal-header">
+        <h2 data-i18n="users.create">➕ Criar Novo Usuário</h2>
+        <button class="modal-close" onclick="masterCtrl.closeCreateUserModal()">&times;</button>
+      </div>
+      <div class="modal-body">
+        <form id="createUserForm">
+          <div class="form-group">
+            <label data-i18n="userModal.name">Nome</label>
+            <input type="text" id="newUserName" class="input" required>
+          </div>
+          <div class="form-group">
+            <label data-i18n="userModal.email">Email</label>
+            <input type="email" id="newUserEmail" class="input" required>
+          </div>
+          <div class="form-group">
+            <label data-i18n="userModal.username">Username</label>
+            <input type="text" id="newUserUsername" class="input" required>
+          </div>
+          <div class="form-group">
+            <label>Senha</label>
+            <input type="password" id="newUserPassword" class="input" required>
+          </div>
+          <div class="form-group">
+            <label data-i18n="userModal.role">Nível</label>
+            <select id="newUserRole" class="select" required>
+              <option value="user">User (Básico)</option>
+              <option value="manager">Manager (Gerente)</option>
+              <option value="admin">Admin (Administrador)</option>
+              <option value="master">Master (Super Admin)</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label data-i18n="userModal.properties">Propriedades (vírgula)</label>
+            <select id="newUserProperties" class="select" multiple size="4"></select>
+            <small style="display:block;margin-top:4px;color:#64748b" data-i18n="users.propertiesHint">Selecione uma ou mais propriedades</small>
+          </div>
+          <div class="form-actions">
+            <button type="button" class="btn btn-secondary" onclick="masterCtrl.closeCreateUserModal()" data-i18n="restoreSelective.cancel">Cancelar</button>
+            <button type="submit" class="btn btn-primary" data-i18n="users.create">✅ Criar Usuário</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <!-- Scripts -->
+  <div id="restoreSelectiveModal" class="modal" style="display:none;">
+    <div class="modal-content" style="max-width:520px;">
+      <div class="modal-header">
+        <h2 data-i18n="restoreSelective.title">♻️ Restauração Seletiva</h2>
+        <button class="modal-close" data-i18n="restoreSelective.cancel" onclick="document.getElementById('restoreSelectiveModal').style.display='none'">&times;</button>
+      </div>
+      <div class="modal-body">
+        <p data-i18n="restoreSelective.description">Selecione os módulos que deseja restaurar deste backup.</p>
+        <div class="form-group">
+          <label><input type="checkbox" id="restore-users" value="users" checked> Usuários</label>
+          <label><input type="checkbox" id="restore-reservations" value="reservations" checked> Reservas</label>
+          <label><input type="checkbox" id="restore-inventory" value="inventory" checked> Inventário</label>
+          <label><input type="checkbox" id="restore-configurations" value="configurations" checked> Configurações</label>
+        </div>
+        <div class="alert alert-warning" data-i18n="restoreSelective.warning">⚠️ Apenas os módulos selecionados serão sobrescritos.</div>
+        <div class="form-actions">
+          <button class="btn btn-secondary" data-i18n="restoreSelective.cancel" onclick="document.getElementById('restoreSelectiveModal').style.display='none'">Cancelar</button>
+          <button class="btn btn-danger" data-i18n="restoreSelective.restoreSelected" onclick="(function(){ const bid=document.getElementById('restoreSelectiveModal').dataset.backupId; masterCtrl.restoreBackup(bid,'selective'); document.getElementById('restoreSelectiveModal').style.display='none'; })()">Restaurar Selecionados</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div id="editUserModal" class="modal" style="display:none;">
+    <div class="modal-content" style="max-width:640px;">
+      <div class="modal-header">
+        <h2 data-i18n="userModal.title">👤 Usuário</h2>
+        <button class="modal-close" data-i18n="userModal.close" onclick="masterCtrl.closeEditUserModal()">&times;</button>
+      </div>
+      <div class="modal-body">
+        <div class="form-group">
+          <label data-i18n="userModal.name">Nome</label>
+          <input id="editUserName" class="input" type="text">
+        </div>
+        <div class="form-group">
+          <label data-i18n="userModal.email">Email</label>
+          <input id="editUserEmail" class="input" type="email">
+        </div>
+        <div class="form-group">
+          <label data-i18n="userModal.username">Username</label>
+          <input id="editUserUsername" class="input" type="text">
+        </div>
+        <div class="form-group">
+          <label data-i18n="userModal.role">Nível</label>
+          <select id="editUserRole" class="select">
+            <option value="master">Master</option>
+            <option value="admin">Admin</option>
+            <option value="manager">Manager</option>
+            <option value="user">User</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label data-i18n="userModal.status">Status</label>
+          <select id="editUserStatus" class="select">
+            <option value="active">Ativo</option>
+            <option value="pending">Pendente</option>
+            <option value="suspended">Suspenso</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label data-i18n="userModal.properties">Propriedades (vírgula)</label>
+          <select id="editUserProperties" class="select" multiple size="6"></select>
+        </div>
+        <div class="form-actions">
+          <button class="btn btn-secondary" data-i18n="userModal.close" onclick="masterCtrl.closeEditUserModal()">Fechar</button>
+          <button id="btnSaveUserChanges" class="btn btn-primary" data-i18n="userModal.save" onclick="masterCtrl.handleSaveUserEdits()">Salvar Alterações</button>
+        </div>
+      </div>
+    </div>
+  </div>
+  <!-- Create/Edit Property Modal -->
+  <div id="propertyModal" class="modal" style="display:none;">
+    <div class="modal-content" style="max-width:700px; background: white;">
+      <div class="modal-header">
+        <h2 id="propertyModalTitle" data-i18n="properties.modal.create">Criar Nova Propriedade</h2>
+        <button class="modal-close" onclick="masterCtrl.closePropertyModal()">&times;</button>
+      </div>
+      <div class="modal-body">
+        <form id="propertyForm" class="modal-form">
+          <div class="form-group">
+            <label><span class="icon">🔑</span> <span data-i18n="properties.modal.id">Property ID</span> <span class="required">*</span></label>
+            <input type="text" id="propertyId" class="input" placeholder="ex: iluxSaoPaulo" required data-i18n-placeholder="properties.modal.idPlaceholder">
+            <small data-i18n="properties.modal.idHelp">Identificador único (sem espaços, primary key no banco)</small>
+          </div>
+
+          <div class="form-group">
+            <label><span class="icon">🏨</span> <span data-i18n="properties.modal.name">Nome da Propriedade</span></label>
+            <input type="text" id="propertyName" class="input" placeholder="ex: iLux São Paulo" data-i18n-placeholder="properties.modal.namePlaceholder">
+          </div>
+
+          <div class="form-group">
+            <label><span class="icon">🖼️</span> <span data-i18n="properties.modal.image">URL da Imagem</span></label>
+            <input type="text" id="propertyImage" class="input" placeholder="assets/images/hotel_sp.jpg" data-i18n-placeholder="properties.modal.imagePlaceholder">
+          </div>
+
+          <div class="form-group">
+            <label><span class="icon">📦</span> <span data-i18n="properties.modal.modules">Módulos Adquiridos</span></label>
+            <div class="checkbox-group" style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 8px;">
+              <label class="checkbox-label">
+                <input type="checkbox" name="modules" value="engineering" checked> Engineering
+              </label>
+              <label class="checkbox-label">
+                <input type="checkbox" name="modules" value="housekeeping" checked> Housekeeping
+              </label>
+              <label class="checkbox-label">
+                <input type="checkbox" name="modules" value="alerts" checked> Alerts
+              </label>
+              <label class="checkbox-label">
+                <input type="checkbox" name="modules" value="frontdesk"> Front Desk
+              </label>
+              <label class="checkbox-label">
+                <input type="checkbox" name="modules" value="reservations"> Reservations
+              </label>
+              <label class="checkbox-label">
+                <input type="checkbox" name="modules" value="analytics"> Analytics
+              </label>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label><span class="icon">👥</span> <span data-i18n="properties.modal.capacity">Capacidade de Usuários</span></label>
+            <select id="propertyCapacity" class="select">
+              <option value="to30" data-i18n="properties.modal.capacityTo30">Até 30 usuários</option>
+              <option value="30to50" data-i18n="properties.modal.capacity30to50">30 a 50 usuários</option>
+              <option value="50to100" selected data-i18n="properties.modal.capacity50to100">50 a 100 usuários</option>
+              <option value="100plus" data-i18n="properties.modal.capacity100plus">100+ usuários</option>
+            </select>
+          </div>
+
+          <div class="form-group">
+            <label class="checkbox-label" style="display: flex; align-items: center; gap: 8px;">
+              <input type="checkbox" id="propertyActive" checked>
+              <span data-i18n="properties.modal.active">Propriedade Ativa</span>
+              <span class="help-icon" 
+                    data-i18n-title="properties.modal.activeHelp"
+                    title="Define se a propriedade está visível e operacional no sistema. Desmarque para ocultar temporariamente sem perder dados."
+                    style="display: inline-flex; align-items: center; justify-content: center; 
+                           width: 18px; height: 18px; border-radius: 50%; 
+                           background: #3b82f6; color: white; font-size: 12px; font-weight: bold; 
+                           cursor: help; user-select: none; transition: all 0.2s ease;"
+                    onmouseenter="this.style.transform='scale(1.15)'; this.style.background='#2563eb';"
+                    onmouseleave="this.style.transform='scale(1)'; this.style.background='#3b82f6';">
+                ?
+              </span>
+            </label>
+          </div>
+
+          <div class="form-actions">
+            <button type="button" class="btn btn-secondary" onclick="masterCtrl.closePropertyModal()" data-i18n="modal.cancel">Cancelar</button>
+            <button type="submit" class="btn btn-primary" id="btnSaveProperty" data-i18n="modal.save">Salvar</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <!-- Deployment Wizard Modal -->
+  <div id="deploymentWizard" class="modal" style="display:none;">
+    <div class="modal-content" style="max-width: 900px; background: white;">
+      <div class="modal-header">
+        <h2><span class="icon">🚀</span> <span data-i18n="deployment.wizard.title">Wizard de Implantação</span></h2>
+        <button class="modal-close" onclick="masterCtrl.closeDeploymentWizard()">&times;</button>
+      </div>
+      <div class="modal-body">
+        <!-- Layout 2 Colunas: Steps (Lateral) + Conteúdo (Principal) -->
+        <div style="display: grid; grid-template-columns: 200px 1fr; gap: 24px;">
+          
+          <!-- COLUNA ESQUERDA: Steps Indicator (Vertical) -->
+          <div class="wizard-steps-sidebar" style="padding: 16px 0;">
+            <div class="wizard-step active" data-step="1" style="margin-bottom: 24px; display: flex; align-items: center; gap: 12px; padding: 12px; border-radius: 8px; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; box-shadow: 0 2px 8px rgba(102, 126, 234, 0.3);">
+              <div class="step-number" style="width: 36px; height: 36px; background: rgba(255,255,255,0.2); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: bold; font-size: 16px; backdrop-filter: blur(10px);">1</div>
+              <div>
+                <div class="step-label" style="font-size: 11px; opacity: 0.9; font-weight: 500;" data-i18n="deployment.step1">Validação</div>
+                <div style="font-size: 9px; opacity: 0.7;">Verificar requisitos</div>
+              </div>
+            </div>
+            
+            <div class="wizard-step" data-step="2" style="margin-bottom: 24px; display: flex; align-items: center; gap: 12px; padding: 12px; border-radius: 8px; background: #f0f0f0; color: #666;">
+              <div class="step-number" style="width: 36px; height: 36px; background: #ddd; color: #666; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: bold; font-size: 16px;">2</div>
+              <div>
+                <div class="step-label" style="font-size: 11px; font-weight: 500;" data-i18n="deployment.step2">Configuração</div>
+                <div style="font-size: 9px; opacity: 0.7;">Configurar deploy</div>
+              </div>
+            </div>
+            
+            <div class="wizard-step" data-step="3" style="display: flex; align-items: center; gap: 12px; padding: 12px; border-radius: 8px; background: #f0f0f0; color: #666;">
+              <div class="step-number" style="width: 36px; height: 36px; background: #ddd; color: #666; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: bold; font-size: 16px;">3</div>
+              <div>
+                <div class="step-label" style="font-size: 11px; font-weight: 500;" data-i18n="deployment.step3">Execução</div>
+                <div style="font-size: 9px; opacity: 0.7;">Iniciar implantação</div>
+              </div>
+            </div>
+          </div>
+          
+          <!-- COLUNA DIREITA: Conteúdo dos Steps -->
+          <div class="wizard-content-area">
+
+            <!-- Step 1: Validation -->
+            <div class="wizard-content" id="deployStep1">
+              <div style="text-align: center; margin-bottom: 20px;">
+                <div style="font-size: 40px; margin-bottom: 8px;">🔍</div>
+                <h3 style="margin: 0 0 6px 0; font-size: 20px;" data-i18n="deployment.validation.title">Validação de Requisitos</h3>
+                <p style="color: #666; margin: 0; font-size: 13px;" data-i18n="deployment.validation.description">Verificando se a propriedade está pronta para implantação...</p>
+              </div>
+              
+              <div class="validation-checks" style="margin: 16px 0;">
+                <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px;">
+                  <div class="check-card" style="padding: 16px 12px; background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%); border-radius: 10px; text-align: center; box-shadow: 0 2px 8px rgba(0,0,0,0.1);">
+                    <div style="font-size: 28px; margin-bottom: 6px;">🔑</div>
+                    <div style="font-weight: 600; font-size: 13px;" data-i18n="deployment.validation.check1">Property ID único</div>
+                    <div style="font-size: 11px; color: #4CAF50; margin-top: 3px;">✓ Validado</div>
+                  </div>
+                  <div class="check-card" style="padding: 16px 12px; background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%); border-radius: 10px; text-align: center; box-shadow: 0 2px 8px rgba(0,0,0,0.1);">
+                    <div style="font-size: 28px; margin-bottom: 6px;">📦</div>
+                    <div style="font-weight: 600; font-size: 13px;" data-i18n="deployment.validation.check2">Módulos configurados</div>
+                    <div style="font-size: 11px; color: #4CAF50; margin-top: 3px;">✓ Validado</div>
+                  </div>
+                  <div class="check-card" style="padding: 16px 12px; background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%); border-radius: 10px; text-align: center; box-shadow: 0 2px 8px rgba(0,0,0,0.1);">
+                    <div style="font-size: 28px; margin-bottom: 6px;">👥</div>
+                    <div style="font-weight: 600; font-size: 13px;" data-i18n="deployment.validation.check3">Capacidade definida</div>
+                    <div style="font-size: 11px; color: #4CAF50; margin-top: 3px;">✓ Validado</div>
+                  </div>
+                  <div class="check-card" style="padding: 16px 12px; background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%); border-radius: 10px; text-align: center; box-shadow: 0 2px 8px rgba(0,0,0,0.1);">
+                    <div style="font-size: 28px; margin-bottom: 6px;">⚙️</div>
+                    <div style="font-weight: 600; font-size: 13px;" data-i18n="deployment.validation.check4">Configurações válidas</div>
+                    <div style="font-size: 11px; color: #4CAF50; margin-top: 3px;">✓ Validado</div>
+                  </div>
+                </div>
+              </div>
+
+              <div class="form-actions" style="margin-top: 20px;">
+                <button class="btn btn-secondary" onclick="masterCtrl.closeDeploymentWizard()" data-i18n="modal.cancel">Cancelar</button>
+                <button class="btn btn-primary" onclick="masterCtrl.deploymentNextStep(2)" data-i18n="wizard.next">Próximo →</button>
+              </div>
+            </div>
+
+            <!-- Step 2: Configuration -->
+            <div class="wizard-content" id="deployStep2" style="display:none;">
+              <div style="text-align: center; margin-bottom: 16px;">
+                <div style="font-size: 40px; margin-bottom: 8px;">⚙️</div>
+                <h3 style="margin: 0 0 6px 0; font-size: 20px;" data-i18n="deployment.config.title">Configuração de Deploy</h3>
+                <p style="color: #666; margin: 0; font-size: 13px;">Configure as opções de implantação</p>
+              </div>
+              
+              <div style="background: #f8f9fa; padding: 18px; border-radius: 10px; margin-bottom: 16px;">
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-bottom: 16px;">
+              <div class="form-group" style="margin: 0;">
+                <label style="display: block; font-weight: 600; margin-bottom: 6px; font-size: 13px;">
+                  <span class="icon">🌐</span> <span data-i18n="deployment.config.environment">Ambiente</span>
+                </label>
+                <select id="deployEnvironment" class="select" style="width: 100%; padding: 8px; border-radius: 6px; font-size: 13px;">
+                  <option value="development" data-i18n="deployment.config.dev">🔧 Desenvolvimento</option>
+                  <option value="staging" data-i18n="deployment.config.staging">🧪 Staging</option>
+                  <option value="production" data-i18n="deployment.config.prod">🚀 Produção</option>
+                </select>
+              </div>
+
+              <div class="form-group" style="margin: 0;">
+                <label style="display: block; font-weight: 600; margin-bottom: 6px; font-size: 13px;">
+                  <span class="icon">🔗</span> <span data-i18n="deployment.config.url">URL de Deploy</span>
+                </label>
+                <input type="text" id="deployUrl" class="input" style="width: 100%; padding: 8px; border-radius: 6px; font-size: 13px;" placeholder="https://api.nexefii.com" data-i18n-placeholder="deployment.config.urlPlaceholder">
+              </div>
+            </div>
+
+            <div style="border-top: 1px solid #dee2e6; padding-top: 14px;">
+              <div style="font-weight: 600; margin-bottom: 10px; color: #495057; font-size: 13px;">Opções Adicionais:</div>
+              
+              <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px;">
+                <label class="checkbox-label" style="display: flex; align-items: center; padding: 10px; background: white; border-radius: 6px; cursor: pointer;">
+                  <input type="checkbox" id="deployBackup" checked style="margin-right: 10px; width: 16px; height: 16px;">
+                  <div style="flex: 1;">
+                    <div style="font-weight: 500; font-size: 12px;"><span class="icon">💾</span> <span data-i18n="deployment.config.backup">Criar backup</span></div>
+                    <div style="font-size: 10px; color: #6c757d; margin-top: 1px;">Recomendado</div>
+                  </div>
+                </label>
+
+                <label class="checkbox-label" style="display: flex; align-items: center; padding: 10px; background: white; border-radius: 6px; cursor: pointer;">
+                  <input type="checkbox" id="deployNotify" checked style="margin-right: 10px; width: 16px; height: 16px;">
+                  <div style="flex: 1;">
+                    <div style="font-weight: 500; font-size: 12px;"><span class="icon">📧</span> <span data-i18n="deployment.config.notify">Notificar admins</span></div>
+                    <div style="font-size: 10px; color: #6c757d; margin-top: 1px;">Após conclusão</div>
+                  </div>
+                </label>
+              </div>
+            </div>
+              </div>
+
+              <div class="form-actions" style="margin-top: 18px;">
+                <button class="btn btn-secondary" onclick="masterCtrl.deploymentNextStep(1)" data-i18n="wizard.back">← Voltar</button>
+                <button class="btn btn-primary" onclick="masterCtrl.deploymentNextStep(3)" data-i18n="wizard.next">Próximo →</button>
+              </div>
+            </div>
+
+            <!-- Step 3: Execution -->
+            <div class="wizard-content" id="deployStep3" style="display:none;">
+              <div style="text-align: center; margin-bottom: 16px;">
+                <div style="font-size: 40px; margin-bottom: 8px;">🚀</div>
+                <h3 style="margin: 0 0 6px 0; font-size: 20px;" data-i18n="deployment.execution.title">Execução da Implantação</h3>
+                <p style="color: #666; margin: 0; font-size: 13px;">Revise e inicie o processo de implantação</p>
+              </div>
+              
+              <div class="deployment-summary" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; padding: 16px; border-radius: 10px; margin-bottom: 16px; box-shadow: 0 4px 15px rgba(0,0,0,0.2);">
+            <h4 style="margin: 0 0 12px 0; font-size: 14px; opacity: 0.95; font-weight: 600;" data-i18n="deployment.execution.summary">📋 Resumo da Implantação:</h4>
+            <div style="display: grid; gap: 8px;">
+              <div style="display: flex; align-items: center; background: rgba(255,255,255,0.15); padding: 10px; border-radius: 6px; backdrop-filter: blur(10px);">
+                <span style="font-size: 20px; margin-right: 10px;">🏨</span>
+                <div style="flex: 1;">
+                  <div style="font-size: 10px; opacity: 0.85; text-transform: uppercase; letter-spacing: 0.3px;" data-i18n="deployment.execution.property">Propriedade</div>
+                  <div style="font-weight: 600; font-size: 13px;" id="deploySummaryProperty">-</div>
+                </div>
+              </div>
+              
+              <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 8px;">
+                <div style="display: flex; align-items: center; background: rgba(255,255,255,0.15); padding: 10px; border-radius: 6px;">
+                  <span style="font-size: 18px; margin-right: 8px;">🌐</span>
+                  <div style="flex: 1;">
+                    <div style="font-size: 9px; opacity: 0.85; text-transform: uppercase;" data-i18n="deployment.execution.environment">Ambiente</div>
+                    <div style="font-weight: 600; font-size: 12px;" id="deploySummaryEnv">-</div>
+                  </div>
+                </div>
+                
+                <div style="display: flex; align-items: center; background: rgba(255,255,255,0.15); padding: 10px; border-radius: 6px;">
+                  <span style="font-size: 18px; margin-right: 8px;">📦</span>
+                  <div style="flex: 1;">
+                    <div style="font-size: 9px; opacity: 0.85; text-transform: uppercase;" data-i18n="deployment.execution.modules">Módulos</div>
+                    <div style="font-weight: 600; font-size: 12px;" id="deploySummaryModules">-</div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="deployment-progress" style="margin: 16px 0;">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px;">
+              <span style="font-weight: 600; font-size: 13px;">Progresso:</span>
+              <span id="deployProgressText" style="font-weight: 500; font-size: 12px; color: #666;">Aguardando início...</span>
+            </div>
+            <div class="progress-bar" style="background: #e0e0e0; height: 10px; border-radius: 5px; overflow: hidden; box-shadow: inset 0 2px 4px rgba(0,0,0,0.1);">
+              <div id="deployProgressBar" style="background: linear-gradient(90deg, #4CAF50, #8BC34A); height: 100%; width: 0%; transition: width 0.5s ease; box-shadow: 0 0 8px rgba(76, 175, 80, 0.5);"></div>
+            </div>
+          </div>
+
+              <div style="margin: 16px 0;">
+                <div style="font-weight: 600; margin-bottom: 6px; font-size: 13px; display: flex; align-items: center;">
+                  <span style="margin-right: 6px;">💻</span> Console de Implantação:
+                </div>
+                <div class="deployment-log" style="background: #1e1e1e; color: #00ff00; padding: 12px; border-radius: 6px; font-family: 'Courier New', monospace; font-size: 11px; max-height: 180px; overflow-y: auto; box-shadow: inset 0 2px 8px rgba(0,0,0,0.5);" id="deployLog">
+                  <div>> Sistema pronto para implantação...</div>
+                </div>
+              </div>
+
+              <div class="form-actions" style="margin-top: 18px;">
+                <button class="btn btn-secondary" onclick="masterCtrl.deploymentNextStep(2)" id="btnDeployBack" data-i18n="wizard.back">← Voltar</button>
+                <button class="btn btn-success" onclick="masterCtrl.executeDeployment()" id="btnDeployExecute" style="min-width: 180px;">
+                  <span class="icon">🚀</span> <span data-i18n="deployment.execution.start">Iniciar Implantação</span>
+                </button>
+                <button class="btn btn-primary" onclick="masterCtrl.closeDeploymentWizard()" id="btnDeployFinish" style="display:none; min-width: 180px;" data-i18n="deployment.execution.finish">✓ Concluir</button>
+              </div>
+            </div>
+            
+          </div> <!-- fim wizard-content-area -->
+        </div> <!-- fim grid 2 colunas -->
+      </div> <!-- fim modal-body -->
+    </div> <!-- fim modal-content -->
+  </div> <!-- fim modal -->
+
+
+
+
+  <script src="properties.js"></script>
+  <script src="property-local-test-generator.js"></script>
+  <script src="demo-data-generator.js"></script>
+  <script src="enterprise-backup-system.js"></script>
+  <script src="release-management-system.js"></script>
+  <script src="master-control.js"></script>
+  <script src="master-control-enterprise.js"></script>
+  <script src="master-control-backups.js"></script>
+  <script src="master-control-v3-compatibility.js"></script>
+  <script src="property-publish-helpers.js"></script>
+</body>
+</html>

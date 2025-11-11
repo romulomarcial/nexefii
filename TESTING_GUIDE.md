@@ -1,0 +1,286 @@
+# 🧪 Guia de Testes - Nexefii Platform
+
+**Servidor:** http://localhost:8004  
+**Data:** 2025-11-09
+
+---
+
+## 🚀 Como Iniciar
+
+### 1. Servidor Local
+```powershell
+cd r:\Development\Projects\iluxsys
+node server.js
+```
+✅ Servidor rodando em: **http://localhost:8004**
+
+---
+
+## 📋 Testes por Sprint
+
+### ✅ Sprint 3: Image Upload + UX
+**Página de teste:** `http://localhost:8004/index.html`
+
+**O que testar:**
+1. **Upload de Imagem via Galeria**
+   - Clicar em botão de upload
+   - Selecionar imagem da galeria (6 SVGs disponíveis)
+   - ✅ Preview deve aparecer
+   - ✅ Imagem deve ser salva
+
+2. **Upload de Arquivo**
+   - Arrastar arquivo para área de drop
+   - ✅ Feedback visual durante drag
+   - ✅ Preview da imagem
+   - ✅ Arquivo processado
+
+3. **Upload via URL**
+   - Inserir URL de imagem
+   - ✅ Download e preview
+   - ✅ Salvamento correto
+
+4. **Animações**
+   - ✅ Fade-in ao carregar
+   - ✅ Hover effects nos botões
+   - ✅ Transições suaves
+
+**Resultado esperado:** 27/27 testes passando (conforme QA)
+
+---
+
+### ✅ Sprint 4: Sync Service
+**Página de teste:** `http://localhost:8004/pages/sync-config.html`
+
+**O que testar:**
+1. **Sync Manual**
+   - Clicar em "Sincronizar Agora"
+   - ✅ Evento adicionado à fila
+   - ✅ Status atualizado
+   - ✅ Log de sincronização
+
+2. **Sync Agendado**
+   - Selecionar modo "Agendado"
+   - Definir cron (ex: `0 2 * * *` = 2AM diário)
+   - ✅ Timer ativado
+   - ✅ Próximo sync agendado visível
+
+3. **Sync Contínuo**
+   - Selecionar modo "Contínuo"
+   - ✅ Debounce de 30s ativo
+   - ✅ Auto-sync após mudanças
+
+4. **Resolução de Conflitos**
+   - Criar conflito (editar mesmo registro local e remoto)
+   - ✅ Política last-write-wins aplicada
+   - ✅ Log de conflitos
+
+**Console esperado:**
+```
+[SyncService] Iniciado (modo: manual)
+[SyncService] Evento enfileirado: {...}
+[SyncService] Processando lote (50 eventos)
+[SyncService] Delta sync: 12 registros modificados
+```
+
+---
+
+### ✅ Sprint 5: OTA & Rollback
+**Página de teste:** `http://localhost:8004/pages/ota-manager.html`
+
+**O que testar:**
+1. **Check de Atualizações**
+   - Clicar em "Verificar Atualizações"
+   - ✅ Versão atual exibida (ex: 1.0.0)
+   - ✅ Versão disponível verificada
+   - ✅ Changelog exibido
+
+2. **Compatibilidade**
+   - Verificar compatibilidade antes de aplicar
+   - ✅ Schema version validado
+   - ✅ Dependências verificadas
+   - ✅ Storage disponível checado
+
+3. **Aplicar Update**
+   - Clicar em "Aplicar Update"
+   - ✅ Snapshot criado automaticamente
+   - ✅ Migrations executadas
+   - ✅ Versão atualizada
+   - ⏱️ Tempo: ~2s
+
+4. **Rollback**
+   - Simular falha no update
+   - ✅ Rollback automático disparado
+   - ✅ Estado anterior restaurado
+   - ✅ Log de rollback
+
+5. **Snapshots Manuais**
+   - Criar snapshot manual
+   - Listar snapshots disponíveis
+   - Restaurar snapshot específico
+   - ✅ Max 5 snapshots (rotação)
+
+**Console esperado:**
+```
+[OTAManager] Check: versão atual 1.0.0
+[OTAManager] Disponível: 1.1.0
+[CompatibilityChecker] Schema v1.0.0 → v1.1.0 compatível
+[RollbackService] Snapshot criado: snap_1699524000000
+[OTAManager] Update aplicado com sucesso
+```
+
+---
+
+### ✅ Sprint 6: Observability
+**Página de teste:** `http://localhost:8004/pages/observability.html`
+
+**O que testar:**
+1. **Dashboard Inicial**
+   - Abrir página
+   - ✅ 3 cards: Métricas, Logs, Alertas
+   - ✅ Estado inicial "Aguardando dados..."
+
+2. **Iniciar Monitoramento**
+   - Clicar em "▶️ Iniciar Monitoramento"
+   - ✅ MetricsCollector iniciado (intervalo 3s)
+   - ✅ AlertManager iniciado (check 30s)
+   - ✅ Heartbeat logs a cada 5s
+
+3. **Logger em Ação**
+   - Verificar seção "Logs Recentes"
+   - ✅ Logs aparecem em tempo real
+   - ✅ Formato: `[HH:MM:SS] [LEVEL] message`
+   - ✅ Níveis: INFO, WARN, ERROR visíveis
+
+4. **Métricas**
+   - Verificar card "Métricas Gerais"
+   - ✅ Performance Avg (ms)
+   - ✅ Performance P95 (ms)
+   - ✅ Memory Usage (%)
+   - ⏱️ Atualização a cada 2s
+
+5. **Alertas**
+   - Simular condição de alerta (memória >85%)
+   - ✅ Alerta dispara
+   - ✅ Card "Alertas Ativos" incrementa
+   - ✅ Histórico exibe alerta com timestamp
+   - ✅ Botão "✓ OK" para acknowledge
+
+6. **Export**
+   - Clicar em "📤 Exportar"
+   - ✅ Download de `observability-export.json`
+   - ✅ Arquivo contém: logger, metrics, alerts
+
+**Console esperado:**
+```
+[INFO] Sistema inicializado
+[DEBUG] Debug mode ativo
+[INFO] Observability iniciado
+[INFO] Heartbeat {category: "system"}
+[WARN] [ALERT WARNING] Alto uso de memória em 87%
+```
+
+---
+
+### ✅ Sprint 6: QA Automatizado
+**Página de teste:** `http://localhost:8004/qa-baseline/sprint6-observability-qa.html`
+
+**O que acontece:**
+- ✅ 7 testes executam automaticamente ao carregar
+- ✅ Resultados aparecem em ~5s
+- ✅ Cada teste mostra: ✅ PASS ou ❌ FALHOU
+
+**Testes incluídos:**
+1. Logger: Níveis e Categorias
+2. Logger: Export e Subscribe
+3. MetricsCollector: Performance & Resources
+4. MetricsCollector: Análise Estatística (P95/P99)
+5. AlertManager: Regras e Triggers
+6. AlertManager: Cooldown e Acknowledge
+7. Performance: Overhead <100ms
+
+**Resultado esperado:** 7/7 testes PASS ✅
+
+---
+
+## 🎯 Testes Completos (Todas as Sprints)
+
+### Checklist Rápido
+
+```powershell
+# 1. Servidor rodando?
+Test-NetConnection localhost -Port 8004
+
+# 2. Abrir páginas principais
+Start-Process "http://localhost:8004/index.html"
+Start-Process "http://localhost:8004/pages/sync-config.html"
+Start-Process "http://localhost:8004/pages/ota-manager.html"
+Start-Process "http://localhost:8004/pages/observability.html"
+
+# 3. Abrir QA
+Start-Process "http://localhost:8004/qa-baseline/sprint6-observability-qa.html"
+```
+
+### Verificar Console do Navegador
+
+Pressione **F12** (DevTools) e verifique:
+
+✅ **Sem erros 404** (todos os módulos carregaram)  
+✅ **Módulos ES6 importados** (Logger, MetricsCollector, AlertManager)  
+✅ **Logs estruturados** aparecem no console  
+✅ **Performance** não degradada (FCP <2s)
+
+---
+
+## 🔍 Troubleshooting
+
+### Erro: "Failed to load module"
+**Causa:** Caminho de import incorreto  
+**Solução:** Verificar que servidor está em `r:\Development\Projects\iluxsys`
+
+### Erro: "Cannot read property of undefined"
+**Causa:** Módulo não carregou antes de ser usado  
+**Solução:** Verificar ordem de imports no HTML
+
+### QA não executa automaticamente
+**Causa:** Script de auto-run pode estar desabilitado  
+**Solução:** Clicar manualmente no botão "🚀 Executar Todos os Testes"
+
+### Métricas não atualizam
+**Causa:** Monitoramento não foi iniciado  
+**Solução:** Clicar em "▶️ Iniciar Monitoramento" no dashboard
+
+---
+
+## 📊 Performance Esperada
+
+| Métrica | Target | Como Verificar |
+|---------|--------|----------------|
+| FCP | <2s | DevTools > Performance > Record |
+| Sync Latência | <2s | Console logs de SyncService |
+| OTA Update | ~2s | Console logs de OTAManager |
+| Observability Overhead | <100ms | QA Test #7 |
+
+---
+
+## 🎓 Dicas de Teste
+
+1. **Use Modo Incógnito:** Evita cache antigo
+2. **Limpe localStorage:** `localStorage.clear()` no console
+3. **Monitore Network:** DevTools > Network para ver requisições
+4. **Console sempre aberto:** Logs são essenciais
+5. **Teste em diferentes navegadores:** Chrome, Edge, Firefox
+
+---
+
+## 📝 Reportar Problemas
+
+Se encontrar bugs, anote:
+- ✅ URL da página
+- ✅ Ação realizada
+- ✅ Erro no console (screenshot)
+- ✅ Comportamento esperado vs observado
+
+---
+
+**Última atualização:** 2025-11-09 08:52:00  
+**Servidor ativo:** ✅ http://localhost:8004

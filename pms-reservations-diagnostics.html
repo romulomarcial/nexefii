@@ -1,0 +1,355 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Diagnóstico - PMS Reservas</title>
+  <style>
+    body {
+      font-family: system-ui, -apple-system, sans-serif;
+      padding: 20px;
+      background: #f8fafc;
+      color: #1e293b;
+    }
+    .container {
+      max-width: 900px;
+      margin: 0 auto;
+      background: white;
+      padding: 30px;
+      border-radius: 12px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    }
+    h1 {
+      color: #3b82f6;
+      margin-top: 0;
+    }
+    .test-section {
+      margin: 20px 0;
+      padding: 20px;
+      background: #f8fafc;
+      border-radius: 8px;
+      border-left: 4px solid #3b82f6;
+    }
+    .test-section h2 {
+      margin-top: 0;
+      font-size: 18px;
+    }
+    .test-result {
+      padding: 10px;
+      margin: 8px 0;
+      border-radius: 6px;
+      font-family: monospace;
+      font-size: 13px;
+    }
+    .success {
+      background: #d1fae5;
+      color: #065f46;
+      border-left: 3px solid #10b981;
+    }
+    .error {
+      background: #fee2e2;
+      color: #991b1b;
+      border-left: 3px solid #ef4444;
+    }
+    .warning {
+      background: #fef3c7;
+      color: #92400e;
+      border-left: 3px solid #f59e0b;
+    }
+    button {
+      padding: 10px 20px;
+      background: #3b82f6;
+      color: white;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+      font-weight: 600;
+      margin: 5px;
+    }
+    button:hover {
+      background: #2563eb;
+    }
+    .info {
+      padding: 10px;
+      background: #dbeafe;
+      border-radius: 6px;
+      margin: 10px 0;
+      font-size: 13px;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>🔍 Diagnóstico do Sistema PMS - Reservas</h1>
+    
+    <div class="info">
+      Este diagnóstico verifica se todos os componentes estão carregados e funcionando corretamente.
+    </div>
+
+    <button onclick="runDiagnostics()">▶️ Executar Diagnóstico Completo</button>
+    <button onclick="testModal()">🪟 Testar Modal de Reserva</button>
+    <button onclick="testTranslations()">🌍 Testar Traduções</button>
+    <button onclick="clearLogs()">🗑️ Limpar Resultados</button>
+
+    <div id="results"></div>
+  </div>
+
+  <script>
+    let resultsDiv = document.getElementById('results');
+
+    function log(message, type = 'info') {
+      const div = document.createElement('div');
+      div.className = `test-result ${type}`;
+      div.textContent = message;
+      resultsDiv.appendChild(div);
+    }
+
+    function clearLogs() {
+      resultsDiv.innerHTML = '';
+    }
+
+    async function runDiagnostics() {
+      clearLogs();
+      
+      const section = document.createElement('div');
+      section.className = 'test-section';
+      section.innerHTML = '<h2>📋 Resultados do Diagnóstico</h2>';
+      resultsDiv.appendChild(section);
+
+      // Test 1: Check if files exist
+      log('✓ Teste 1: Verificando arquivos...', 'success');
+      
+      const files = [
+        'pms-modules.js',
+        'pms-reservations.js',
+        'pms-reservations-ui.js',
+        'i18n.json'
+      ];
+
+      for (const file of files) {
+        try {
+          const response = await fetch(file, { method: 'HEAD' });
+          if (response.ok) {
+            log(`  ✓ ${file} encontrado`, 'success');
+          } else {
+            log(`  ✗ ${file} não encontrado (${response.status})`, 'error');
+          }
+        } catch (e) {
+          log(`  ✗ ${file} erro ao carregar: ${e.message}`, 'error');
+        }
+      }
+
+      // Test 2: Check global objects
+      log('✓ Teste 2: Verificando objetos globais...', 'success');
+      
+      if (typeof window.PMSModuleManager !== 'undefined') {
+        log('  ✓ PMSModuleManager carregado', 'success');
+      } else {
+        log('  ✗ PMSModuleManager NÃO carregado', 'error');
+      }
+
+      if (typeof window.getReservationEngine !== 'undefined') {
+        log('  ✓ ReservationEngine disponível', 'success');
+      } else {
+        log('  ✗ ReservationEngine NÃO disponível', 'error');
+      }
+
+      if (typeof window.RatePlanEngine !== 'undefined') {
+        log('  ✓ RatePlanEngine disponível', 'success');
+      } else {
+        log('  ✗ RatePlanEngine NÃO disponível', 'error');
+      }
+
+      // Test 3: Check localStorage
+      log('✓ Teste 3: Verificando localStorage...', 'success');
+      
+      const lang = localStorage.getItem('ilux_lang');
+      if (lang) {
+        log(`  ✓ Idioma: ${lang}`, 'success');
+      } else {
+        log('  ⚠ Idioma não definido (padrão: pt)', 'warning');
+      }
+
+      // Test 4: Test i18n loading
+      log('✓ Teste 4: Testando carregamento de traduções...', 'success');
+      
+      try {
+        const response = await fetch('i18n.json');
+        const data = await response.json();
+        
+        const langData = data[lang || 'pt'];
+        if (langData && langData.app) {
+          const keys = Object.keys(langData.app);
+          log(`  ✓ ${keys.length} traduções carregadas para ${lang || 'pt'}`, 'success');
+          
+          // Check for specific keys
+          const requiredKeys = ['resPageTitle', 'resNewReservation', 'resFilters'];
+          const missing = requiredKeys.filter(k => !langData.app[k]);
+          
+          if (missing.length === 0) {
+            log('  ✓ Todas as chaves essenciais presentes', 'success');
+          } else {
+            log(`  ⚠ Chaves faltando: ${missing.join(', ')}`, 'warning');
+          }
+        } else {
+          log('  ✗ Estrutura de traduções inválida', 'error');
+        }
+      } catch (e) {
+        log(`  ✗ Erro ao carregar i18n.json: ${e.message}`, 'error');
+      }
+
+      // Test 5: Check reservation engine
+      log('✓ Teste 5: Testando ReservationEngine...', 'success');
+      
+      try {
+        const engine = window.getReservationEngine('test_property');
+        log('  ✓ Engine instanciado com sucesso', 'success');
+        
+        const testRes = {
+          guestName: 'Teste',
+          guestEmail: 'teste@test.com',
+          guestPhone: '11999999999',
+          checkInDate: '2025-11-10',
+          checkOutDate: '2025-11-13',
+          roomTypeId: 'standard',
+          adults: 2,
+          children: 0,
+          ratePerNight: 350,
+          totalAmount: 1050,
+          source: 'direct',
+          status: 'confirmed'
+        };
+        
+        const created = engine.createReservation(testRes);
+        log(`  ✓ Reserva teste criada: ${created.confirmationNumber}`, 'success');
+        
+        // Clean up
+        const idx = engine.reservations.findIndex(r => r.id === created.id);
+        if (idx >= 0) {
+          engine.reservations.splice(idx, 1);
+          engine.saveReservations();
+        }
+        
+      } catch (e) {
+        log(`  ✗ Erro no ReservationEngine: ${e.message}`, 'error');
+      }
+
+      // Test 6: Test RatePlanEngine
+      log('✓ Teste 6: Testando RatePlanEngine...', 'success');
+      
+      try {
+        const ratePlan = new window.RatePlanEngine();
+        const rate = ratePlan.calculateRate('standard', '2025-11-10', '2025-11-13', 'rack', 2);
+        
+        if (rate && rate.finalRate) {
+          log(`  ✓ Cálculo de tarifa: R$ ${rate.finalRate.toFixed(2)}`, 'success');
+        } else {
+          log('  ✗ Cálculo de tarifa retornou null', 'error');
+        }
+      } catch (e) {
+        log(`  ✗ Erro no RatePlanEngine: ${e.message}`, 'error');
+      }
+
+      log('✅ Diagnóstico completo!', 'success');
+    }
+
+    function testModal() {
+      clearLogs();
+      
+      log('🪟 Testando modal de reserva...', 'success');
+      
+      // Open popup
+      const popup = window.open('pms-reservations.html', '_blank', 'width=1400,height=900');
+      
+      if (popup) {
+        log('  ✓ Popup aberta', 'success');
+        log('  ℹ Aguarde a página carregar...', 'info');
+        
+        // Wait for load
+        setTimeout(() => {
+          try {
+            // Check if elements exist
+            const btnNew = popup.document.getElementById('btnNewReservation');
+            const modal = popup.document.getElementById('newReservationModal');
+            
+            if (btnNew) {
+              log('  ✓ Botão "Nova Reserva" encontrado', 'success');
+            } else {
+              log('  ✗ Botão "Nova Reserva" NÃO encontrado', 'error');
+            }
+            
+            if (modal) {
+              log('  ✓ Modal encontrado no DOM', 'success');
+            } else {
+              log('  ✗ Modal NÃO encontrado no DOM', 'error');
+            }
+            
+            // Try to click
+            if (btnNew) {
+              log('  → Clicando no botão...', 'info');
+              btnNew.click();
+              
+              setTimeout(() => {
+                if (modal && modal.style.display === 'flex') {
+                  log('  ✓ Modal abriu com sucesso!', 'success');
+                } else {
+                  log('  ✗ Modal não abriu após click', 'error');
+                  log('  ℹ Abra o console da popup (F12) para ver erros', 'warning');
+                }
+              }, 500);
+            }
+            
+          } catch (e) {
+            log(`  ✗ Erro ao testar modal: ${e.message}`, 'error');
+            log('  ℹ A popup pode ter bloqueado o acesso por segurança', 'warning');
+          }
+        }, 2000);
+        
+      } else {
+        log('  ✗ Popup bloqueada pelo navegador', 'error');
+        log('  ℹ Permita popups para este site', 'warning');
+      }
+    }
+
+    async function testTranslations() {
+      clearLogs();
+      
+      log('🌍 Testando traduções...', 'success');
+      
+      const langs = ['pt', 'en', 'es'];
+      
+      try {
+        const response = await fetch('i18n.json');
+        const data = await response.json();
+        
+        for (const lang of langs) {
+          if (data[lang] && data[lang].app) {
+            const keys = Object.keys(data[lang].app);
+            const resKeys = keys.filter(k => k.startsWith('res'));
+            log(`  ✓ ${lang.toUpperCase()}: ${resKeys.length} traduções de reservas`, 'success');
+            
+            // Test specific keys
+            const testKeys = ['resPageTitle', 'resNewReservation', 'resFilters'];
+            const values = testKeys.map(k => data[lang].app[k]).filter(v => v);
+            
+            if (values.length === testKeys.length) {
+              log(`    Exemplos: "${values.join('", "')}"`, 'info');
+            }
+          } else {
+            log(`  ✗ ${lang.toUpperCase()}: estrutura inválida`, 'error');
+          }
+        }
+      } catch (e) {
+        log(`  ✗ Erro: ${e.message}`, 'error');
+      }
+    }
+
+    // Auto-run on load
+    window.addEventListener('load', () => {
+      setTimeout(() => {
+        log('📋 Página de diagnóstico carregada. Clique em "Executar Diagnóstico Completo" para começar.', 'info');
+      }, 100);
+    });
+  </script>
+</body>
+</html>

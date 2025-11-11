@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>iLuxSys · Gerenciar Alertas</title>
+  <link rel="stylesheet" href="style.css">
+  <script src="auth.js"></script>
+  <script>
+    // Auth guard - redirect to login if not authenticated
+    if(!IluxAuth.isAuthenticated()) {
+      window.location.href = 'login.html';
+    }
+    // Module permission check
+    if(!IluxAuth.hasModuleAccess('alerts')) {
+      alert('Você não tem permissão para acessar o módulo de Alertas.');
+      window.location.href = 'index.html';
+    }
+  </script>
+  <style>
+    .alerts-grid { display:grid; gap:1px; background:var(--line); border-radius:8px; overflow:hidden; }
+    .alerts-grid .grid-header { display:grid; grid-template-columns: repeat(6, 1fr); background:var(--bg-alt); padding:12px; font-weight:500; text-transform: uppercase; }
+    .alerts-grid .room-row { display:grid; grid-template-columns: repeat(6, 1fr); background:var(--bg); padding:12px; align-items:center; }
+    .alerts-grid .room-row:hover { background: var(--bg-hover); }
+    .floor-nav { display:flex; align-items:center; gap:20px; width:100%; }
+    .floor-nav select, .floor-nav input { padding:6px 12px; border-radius:6px; border:1px solid var(--line); background:var(--bg); }
+    .floor-nav select { min-width:120px; }
+    .alert-chip { display:inline-block; padding:4px 8px; border-radius:6px; font-size:12px; font-weight:600; }
+    .alert-offline { background:#ef4444; color:#fff; }
+    .alert-maintenance { background:#f59e0b; color:#fff; }
+    .alert-humidity { background:#f97316; color:#fff; }
+    .muted { color: var(--muted); }
+    .floor-counts { display:flex; gap:8px; align-items:center; margin:8px 0 16px 0; flex-wrap:wrap; }
+    .count-chip { background: var(--bg-alt); border:1px solid var(--line); color: var(--fg); padding:4px 10px; border-radius:999px; font-size:12px; }
+  </style>
+  </head>
+<body>
+  <div id="loadingOverlay" class="loading-overlay">
+    <div class="loading-spinner"></div>
+  </div>
+  <header>
+    <div class="brand">
+      <img src="assets/logo_iluxsys.png">
+    </div>
+    <div style="display:flex;align-items:center;gap:8px">
+      <select id="langSelect" onchange="changeLanguage(this.value)" style="padding:6px;border-radius:8px;border:1px solid var(--line)">
+        <option value="pt">Português</option>
+        <option value="en">English</option>
+        <option value="es">Español</option>
+      </select>
+      <button class="btn ghost" onclick="window.close()">Fechar</button>
+    </div>
+  </header>
+  <div class="container">
+    <div class="card">
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:20px;width:100%">
+        <h2 id="alertsTitle">Room Information - ALERTS</h2>
+        <div class="floor-nav">
+          <div style="display:flex;align-items:center;gap:8px">
+            <label for="floorSelect" id="lbl-floor">Pavimento:</label>
+            <select id="floorSelect" class="form-select" onchange="alertsChangeFloor(this.value)">
+              <option value="all" id="opt-all-floors">Todos os andares</option>
+              <option value="3">3º Andar</option>
+              <option value="2">2º Andar</option>
+              <option value="1">1º Andar</option>
+            </select>
+          </div>
+          <div style="display:flex;align-items:center;gap:8px">
+            <label for="roomSearch" id="lbl-room">Quarto:</label>
+            <input type="text" id="roomSearch" class="form-input" placeholder="Ex: 301" style="width:80px;padding:6px;border-radius:6px;border:1px solid var(--line)">
+            <button class="btn primary" id="btn-search" onclick="alertsSearchRoom()">Buscar</button>
+          </div>
+          <div style="display:flex;align-items:center;gap:8px">
+            <label for="typeSelect" id="lbl-type">Tipo:</label>
+            <select id="typeSelect" class="form-select" onchange="alertsChangeType(this.value)">
+              <option value="all" id="opt-type-all">Todos</option>
+              <option value="offline" id="opt-type-offline">Termostato Desconectado</option>
+              <option value="maintenance" id="opt-type-maintenance">Manutenção HVAC</option>
+              <option value="humidity" id="opt-type-humidity">Umidade Alta</option>
+            </select>
+          </div>
+          <div style="margin-left:auto">
+            <button class="btn" id="btn-export-csv" onclick="alertsExportCSV()">Exportar CSV</button>
+          </div>
+        </div>
+      </div>
+      <div id="floorCounts" class="floor-counts" aria-live="polite"></div>
+      <div class="alerts-grid">
+        <div class="grid-header">
+          <div id="col-room">ROOM</div>
+          <div id="col-alerts">ALERTS</div>
+          <div id="col-hvac">HVAC</div>
+          <div id="col-thermostat">THERMOSTAT</div>
+          <div id="col-humidity">HUMIDITY</div>
+          <div id="col-lastupdate">LAST UPDATE</div>
+        </div>
+        <div id="alertsRoomRows"></div>
+      </div>
+      <div style="display:flex;justify-content:flex-end;align-items:center;gap:8px;margin-top:12px">
+        <button class="btn" id="btn-prev" onclick="alertsPrevPage()">Anterior</button>
+        <div id="page-info" class="muted">1 / 1</div>
+        <button class="btn" id="btn-next" onclick="alertsNextPage()">Próximo</button>
+      </div>
+    </div>
+  </div>
+  <script src="app.js" defer></script>
+  <script src="alerts.js" defer></script>
+  <script>
+    // Intercept console logs and send them to opener window for debugging
+    (function() {
+        if(window.opener && window.opener.console) {
+            const originalLog = console.log;
+            const originalWarn = console.warn;
+            const originalError = console.error;
+            
+            console.log = function() {
+                originalLog.apply(console, arguments);
+                try { window.opener.console.log.apply(window.opener.console, ['[ALERTS-POPUP]'].concat(Array.from(arguments))); } catch(e) {}
+            };
+            console.warn = function() {
+                originalWarn.apply(console, arguments);
+                try { window.opener.console.warn.apply(window.opener.console, ['[ALERTS-POPUP]'].concat(Array.from(arguments))); } catch(e) {}
+            };
+            console.error = function() {
+                originalError.apply(console, arguments);
+                try { window.opener.console.error.apply(window.opener.console, ['[ALERTS-POPUP]'].concat(Array.from(arguments))); } catch(e) {}
+            };
+            
+            console.log('[ALERTS] Console interceptor installed, logs will appear in opener window');
+        }
+    })();
+  </script>
+  </body>
+  </html>

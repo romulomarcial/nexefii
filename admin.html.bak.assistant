@@ -1,0 +1,816 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>iLuxSys · Administração</title>
+  <link rel="stylesheet" href="style.css">
+  <script src="auth.js"></script>
+  <script src="properties.js"></script>
+  <script>
+    // Admin-only guard
+    const session = IluxAuth.getCurrentSession();
+    if(!session || session.role !== 'admin') {
+      alert('Acesso negado. Apenas administradores podem acessar esta página.');
+      window.location.href = 'index.html';
+    }
+  </script>
+  <style>
+    .admin-container { max-width: 1400px; margin: 0 auto; padding: 24px; }
+    .admin-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 32px; }
+    .admin-title { font-size: 28px; font-weight: 700; color: var(--text); }
+    .tabs { display: flex; gap: 8px; border-bottom: 2px solid var(--line); margin-bottom: 24px; }
+    .tab { padding: 12px 24px; cursor: pointer; border: none; background: none; font-size: 14px; 
+      font-weight: 600; color: var(--muted); border-bottom: 3px solid transparent; transition: all 0.2s; }
+    .tab.active { color: var(--primary); border-bottom-color: var(--primary); }
+    .tab:hover { color: var(--text); }
+    .users-table { background: var(--card); border: 1px solid var(--line); border-radius: 12px; overflow: hidden; }
+    .table-header { display: grid; grid-template-columns: 200px 200px 150px 150px 160px 140px 1fr 260px; 
+      background: var(--bg-alt); padding: 16px; font-weight: 600; font-size: 12px; 
+      text-transform: uppercase; color: var(--muted); }
+    .table-row { display: grid; grid-template-columns: 200px 200px 150px 150px 160px 140px 1fr 260px; 
+      padding: 16px; border-top: 1px solid var(--line); align-items: center; }
+    .table-row:hover { background: var(--bg-hover); }
+    .status-badge { display: inline-block; padding: 4px 10px; border-radius: 12px; 
+      font-size: 11px; font-weight: 600; text-transform: uppercase; }
+    .status-pending { background: #fef3c7; color: #92400e; }
+    .status-approved { background: #d1fae5; color: #065f46; }
+    .status-denied { background: #fee2e2; color: #991b1b; }
+    .action-btns { display: flex; gap: 8px; }
+    .btn-sm { padding: 6px 12px; font-size: 12px; border-radius: 8px; border: 1px solid var(--line); 
+      cursor: pointer; font-weight: 600; transition: all 0.2s; }
+    .btn-approve { background: #10b981; color: white; border-color: #10b981; }
+    .btn-approve:hover { background: #059669; }
+    .btn-deny { background: #ef4444; color: white; border-color: #ef4444; }
+    .btn-deny:hover { background: #dc2626; }
+    .btn-edit { background: #3b82f6; color: white; border-color: #3b82f6; }
+    .btn-edit:hover { background: #2563eb; }
+    .btn-delete { background: #6b7280; color: white; border-color: #6b7280; }
+    .btn-delete:hover { background: #4b5563; }
+    .empty-state { text-align: center; padding: 48px; color: var(--muted); }
+    .modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; 
+      background: rgba(0,0,0,0.5); z-index: 1000; align-items: center; justify-content: center; }
+    .modal.show { display: flex; }
+    .modal-content { background: var(--card); border-radius: 16px; padding: 32px; 
+      max-width: 600px; width: 90%; max-height: 80vh; overflow-y: auto; }
+    .modal-title { font-size: 20px; font-weight: 700; margin-bottom: 24px; }
+    .module-checkboxes { display: grid; gap: 12px; }
+    .module-checkbox { display: flex; align-items: center; gap: 12px; padding: 12px; 
+      background: var(--bg); border-radius: 8px; cursor: pointer; }
+    .module-checkbox:hover { background: var(--bg-hover); }
+    .module-checkbox input[type="checkbox"] { width: 20px; height: 20px; cursor: pointer; }
+    .module-checkbox label { cursor: pointer; font-weight: 500; flex: 1; }
+    .modal-footer { display: flex; gap: 12px; margin-top: 24px; justify-content: flex-end; }
+    .stats-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); 
+      gap: 16px; margin-bottom: 32px; }
+    .stat-card { background: var(--card); border: 1px solid var(--line); border-radius: 12px; 
+      padding: 20px; }
+    .stat-value { font-size: 32px; font-weight: 700; color: var(--primary); }
+    .stat-label { font-size: 13px; color: var(--muted); margin-top: 4px; }
+    /* Properties */
+    .prop-grid { display:grid; gap:12px; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); }
+    .prop-card { background: var(--card); border:1px solid var(--line); border-radius:12px; padding:16px; display:flex; gap:12px; }
+    .prop-thumb { width:96px; height:72px; object-fit:cover; border-radius:8px; border:1px solid var(--line); background:#f1f5f9; }
+    .prop-actions { display:flex; gap:8px; margin-top:8px; }
+    .badge { display:inline-block; background:var(--bg); border:1px solid var(--line); padding:2px 8px; border-radius:999px; font-size:11px; color:var(--muted) }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="brand">
+      <img src="assets/logo_iluxsys.png">
+    </div>
+    <div style="display:flex;align-items:center;gap:8px">
+      <button class="btn ghost" onclick="window.location.href='index.html'">
+        <span id="btnDashboard">← Voltar ao Dashboard</span>
+      </button>
+      <button class="btn ghost" onclick="logout()">
+        <span id="btnLogout">Sair</span>
+      </button>
+    </div>
+  </header>
+
+  <div class="admin-container">
+    <div class="admin-header">
+      <div class="admin-title" id="pageTitle">Gerenciamento de Usuários</div>
+      <select id="langSelect" onchange="changeLanguage(this.value)" 
+        style="padding:8px 12px;border-radius:8px;border:1px solid var(--line)">
+        <option value="pt">Português</option>
+        <option value="en">English</option>
+        <option value="es">Español</option>
+      </select>
+    </div>
+
+    <div class="stats-grid">
+      <div class="stat-card">
+        <div class="stat-value" id="statTotal">0</div>
+        <div class="stat-label" id="lblTotal">Total de Usuários</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-value" id="statPending">0</div>
+        <div class="stat-label" id="lblPending">Aguardando Aprovação</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-value" id="statApproved">0</div>
+        <div class="stat-label" id="lblApproved">Aprovados</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-value" id="statDenied">0</div>
+        <div class="stat-label" id="lblDenied">Negados</div>
+      </div>
+    </div>
+
+    <div class="tabs">
+      <button class="tab active" data-tab="all" onclick="switchTab('all')" id="tabAll">Todos</button>
+      <button class="tab" data-tab="pending" onclick="switchTab('pending')" id="tabPending">Aguardando</button>
+      <button class="tab" data-tab="approved" onclick="switchTab('approved')" id="tabApproved">Aprovados</button>
+      <button class="tab" data-tab="denied" onclick="switchTab('denied')" id="tabDenied">Negados</button>
+      <button class="tab" data-tab="properties" onclick="switchTab('properties')" id="tabProperties">Propriedades</button>
+    </div>
+
+    <div class="users-table" id="usersSection">
+      <div class="table-header">
+        <div id="colName">Nome</div>
+        <div id="colEmail">Email</div>
+        <div id="colUsername">Usuário</div>
+        <div id="colStatus">Status</div>
+        <div id="colProperty">Propriedade</div>
+        <div id="colPosition">Cargo</div>
+        <div id="colModules">Módulos</div>
+        <div id="colActions">Ações</div>
+      </div>
+      <div id="usersTableBody"></div>
+    </div>
+
+    <div id="propertiesSection" style="display:none">
+      <div style="display:flex;justify-content:space-between;align-items:center;margin:12px 0">
+        <h3 id="propTitle" style="margin:0">Propriedades</h3>
+        <button class="btn primary" onclick="openPropertyModal()" id="btnNewProperty">Nova Propriedade</button>
+      </div>
+      <div class="prop-grid" id="propGrid"></div>
+    </div>
+  </div>
+
+  <!-- Modal de Edição de Módulos -->
+  <div id="moduleModal" class="modal" onclick="closeModal(event)">
+    <div class="modal-content" onclick="event.stopPropagation()">
+      <div class="modal-title" id="modalTitle">Gerenciar Módulos</div>
+      <div id="modalUserInfo" style="margin-bottom:20px;color:var(--muted);font-size:14px"></div>
+      <div>
+        <label id="labProperty" style="font-size:12px;font-weight:600;">Propriedade</label>
+        <select id="modalProperty" style="width:100%;margin-top:6px;padding:10px;border:1px solid var(--line);border-radius:8px"></select>
+      </div>
+      <div style="height:12px"></div>
+      <div class="module-checkboxes" id="moduleCheckboxes"></div>
+      <div class="modal-footer">
+        <button class="btn ghost" onclick="closeModuleModal()" id="btnCancel">Cancelar</button>
+        <button class="btn primary" onclick="saveModules()" id="btnSave">Salvar</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Property Modal -->
+  <div id="propertyModal" class="modal" onclick="closePropertyModal(event)">
+    <div class="modal-content" onclick="event.stopPropagation()">
+      <div class="modal-title" id="propModalTitle">Nova Propriedade</div>
+      <div style="display:grid;gap:12px">
+        <div>
+          <label id="labPropKey" style="font-size:12px;font-weight:600;">Propriedade</label>
+          <select id="propKey" style="width:100%;margin-top:6px;padding:10px;border:1px solid var(--line);border-radius:8px"></select>
+        </div>
+          <div>
+          <label id="labPropImage" style="font-size:12px;font-weight:600;">Imagem (URL)</label>
+          <input id="propImageUrl" class="input" placeholder="assets/images/hotel_sp.jpg" />
+        </div>
+        <div>
+          <label id="labPropCapacity" style="font-size:12px;font-weight:600;">Capacidade de Usuários</label>
+          <select id="propCapacity" style="width:100%;margin-top:6px;padding:10px;border:1px solid var(--line);border-radius:8px">
+            <option value="to30">Até 30</option>
+            <option value="30to50">30 até 50</option>
+            <option value="50to100">50 até 100</option>
+            <option value="100plus">Acima de 100</option>
+          </select>
+        </div>
+        <div>
+          <label id="labPropModules" style="font-size:12px;font-weight:600;">Módulos Adquiridos</label>
+          <div class="module-checkboxes" id="propModules"></div>
+        </div>
+        <div style="display:flex;align-items:center;gap:8px">
+          <input type="checkbox" id="propActive" checked />
+          <label for="propActive" id="labPropActive">Ativa</label>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button class="btn ghost" onclick="closePropertyModal()" id="btnPropCancel">Cancelar</button>
+        <button class="btn primary" onclick="saveProperty()" id="btnPropSave">Salvar</button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+  let CURRENT_TAB = 'all';
+    let CURRENT_EDITING_USER = null;
+  let APPROVAL_MODE = false;
+  let CURRENT_EDITING_PROPERTY_KEY = null; // when editing property
+    let I18N_ADMIN = null;
+    let HOTELS_I18N = null;
+    const DEFAULT_HOTELS = {
+      pt: {
+        iluxSaoPaulo: 'iLux Hotel São Paulo',
+        iluxMiami: 'iLux Hotel Miami',
+        iluxRioDeJaneiro: 'iLux Hotel Rio de Janeiro'
+      },
+      en: {
+        iluxSaoPaulo: 'iLux Hotel São Paulo',
+        iluxMiami: 'iLux Hotel Miami',
+        iluxRioDeJaneiro: 'iLux Hotel Rio de Janeiro'
+      },
+      es: {
+        iluxSaoPaulo: 'iLux Hotel São Paulo',
+        iluxMiami: 'iLux Hotel Miami',
+        iluxRioDeJaneiro: 'iLux Hotel Rio de Janeiro'
+      }
+    };
+    const DEFAULT_ADMIN_I18N = {
+      pt: {
+        pageTitle: 'Gerenciamento de Usuários',
+        btnDashboard: '← Voltar ao Dashboard',
+        btnLogout: 'Sair',
+        lblTotal: 'Total de Usuários',
+        lblPending: 'Aguardando Aprovação',
+        lblApproved: 'Aprovados',
+        lblDenied: 'Negados',
+        tabAll: 'Todos',
+        tabPending: 'Aguardando',
+        tabApproved: 'Aprovados',
+        tabDenied: 'Negados',
+        colName: 'Nome',
+        colEmail: 'Email',
+        colUsername: 'Usuário',
+        colStatus: 'Status',
+        colProperty: 'Propriedade',
+        colPosition: 'Cargo',
+        colModules: 'Módulos',
+        colActions: 'Ações',
+    tabProperties: 'Propriedades',
+        statusPending: 'Aguardando',
+        statusApproved: 'Aprovado',
+        statusDenied: 'Negado',
+        btnApprove: 'Aprovar',
+        btnDeny: 'Negar',
+        btnEdit: 'Módulos',
+        btnDelete: 'Excluir',
+    btnNewProperty: 'Nova Propriedade',
+    propTitle: 'Propriedades',
+    propModalTitleNew: 'Nova Propriedade',
+    propModalTitleEdit: 'Editar Propriedade',
+    labPropKey: 'Propriedade',
+    labPropImage: 'Imagem (URL)',
+    labPropCapacity: 'Capacidade de Usuários',
+    labPropModules: 'Módulos Adquiridos',
+    labPropActive: 'Ativa',
+    btnApproveSave: 'Aprovar e Salvar',
+        emptyState: 'Nenhum usuário encontrado',
+        modalTitle: 'Gerenciar Módulos',
+  labProperty: 'Propriedade',
+        btnCancel: 'Cancelar',
+        btnSave: 'Salvar',
+        confirmApprove: 'Aprovar este usuário?',
+        confirmDeny: 'Negar acesso a este usuário?',
+        confirmDelete: 'Excluir permanentemente este usuário?',
+    confirmDeleteProperty: 'Excluir esta propriedade?',
+        successApprove: 'Usuário aprovado com sucesso!',
+        successDeny: 'Usuário negado.',
+        successDelete: 'Usuário excluído.',
+    successModules: 'Módulos atualizados com sucesso!',
+    successProperty: 'Propriedade salva com sucesso!',
+    successPropertyDelete: 'Propriedade excluída.'
+      },
+      en: {
+        pageTitle: 'User Management',
+        btnDashboard: '← Back to Dashboard',
+        btnLogout: 'Logout',
+        lblTotal: 'Total Users',
+        lblPending: 'Pending Approval',
+        lblApproved: 'Approved',
+        lblDenied: 'Denied',
+        tabAll: 'All',
+        tabPending: 'Pending',
+        tabApproved: 'Approved',
+        tabDenied: 'Denied',
+        colName: 'Name',
+        colEmail: 'Email',
+        colUsername: 'Username',
+        colStatus: 'Status',
+        colProperty: 'Property',
+        colPosition: 'Position',
+        colModules: 'Modules',
+        colActions: 'Actions',
+    tabProperties: 'Properties',
+        statusPending: 'Pending',
+        statusApproved: 'Approved',
+        statusDenied: 'Denied',
+        btnApprove: 'Approve',
+        btnDeny: 'Deny',
+        btnEdit: 'Modules',
+        btnDelete: 'Delete',
+    btnNewProperty: 'New Property',
+    propTitle: 'Properties',
+    propModalTitleNew: 'New Property',
+    propModalTitleEdit: 'Edit Property',
+    labPropKey: 'Property',
+    labPropImage: 'Image (URL)',
+    labPropCapacity: 'User Capacity',
+    labPropModules: 'Purchased Modules',
+    labPropActive: 'Active',
+    btnApproveSave: 'Approve & Save',
+        emptyState: 'No users found',
+        modalTitle: 'Manage Modules',
+  labProperty: 'Property',
+        btnCancel: 'Cancel',
+        btnSave: 'Save',
+        confirmApprove: 'Approve this user?',
+        confirmDeny: 'Deny access to this user?',
+        confirmDelete: 'Permanently delete this user?',
+    confirmDeleteProperty: 'Delete this property?',
+        successApprove: 'User approved successfully!',
+        successDeny: 'User denied.',
+        successDelete: 'User deleted.',
+    successModules: 'Modules updated successfully!',
+    successProperty: 'Property saved successfully!',
+    successPropertyDelete: 'Property deleted.'
+      },
+      es: {
+        pageTitle: 'Gestión de Usuarios',
+        btnDashboard: '← Volver al Panel',
+        btnLogout: 'Salir',
+        lblTotal: 'Total de Usuarios',
+        lblPending: 'Esperando Aprobación',
+        lblApproved: 'Aprobados',
+        lblDenied: 'Negados',
+        tabAll: 'Todos',
+        tabPending: 'Esperando',
+        tabApproved: 'Aprobados',
+        tabDenied: 'Negados',
+        colName: 'Nombre',
+        colEmail: 'Correo',
+        colUsername: 'Usuario',
+        colStatus: 'Estado',
+        colProperty: 'Propiedad',
+        colPosition: 'Cargo',
+        colModules: 'Módulos',
+        colActions: 'Acciones',
+        tabProperties: 'Propiedades',
+        statusPending: 'Esperando',
+        statusApproved: 'Aprobado',
+        statusDenied: 'Negado',
+        btnApprove: 'Aprobar',
+        btnDeny: 'Negar',
+        btnEdit: 'Módulos',
+        btnDelete: 'Eliminar',
+        btnNewProperty: 'Nueva Propiedad',
+        propTitle: 'Propiedades',
+        propModalTitleNew: 'Nueva Propiedad',
+        propModalTitleEdit: 'Editar Propiedad',
+        labPropKey: 'Propiedad',
+        labPropImage: 'Imagen (URL)',
+        labPropCapacity: 'Capacidad de Usuarios',
+        labPropModules: 'Módulos Comprados',
+        labPropActive: 'Activa',
+        btnApproveSave: 'Aprobar y Guardar',
+        emptyState: 'No se encontraron usuarios',
+        modalTitle: 'Gestionar Módulos',
+  labProperty: 'Propiedad',
+        btnCancel: 'Cancelar',
+        btnSave: 'Guardar',
+        confirmApprove: '¿Aprobar este usuario?',
+        confirmDeny: '¿Negar acceso a este usuario?',
+        confirmDelete: '¿Eliminar permanentemente este usuario?',
+        confirmDeleteProperty: '¿Eliminar esta propiedad?',
+        successApprove: '¡Usuario aprobado con éxito!',
+        successDeny: 'Usuario negado.',
+        successDelete: 'Usuario eliminado.',
+        successModules: '¡Módulos actualizados con éxito!',
+        successProperty: '¡Propiedad guardada con éxito!',
+        successPropertyDelete: 'Propiedad eliminada.'
+      }
+    };
+
+    async function loadAdminI18N() {
+      try {
+        const res = await fetch('i18n.json', {cache:'no-store'});
+        if(!res.ok) throw new Error('http');
+        const data = await res.json();
+        // Merge with defaults to avoid undefined labels when admin section is missing
+        const merge = (base, extra) => ({...base, ...(extra || {})});
+        I18N_ADMIN = {
+          pt: merge(DEFAULT_ADMIN_I18N.pt, data?.pt?.admin),
+          en: merge(DEFAULT_ADMIN_I18N.en, data?.en?.admin),
+          es: merge(DEFAULT_ADMIN_I18N.es, data?.es?.admin)
+        };
+        HOTELS_I18N = {
+          pt: data?.pt?.hotels || DEFAULT_HOTELS.pt,
+          en: data?.en?.hotels || DEFAULT_HOTELS.en,
+          es: data?.es?.hotels || DEFAULT_HOTELS.es
+        };
+      } catch(e) {
+        // Fallback to defaults
+        I18N_ADMIN = DEFAULT_ADMIN_I18N;
+        HOTELS_I18N = DEFAULT_HOTELS;
+      }
+    }
+
+    function applyAdminLang() {
+      if(!I18N_ADMIN) return;
+      const lang = document.getElementById('langSelect').value;
+  const L = I18N_ADMIN[lang] || I18N_ADMIN.pt;
+  const MOD = IluxAuth.MODULE_NAMES[lang] || IluxAuth.MODULE_NAMES.pt;
+  const HOTELS = HOTELS_I18N?.[lang] || HOTELS_I18N?.pt || DEFAULT_HOTELS.pt;
+
+      document.getElementById('pageTitle').innerText = L.pageTitle;
+      document.getElementById('btnDashboard').innerText = L.btnDashboard;
+      document.getElementById('btnLogout').innerText = L.btnLogout;
+      document.getElementById('lblTotal').innerText = L.lblTotal;
+      document.getElementById('lblPending').innerText = L.lblPending;
+      document.getElementById('lblApproved').innerText = L.lblApproved;
+      document.getElementById('lblDenied').innerText = L.lblDenied;
+      document.getElementById('tabAll').innerText = L.tabAll;
+      document.getElementById('tabPending').innerText = L.tabPending;
+      document.getElementById('tabApproved').innerText = L.tabApproved;
+      document.getElementById('tabDenied').innerText = L.tabDenied;
+      document.getElementById('colName').innerText = L.colName;
+      document.getElementById('colEmail').innerText = L.colEmail;
+      document.getElementById('colUsername').innerText = L.colUsername;
+      document.getElementById('colStatus').innerText = L.colStatus;
+      document.getElementById('colProperty').innerText = L.colProperty || 'Propriedade';
+      document.getElementById('colPosition').innerText = L.colPosition || 'Cargo';
+      document.getElementById('colModules').innerText = L.colModules;
+      document.getElementById('colActions').innerText = L.colActions;
+      document.getElementById('modalTitle').innerText = L.modalTitle;
+  document.getElementById('labProperty').innerText = L.labProperty || 'Propriedade';
+      document.getElementById('btnCancel').innerText = L.btnCancel;
+      document.getElementById('btnSave').innerText = APPROVAL_MODE ? L.btnApproveSave : L.btnSave;
+      // Tabs
+      document.getElementById('tabProperties').innerText = L.tabProperties || 'Propriedades';
+      document.getElementById('propTitle').innerText = L.propTitle || 'Propriedades';
+      document.getElementById('btnNewProperty').innerText = L.btnNewProperty || 'Nova Propriedade';
+      // Property modal labels
+      document.getElementById('labPropKey').innerText = L.labPropKey || 'Propriedade';
+      document.getElementById('labPropImage').innerText = L.labPropImage || 'Imagem (URL)';
+      document.getElementById('labPropCapacity').innerText = L.labPropCapacity || 'Capacidade de Usuários';
+      document.getElementById('labPropModules').innerText = L.labPropModules || 'Módulos Adquiridos';
+      document.getElementById('labPropActive').innerText = L.labPropActive || 'Ativa';
+      document.getElementById('btnPropCancel').innerText = L.btnCancel;
+      document.getElementById('btnPropSave').innerText = L.btnSave;
+
+      localStorage.setItem('ilux_lang', lang);
+      renderUsers();
+      renderProperties();
+    }
+
+    function changeLanguage(lang) {
+      applyAdminLang();
+    }
+
+    function switchTab(tab) {
+      CURRENT_TAB = tab;
+      document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+      document.querySelector(`[data-tab="${tab}"]`).classList.add('active');
+      document.getElementById('usersSection').style.display = (tab==='properties')?'none':'';
+      document.getElementById('propertiesSection').style.display = (tab==='properties')?'':'none';
+      if(tab==='properties'){
+        renderProperties();
+      } else {
+        renderUsers();
+      }
+    }
+
+    function renderUsers() {
+      try{
+        const lang = document.getElementById('langSelect').value;
+        const L = I18N_ADMIN[lang] || I18N_ADMIN.pt;
+        const MOD = IluxAuth.MODULE_NAMES[lang] || IluxAuth.MODULE_NAMES.pt;
+        const HOTELS = HOTELS_I18N?.[lang] || HOTELS_I18N?.pt || DEFAULT_HOTELS.pt;
+
+        const allUsers = (IluxAuth.getAllUsers()||[]).filter(u => u.role !== 'admin');
+        const tbody = document.getElementById('usersTableBody');
+        if(!tbody) { console.error('[admin] usersTableBody not found'); return; }
+
+        // Update stats
+        const countPending = allUsers.filter(u => u.status === 'pending').length;
+        const countApproved = allUsers.filter(u => u.status === 'approved').length;
+        const countDenied = allUsers.filter(u => u.status === 'denied').length;
+        document.getElementById('statTotal').innerText = allUsers.length;
+        document.getElementById('statPending').innerText = countPending;
+        document.getElementById('statApproved').innerText = countApproved;
+        document.getElementById('statDenied').innerText = countDenied;
+
+        // Filter users by tab
+        let filteredUsers = allUsers;
+        if(CURRENT_TAB !== 'all') {
+          filteredUsers = allUsers.filter(u => u.status === CURRENT_TAB);
+        }
+        console.debug('[admin] renderUsers', {tab: CURRENT_TAB, total: allUsers.length, filtered: filteredUsers.length, pending: countPending, approved: countApproved, denied: countDenied});
+
+        if(filteredUsers.length === 0) {
+          tbody.innerHTML = `<div class="empty-state">${L.emptyState}</div>`;
+          return;
+        }
+
+        tbody.innerHTML = filteredUsers.map(user => {
+        // Defensive fallbacks
+        const statusClass = `status-${user.status || 'pending'}`;
+        const statusKey = `status${(user.status || 'pending').charAt(0).toUpperCase() + (user.status || 'pending').slice(1)}`;
+        const statusText = L[statusKey] || user.status || 'Pending';
+        const modules = (Array.isArray(user.modules)? user.modules : []).map(m => MOD[m] || m).join(', ') || '-';
+        const propertyLabel = user.propertyKey ? (HOTELS[user.propertyKey] || user.propertyKey) : '-';
+        const positionLabel = user.position || '-';
+        
+        let actions = '';
+        if(user.status === 'pending') {
+          actions = `
+            <button class="btn-sm btn-approve" onclick="approveUser('${user.id}', true)">${L.btnApprove}</button>
+            <button class="btn-sm btn-deny" onclick="denyUser('${user.id}')">${L.btnDeny}</button>
+            <button class="btn-sm btn-delete" onclick="deleteUserConfirm('${user.id}')">${L.btnDelete}</button>
+          `;
+        } else if(user.status === 'approved') {
+          actions = `
+            <button class="btn-sm btn-edit" onclick="editModules('${user.id}')">${L.btnEdit}</button>
+            <button class="btn-sm btn-deny" onclick="denyUser('${user.id}')">${L.btnDeny}</button>
+            <button class="btn-sm btn-delete" onclick="deleteUserConfirm('${user.id}')">${L.btnDelete}</button>
+          `;
+        } else {
+          actions = `
+            <button class="btn-sm btn-approve" onclick="approveUser('${user.id}')">${L.btnApprove}</button>
+            <button class="btn-sm btn-delete" onclick="deleteUserConfirm('${user.id}')">${L.btnDelete}</button>
+          `;
+        }
+
+        return `
+          <div class="table-row">
+            <div>${user.fullName || 'N/A'}</div>
+            <div style="font-size:12px">${user.email || 'N/A'}</div>
+            <div>${user.username || 'N/A'}</div>
+            <div><span class="status-badge ${statusClass}">${statusText}</span></div>
+            <div style="font-size:12px;color:var(--muted)">${propertyLabel}</div>
+            <div style="font-size:12px;color:var(--muted)">${positionLabel}</div>
+            <div style="font-size:11px;color:var(--muted)">${modules}</div>
+            <div class="action-btns">${actions}</div>
+          </div>
+        `;
+      }).join('');
+      }catch(err){
+        console.error('[admin] renderUsers failed', err);
+        const tbody = document.getElementById('usersTableBody');
+        if(tbody) tbody.innerHTML = `<div class="empty-state">Erro ao carregar usuários.</div>`;
+      }
+    }
+
+    function approveUser(userId, selective=false) {
+      const lang = document.getElementById('langSelect').value;
+      const L = I18N_ADMIN[lang] || I18N_ADMIN.pt;
+      if(selective){
+        // Open modal in approval mode to select subset of requested modules and property
+        APPROVAL_MODE = true;
+        editModules(userId, true);
+        document.getElementById('btnSave').innerText = L.btnApproveSave || 'Aprovar e Salvar';
+        return;
+      }
+      if(!confirm(L.confirmApprove)) return;
+      const result = IluxAuth.approveUser(userId);
+      if(result.success){ alert(L.successApprove); renderUsers(); }
+    }
+
+    function denyUser(userId) {
+      const lang = document.getElementById('langSelect').value;
+      const L = I18N_ADMIN[lang] || I18N_ADMIN.pt;
+      
+      if(!confirm(L.confirmDeny)) return;
+      
+      const result = IluxAuth.denyUser(userId);
+      if(result.success) {
+        alert(L.successDeny);
+        renderUsers();
+      }
+    }
+
+    function deleteUserConfirm(userId) {
+      const lang = document.getElementById('langSelect').value;
+      const L = I18N_ADMIN[lang] || I18N_ADMIN.pt;
+      
+      if(!confirm(L.confirmDelete)) return;
+      
+      const result = IluxAuth.deleteUser(userId);
+      if(result.success) {
+        alert(L.successDelete);
+        renderUsers();
+      }
+    }
+
+    function editModules(userId, approval=false) {
+      CURRENT_EDITING_USER = userId;
+      APPROVAL_MODE = !!approval;
+      const lang = document.getElementById('langSelect').value;
+      const MOD = IluxAuth.MODULE_NAMES[lang] || IluxAuth.MODULE_NAMES.pt;
+      const HOTELS = HOTELS_I18N?.[lang] || HOTELS_I18N?.pt || DEFAULT_HOTELS.pt;
+      
+      const users = IluxAuth.getAllUsers();
+      const user = users.find(u => u.id === userId);
+      
+      if(!user) return;
+      
+      document.getElementById('modalUserInfo').innerText = `${user.fullName} (${user.email})`;
+
+      // Build property select
+      const propSel = document.getElementById('modalProperty');
+      const propOpts = ['<option value="">-</option>'];
+      Object.entries(HOTELS).forEach(([key,label]) => {
+        const selected = user.propertyKey === key ? 'selected' : '';
+        propOpts.push(`<option value="${key}" ${selected}>${label}</option>`);
+      });
+      propSel.innerHTML = propOpts.join('');
+      
+      const userModules = APPROVAL_MODE ? (user.requestedModules || []) : (user.modules || []);
+      const checkboxesHtml = Object.values(IluxAuth.MODULES).map(module => {
+        const checked = userModules.includes(module) ? 'checked' : '';
+        return `
+          <div class="module-checkbox">
+            <input type="checkbox" id="mod_${module}" value="${module}" ${checked}>
+            <label for="mod_${module}">${MOD[module] || module}</label>
+          </div>
+        `;
+      }).join('');
+      
+      document.getElementById('moduleCheckboxes').innerHTML = checkboxesHtml;
+      // Enforce property entitlements
+      const entitleByProperty = ()=>{
+        const key = document.getElementById('modalProperty').value || '';
+        const prop = key ? (window.IluxProps && IluxProps.getProperty(key)) : null;
+        const purchased = prop && Array.isArray(prop.modulesPurchased) ? prop.modulesPurchased : null;
+        Object.values(IluxAuth.MODULES).forEach(module => {
+          const cb = document.getElementById(`mod_${module}`);
+          if(!cb) return;
+          if(purchased && !purchased.includes(module)){
+            cb.checked = false;
+            cb.disabled = true;
+            cb.parentElement.title = 'Módulo não adquirido para esta propriedade';
+            cb.parentElement.style.opacity = '0.6';
+          }else{
+            cb.disabled = false;
+            cb.parentElement.title = '';
+            cb.parentElement.style.opacity = '';
+          }
+        });
+      };
+      document.getElementById('modalProperty').addEventListener('change', entitleByProperty);
+      entitleByProperty();
+      document.getElementById('moduleModal').classList.add('show');
+    }
+
+    function closeModuleModal() {
+      document.getElementById('moduleModal').classList.remove('show');
+      CURRENT_EDITING_USER = null;
+      APPROVAL_MODE = false;
+      // reset save button label according to current lang
+      const lang = document.getElementById('langSelect').value;
+      const L = I18N_ADMIN[lang] || I18N_ADMIN.pt;
+      const btn = document.getElementById('btnSave'); if(btn) btn.innerText = L.btnSave;
+    }
+
+    function closeModal(event) {
+      if(event.target.id === 'moduleModal') {
+        closeModuleModal();
+      }
+    }
+
+    function saveModules() {
+      if(!CURRENT_EDITING_USER) return;
+      
+      const lang = document.getElementById('langSelect').value;
+      const L = I18N_ADMIN[lang] || I18N_ADMIN.pt;
+      
+      const selectedModules = [];
+      Object.values(IluxAuth.MODULES).forEach(module => {
+        const checkbox = document.getElementById(`mod_${module}`);
+        if(checkbox && checkbox.checked) {
+          selectedModules.push(module);
+        }
+      });
+      // Update property too
+      const newProperty = document.getElementById('modalProperty').value || null;
+      if(APPROVAL_MODE){
+        const r = IluxAuth.approveUserWithModules(CURRENT_EDITING_USER, selectedModules, newProperty);
+        if(r.success){ alert(L.successApprove); closeModuleModal(); renderUsers(); }
+      }else{
+        const r1 = IluxAuth.updateUserModules(CURRENT_EDITING_USER, selectedModules);
+        const r2 = IluxAuth.updateUserProperty(CURRENT_EDITING_USER, newProperty);
+        if(r1.success && r2.success) {
+          alert(L.successModules);
+          closeModuleModal();
+          renderUsers();
+        }
+      }
+    }
+
+    function logout() {
+      IluxAuth.logout();
+      window.location.href = 'login.html';
+    }
+
+    // ---------- Properties Management ----------
+    function renderProperties(){
+      const grid = document.getElementById('propGrid');
+      if(!grid) return;
+      const lang = document.getElementById('langSelect').value;
+      const HOTELS = HOTELS_I18N?.[lang] || HOTELS_I18N?.pt || DEFAULT_HOTELS.pt;
+      const props = (window.IluxProps && IluxProps.listProperties ? IluxProps.listProperties() : []).sort((a,b)=>{
+        const an = HOTELS[a.key] || a.key; const bn = HOTELS[b.key] || b.key; return an.localeCompare(bn);
+      });
+      grid.innerHTML = props.map(p=>{
+        const name = HOTELS[p.key] || p.key;
+        const mods = (p.modulesPurchased||[]).map(m=> (IluxAuth.MODULE_NAMES[lang]||IluxAuth.MODULE_NAMES.pt)[m] || m).join(', ') || '-';
+        const capLabel = p.userCapacity==='to30'?'≤30': p.userCapacity==='30to50'?'30–50': p.userCapacity==='50to100'?'50–100': '100+';
+        return `
+          <div class="prop-card">
+            <img class="prop-thumb" src="${p.imageUrl||''}" onerror="this.style.display='none'" />
+            <div style="flex:1">
+              <div style="display:flex;justify-content:space-between;gap:8px;align-items:center">
+                <b>${name}</b>
+                <span class="badge">${p.active!==false?'Ativa':'Inativa'}</span>
+              </div>
+              <div class="sub" style="font-size:12px;margin-top:4px">${mods}</div>
+              <div class="sub" style="font-size:12px;margin-top:2px">Capacidade: ${capLabel}</div>
+              <div class="prop-actions">
+                <button class="btn-sm btn-edit" onclick="openPropertyModal('${p.key}')">Editar</button>
+                <button class="btn-sm btn-delete" onclick="deletePropertyConfirm('${p.key}')">Excluir</button>
+              </div>
+            </div>
+          </div>`;
+      }).join('');
+    }
+
+    function openPropertyModal(key){
+      CURRENT_EDITING_PROPERTY_KEY = key || null;
+      const lang = document.getElementById('langSelect').value;
+      const L = I18N_ADMIN[lang] || I18N_ADMIN.pt;
+      const HOTELS = HOTELS_I18N?.[lang] || HOTELS_I18N?.pt || DEFAULT_HOTELS.pt;
+      const prop = key ? (IluxProps.getProperty(key)||{}) : {};
+      document.getElementById('propModalTitle').innerText = key ? (L.propModalTitleEdit||'Editar Propriedade') : (L.propModalTitleNew||'Nova Propriedade');
+      // Build property key select
+      const sel = document.getElementById('propKey');
+      sel.innerHTML = Object.entries(HOTELS).map(([k,label])=>`<option value="${k}">${label}</option>`).join('');
+      sel.value = prop.key || sel.value;
+      sel.disabled = !!key; // cannot change key on edit
+      document.getElementById('propImageUrl').value = prop.imageUrl || '';
+      document.getElementById('propCapacity').value = prop.userCapacity || 'to30';
+      document.getElementById('propActive').checked = prop.active!==false;
+      const MOD = IluxAuth.MODULE_NAMES[lang] || IluxAuth.MODULE_NAMES.pt;
+      const purchased = prop.modulesPurchased || [];
+      document.getElementById('propModules').innerHTML = Object.values(IluxAuth.MODULES).map(m=>{
+        const checked = purchased.includes(m) ? 'checked' : '';
+        return `<div class="module-checkbox"><input type="checkbox" id="pm_${m}" value="${m}" ${checked}><label for="pm_${m}">${MOD[m]||m}</label></div>`;
+      }).join('');
+      document.getElementById('propertyModal').classList.add('show');
+    }
+
+    function closePropertyModal(e){
+      if(e && e.target && e.target.id==='propertyModal'){
+        document.getElementById('propertyModal').classList.remove('show');
+        return;
+      }
+      document.getElementById('propertyModal').classList.remove('show');
+    }
+
+    function saveProperty(){
+      const lang = document.getElementById('langSelect').value;
+      const L = I18N_ADMIN[lang] || I18N_ADMIN.pt;
+      const key = CURRENT_EDITING_PROPERTY_KEY || document.getElementById('propKey').value;
+      const imageUrl = document.getElementById('propImageUrl').value.trim();
+      const userCapacity = document.getElementById('propCapacity').value;
+      const active = !!document.getElementById('propActive').checked;
+      const modulesPurchased = [];
+      Object.values(IluxAuth.MODULES).forEach(m=>{ const cb=document.getElementById(`pm_${m}`); if(cb && cb.checked) modulesPurchased.push(m); });
+      const r = IluxProps.upsertProperty({key, imageUrl, userCapacity, active, modulesPurchased});
+      if(r.success){ alert(L.successProperty||'Propriedade salva com sucesso!'); closePropertyModal(); renderProperties(); }
+    }
+
+    function deletePropertyConfirm(key){
+      const lang = document.getElementById('langSelect').value;
+      const L = I18N_ADMIN[lang] || I18N_ADMIN.pt;
+      if(!confirm(L.confirmDeleteProperty||'Excluir esta propriedade?')) return;
+      const r = IluxProps.deleteProperty(key);
+      if(r.success){ alert(L.successPropertyDelete||'Propriedade excluída.'); renderProperties(); }
+    }
+
+    // Initialize
+    window.addEventListener('DOMContentLoaded', async () => {
+      await loadAdminI18N();
+      const saved = localStorage.getItem('ilux_lang') || 'pt';
+      document.getElementById('langSelect').value = saved;
+      applyAdminLang();
+      renderUsers();
+      renderProperties();
+    });
+  </script>
+</body>
+</html>

@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Check-in / Check-out - IluxSys PMS</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div class="fd-container">
+    <div class="fd-header">
+      <h1 data-i18n="fdTitle">Check-in / Check-out</h1>
+      <div class="fd-actions" style="display:flex;gap:8px;align-items:center">
+        <a class="btn" href="index.html#pms" title="Voltar ao Card PMS">← PMS</a>
+        <select id="pmsModuleSwitcher" class="select" style="padding:8px;border-radius:8px;border:1px solid #e2e8f0"></select>
+      </div>
+    </div>
+
+    <div class="fd-columns">
+      <!-- Arrivals -->
+      <section class="fd-card" id="fdArrivalsCard">
+        <header>
+          <span>📥 <span data-i18n="fdArrivals">Chegadas Hoje</span></span>
+          <span class="badge badge-emerald" id="fdArrivalsCount">0</span>
+        </header>
+        <div class="fd-list" id="fdArrivalsList"></div>
+        <div class="fd-footer" data-i18n="fdArrivalsHint">Reservas com check-in hoje (confirmadas/pendentes).</div>
+      </section>
+
+      <!-- In-House -->
+      <section class="fd-card" id="fdInHouseCard">
+        <header>
+          <span>🏨 <span data-i18n="fdInHouse">Hóspedes In-House</span></span>
+          <span class="badge badge-blue" id="fdInHouseCount">0</span>
+        </header>
+        <div class="fd-list" id="fdInHouseList"></div>
+        <div class="fd-footer" data-i18n="fdInHouseHint">Hóspedes com check-in realizado.</div>
+      </section>
+
+      <!-- Departures -->
+      <section class="fd-card" id="fdDeparturesCard">
+        <header>
+          <span>📤 <span data-i18n="fdDepartures">Saídas Hoje</span></span>
+          <span class="badge badge-amber" id="fdDeparturesCount">0</span>
+        </header>
+        <div class="fd-list" id="fdDeparturesList"></div>
+        <div class="fd-footer" data-i18n="fdDeparturesHint">Hóspedes com saída prevista para hoje.</div>
+      </section>
+    </div>
+  </div>
+
+  <script src="pms-modules.js"></script>
+  <script src="pms-hotel-inventory.js"></script>
+  <script src="pms-reservations.js"></script>
+  <script src="pms-integrations.js"></script>
+  <script src="pms-frontdesk.js"></script>
+  <script>
+    // Simple module switcher navigation
+    (function(){
+      const sel = document.getElementById('pmsModuleSwitcher');
+      if(sel){ sel.addEventListener('change', ()=>{ window.location.href = sel.value; }); }
+    })();
+  </script>
+</body>
+</html>

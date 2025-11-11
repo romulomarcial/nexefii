@@ -1,0 +1,403 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>🧪 Property Dashboard - Quick Test</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      color: #1e293b;
+      padding: 40px 20px;
+    }
+    .container {
+      max-width: 900px;
+      margin: 0 auto;
+      background: white;
+      border-radius: 16px;
+      padding: 40px;
+      box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+    }
+    h1 {
+      font-size: 32px;
+      margin-bottom: 8px;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      background-clip: text;
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+    .subtitle {
+      color: #64748b;
+      margin-bottom: 32px;
+      font-size: 14px;
+    }
+    .test-section {
+      background: #f8fafc;
+      border-radius: 12px;
+      padding: 20px;
+      margin-bottom: 20px;
+      border-left: 4px solid #667eea;
+    }
+    .test-section h2 {
+      font-size: 18px;
+      margin-bottom: 12px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .test-result {
+      padding: 12px;
+      border-radius: 8px;
+      margin-bottom: 8px;
+      font-family: monospace;
+      font-size: 13px;
+    }
+    .test-result.success {
+      background: #dcfce7;
+      border: 1px solid #86efac;
+      color: #166534;
+    }
+    .test-result.error {
+      background: #fee2e2;
+      border: 1px solid #fca5a5;
+      color: #991b1b;
+    }
+    .test-result.warning {
+      background: #fef3c7;
+      border: 1px solid #fde047;
+      color: #854d0e;
+    }
+    .test-result.info {
+      background: #dbeafe;
+      border: 1px solid #93c5fd;
+      color: #1e40af;
+    }
+    button {
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      color: white;
+      border: none;
+      padding: 12px 24px;
+      border-radius: 8px;
+      font-size: 14px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: transform 0.2s ease;
+      margin-right: 8px;
+      margin-bottom: 8px;
+    }
+    button:hover {
+      transform: translateY(-2px);
+    }
+    button:active {
+      transform: translateY(0);
+    }
+    .actions {
+      margin-top: 32px;
+      padding-top: 24px;
+      border-top: 2px solid #e2e8f0;
+    }
+    .badge {
+      display: inline-block;
+      padding: 4px 8px;
+      border-radius: 4px;
+      font-size: 11px;
+      font-weight: 600;
+      text-transform: uppercase;
+    }
+    .badge.pass { background: #86efac; color: #166534; }
+    .badge.fail { background: #fca5a5; color: #991b1b; }
+    .badge.warn { background: #fde047; color: #854d0e; }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>🧪 Property Dashboard - Quick Test</h1>
+    <p class="subtitle">Teste rápido de integridade do sistema</p>
+
+    <div class="test-section">
+      <h2>📦 1. Verificação de Arquivos</h2>
+      <div id="fileTests"></div>
+    </div>
+
+    <div class="test-section">
+      <h2>🔐 2. Verificação de Autenticação</h2>
+      <div id="authTests"></div>
+    </div>
+
+    <div class="test-section">
+      <h2>🏨 3. Verificação de Propriedades</h2>
+      <div id="propertyTests"></div>
+    </div>
+
+    <div class="test-section">
+      <h2>⚡ 4. Verificação de Sistema</h2>
+      <div id="systemTests"></div>
+    </div>
+
+    <div class="actions">
+      <button onclick="runAllTests()">🔄 Executar Testes</button>
+      <button onclick="clearStorage()">🗑️ Limpar LocalStorage</button>
+      <button onclick="seedData()">🌱 Criar Dados Teste</button>
+      <button onclick="window.location.href='index.html'">🏠 Ir para Index</button>
+    </div>
+  </div>
+
+  <script>
+    let testResults = {
+      pass: 0,
+      fail: 0,
+      warn: 0
+    };
+
+    function addResult(containerId, message, type = 'info') {
+      const container = document.getElementById(containerId);
+      const div = document.createElement('div');
+      div.className = `test-result ${type}`;
+      
+      const icon = {
+        success: '✅',
+        error: '❌',
+        warning: '⚠️',
+        info: 'ℹ️'
+      }[type];
+      
+      div.textContent = `${icon} ${message}`;
+      container.appendChild(div);
+
+      if (type === 'success') testResults.pass++;
+      if (type === 'error') testResults.fail++;
+      if (type === 'warning') testResults.warn++;
+    }
+
+    function testFiles() {
+      const container = document.getElementById('fileTests');
+      container.innerHTML = '';
+
+      // Teste de scripts carregados
+      const scripts = [
+        'property-dashboard-manager.js',
+        'properties.js',
+        'auth.js'
+      ];
+
+      let scriptsLoaded = 0;
+      document.querySelectorAll('script').forEach(script => {
+        scripts.forEach(name => {
+          if (script.src && script.src.includes(name)) {
+            scriptsLoaded++;
+          }
+        });
+      });
+
+      if (scriptsLoaded === 0) {
+        addResult('fileTests', 'AVISO: Esta página não carrega os scripts do sistema', 'warning');
+        addResult('fileTests', 'Execute os testes na página index.html', 'info');
+      } else {
+        addResult('fileTests', `${scriptsLoaded} scripts detectados`, 'success');
+      }
+
+      // Teste de objetos globais
+      if (typeof PropertyDashboard !== 'undefined') {
+        addResult('fileTests', 'PropertyDashboard carregado', 'success');
+      } else {
+        addResult('fileTests', 'PropertyDashboard não encontrado (execute em index.html)', 'warning');
+      }
+    }
+
+    function testAuth() {
+      const container = document.getElementById('authTests');
+      container.innerHTML = '';
+
+      try {
+        const usersRaw = localStorage.getItem('iluxsys_users');
+        if (!usersRaw) {
+          addResult('authTests', 'Nenhum usuário encontrado no localStorage', 'error');
+          return;
+        }
+
+        const users = JSON.parse(usersRaw);
+        addResult('authTests', `${users.length} usuários encontrados`, 'success');
+
+        // Verificar usuários importantes
+        const master = users.find(u => u.username === 'master');
+        const admin = users.find(u => u.username === 'admin');
+        const demo = users.find(u => u.username === 'demo');
+
+        if (master) {
+          addResult('authTests', 'Usuário master: ✅', 'success');
+          if (master.properties && Array.isArray(master.properties)) {
+            addResult('authTests', `master.properties = ${JSON.stringify(master.properties)}`, 'info');
+          }
+        } else {
+          addResult('authTests', 'Usuário master: ❌ não encontrado', 'error');
+        }
+
+        if (admin) {
+          addResult('authTests', 'Usuário admin: ✅', 'success');
+        } else {
+          addResult('authTests', 'Usuário admin: ❌ não encontrado', 'error');
+        }
+
+        if (demo) {
+          addResult('authTests', 'Usuário demo: ✅', 'success');
+          if (demo.properties && Array.isArray(demo.properties)) {
+            addResult('authTests', `demo.properties = ${JSON.stringify(demo.properties)}`, 'info');
+          }
+        } else {
+          addResult('authTests', 'Usuário demo: ⚠️ não encontrado', 'warning');
+        }
+
+        // Verificar usuário atual
+        const currentUserRaw = localStorage.getItem('currentUser');
+        if (currentUserRaw) {
+          const currentUser = JSON.parse(currentUserRaw);
+          addResult('authTests', `Usuário logado: ${currentUser.username} (${currentUser.role})`, 'info');
+        } else {
+          addResult('authTests', 'Nenhum usuário logado', 'warning');
+        }
+
+      } catch (e) {
+        addResult('authTests', `Erro ao ler dados: ${e.message}`, 'error');
+      }
+    }
+
+    function testProperties() {
+      const container = document.getElementById('propertyTests');
+      container.innerHTML = '';
+
+      try {
+        const propsRaw = localStorage.getItem('iluxsys_properties');
+        if (!propsRaw) {
+          addResult('propertyTests', 'Nenhuma propriedade encontrada', 'error');
+          return;
+        }
+
+        const props = JSON.parse(propsRaw);
+        const propArray = Object.values(props);
+        
+        addResult('propertyTests', `${propArray.length} propriedades no sistema`, 'success');
+
+        // Verificar cada propriedade
+        propArray.forEach(prop => {
+          const deployed = prop.deployed ? '✅ IMPLANTADA' : '⏳ Não implantada';
+          const active = prop.active ? '✅ Ativa' : '❌ Inativa';
+          
+          const hasAllFields = 
+            prop.key && 
+            prop.name && 
+            prop.modulesPurchased && 
+            prop.userCapacity !== undefined &&
+            prop.deployed !== undefined &&
+            prop.active !== undefined;
+
+          if (hasAllFields) {
+            addResult('propertyTests', 
+              `${prop.name}: ${deployed}, ${active}, ${prop.modulesPurchased.length} módulos`, 
+              'success'
+            );
+          } else {
+            addResult('propertyTests', 
+              `${prop.name}: ⚠️ Dados incompletos`, 
+              'warning'
+            );
+          }
+
+          // Verificar campos novos
+          if (prop.roomCount) {
+            addResult('propertyTests', `  ➜ ${prop.roomCount} quartos`, 'info');
+          }
+          if (prop.location) {
+            addResult('propertyTests', `  ➜ ${prop.location.city}, ${prop.location.country}`, 'info');
+          }
+        });
+
+        // Contar implantadas
+        const deployed = propArray.filter(p => p.deployed && p.active);
+        addResult('propertyTests', 
+          `${deployed.length} propriedades implantadas e ativas (visíveis no dashboard)`, 
+          deployed.length > 0 ? 'success' : 'warning'
+        );
+
+      } catch (e) {
+        addResult('propertyTests', `Erro ao ler propriedades: ${e.message}`, 'error');
+      }
+    }
+
+    function testSystem() {
+      const container = document.getElementById('systemTests');
+      container.innerHTML = '';
+
+      // Teste de localStorage disponível
+      if (typeof Storage !== 'undefined') {
+        addResult('systemTests', 'LocalStorage: disponível', 'success');
+      } else {
+        addResult('systemTests', 'LocalStorage: não disponível', 'error');
+      }
+
+      // Teste de uso de storage
+      try {
+        let total = 0;
+        for (let key in localStorage) {
+          if (localStorage.hasOwnProperty(key)) {
+            total += localStorage[key].length;
+          }
+        }
+        const mb = (total / 1024 / 1024).toFixed(2);
+        addResult('systemTests', `Uso de localStorage: ${mb} MB`, 'info');
+        
+        if (total > 4 * 1024 * 1024) {
+          addResult('systemTests', '⚠️ Uso alto de storage (> 4MB)', 'warning');
+        }
+      } catch (e) {
+        addResult('systemTests', 'Não foi possível calcular uso de storage', 'warning');
+      }
+
+      // Teste de cache
+      if (typeof PropertyDashboard !== 'undefined' && PropertyDashboard.initialized) {
+        addResult('systemTests', 'PropertyDashboard: inicializado', 'success');
+        addResult('systemTests', `Propriedades carregadas: ${PropertyDashboard.properties.length}`, 'info');
+      } else {
+        addResult('systemTests', 'PropertyDashboard: não inicializado (execute em index.html)', 'info');
+      }
+
+      // Resumo final
+      const total = testResults.pass + testResults.fail + testResults.warn;
+      addResult('systemTests', 
+        `Resumo: ${testResults.pass} ✅ | ${testResults.fail} ❌ | ${testResults.warn} ⚠️ | Total: ${total}`, 
+        testResults.fail > 0 ? 'error' : 'success'
+      );
+    }
+
+    function runAllTests() {
+      testResults = { pass: 0, fail: 0, warn: 0 };
+      testFiles();
+      testAuth();
+      testProperties();
+      testSystem();
+    }
+
+    function clearStorage() {
+      if (confirm('⚠️ Isso irá APAGAR TODOS os dados do localStorage. Continuar?')) {
+        localStorage.clear();
+        alert('✅ LocalStorage limpo! Recarregue a página.');
+        location.reload();
+      }
+    }
+
+    function seedData() {
+      if (confirm('Isso irá criar dados de teste. Continuar?')) {
+        // Força re-seed
+        localStorage.removeItem('iluxsys_users');
+        localStorage.removeItem('iluxsys_properties');
+        
+        alert('✅ Dados removidos. Recarregue index.html para criar novos dados.');
+      }
+    }
+
+    // Executar testes ao carregar
+    window.addEventListener('DOMContentLoaded', runAllTests);
+  </script>
+</body>
+</html>

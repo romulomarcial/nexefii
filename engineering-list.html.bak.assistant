@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>iLuxSys · Lista de Quartos</title>
+    <link rel="stylesheet" href="style.css">
+    <script src="auth.js"></script>
+    <script>
+      // Auth guard - redirect to login if not authenticated
+      if(!IluxAuth.isAuthenticated()) {
+        window.location.href = 'login.html';
+      }
+      // Module permission check
+      if(!IluxAuth.hasModuleAccess('engineering')) {
+        alert('Você não tem permissão para acessar o módulo de Engenharia.');
+        window.location.href = 'index.html';
+      }
+    </script>
+    <style>
+        .filter-bar {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            margin-bottom: 24px;
+            padding: 16px;
+            background: var(--bg-alt);
+            border-radius: 8px;
+        }
+        .filter-bar select {
+            min-width: 200px;
+            padding: 8px 12px;
+            border-radius: 6px;
+            border: 1px solid var(--line);
+            background: var(--bg);
+        }
+        .room-grid {
+            display: grid;
+            gap: 16px;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+        }
+        .room-card {
+            background: var(--bg);
+            border: 1px solid var(--line);
+            border-radius: 8px;
+            padding: 16px;
+            transition: all 0.2s;
+        }
+        .room-card:hover {
+            border-color: var(--primary);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+        }
+        .room-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 12px;
+            padding-bottom: 12px;
+            border-bottom: 1px solid var(--line);
+        }
+        .room-number {
+            font-size: 1.2em;
+            font-weight: 500;
+        }
+        .room-status {
+            padding: 4px 8px;
+            border-radius: 4px;
+            font-size: 0.9em;
+        }
+        .status-occupied { background: #fef2f2; color: #ef4444; }
+        .status-available { background: #f0fdf4; color: #22c55e; }
+        .room-info {
+            display: grid;
+            gap: 8px;
+        }
+        .info-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 0.9em;
+        }
+        .info-label {
+            color: var(--muted);
+        }
+        .temp-value {
+            display: flex;
+            align-items: center;
+            gap: 4px;
+        }
+        .temp-value.cool { color: #3b82f6; }
+        .temp-value.heat { color: #ef4444; }
+        .summary-stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 16px;
+            margin-bottom: 24px;
+        }
+        .stat-card {
+            background: var(--bg);
+            border: 1px solid var(--line);
+            border-radius: 8px;
+            padding: 16px;
+            text-align: center;
+        }
+        .stat-value {
+            font-size: 1.5em;
+            font-weight: 500;
+            color: var(--primary);
+            margin: 8px 0;
+        }
+        .stat-label {
+            font-size: 0.9em;
+            color: var(--muted);
+        }
+        .back-button {
+            margin-bottom: 24px;
+        }
+    </style>
+</head>
+<body>
+    <div id="loadingOverlay" class="loading-overlay">
+        <div class="loading-spinner"></div>
+    </div>
+    <header>
+        <div class="brand">
+            <img src="assets/logo_iluxsys.png">
+        </div>
+        <div style="display:flex;align-items:center;gap:8px">
+            <select id="langSelect" onchange="changeLanguage(this.value)" style="padding:6px;border-radius:8px;border:1px solid var(--line)">
+                <option value="pt">Português</option>
+                <option value="en">English</option>
+                <option value="es">Español</option>
+            </select>
+            <button class="btn ghost" onclick="window.close()">Fechar</button>
+        </div>
+    </header>
+    <div class="container">
+        <div class="card">
+            <div class="back-button">
+                <button class="btn ghost" onclick="window.close()">
+                    <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+                        <path d="M10 12L6 8L10 4" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                    </svg>
+                    Voltar
+                </button>
+            </div>
+
+            <div class="summary-stats">
+                <div class="stat-card">
+                    <div class="stat-label">Total de Quartos</div>
+                    <div class="stat-value" id="totalRooms">0</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-label">Ocupados</div>
+                    <div class="stat-value" id="occupiedRooms">0</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-label">Temperatura Média</div>
+                    <div class="stat-value" id="avgTemp">--°C</div>
+                </div>
+            </div>
+
+            <div class="filter-bar">
+                <select id="categoryFilter" onchange="updateList()">
+                    <option value="hvac_on">HVAC Ligado</option>
+                    <option value="hvac_cool">Resfriamento</option>
+                    <option value="hvac_heat">Aquecimento</option>
+                    <option value="hvac_auto">Automático</option>
+                    <option value="hvac_off">HVAC Desligado</option>
+                </select>
+                <select id="floorFilter" onchange="updateList()">
+                    <option value="all">Todos os Andares</option>
+                    <option value="1">1º Andar</option>
+                    <option value="2">2º Andar</option>
+                    <option value="3">3º Andar</option>
+                </select>
+                <select id="sortBy" onchange="updateList()">
+                    <option value="room">Ordenar por Quarto</option>
+                    <option value="temp">Ordenar por Temperatura</option>
+                    <option value="update">Ordenar por Atualização</option>
+                </select>
+            </div>
+
+            <div id="roomGrid" class="room-grid">
+                <!-- Room cards will be populated by JavaScript -->
+            </div>
+        </div>
+    </div>
+
+    <script src="app.js" defer></script>
+    <script src="engineering-list.js" defer></script>
+</body>
+</html>

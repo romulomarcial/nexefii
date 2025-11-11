@@ -1,0 +1,81 @@
+{
+  "name": "NEXEFII - Advanced Hospitality Management System",
+  "short_name": "NEXEFII",
+  "description": "Next-generation multi-tenant hospitality platform with PMS, EMS, Housekeeping, and Engineering modules",
+  "start_url": "/shell.html",
+  "display": "standalone",
+  "background_color": "#1a1a1a",
+  "theme_color": "#E42121",
+  "orientation": "any",
+  "scope": "/",
+
+  "icons": [
+    {
+  "src": "assets/Nexefii_logo_3d-official.png",
+      "sizes": "1024x1024",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+  "src": "assets/Nexefii_logo_3d-official.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+  "src": "assets/Nexefii_logo_3d-official.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any"
+    }
+  ],
+  "categories": [
+    "business",
+    "productivity",
+    "utilities"
+  ],
+  "screenshots": [
+    {
+  "src": "assets/screenshots/master-control.png",
+      "sizes": "1280x720",
+      "type": "image/png",
+      "label": "Master Control Dashboard"
+    },
+    {
+  "src": "assets/screenshots/property-management.png",
+      "sizes": "1280x720",
+      "type": "image/png",
+      "label": "Property Management"
+    }
+  ],
+  "shortcuts": [
+    {
+      "name": "Master Control",
+      "short_name": "Control",
+      "description": "Open Master Control Dashboard",
+      "url": "/index.html",
+      "icons": [
+        {
+      "src": "assets/Nexefii_logo_3d-official.png",
+          "sizes": "96x96"
+        }
+      ]
+    },
+    {
+      "name": "Property Backups",
+      "short_name": "Backups",
+      "description": "Manage Property Backups",
+      "url": "/index.html#backups",
+      "icons": [
+        {
+      "src": "assets/icons/backup-icon.png",
+          "sizes": "96x96"
+        }
+      ]
+    }
+  ],
+  "related_applications": [],
+  
+  "lang": "en-US",
+  "dir": "ltr"
+}

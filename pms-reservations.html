@@ -1,0 +1,345 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Reservas - IluxSys PMS</title>
+  <link rel="stylesheet" href="style.css">
+  
+</head>
+<body>
+  <div class="reservation-container">
+    <!-- Left Sidebar -->
+    <div class="reservation-sidebar">
+      <div class="sidebar-section">
+        <h3 data-i18n="resFilters">Filtros</h3>
+        
+        <div class="filter-group">
+          <label for="filterDateFrom" data-i18n="resDateFrom">Data de Check-in</label>
+          <input type="date" id="filterDateFrom">
+        </div>
+
+        <div class="filter-group">
+          <label for="filterDateTo" data-i18n="resDateTo">Data de Check-out</label>
+          <input type="date" id="filterDateTo">
+        </div>
+
+        <div class="filter-group">
+          <label for="filterStatus" data-i18n="resStatus">Status</label>
+          <select id="filterStatus">
+            <option value="" data-i18n="resAllStatuses">Todos</option>
+            <option value="confirmed" data-i18n="resConfirmed">Confirmada</option>
+            <option value="pending" data-i18n="resPending">Pendente</option>
+            <option value="checked_in" data-i18n="resCheckedIn">Check-in</option>
+            <option value="checked_out" data-i18n="resCheckedOut">Check-out</option>
+            <option value="cancelled" data-i18n="resCancelled">Cancelada</option>
+          </select>
+        </div>
+
+        <div class="filter-group">
+          <label for="filterRoomType" data-i18n="resRoomType">Tipo de Quarto</label>
+          <select id="filterRoomType">
+            <option value="" data-i18n="resAllRooms">Todos</option>
+            <option value="standard" data-i18n="resStandard">Standard</option>
+            <option value="deluxe" data-i18n="resDeluxe">Deluxe</option>
+            <option value="suite" data-i18n="resSuite">Suíte</option>
+          </select>
+        </div>
+
+        <div class="filter-group">
+          <label for="filterSource" data-i18n="resSource">Canal</label>
+          <select id="filterSource">
+            <option value="" data-i18n="resAllChannels">Todos</option>
+            <option value="direct" data-i18n="resDirect">Direto</option>
+            <option value="ota" data-i18n="resOTA">OTA</option>
+            <option value="phone" data-i18n="resPhone">Telefone</option>
+            <option value="walk_in" data-i18n="resWalkIn">Walk-in</option>
+            <option value="corporate" data-i18n="resCorporate">Corporativo</option>
+          </select>
+        </div>
+
+        <button class="btn-filter" id="btnApplyFilters" data-i18n="resApplyFilters">Aplicar Filtros</button>
+      </div>
+
+      <div class="sidebar-section">
+        <h3 data-i18n="resQuickFilters">Filtros Rápidos</h3>
+        <div class="quick-filters">
+          <button class="quick-filter-btn active" data-filter="all" data-i18n="resAll">Todas</button>
+          <button class="quick-filter-btn" data-filter="in-house" data-i18n="resInHouseFilter">🏨 In-House</button>
+          <button class="quick-filter-btn" data-filter="today" data-i18n="resToday">Hoje</button>
+          <button class="quick-filter-btn" data-filter="tomorrow" data-i18n="resTomorrow">Amanhã</button>
+          <button class="quick-filter-btn" data-filter="week" data-i18n="resThisWeek">Esta Semana</button>
+          <button class="quick-filter-btn" data-filter="month" data-i18n="resThisMonth">Este Mês</button>
+        </div>
+      </div>
+
+      <div class="sidebar-section">
+        <h3 data-i18n="resAvailability">Disponibilidade</h3>
+        <div id="availabilityInfo" style="font-size: 13px; color: #475569;">
+          <p><strong id="availableRooms">--</strong> <span data-i18n="resAvailableRooms">quartos disponíveis</span></p>
+          <p><strong id="occupancyRate">--%</strong> <span data-i18n="resOccupancy">ocupação</span></p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Main Content -->
+    <div class="reservation-main">
+      <!-- Header -->
+      <div class="reservation-header">
+        <h1 data-i18n="resPageTitle">📅 Reservas</h1>
+        <div class="header-actions">
+          <a class="btn" href="index.html#pms" style="display:inline-flex;align-items:center;gap:8px;text-decoration:none;" title="Voltar ao Card PMS">← PMS</a>
+          <select id="pmsModuleSwitcher" class="select" style="padding:8px;border-radius:8px;border:1px solid #e2e8f0"></select>
+          <button class="btn" id="btnExport">
+            <span>📊</span>
+            <span data-i18n="resExport">Exportar</span>
+          </button>
+          <button class="btn btn-primary" id="btnNewReservation">
+            <span>➕</span>
+            <span data-i18n="resNewReservation">Nova Reserva</span>
+          </button>
+        </div>
+      </div>
+
+      <!-- Stats Cards -->
+      <div class="reservation-stats">
+        <div class="stat-card arrivals">
+          <h4 data-i18n="resArrivalsToday">Chegadas Hoje</h4>
+          <div class="value" id="statArrivalsValue">0</div>
+          <div class="subvalue"><span id="statArrivalsSubvalue">0</span> <span data-i18n="resRoomsReserved">quartos reservados</span></div>
+        </div>
+        <div class="stat-card departures">
+          <h4 data-i18n="resDeparturesToday">Saídas Hoje</h4>
+          <div class="value" id="statDeparturesValue">0</div>
+          <div class="subvalue"><span id="statDeparturesSubvalue">0</span> <span data-i18n="resRoomsCheckout">quartos check-out</span></div>
+        </div>
+        <div class="stat-card in-house">
+          <h4 data-i18n="resInHouse">Hóspedes</h4>
+          <div class="value" id="statInHouseValue">0</div>
+          <div class="subvalue"><span id="statInHouseSubvalue">0</span> <span data-i18n="resInHotel">no hotel</span></div>
+        </div>
+        <div class="stat-card revenue">
+          <h4 data-i18n="resRevenue">Receita Prevista</h4>
+          <div class="value" id="statRevenueValue">R$ 0</div>
+          <div class="subvalue" data-i18n="resNext30Days">próximos 30 dias</div>
+        </div>
+      </div>
+
+      <!-- Content Area -->
+      <div class="reservation-content">
+        <div class="content-toolbar">
+          <div class="view-toggles">
+            <button class="view-toggle-btn active" data-view="list">📋 <span data-i18n="resViewList">Lista</span></button>
+            <button class="view-toggle-btn" data-view="calendar">📅 <span data-i18n="resViewCalendar">Calendário</span></button>
+            <button class="view-toggle-btn" data-view="timeline">📊 <span data-i18n="resViewTimeline">Timeline</span></button>
+          </div>
+
+          <div class="search-box">
+            <input type="text" id="searchReservations" data-i18n-placeholder="resSearch" placeholder="Buscar reserva, hóspede...">
+          </div>
+        </div>
+
+        <!-- List View -->
+        <div class="reservation-list" id="reservationListView">
+          <!-- Reservations will be rendered here -->
+        </div>
+
+        <!-- Calendar View (hidden by default) -->
+        <div class="reservation-calendar" id="reservationCalendarView" style="display: none;">
+          <!-- Calendar grid will be rendered here -->
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- New Reservation Modal -->
+  <div id="newReservationModal" class="modal" style="display: none;">
+    <div class="modal-content" style="max-width: 900px; max-height: 90vh; overflow-y: auto;">
+      <div class="modal-header">
+        <h2 data-i18n="resNewResTitle">Nova Reserva</h2>
+        <button class="modal-close" id="closeNewResModal">&times;</button>
+      </div>
+      <div class="modal-body">
+        <form id="newReservationForm">
+          <!-- Guest Information -->
+          <div class="form-section">
+            <h3 data-i18n="resGuestInfo">Informações do Hóspede</h3>
+            <div class="form-grid">
+              <div class="form-group">
+                <label for="guestName" data-i18n="resGuestName">Nome Completo</label>
+                <input type="text" id="guestName" required>
+              </div>
+              <div class="form-group">
+                <label for="guestEmail" data-i18n="resGuestEmail">Email</label>
+                <input type="email" id="guestEmail" required>
+              </div>
+              <div class="form-group">
+                <label for="guestPhone" data-i18n="resGuestPhone">Telefone</label>
+                <input type="tel" id="guestPhone" required>
+              </div>
+              <div class="form-group">
+                <label for="guestDocument" data-i18n="resGuestDocument">Documento (CPF/Passaporte)</label>
+                <input type="text" id="guestDocument">
+              </div>
+              <div class="form-group">
+                <label for="guestCountry" data-i18n="resGuestCountry">País</label>
+                <input type="text" id="guestCountry" value="Brasil">
+              </div>
+            </div>
+          </div>
+
+          <!-- Stay Information -->
+          <div class="form-section">
+            <h3 data-i18n="resStayInfo">Informações da Estadia</h3>
+            <div class="form-grid">
+              <div class="form-group">
+                <label for="checkInDate" data-i18n="resCheckInDate">Data Check-in</label>
+                <input type="date" id="checkInDate" required>
+              </div>
+              <div class="form-group">
+                <label for="checkOutDate" data-i18n="resCheckOutDate">Data Check-out</label>
+                <input type="date" id="checkOutDate" required>
+              </div>
+              <div class="form-group">
+                <label for="nightsDisplay" data-i18n="resNightsCalc">Noites</label>
+                <input type="text" id="nightsDisplay" readonly style="background: #f1f5f9;">
+              </div>
+            </div>
+          </div>
+
+          <!-- Room Information -->
+          <div class="form-section">
+            <h3 data-i18n="resRoomInfo">Informações do Quarto</h3>
+            <div class="form-grid">
+              <div class="form-group">
+                <label for="roomTypeId" data-i18n="resRoomTypeSelect">Tipo de Quarto</label>
+                <select id="roomTypeId" required>
+                  <option value="">-- Selecione --</option>
+                  <option value="standard" data-i18n="resStandard">Standard</option>
+                  <option value="deluxe" data-i18n="resDeluxe">Deluxe</option>
+                  <option value="suite" data-i18n="resSuite">Suíte</option>
+                </select>
+              </div>
+              <div class="form-group">
+                <label for="adults" data-i18n="resAdults">Adultos</label>
+                <input type="number" id="adults" min="1" max="6" value="2" required>
+              </div>
+              <div class="form-group">
+                <label for="children" data-i18n="resChildren">Crianças</label>
+                <input type="number" id="children" min="0" max="4" value="0">
+              </div>
+              <div class="form-group" style="grid-column: 1 / -1;">
+                <button type="button" id="btnCheckAvailability" class="btn btn-secondary" style="width: 100%;">
+                  <span data-i18n="resBtnCheckAvailability">Verificar Disponibilidade</span>
+                </button>
+                <div id="availabilityResult" style="margin-top: 8px; font-size: 13px; font-weight: 600;"></div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Rate Information -->
+          <div class="form-section">
+            <h3 data-i18n="resRateInfo">Informações de Tarifa</h3>
+            <div class="form-grid">
+              <div class="form-group">
+                <label for="ratePlanId" data-i18n="resRatePlan">Plano Tarifário</label>
+                <select id="ratePlanId" required>
+                  <option value="rack" data-i18n="resRackRate">Tarifa Balcão</option>
+                  <option value="corporate" data-i18n="resCorporateRate">Tarifa Corporativa</option>
+                  <option value="nonRefundable" data-i18n="resNonRefundable">Não Reembolsável</option>
+                </select>
+              </div>
+              <div class="form-group">
+                <label for="ratePerNight" data-i18n="resRatePerNight">Tarifa por Noite</label>
+                <input type="number" id="ratePerNight" step="0.01" min="0" required>
+              </div>
+              <div class="form-group">
+                <label for="totalAmount" data-i18n="resTotalAmount">Total</label>
+                <input type="number" id="totalAmount" step="0.01" min="0" readonly style="background: #f1f5f9; font-weight: 600;">
+              </div>
+            </div>
+          </div>
+
+          <!-- Payment Information -->
+          <div class="form-section">
+            <h3 data-i18n="resPaymentInfo">Informações de Pagamento</h3>
+            <div class="form-grid">
+              <div class="form-group">
+                <label for="paymentMethod" data-i18n="resPaymentMethod">Método de Pagamento</label>
+                <select id="paymentMethod">
+                  <option value="credit_card" data-i18n="resCreditCard">Cartão de Crédito</option>
+                  <option value="debit_card" data-i18n="resDebitCard">Cartão de Débito</option>
+                  <option value="cash" data-i18n="resCash">Dinheiro</option>
+                  <option value="bank_transfer" data-i18n="resBankTransfer">Transferência</option>
+                </select>
+              </div>
+              <div class="form-group">
+                <label for="paymentStatus" data-i18n="resPaymentStatus">Status do Pagamento</label>
+                <select id="paymentStatus">
+                  <option value="pending" data-i18n="resPaymentPending">Pendente</option>
+                  <option value="authorized" data-i18n="resPaymentAuthorized">Autorizado</option>
+                  <option value="paid" data-i18n="resPaymentPaid">Pago</option>
+                </select>
+              </div>
+              <div class="form-group">
+                <label for="depositAmount" data-i18n="resDepositAmount">Valor do Depósito</label>
+                <input type="number" id="depositAmount" step="0.01" min="0" value="0">
+              </div>
+            </div>
+          </div>
+
+          <!-- Channel Information -->
+          <div class="form-section">
+            <h3 data-i18n="resChannelInfo">Canal de Reserva</h3>
+            <div class="form-grid">
+              <div class="form-group">
+                <label for="source" data-i18n="resBookingSource">Origem da Reserva</label>
+                <select id="source">
+                  <option value="direct" data-i18n="resDirect">Direto</option>
+                  <option value="ota" data-i18n="resOTA">OTA</option>
+                  <option value="phone" data-i18n="resPhone">Telefone</option>
+                  <option value="walk_in" data-i18n="resWalkIn">Walk-in</option>
+                  <option value="corporate" data-i18n="resCorporate">Corporativo</option>
+                </select>
+              </div>
+              <div class="form-group">
+                <label for="otaName" data-i18n="resOTAName">Nome da OTA (se aplicável)</label>
+                <input type="text" id="otaName">
+              </div>
+            </div>
+          </div>
+
+          <!-- Special Requests -->
+          <div class="form-section">
+            <h3 data-i18n="resSpecialRequests">Solicitações Especiais</h3>
+            <div class="form-group">
+              <textarea id="specialRequests" rows="3" data-i18n-placeholder="resSpecialRequestsPlaceholder" placeholder="Ex: Cama extra, berço, andar alto..."></textarea>
+            </div>
+          </div>
+
+          <!-- Form Actions -->
+          <div class="form-actions">
+            <button type="button" id="btnCancelNewRes" class="btn btn-secondary" data-i18n="resBtnCancel">Cancelar</button>
+            <button type="submit" class="btn btn-primary" data-i18n="resBtnSave">Salvar Reserva</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  
+
+  <!-- Scripts -->
+  <script src="pms-modules.js"></script>
+  <script src="pms-hotel-inventory.js"></script>
+  <script src="pms-reservations.js"></script>
+  <script src="pms-production-setup.js"></script>
+  <script src="pms-reservations-ui.js"></script>
+  <script>
+    (function(){
+      const sel = document.getElementById('pmsModuleSwitcher');
+      if(sel){ sel.addEventListener('change', ()=>{ window.location.href = sel.value; }); }
+    })();
+  </script>
+</body>
+</html>
