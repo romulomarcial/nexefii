@@ -2,7 +2,7 @@
   "name": "nexefii-dev-server",
   "version": "1.0.0",
   "private": true,
-  "description": "Dev static server for NEXEFII (iluxsys)",
+  "description": "Dev static server for NEXEFII (nexefii)",
   "scripts": {
     "start": "node server.js"
   },
@@ -10,3 +10,4 @@
     "puppeteer": "^24.29.1"
   }
 }
+

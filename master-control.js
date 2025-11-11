@@ -11,7 +11,7 @@ class MasterControlSystem {
     this.versions = [];
     this.logs = [];
     this.propertySchedules = {};
-    this.lang = (localStorage.getItem('ilux_lang') || 'pt').toLowerCase();
+  this.lang = (localStorage.getItem('ilux_lang') || 'pt').toLowerCase();
     this.i18n = null;
     this.initSystem();
   }
@@ -146,7 +146,7 @@ class MasterControlSystem {
   applyLang() {
     try {
       document.documentElement.lang = this.lang;
-  document.getElementById('pageTitle').textContent = this.t('title','Painel Master') + ' - IluxSys';
+  document.getElementById('pageTitle').textContent = this.t('title','Painel Master') + ' - nexefii';
       // Map data-i18n keys
       document.querySelectorAll('[data-i18n]').forEach(el => {
         const key = el.getAttribute('data-i18n');
@@ -558,7 +558,7 @@ class MasterControlSystem {
     var configsRaw = this.getAllLocalStorageByPrefix('config_');
     var settingsRaw = this.getAllLocalStorageByPrefix('settings_');
     var propertiesMap = {};
-    try { propertiesMap = JSON.parse(localStorage.getItem('iluxsys_properties')||'{}')||{}; } catch(e){ propertiesMap = {}; }
+  try { propertiesMap = JSON.parse(localStorage.getItem('nexefii_properties')||localStorage.getItem('nexefii_properties')||'{}')||{}; } catch(e){ propertiesMap = {}; }
 
     // Asset listing (paths referenciados em img/link tags do DOM)
     var assets = this.captureAssetList();
@@ -1161,7 +1161,7 @@ class MasterControlSystem {
         
         // Fallback: Tentar localStorage direto
         try {
-          var map = JSON.parse(localStorage.getItem('iluxsys_properties') || '{}');
+          var map = JSON.parse(localStorage.getItem('nexefii_properties') || localStorage.getItem('nexefii_properties') || '{}');
           var keys = Object.keys(map);
           console.log('populateBackupPropertySelect(): localStorage retornou', keys.length, 'propriedades:', keys);
           if (keys.length > 0) {
@@ -1225,7 +1225,7 @@ class MasterControlSystem {
         
         // 2) Fallback: Tentar localStorage direto
         try {
-          var map = JSON.parse(localStorage.getItem('iluxsys_properties') || '{}');
+          var map = JSON.parse(localStorage.getItem('nexefii_properties') || localStorage.getItem('nexefii_properties') || '{}');
           var keys = Object.keys(map);
           if (keys.length > 0) {
             props = keys;
@@ -2513,7 +2513,7 @@ class MasterControlSystem {
         
         // Fallback 1: Tentar localStorage direto
         try {
-          var map = JSON.parse(localStorage.getItem('iluxsys_properties') || '{}');
+          var map = JSON.parse(localStorage.getItem('nexefii_properties') || localStorage.getItem('nexefii_properties') || '{}');
           var keys = Object.keys(map);
           console.log('populatePropertySelects(): localStorage retornou', keys.length, 'propriedades:', keys);
           if (keys.length > 0) {
@@ -3082,7 +3082,7 @@ class MasterControlSystem {
       restoreArray(snap.configurations);
       restoreArray(snap.settings);
       // propriedades
-      if (snap.properties) localStorage.setItem('iluxsys_properties', JSON.stringify(snap.properties));
+  if (snap.properties) { localStorage.setItem('nexefii_properties', JSON.stringify(snap.properties)); try { localStorage.setItem('nexefii_properties', JSON.stringify(snap.properties)); } catch(e){} }
       // logs
       if (snap.logs) localStorage.setItem('master_logs', JSON.stringify(snap.logs));
       // backups referência não restaura conteúdo, apenas preserva lista original se desejado
@@ -3535,7 +3535,7 @@ class MasterControlSystem {
       // Gerar Link da propriedade
       let propertyLink;
       if (prop.deployed) {
-        const propertyUrl = `https://${prop.key}.iluxsys.com`;
+        const propertyUrl = `https://${prop.key}.nexefii.com`;
         propertyLink = `<a href="${propertyUrl}" target="_blank" title="Abrir propriedade publicada: ${propertyUrl}" style="color: #667eea; text-decoration: none; font-weight: 500;">${prop.name || prop.key}</a>`;
       } else {
         // Link para abrir propriedade local (não publicada ainda)
@@ -3688,7 +3688,7 @@ class MasterControlSystem {
     
     const username = 'admin';
     const password = `admin${propertyKey}`; // admin + nome da propriedade
-    const email = `admin@${propertyKey}.iluxsys.com`;
+    const email = `admin@${propertyKey}.nexefii.com`;
     
     // Verificar se já existe usuário admin para esta propriedade
     const allUsers = this.getAllUsers();
@@ -3761,7 +3761,7 @@ class MasterControlSystem {
     // Verificar se já está implantada
     if (property.deployed) {
       // Se já implantada, abrir URL real
-      const propertyUrl = `https://${property.key}.iluxsys.com`;
+      const propertyUrl = `https://${property.key}.nexefii.com`;
       window.open(propertyUrl, '_blank');
       return;
     }
@@ -3835,7 +3835,7 @@ class MasterControlSystem {
             <span>🔍</span> Validação Local
           </h4>
           <p style="margin: 0 0 15px 0; color: #742a2a; line-height: 1.6;">
-            Como você está em ambiente local, a URL <strong>https://${property.key}.iluxsys.com</strong> ainda não existe.
+            Como você está em ambiente local, a URL <strong>https://${property.key}.nexefii.com</strong> ainda não existe.
             Para validar a propriedade antes de publicar:
           </p>
           <ul style="margin: 0; padding-left: 25px; color: #742a2a;">
@@ -4127,7 +4127,7 @@ if (window.IluxProps && typeof window.IluxProps.listProperties === 'function') {
   console.error('❌ PROBLEMA: IluxProps não está disponível no momento da inicialização!');
   console.log('   Tentando fallback via localStorage...');
   try {
-    const map = JSON.parse(localStorage.getItem('iluxsys_properties') || '{}');
+  const map = JSON.parse(localStorage.getItem('nexefii_properties') || localStorage.getItem('nexefii_properties') || '{}');
     console.log('   localStorage contém', Object.keys(map).length, 'propriedades:', Object.keys(map));
   } catch(e) {
     console.error('   Erro ao ler localStorage:', e);
@@ -4138,3 +4138,4 @@ const masterCtrl = new MasterControlSystem();
 // Expor globalmente para handlers inline e integrações
 window.masterCtrl = masterCtrl;
 console.log('[MasterControl] masterCtrl exposto globalmente:', typeof window.masterCtrl);
+

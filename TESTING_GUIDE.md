@@ -1,78 +1,78 @@
-# 🧪 Guia de Testes - Nexefii Platform
+﻿# ðŸ§ª Guia de Testes - Nexefii Platform
 
 **Servidor:** http://localhost:8004  
 **Data:** 2025-11-09
 
 ---
 
-## 🚀 Como Iniciar
+## ðŸš€ Como Iniciar
 
 ### 1. Servidor Local
 ```powershell
-cd r:\Development\Projects\iluxsys
+cd r:\Development\Projects\nexefii
 node server.js
 ```
-✅ Servidor rodando em: **http://localhost:8004**
+âœ… Servidor rodando em: **http://localhost:8004**
 
 ---
 
-## 📋 Testes por Sprint
+## ðŸ“‹ Testes por Sprint
 
-### ✅ Sprint 3: Image Upload + UX
-**Página de teste:** `http://localhost:8004/index.html`
+### âœ… Sprint 3: Image Upload + UX
+**PÃ¡gina de teste:** `http://localhost:8004/index.html`
 
 **O que testar:**
 1. **Upload de Imagem via Galeria**
-   - Clicar em botão de upload
-   - Selecionar imagem da galeria (6 SVGs disponíveis)
-   - ✅ Preview deve aparecer
-   - ✅ Imagem deve ser salva
+   - Clicar em botÃ£o de upload
+   - Selecionar imagem da galeria (6 SVGs disponÃ­veis)
+   - âœ… Preview deve aparecer
+   - âœ… Imagem deve ser salva
 
 2. **Upload de Arquivo**
-   - Arrastar arquivo para área de drop
-   - ✅ Feedback visual durante drag
-   - ✅ Preview da imagem
-   - ✅ Arquivo processado
+   - Arrastar arquivo para Ã¡rea de drop
+   - âœ… Feedback visual durante drag
+   - âœ… Preview da imagem
+   - âœ… Arquivo processado
 
 3. **Upload via URL**
    - Inserir URL de imagem
-   - ✅ Download e preview
-   - ✅ Salvamento correto
+   - âœ… Download e preview
+   - âœ… Salvamento correto
 
-4. **Animações**
-   - ✅ Fade-in ao carregar
-   - ✅ Hover effects nos botões
-   - ✅ Transições suaves
+4. **AnimaÃ§Ãµes**
+   - âœ… Fade-in ao carregar
+   - âœ… Hover effects nos botÃµes
+   - âœ… TransiÃ§Ãµes suaves
 
 **Resultado esperado:** 27/27 testes passando (conforme QA)
 
 ---
 
-### ✅ Sprint 4: Sync Service
-**Página de teste:** `http://localhost:8004/pages/sync-config.html`
+### âœ… Sprint 4: Sync Service
+**PÃ¡gina de teste:** `http://localhost:8004/pages/sync-config.html`
 
 **O que testar:**
 1. **Sync Manual**
    - Clicar em "Sincronizar Agora"
-   - ✅ Evento adicionado à fila
-   - ✅ Status atualizado
-   - ✅ Log de sincronização
+   - âœ… Evento adicionado Ã  fila
+   - âœ… Status atualizado
+   - âœ… Log de sincronizaÃ§Ã£o
 
 2. **Sync Agendado**
    - Selecionar modo "Agendado"
-   - Definir cron (ex: `0 2 * * *` = 2AM diário)
-   - ✅ Timer ativado
-   - ✅ Próximo sync agendado visível
+   - Definir cron (ex: `0 2 * * *` = 2AM diÃ¡rio)
+   - âœ… Timer ativado
+   - âœ… PrÃ³ximo sync agendado visÃ­vel
 
-3. **Sync Contínuo**
-   - Selecionar modo "Contínuo"
-   - ✅ Debounce de 30s ativo
-   - ✅ Auto-sync após mudanças
+3. **Sync ContÃ­nuo**
+   - Selecionar modo "ContÃ­nuo"
+   - âœ… Debounce de 30s ativo
+   - âœ… Auto-sync apÃ³s mudanÃ§as
 
-4. **Resolução de Conflitos**
+4. **ResoluÃ§Ã£o de Conflitos**
    - Criar conflito (editar mesmo registro local e remoto)
-   - ✅ Política last-write-wins aplicada
-   - ✅ Log de conflitos
+   - âœ… PolÃ­tica last-write-wins aplicada
+   - âœ… Log de conflitos
 
 **Console esperado:**
 ```
@@ -84,91 +84,91 @@ node server.js
 
 ---
 
-### ✅ Sprint 5: OTA & Rollback
-**Página de teste:** `http://localhost:8004/pages/ota-manager.html`
+### âœ… Sprint 5: OTA & Rollback
+**PÃ¡gina de teste:** `http://localhost:8004/pages/ota-manager.html`
 
 **O que testar:**
-1. **Check de Atualizações**
-   - Clicar em "Verificar Atualizações"
-   - ✅ Versão atual exibida (ex: 1.0.0)
-   - ✅ Versão disponível verificada
-   - ✅ Changelog exibido
+1. **Check de AtualizaÃ§Ãµes**
+   - Clicar em "Verificar AtualizaÃ§Ãµes"
+   - âœ… VersÃ£o atual exibida (ex: 1.0.0)
+   - âœ… VersÃ£o disponÃ­vel verificada
+   - âœ… Changelog exibido
 
 2. **Compatibilidade**
    - Verificar compatibilidade antes de aplicar
-   - ✅ Schema version validado
-   - ✅ Dependências verificadas
-   - ✅ Storage disponível checado
+   - âœ… Schema version validado
+   - âœ… DependÃªncias verificadas
+   - âœ… Storage disponÃ­vel checado
 
 3. **Aplicar Update**
    - Clicar em "Aplicar Update"
-   - ✅ Snapshot criado automaticamente
-   - ✅ Migrations executadas
-   - ✅ Versão atualizada
-   - ⏱️ Tempo: ~2s
+   - âœ… Snapshot criado automaticamente
+   - âœ… Migrations executadas
+   - âœ… VersÃ£o atualizada
+   - â±ï¸ Tempo: ~2s
 
 4. **Rollback**
    - Simular falha no update
-   - ✅ Rollback automático disparado
-   - ✅ Estado anterior restaurado
-   - ✅ Log de rollback
+   - âœ… Rollback automÃ¡tico disparado
+   - âœ… Estado anterior restaurado
+   - âœ… Log de rollback
 
 5. **Snapshots Manuais**
    - Criar snapshot manual
-   - Listar snapshots disponíveis
-   - Restaurar snapshot específico
-   - ✅ Max 5 snapshots (rotação)
+   - Listar snapshots disponÃ­veis
+   - Restaurar snapshot especÃ­fico
+   - âœ… Max 5 snapshots (rotaÃ§Ã£o)
 
 **Console esperado:**
 ```
-[OTAManager] Check: versão atual 1.0.0
-[OTAManager] Disponível: 1.1.0
-[CompatibilityChecker] Schema v1.0.0 → v1.1.0 compatível
+[OTAManager] Check: versÃ£o atual 1.0.0
+[OTAManager] DisponÃ­vel: 1.1.0
+[CompatibilityChecker] Schema v1.0.0 â†’ v1.1.0 compatÃ­vel
 [RollbackService] Snapshot criado: snap_1699524000000
 [OTAManager] Update aplicado com sucesso
 ```
 
 ---
 
-### ✅ Sprint 6: Observability
-**Página de teste:** `http://localhost:8004/pages/observability.html`
+### âœ… Sprint 6: Observability
+**PÃ¡gina de teste:** `http://localhost:8004/pages/observability.html`
 
 **O que testar:**
 1. **Dashboard Inicial**
-   - Abrir página
-   - ✅ 3 cards: Métricas, Logs, Alertas
-   - ✅ Estado inicial "Aguardando dados..."
+   - Abrir pÃ¡gina
+   - âœ… 3 cards: MÃ©tricas, Logs, Alertas
+   - âœ… Estado inicial "Aguardando dados..."
 
 2. **Iniciar Monitoramento**
-   - Clicar em "▶️ Iniciar Monitoramento"
-   - ✅ MetricsCollector iniciado (intervalo 3s)
-   - ✅ AlertManager iniciado (check 30s)
-   - ✅ Heartbeat logs a cada 5s
+   - Clicar em "â–¶ï¸ Iniciar Monitoramento"
+   - âœ… MetricsCollector iniciado (intervalo 3s)
+   - âœ… AlertManager iniciado (check 30s)
+   - âœ… Heartbeat logs a cada 5s
 
-3. **Logger em Ação**
-   - Verificar seção "Logs Recentes"
-   - ✅ Logs aparecem em tempo real
-   - ✅ Formato: `[HH:MM:SS] [LEVEL] message`
-   - ✅ Níveis: INFO, WARN, ERROR visíveis
+3. **Logger em AÃ§Ã£o**
+   - Verificar seÃ§Ã£o "Logs Recentes"
+   - âœ… Logs aparecem em tempo real
+   - âœ… Formato: `[HH:MM:SS] [LEVEL] message`
+   - âœ… NÃ­veis: INFO, WARN, ERROR visÃ­veis
 
-4. **Métricas**
-   - Verificar card "Métricas Gerais"
-   - ✅ Performance Avg (ms)
-   - ✅ Performance P95 (ms)
-   - ✅ Memory Usage (%)
-   - ⏱️ Atualização a cada 2s
+4. **MÃ©tricas**
+   - Verificar card "MÃ©tricas Gerais"
+   - âœ… Performance Avg (ms)
+   - âœ… Performance P95 (ms)
+   - âœ… Memory Usage (%)
+   - â±ï¸ AtualizaÃ§Ã£o a cada 2s
 
 5. **Alertas**
-   - Simular condição de alerta (memória >85%)
-   - ✅ Alerta dispara
-   - ✅ Card "Alertas Ativos" incrementa
-   - ✅ Histórico exibe alerta com timestamp
-   - ✅ Botão "✓ OK" para acknowledge
+   - Simular condiÃ§Ã£o de alerta (memÃ³ria >85%)
+   - âœ… Alerta dispara
+   - âœ… Card "Alertas Ativos" incrementa
+   - âœ… HistÃ³rico exibe alerta com timestamp
+   - âœ… BotÃ£o "âœ“ OK" para acknowledge
 
 6. **Export**
-   - Clicar em "📤 Exportar"
-   - ✅ Download de `observability-export.json`
-   - ✅ Arquivo contém: logger, metrics, alerts
+   - Clicar em "ðŸ“¤ Exportar"
+   - âœ… Download de `observability-export.json`
+   - âœ… Arquivo contÃ©m: logger, metrics, alerts
 
 **Console esperado:**
 ```
@@ -176,41 +176,41 @@ node server.js
 [DEBUG] Debug mode ativo
 [INFO] Observability iniciado
 [INFO] Heartbeat {category: "system"}
-[WARN] [ALERT WARNING] Alto uso de memória em 87%
+[WARN] [ALERT WARNING] Alto uso de memÃ³ria em 87%
 ```
 
 ---
 
-### ✅ Sprint 6: QA Automatizado
-**Página de teste:** `http://localhost:8004/qa-baseline/sprint6-observability-qa.html`
+### âœ… Sprint 6: QA Automatizado
+**PÃ¡gina de teste:** `http://localhost:8004/qa-baseline/sprint6-observability-qa.html`
 
 **O que acontece:**
-- ✅ 7 testes executam automaticamente ao carregar
-- ✅ Resultados aparecem em ~5s
-- ✅ Cada teste mostra: ✅ PASS ou ❌ FALHOU
+- âœ… 7 testes executam automaticamente ao carregar
+- âœ… Resultados aparecem em ~5s
+- âœ… Cada teste mostra: âœ… PASS ou âŒ FALHOU
 
-**Testes incluídos:**
-1. Logger: Níveis e Categorias
+**Testes incluÃ­dos:**
+1. Logger: NÃ­veis e Categorias
 2. Logger: Export e Subscribe
 3. MetricsCollector: Performance & Resources
-4. MetricsCollector: Análise Estatística (P95/P99)
+4. MetricsCollector: AnÃ¡lise EstatÃ­stica (P95/P99)
 5. AlertManager: Regras e Triggers
 6. AlertManager: Cooldown e Acknowledge
 7. Performance: Overhead <100ms
 
-**Resultado esperado:** 7/7 testes PASS ✅
+**Resultado esperado:** 7/7 testes PASS âœ…
 
 ---
 
-## 🎯 Testes Completos (Todas as Sprints)
+## ðŸŽ¯ Testes Completos (Todas as Sprints)
 
-### Checklist Rápido
+### Checklist RÃ¡pido
 
 ```powershell
 # 1. Servidor rodando?
 Test-NetConnection localhost -Port 8004
 
-# 2. Abrir páginas principais
+# 2. Abrir pÃ¡ginas principais
 Start-Process "http://localhost:8004/index.html"
 Start-Process "http://localhost:8004/pages/sync-config.html"
 Start-Process "http://localhost:8004/pages/ota-manager.html"
@@ -224,63 +224,64 @@ Start-Process "http://localhost:8004/qa-baseline/sprint6-observability-qa.html"
 
 Pressione **F12** (DevTools) e verifique:
 
-✅ **Sem erros 404** (todos os módulos carregaram)  
-✅ **Módulos ES6 importados** (Logger, MetricsCollector, AlertManager)  
-✅ **Logs estruturados** aparecem no console  
-✅ **Performance** não degradada (FCP <2s)
+âœ… **Sem erros 404** (todos os mÃ³dulos carregaram)  
+âœ… **MÃ³dulos ES6 importados** (Logger, MetricsCollector, AlertManager)  
+âœ… **Logs estruturados** aparecem no console  
+âœ… **Performance** nÃ£o degradada (FCP <2s)
 
 ---
 
-## 🔍 Troubleshooting
+## ðŸ” Troubleshooting
 
 ### Erro: "Failed to load module"
 **Causa:** Caminho de import incorreto  
-**Solução:** Verificar que servidor está em `r:\Development\Projects\iluxsys`
+**SoluÃ§Ã£o:** Verificar que servidor estÃ¡ em `r:\Development\Projects\nexefii`
 
 ### Erro: "Cannot read property of undefined"
-**Causa:** Módulo não carregou antes de ser usado  
-**Solução:** Verificar ordem de imports no HTML
+**Causa:** MÃ³dulo nÃ£o carregou antes de ser usado  
+**SoluÃ§Ã£o:** Verificar ordem de imports no HTML
 
-### QA não executa automaticamente
+### QA nÃ£o executa automaticamente
 **Causa:** Script de auto-run pode estar desabilitado  
-**Solução:** Clicar manualmente no botão "🚀 Executar Todos os Testes"
+**SoluÃ§Ã£o:** Clicar manualmente no botÃ£o "ðŸš€ Executar Todos os Testes"
 
-### Métricas não atualizam
-**Causa:** Monitoramento não foi iniciado  
-**Solução:** Clicar em "▶️ Iniciar Monitoramento" no dashboard
+### MÃ©tricas nÃ£o atualizam
+**Causa:** Monitoramento nÃ£o foi iniciado  
+**SoluÃ§Ã£o:** Clicar em "â–¶ï¸ Iniciar Monitoramento" no dashboard
 
 ---
 
-## 📊 Performance Esperada
+## ðŸ“Š Performance Esperada
 
-| Métrica | Target | Como Verificar |
+| MÃ©trica | Target | Como Verificar |
 |---------|--------|----------------|
 | FCP | <2s | DevTools > Performance > Record |
-| Sync Latência | <2s | Console logs de SyncService |
+| Sync LatÃªncia | <2s | Console logs de SyncService |
 | OTA Update | ~2s | Console logs de OTAManager |
 | Observability Overhead | <100ms | QA Test #7 |
 
 ---
 
-## 🎓 Dicas de Teste
+## ðŸŽ“ Dicas de Teste
 
-1. **Use Modo Incógnito:** Evita cache antigo
+1. **Use Modo IncÃ³gnito:** Evita cache antigo
 2. **Limpe localStorage:** `localStorage.clear()` no console
-3. **Monitore Network:** DevTools > Network para ver requisições
-4. **Console sempre aberto:** Logs são essenciais
+3. **Monitore Network:** DevTools > Network para ver requisiÃ§Ãµes
+4. **Console sempre aberto:** Logs sÃ£o essenciais
 5. **Teste em diferentes navegadores:** Chrome, Edge, Firefox
 
 ---
 
-## 📝 Reportar Problemas
+## ðŸ“ Reportar Problemas
 
 Se encontrar bugs, anote:
-- ✅ URL da página
-- ✅ Ação realizada
-- ✅ Erro no console (screenshot)
-- ✅ Comportamento esperado vs observado
+- âœ… URL da pÃ¡gina
+- âœ… AÃ§Ã£o realizada
+- âœ… Erro no console (screenshot)
+- âœ… Comportamento esperado vs observado
 
 ---
 
-**Última atualização:** 2025-11-09 08:52:00  
-**Servidor ativo:** ✅ http://localhost:8004
+**Ãšltima atualizaÃ§Ã£o:** 2025-11-09 08:52:00  
+**Servidor ativo:** âœ… http://localhost:8004
+

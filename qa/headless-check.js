@@ -1,90 +1,239 @@
-const fs = require('fs');
-const puppeteer = require('puppeteer');
+﻿/**
+ * qa/headless-check.js
+ * Headless smoke test para Nexefii.
+ * - Varre páginas chave
+ * - Coleta console, page errors, e respostas 4xx/5xx
+ * - Gera qa/headless-report.json
+ * - Sai com code 1 se encontrar erro crítico
+ *
+ * Personalização:
+ *  - Base URL: defina env NEXEFII_URL (ex.: http://127.0.0.1:8004)
+ *  - Páginas: ajuste o array PAGES
+ */
 
-function sleep(ms){ return new Promise(r=>setTimeout(r, ms)); }
+const fs = require("fs");
+const path = require("path");
+const puppeteer = require("puppeteer");
 
-(async ()=>{
-  const report = { timestamp: new Date().toISOString(), pages: [] };
-  const browser = await puppeteer.launch({ headless: true, args: ['--no-sandbox','--disable-setuid-sandbox'] });
-  try {
-    const page = await browser.newPage();
-    page.setDefaultNavigationTimeout(30000);
+const BASE = process.env.NEXEFII_URL || "http://127.0.0.1:8004";
+const OUT_DIR = path.join(process.cwd(), "qa");
+const OUT_FILE = path.join(OUT_DIR, "headless-report.json");
 
-    const urls = [
-      {name:'index', url:'http://127.0.0.1:8004/index.html'},
-      {name:'login', url:'http://127.0.0.1:8004/login.html'},
-      {name:'shell', url:'http://127.0.0.1:8004/shell.html'}
-    ];
+// ajuste as rotas conforme seu app
+const PAGES = [
+  "/",                 // geralmente resolve para index.html
+  "/index.html",
+  "/master-control.html",
+  "/alerts-control.html",
+  "/housekeeping-control.html",
+  "/engineering-list.html",
+];
 
-    for (const u of urls) {
-      const entry = { name: u.name, url: u.url, console: [], errors: [], requestsFailed: [] };
+function nowISO() {
+  return new Date().toISOString();
+}
 
-      page.on('console', msg => {
-        try{ entry.console.push({type: msg.type(), text: msg.text(), location: msg.location()}); }catch(e){}
-      });
-      page.on('pageerror', err => entry.errors.push({message: err.message, stack: err.stack}));
-      page.on('requestfailed', req => entry.requestsFailed.push({url: req.url(), method: req.method(), failure: req.failure() && req.failure().errorText}));
+async function run() {
+  const report = {
+    startedAt: nowISO(),
+    baseUrl: BASE,
+    pages: [],
+    summary: {
+      totalPages: 0,
+      pageErrors: 0,
+      consoleErrors: 0,
+      httpErrors: 0,
+    },
+  };
 
+  let fatalErrors = 0;
+  const browser = await puppeteer.launch({
+    headless: "new",
+    args: ["--no-sandbox", "--disable-setuid-sandbox"],
+  });
+
+  // Try to seed a demo session by performing a login on /login.html if available.
+  async function seedDemoLogin() {
+    try {
+      const p = await browser.newPage();
+      await p.goto(new URL('/login.html', BASE).toString(), { waitUntil: ['domcontentloaded','networkidle2'], timeout: 30000 }).catch(()=>null);
+      const hasUser = await p.$('#user');
+      const hasPwd = await p.$('#pwd');
+      const hasBtn = await p.$('#btnEnter');
+      if (hasUser && hasPwd && hasBtn) {
+        await p.evaluate(()=>{ localStorage.removeItem('nexefii_session'); });
+        await p.type('#user','demo@nexefii.com',{delay:30});
+        await p.type('#pwd','demo123',{delay:30});
+        await Promise.all([ p.click('#btnEnter'), p.waitForNavigation({ waitUntil: ['networkidle2'], timeout: 15000 }).catch(()=>{}) ]);
+        console.log('[headless-check] demo login attempted');
+      }
+      // Ensure demo properties and session are present for pages that expect them (master-control)
       try {
-        const res = await page.goto(u.url, { waitUntil: 'networkidle2' });
-        entry.status = res && res.status ? res.status() : null;
-      } catch (e) {
-        entry.gotoError = e.message;
-      }
-
-      // Small wait to capture late console logs
-      await sleep(700);
-
-      // If this is login page, try demo login if inputs exist
-      if (u.name === 'login'){
-        try{
-          const hasUser = await page.$('#user');
-          const hasPwd  = await page.$('#pwd');
-          const hasBtn  = await page.$('#btnEnter');
-          if (hasUser && hasPwd && hasBtn) {
-            await page.evaluate(()=>{ localStorage.removeItem('nexefii_session'); localStorage.removeItem('nexefii_lang'); });
-            await page.type('#user','demo@nexefii.com',{delay:50});
-            await page.type('#pwd','demo123',{delay:50});
-            await Promise.all([ page.click('#btnEnter'), page.waitForNavigation({ waitUntil: 'networkidle2', timeout: 10000 }).catch(()=>{}) ]);
-            // capture post-login URL
-            entry.postLoginUrl = page.url();
-          } else {
-            entry.loginAttempt = 'login form not found';
-          }
-        }catch(e){ entry.loginAttemptError = e.message }
-      }
-
-      report.pages.push(entry);
-
-      // detach event handlers to avoid duplicates
-      page.removeAllListeners('console');
-      page.removeAllListeners('pageerror');
-      page.removeAllListeners('requestfailed');
+        await p.evaluate(() => {
+          try {
+            const demoProps = {
+              "iluxSaoPaulo": { key: "iluxSaoPaulo", name: "São Paulo", active: true },
+              "iluxMiami": { key: "iluxMiami", name: "Miami", active: true }
+            };
+            localStorage.setItem('nexefii_properties', JSON.stringify(demoProps));
+            // Populate currentUser and nexefii_session for compatibility
+            const demoSession = { username: 'demo', email: 'demo@nexefii.com', properties: ['iluxSaoPaulo','iluxMiami'] };
+            localStorage.setItem('currentUser', JSON.stringify(demoSession));
+            localStorage.setItem('nexefii_session', JSON.stringify(demoSession));
+            localStorage.setItem('nexefii_session', JSON.stringify(demoSession));
+          } catch (e) { /* ignore */ }
+        });
+      } catch (e) { /* ignore */ }
+      await p.close();
+    } catch (e) {
+      console.warn('[headless-check] demo login failed:', e?.message || e);
     }
+  }
 
-    // Extra: navigate to index after login to see dashboard console state
-    try{
-      const page2 = await browser.newPage();
-      const entry = { name: 'post-login-index', url: 'http://127.0.0.1:8004/index.html', console: [], errors: [], requestsFailed: [] };
-      page2.on('console', msg => { try{ entry.console.push({type: msg.type(), text: msg.text(), location: msg.location()}); }catch(e){} });
-      page2.on('pageerror', err => entry.errors.push({message: err.message, stack: err.stack}));
-      page2.on('requestfailed', req => entry.requestsFailed.push({url: req.url(), method: req.method(), failure: req.failure() && req.failure().errorText}));
-      const r = await page2.goto('http://127.0.0.1:8004/index.html', { waitUntil: 'networkidle2' }).catch(()=>null);
-      entry.status = r && r.status ? r.status() : null;
-      await sleep(700);
-      report.pages.push(entry);
-    }catch(e){ report.postIndexError = e.message }
+  try {
+    // Seed demo session before page checks
+    await seedDemoLogin();
 
-    // write report
-    const out = JSON.stringify(report, null, 2);
-    fs.mkdirSync('qa', { recursive: true });
-    fs.writeFileSync('qa/headless-report.json', out, 'utf8');
-    console.log('Headless report saved to qa/headless-report.json');
-    console.log(out);
+    for (const route of PAGES) {
+      const url = new URL(route, BASE).toString();
+      const page = await browser.newPage();
 
-  } catch (e) {
-    console.error('Fatal error running headless check:', e);
+      const pageResult = {
+        url,
+        startedAt: nowISO(),
+        status: null,
+        metrics: {
+          console: { error: 0, warn: 0, log: 0 },
+          pageErrors: 0,
+          http4xx5xx: 0,
+        },
+        console: [],
+        pageErrors: [],
+        httpErrors: [],
+        ok: true,
+      };
+
+      // Console capture
+      page.on("console", (msg) => {
+        const type = msg.type();
+        const text = msg.text();
+        pageResult.console.push({ type, text });
+        if (type === "error") {
+          pageResult.metrics.console.error += 1;
+        } else if (type === "warning" || type === "warn") {
+          pageResult.metrics.console.warn += 1;
+        } else {
+          pageResult.metrics.console.log += 1;
+        }
+      });
+
+      // JS errors on page
+      page.on("pageerror", (err) => {
+        pageResult.pageErrors.push(String(err));
+        pageResult.metrics.pageErrors += 1;
+      });
+
+      // Track responses 4xx/5xx
+      page.on("response", (res) => {
+        const status = res.status();
+        if (status >= 400) {
+          pageResult.httpErrors.push({
+            url: res.url(),
+            status,
+            statusText: res.statusText?.() || "",
+          });
+          pageResult.metrics.http4xx5xx += 1;
+        }
+      });
+
+      // Navigate
+      let resp = null;
+      try {
+        resp = await page.goto(url, {
+          waitUntil: ["domcontentloaded", "networkidle2"],
+          timeout: 120_000,
+        });
+      } catch (e) {
+        pageResult.gotoError = String(e);
+      }
+
+      pageResult.status = resp ? resp.status() : null;
+
+  // Pequeno atraso para capturar logs pós-carregamento
+  // Compat: some puppeteer builds expose page.waitForTimeout, others don't.
+  // Use a lightweight sleep to remain compatible across puppeteer versions.
+  await new Promise((res) => setTimeout(res, 800));
+
+      // Decide sucesso/fracasso da página
+      const pageHasErrors =
+        pageResult.metrics.pageErrors > 0 ||
+        pageResult.metrics.console.error > 0 ||
+        pageResult.metrics.http4xx5xx > 0 ||
+        (pageResult.status && pageResult.status >= 400);
+
+      if (pageHasErrors) {
+        pageResult.ok = false;
+        fatalErrors +=
+          pageResult.metrics.pageErrors +
+          pageResult.metrics.console.error +
+          pageResult.metrics.http4xx5xx +
+          (pageResult.status && pageResult.status >= 400 ? 1 : 0);
+      }
+
+      pageResult.finishedAt = nowISO();
+      report.pages.push(pageResult);
+
+      await page.close();
+    }
   } finally {
     await browser.close();
   }
-})();
+
+  // Summary
+  report.summary.totalPages = report.pages.length;
+  report.summary.pageErrors = report.pages.reduce(
+    (acc, p) => acc + p.metrics.pageErrors,
+    0
+  );
+  report.summary.consoleErrors = report.pages.reduce(
+    (acc, p) => acc + p.metrics.console.error,
+    0
+  );
+  report.summary.httpErrors = report.pages.reduce(
+    (acc, p) => acc + p.metrics.http4xx5xx,
+    0
+  );
+  report.finishedAt = nowISO();
+
+  // Ensure qa folder exists
+  if (!fs.existsSync(OUT_DIR)) fs.mkdirSync(OUT_DIR, { recursive: true });
+  fs.writeFileSync(OUT_FILE, JSON.stringify(report, null, 2), "utf8");
+
+  // Exit code: 0 ok, 1 if any error found
+  const hasAnyError =
+    report.summary.pageErrors > 0 ||
+    report.summary.consoleErrors > 0 ||
+    report.summary.httpErrors > 0 ||
+    report.pages.some((p) => p.status && p.status >= 400);
+
+  if (hasAnyError) {
+    console.error(
+      `[headless-check] FAIL | pages=${report.summary.totalPages} ` +
+        `pageErrors=${report.summary.pageErrors} ` +
+        `consoleErrors=${report.summary.consoleErrors} ` +
+        `httpErrors=${report.summary.httpErrors}`
+    );
+    process.exit(1);
+  } else {
+    console.log(
+      `[headless-check] OK | pages=${report.summary.totalPages} ` +
+        `pageErrors=0 consoleErrors=0 httpErrors=0`
+    );
+  }
+}
+
+run().catch((e) => {
+  console.error("[headless-check] Uncaught runner error:", e);
+  process.exit(1);
+});
+

@@ -1,24 +1,24 @@
-/**
+﻿/**
  * Master Control - Enterprise Backup Integration
  * Integra EnterpriseBackupSystem e ReleaseManagementSystem no Master Control Panel
  * 
- * DECISÕES DE DESIGN:
- * 1. Separação de Responsabilidades: Lógica de backup/release isolada em classes próprias
- * 2. Multi-Tenant: Todas operações scope por propertyId
- * 3. Auditabilidade: Logs detalhados de todas operações críticas
- * 4. Confiabilidade: Validações antes de restore, backups de segurança automáticos
- * 5. Performance: Operações assíncronas, métricas em cache
+ * DECISÃ•ES DE DESIGN:
+ * 1. SeparaÃ§Ã£o de Responsabilidades: LÃ³gica de backup/release isolada em classes prÃ³prias
+ * 2. Multi-Tenant: Todas operaÃ§Ãµes scope por propertyId
+ * 3. Auditabilidade: Logs detalhados de todas operaÃ§Ãµes crÃ­ticas
+ * 4. Confiabilidade: ValidaÃ§Ãµes antes de restore, backups de seguranÃ§a automÃ¡ticos
+ * 5. Performance: OperaÃ§Ãµes assÃ­ncronas, mÃ©tricas em cache
  */
 
-// Adicionar métodos ao MasterControlSystem
+// Adicionar mÃ©todos ao MasterControlSystem
 Object.assign(MasterControlSystem.prototype, {
   
   // ========================================
-  // INICIALIZAÇÃO ENTERPRISE SYSTEMS
+  // INICIALIZAÃ‡ÃƒO ENTERPRISE SYSTEMS
   // ========================================
   
   initEnterpriseBackupSystems() {
-    console.info('🏗️ Initializing Enterprise Backup Systems...');
+    console.info('ðŸ—ï¸ Initializing Enterprise Backup Systems...');
     
     try {
       // Inicializar Enterprise Backup System
@@ -29,19 +29,19 @@ Object.assign(MasterControlSystem.prototype, {
       this.releaseManagement = new ReleaseManagementSystem(this.enterpriseBackup);
       window.releaseManagement = this.releaseManagement; // Global access for debugging
       
-      console.info('✅ Enterprise Backup Systems initialized');
+      console.info('âœ… Enterprise Backup Systems initialized');
     } catch (error) {
-      console.error('❌ Failed to initialize Enterprise Backup Systems:', error);
+      console.error('âŒ Failed to initialize Enterprise Backup Systems:', error);
       this.showToast('Erro ao inicializar sistemas enterprise', 'error');
     }
   },
   
   // ========================================
-  // INICIALIZAÇÃO UI ENTERPRISE
+  // INICIALIZAÃ‡ÃƒO UI ENTERPRISE
   // ========================================
   
   initEnterpriseUI() {
-    console.info('🎨 Initializing Enterprise UI...');
+    console.info('ðŸŽ¨ Initializing Enterprise UI...');
     
     try {
       // Property Backups Tab
@@ -53,9 +53,9 @@ Object.assign(MasterControlSystem.prototype, {
       // Releases Tab
       this.initReleasesUI();
       
-      console.info('✅ Enterprise UI initialized');
+      console.info('âœ… Enterprise UI initialized');
     } catch (error) {
-      console.error('❌ Failed to initialize Enterprise UI:', error);
+      console.error('âŒ Failed to initialize Enterprise UI:', error);
       this.showToast('Erro ao inicializar UI enterprise', 'error');
     }
   },
@@ -103,7 +103,7 @@ Object.assign(MasterControlSystem.prototype, {
     document.getElementById('btnSaveSchedule')?.addEventListener('click', () => this.savePropertyBackupSchedule());
     this.loadPropertyBackupSchedules();
 
-    // Iniciar scheduler automático
+    // Iniciar scheduler automÃ¡tico
     this.startPropertyBackupScheduler();
   },
   
@@ -116,7 +116,7 @@ Object.assign(MasterControlSystem.prototype, {
     selects.forEach(selectId => {
       const select = document.getElementById(selectId);
       if (!select) {
-        console.warn('populatePropertySelects(): Select não encontrado:', selectId);
+        console.warn('populatePropertySelects(): Select nÃ£o encontrado:', selectId);
         return;
       }
       
@@ -135,16 +135,16 @@ Object.assign(MasterControlSystem.prototype, {
         select.appendChild(option);
       });
       
-      console.log('populatePropertySelects(): Select', selectId, 'agora tem', select.options.length, 'opções');
+      console.log('populatePropertySelects(): Select', selectId, 'agora tem', select.options.length, 'opÃ§Ãµes');
     });
   },
   
   getAllProperties() {
-    // Obter propriedades de fontes múltiplas para maior robustez
+    // Obter propriedades de fontes mÃºltiplas para maior robustez
     const allProps = [];
     const seen = new Set();
     
-    // 1) Tentar IluxProps PRIMEIRO (fonte primária de propriedades)
+    // 1) Tentar IluxProps PRIMEIRO (fonte primÃ¡ria de propriedades)
     try {
       if (window.IluxProps && typeof window.IluxProps.listProperties === 'function') {
         const list = window.IluxProps.listProperties() || [];
@@ -183,7 +183,7 @@ Object.assign(MasterControlSystem.prototype, {
     // 3) Fallback: Tentar mapa persistido diretamente
     if (allProps.length === 0) {
       try {
-        const map = JSON.parse(localStorage.getItem('iluxsys_properties') || '{}') || {};
+        const map = JSON.parse(localStorage.getItem('nexefii_properties') || '{}') || {};
         const keys = Object.keys(map);
         console.log('Enterprise getAllProperties(): localStorage retornou', keys.length, 'propriedades:', keys);
         keys.forEach(id => {
@@ -376,13 +376,13 @@ Object.assign(MasterControlSystem.prototype, {
         <td><code style="font-size:11px;">${backup.checksum.substring(0, 12)}...</code></td>
         <td>
           <button class="btn btn-sm" onclick="masterCtrl.viewPropertyBackup('${backup.id}')" title="Ver detalhes">
-            <span class="icon">👁️</span>
+            <span class="icon">ðŸ‘ï¸</span>
           </button>
           <button class="btn btn-sm btn-success" onclick="masterCtrl.openPropertyRestoreWizard('${backup.id}')" title="Restaurar">
-            <span class="icon">♻️</span>
+            <span class="icon">â™»ï¸</span>
           </button>
           <button class="btn btn-sm btn-danger" onclick="masterCtrl.deletePropertyBackup('${backup.id}')" title="Excluir">
-            <span class="icon">🗑️</span>
+            <span class="icon">ðŸ—‘ï¸</span>
           </button>
         </td>
       </tr>
@@ -396,7 +396,7 @@ Object.assign(MasterControlSystem.prototype, {
   viewPropertyBackup(backupId) {
     const backup = this.enterpriseBackup.findTenantBackup(null, backupId);
     if (!backup) {
-      this.showToast('Backup não encontrado', 'error');
+      this.showToast('Backup nÃ£o encontrado', 'error');
       return;
     }
     
@@ -409,7 +409,7 @@ Object.assign(MasterControlSystem.prototype, {
       <strong>Checksum:</strong> <code>${backup.checksum}</code><br>
       <strong>Criado por:</strong> ${backup.created_by}<br>
       ${backup.parent_backup_id ? `<strong>Backup pai:</strong> ${backup.parent_backup_id}<br>` : ''}
-      <strong>Módulos:</strong> ${backup.modules.join(', ')}
+      <strong>MÃ³dulos:</strong> ${backup.modules.join(', ')}
     `;
     
     this.showCustomModal('Detalhes do Backup', details);
@@ -417,17 +417,17 @@ Object.assign(MasterControlSystem.prototype, {
   
   async deletePropertyBackup(backupId) {
     const confirmed = await this.confirmAction(
-      'Confirmar Exclusão',
-      'Tem certeza que deseja excluir este backup? Esta ação não pode ser desfeita.'
+      'Confirmar ExclusÃ£o',
+      'Tem certeza que deseja excluir este backup? Esta aÃ§Ã£o nÃ£o pode ser desfeita.'
     );
     
     if (!confirmed) return;
     
     try {
       // Find and remove backup
-      // DECISÃO: Soft delete - marcar como deleted ao invés de remover fisicamente
+      // DECISÃƒO: Soft delete - marcar como deleted ao invÃ©s de remover fisicamente
       const backup = this.enterpriseBackup.findTenantBackup(null, backupId);
-      if (!backup) throw new Error('Backup não encontrado');
+      if (!backup) throw new Error('Backup nÃ£o encontrado');
       
       backup.deleted = true;
       backup.deleted_at = new Date().toISOString();
@@ -436,7 +436,7 @@ Object.assign(MasterControlSystem.prototype, {
       // Save back
       localStorage.setItem(`enterprise_tenant_backup_${backupId}`, JSON.stringify(backup));
       
-      this.showToast('Backup excluído com sucesso', 'success');
+      this.showToast('Backup excluÃ­do com sucesso', 'success');
       this.loadPropertyBackupCatalog();
       this.updatePropertyBackupMetrics();
       
@@ -537,25 +537,25 @@ Object.assign(MasterControlSystem.prototype, {
       if (isValid) {
         resultsBox.innerHTML = `
           <div class="alert alert-success">
-            <span class="icon">✅</span>
-            <strong>Validação bem-sucedida!</strong><br>
-            O backup está íntegro e pronto para restauração.
+            <span class="icon">âœ…</span>
+            <strong>ValidaÃ§Ã£o bem-sucedida!</strong><br>
+            O backup estÃ¡ Ã­ntegro e pronto para restauraÃ§Ã£o.
           </div>
         `;
       } else {
         resultsBox.innerHTML = `
           <div class="alert alert-danger">
-            <span class="icon">❌</span>
-            <strong>Falha na validação!</strong><br>
-            O backup pode estar corrompido. Não recomendado prosseguir.
+            <span class="icon">âŒ</span>
+            <strong>Falha na validaÃ§Ã£o!</strong><br>
+            O backup pode estar corrompido. NÃ£o recomendado prosseguir.
           </div>
         `;
       }
     } catch (error) {
       resultsBox.innerHTML = `
         <div class="alert alert-danger">
-          <span class="icon">⚠️</span>
-          <strong>Erro na validação:</strong> ${error.message}
+          <span class="icon">âš ï¸</span>
+          <strong>Erro na validaÃ§Ã£o:</strong> ${error.message}
         </div>
       `;
     }
@@ -564,13 +564,13 @@ Object.assign(MasterControlSystem.prototype, {
   async executePropertyRestore() {
     const backup = this.enterpriseBackup.findTenantBackup(null, this.currentRestoreBackupId);
     if (!backup) {
-      this.showToast('Backup não encontrado', 'error');
+      this.showToast('Backup nÃ£o encontrado', 'error');
       return;
     }
     
     const confirmed = await this.confirmAction(
-      'Confirmar Restauração',
-      `Esta operação irá restaurar o backup de ${backup.tenantId} criado em ${new Date(backup.created_at).toLocaleString('pt-BR')}. Continuar?`
+      'Confirmar RestauraÃ§Ã£o',
+      `Esta operaÃ§Ã£o irÃ¡ restaurar o backup de ${backup.tenantId} criado em ${new Date(backup.created_at).toLocaleString('pt-BR')}. Continuar?`
     );
     
     if (!confirmed) return;
@@ -612,7 +612,7 @@ Object.assign(MasterControlSystem.prototype, {
       
       // Reload page to reflect changes
       setTimeout(() => {
-        if (confirm('Restauração concluída. Recarregar página para aplicar mudanças?')) {
+        if (confirm('RestauraÃ§Ã£o concluÃ­da. Recarregar pÃ¡gina para aplicar mudanÃ§as?')) {
           window.location.reload();
         }
       }, 1000);
@@ -633,11 +633,11 @@ Object.assign(MasterControlSystem.prototype, {
     const retentionMonthly = parseInt(document.getElementById('retentionMonthly')?.value) || 3;
     
     if (!propertyId || !frequency) {
-      this.showToast('Preencha todos os campos obrigatórios', 'warning');
+      this.showToast('Preencha todos os campos obrigatÃ³rios', 'warning');
       return;
     }
     
-    // DECISÃO: Usar estrutura simples de agendamento
+    // DECISÃƒO: Usar estrutura simples de agendamento
     // Formato: cron-like para flexibilidade futura
     const schedule = {
       id: `schedule_${propertyId}_${Date.now()}`,
@@ -688,7 +688,7 @@ Object.assign(MasterControlSystem.prototype, {
         const schedules = this.getPropertyBackupSchedules().filter(s => s.enabled !== false);
         for (const s of schedules) {
           if (this._shouldRunCron(s.frequency, now)) {
-            // Evitar rodar múltiplas vezes no mesmo minuto
+            // Evitar rodar mÃºltiplas vezes no mesmo minuto
             const minuteKey = now.getUTCFullYear()+"-"+(now.getUTCMonth()+1)+"-"+now.getUTCDate()+" "+now.getUTCHours()+":"+now.getUTCMinutes();
             if (s._lastRunMinute === minuteKey) continue;
             s._lastRunMinute = minuteKey;
@@ -709,12 +709,12 @@ Object.assign(MasterControlSystem.prototype, {
               } else {
                 await this.enterpriseBackup.createIncrementalTenantBackup(s.propertyId, { createdBy: this.currentUser?.username || 'scheduler', compress: this.isEnterpriseCompressionEnabled(), encrypt: this.isEnterpriseEncryptionEnabled() });
               }
-              this.showToast(`[Scheduler] Backup ${type} concluído para ${s.propertyId}`, 'success');
-              // Atualizar métricas e catálogo se a aba estiver aberta
+              this.showToast(`[Scheduler] Backup ${type} concluÃ­do para ${s.propertyId}`, 'success');
+              // Atualizar mÃ©tricas e catÃ¡logo se a aba estiver aberta
               this.updateTenantBackupMetrics();
               this.loadTenantBackupCatalog();
 
-              // Aplicar política de retenção
+              // Aplicar polÃ­tica de retenÃ§Ã£o
               await this.enterpriseBackup.applyRetentionPolicy(s.propertyId, s.retention);
             } catch (e) {
               console.error('Scheduled backup failed:', e);
@@ -729,7 +729,7 @@ Object.assign(MasterControlSystem.prototype, {
   },
 
   _shouldRunCron(expr, dateObj) {
-    // Suporta formato: "m h dom mon dow" com *, números e listas separadas por vírgula
+    // Suporta formato: "m h dom mon dow" com *, nÃºmeros e listas separadas por vÃ­rgula
     if (!expr || typeof expr !== 'string') return false;
     const parts = expr.trim().split(/\s+/);
     if (parts.length !== 5) return false;
@@ -752,7 +752,7 @@ Object.assign(MasterControlSystem.prototype, {
         const [a,b] = field.split('-').map(x => parseInt(x.trim(), 10));
         return value >= a && value <= b;
       }
-      // número exato
+      // nÃºmero exato
       const n = parseInt(field, 10);
       return !isNaN(n) && n === value;
     };
@@ -775,15 +775,15 @@ Object.assign(MasterControlSystem.prototype, {
         <div style="display:flex; justify-content:space-between; align-items:center;">
           <div>
             <strong>${schedule.propertyId}</strong> - ${schedule.backupType}
-            <br><small>Frequência: ${schedule.frequency}</small>
-            <br><small>Retenção: ${schedule.retention.daily}d / ${schedule.retention.weekly}w / ${schedule.retention.monthly}m</small>
+            <br><small>FrequÃªncia: ${schedule.frequency}</small>
+            <br><small>RetenÃ§Ã£o: ${schedule.retention.daily}d / ${schedule.retention.weekly}w / ${schedule.retention.monthly}m</small>
           </div>
           <div>
             <button class="btn btn-sm" onclick="masterCtrl.toggleSchedule('${schedule.id}')" title="${schedule.enabled ? 'Desabilitar' : 'Habilitar'}">
-              ${schedule.enabled ? '⏸️' : '▶️'}
+              ${schedule.enabled ? 'â¸ï¸' : 'â–¶ï¸'}
             </button>
             <button class="btn btn-sm btn-danger" onclick="masterCtrl.deleteSchedule('${schedule.id}')" title="Excluir">
-              🗑️
+              ðŸ—‘ï¸
             </button>
           </div>
         </div>
@@ -807,7 +807,7 @@ Object.assign(MasterControlSystem.prototype, {
     const filtered = schedules.filter(s => s.id !== scheduleId);
     localStorage.setItem('enterprise_tenant_schedules', JSON.stringify(filtered));
     this.loadPropertyBackupSchedules();
-    this.showToast('Agendamento excluído', 'success');
+    this.showToast('Agendamento excluÃ­do', 'success');
   },
   
   // Feature toggles (persisted) for compression/encryption
@@ -933,13 +933,13 @@ Object.assign(MasterControlSystem.prototype, {
         <td><code style="font-size:11px;">${backup.checksum.substring(0, 12)}...</code></td>
         <td>
           <button class="btn btn-sm" onclick="masterCtrl.viewGeneralBackup('${backup.id}')" title="Ver detalhes">
-            <span class="icon">👁️</span>
+            <span class="icon">ðŸ‘ï¸</span>
           </button>
           <button class="btn btn-sm btn-success" onclick="masterCtrl.openGeneralRestorePanel('${backup.id}')" title="Restaurar">
-            <span class="icon">♻️</span>
+            <span class="icon">â™»ï¸</span>
           </button>
           <button class="btn btn-sm btn-danger" onclick="masterCtrl.deleteGeneralBackup('${backup.id}')" title="Excluir">
-            <span class="icon">🗑️</span>
+            <span class="icon">ðŸ—‘ï¸</span>
           </button>
         </td>
       </tr>
@@ -951,14 +951,14 @@ Object.assign(MasterControlSystem.prototype, {
     const backup = catalog.find(b => b.id === backupId);
     
     if (!backup) {
-      this.showToast('Backup não encontrado', 'error');
+      this.showToast('Backup nÃ£o encontrado', 'error');
       return;
     }
     
     const details = `
       <strong>ID:</strong> ${backup.id}<br>
-      <strong>Versão:</strong> ${backup.version}<br>
-      <strong>Descrição:</strong> ${backup.description}<br>
+      <strong>VersÃ£o:</strong> ${backup.version}<br>
+      <strong>DescriÃ§Ã£o:</strong> ${backup.description}<br>
       <strong>Data:</strong> ${new Date(backup.created_at).toLocaleString('pt-BR')}<br>
       <strong>Tamanho:</strong> ${(backup.size_bytes / 1024 / 1024).toFixed(2)} MB<br>
       <strong>Checksum:</strong> <code>${backup.checksum}</code><br>
@@ -979,7 +979,7 @@ Object.assign(MasterControlSystem.prototype, {
     const backup = catalog.find(b => b.id === backupId);
     
     if (!backup) {
-      this.showToast('Backup não encontrado', 'error');
+      this.showToast('Backup nÃ£o encontrado', 'error');
       return;
     }
     
@@ -989,7 +989,7 @@ Object.assign(MasterControlSystem.prototype, {
     if (panel && infoBox) {
       infoBox.innerHTML = `
         <div class="info-box">
-          <strong>Versão:</strong> ${backup.version}<br>
+          <strong>VersÃ£o:</strong> ${backup.version}<br>
           <strong>Data:</strong> ${new Date(backup.created_at).toLocaleString('pt-BR')}<br>
           <strong>Componentes:</strong> ${backup.components.join(', ')}<br>
           <strong>Tamanho:</strong> ${(backup.size_bytes / 1024 / 1024).toFixed(2)} MB
@@ -1010,8 +1010,8 @@ Object.assign(MasterControlSystem.prototype, {
     if (!this.currentGeneralRestoreBackupId) return;
     
     const confirmed = await this.confirmAction(
-      'Confirmar Restauração de Estrutura',
-      'ATENÇÃO: Esta operação irá restaurar a estrutura geral do sistema. Um backup de segurança será criado automaticamente. Continuar?'
+      'Confirmar RestauraÃ§Ã£o de Estrutura',
+      'ATENÃ‡ÃƒO: Esta operaÃ§Ã£o irÃ¡ restaurar a estrutura geral do sistema. Um backup de seguranÃ§a serÃ¡ criado automaticamente. Continuar?'
     );
     
     if (!confirmed) return;
@@ -1040,7 +1040,7 @@ Object.assign(MasterControlSystem.prototype, {
       
       // Reload page to apply changes
       setTimeout(() => {
-        if (confirm('Restauração concluída. A página será recarregada para aplicar as mudanças.')) {
+        if (confirm('RestauraÃ§Ã£o concluÃ­da. A pÃ¡gina serÃ¡ recarregada para aplicar as mudanÃ§as.')) {
           window.location.reload();
         }
       }, 1500);
@@ -1053,7 +1053,7 @@ Object.assign(MasterControlSystem.prototype, {
   
   async deleteGeneralBackup(backupId) {
     const confirmed = await this.confirmAction(
-      'Confirmar Exclusão',
+      'Confirmar ExclusÃ£o',
       'Tem certeza que deseja excluir este backup de estrutura?'
     );
     
@@ -1067,7 +1067,7 @@ Object.assign(MasterControlSystem.prototype, {
       backup.deleted_at = new Date().toISOString();
       localStorage.setItem(key, JSON.stringify(backup));
       
-      this.showToast('Backup excluído com sucesso', 'success');
+      this.showToast('Backup excluÃ­do com sucesso', 'success');
       this.loadGeneralBackupCatalog();
       this.updateGeneralBackupMetrics();
       
@@ -1120,7 +1120,7 @@ Object.assign(MasterControlSystem.prototype, {
     const filesStr = document.getElementById('releaseFiles')?.value;
     
     if (!version || !name) {
-      this.showToast('Preencha versão e nome da release', 'warning');
+      this.showToast('Preencha versÃ£o e nome da release', 'warning');
       return;
     }
     
@@ -1130,7 +1130,7 @@ Object.assign(MasterControlSystem.prototype, {
       try {
         migrations = JSON.parse(migrationsStr);
       } catch (e) {
-        this.showToast('Formato inválido de migrations (deve ser JSON array)', 'error');
+        this.showToast('Formato invÃ¡lido de migrations (deve ser JSON array)', 'error');
         return;
       }
     }
@@ -1218,16 +1218,16 @@ Object.assign(MasterControlSystem.prototype, {
             <div style="display:flex; gap:8px;">
               ${!isActive && release.status !== 'deployed' ? `
                 <button class="btn btn-sm btn-primary" onclick="masterCtrl.deployRelease('${release.id}')" title="Deploy">
-                  <span class="icon">🚀</span> Deploy
+                  <span class="icon">ðŸš€</span> Deploy
                 </button>
               ` : ''}
               ${canRollback ? `
                 <button class="btn btn-sm btn-danger" onclick="masterCtrl.openRollbackPanel('${release.id}')" title="Rollback">
-                  <span class="icon">⏪</span> Rollback
+                  <span class="icon">âª</span> Rollback
                 </button>
               ` : ''}
               <button class="btn btn-sm" onclick="masterCtrl.viewRelease('${release.id}')" title="Detalhes">
-                <span class="icon">👁️</span>
+                <span class="icon">ðŸ‘ï¸</span>
               </button>
             </div>
           </div>
@@ -1239,7 +1239,7 @@ Object.assign(MasterControlSystem.prototype, {
   async deployRelease(releaseId) {
     const confirmed = await this.confirmAction(
       'Confirmar Deploy',
-      'Esta operação irá fazer o deploy da release. Um backup automático será criado antes. Continuar?'
+      'Esta operaÃ§Ã£o irÃ¡ fazer o deploy da release. Um backup automÃ¡tico serÃ¡ criado antes. Continuar?'
     );
     
     if (!confirmed) return;
@@ -1258,7 +1258,7 @@ Object.assign(MasterControlSystem.prototype, {
       
       // Reload page
       setTimeout(() => {
-        if (confirm('Deploy concluído. Recarregar página para aplicar mudanças?')) {
+        if (confirm('Deploy concluÃ­do. Recarregar pÃ¡gina para aplicar mudanÃ§as?')) {
           window.location.reload();
         }
       }, 1000);
@@ -1272,12 +1272,12 @@ Object.assign(MasterControlSystem.prototype, {
   viewRelease(releaseId) {
     const release = this.releaseManagement.findRelease(releaseId);
     if (!release) {
-      this.showToast('Release não encontrada', 'error');
+      this.showToast('Release nÃ£o encontrada', 'error');
       return;
     }
     
     const details = `
-      <strong>Versão:</strong> ${release.version}<br>
+      <strong>VersÃ£o:</strong> ${release.version}<br>
       <strong>Nome:</strong> ${release.name}<br>
       <strong>Canal:</strong> ${release.channel}<br>
       <strong>Status:</strong> ${release.status}<br>
@@ -1326,7 +1326,7 @@ Object.assign(MasterControlSystem.prototype, {
           ${plan.steps.map(step => `<li>${step}</li>`).join('')}
         </ol>
         ${plan.backwardMigrations.length > 0 ? `
-          <p><strong>Migrations backward:</strong> ${plan.backwardMigrations.length} migration(s) serão executadas</p>
+          <p><strong>Migrations backward:</strong> ${plan.backwardMigrations.length} migration(s) serÃ£o executadas</p>
         ` : ''}
       `;
       
@@ -1345,8 +1345,8 @@ Object.assign(MasterControlSystem.prototype, {
     if (!this.currentRollbackReleaseId) return;
     
     const doubleConfirm = await this.confirmAction(
-      '🚨 CONFIRMAÇÃO FINAL DE ROLLBACK',
-      'Esta é uma operação CRÍTICA que irá reverter o sistema. Modo de manutenção será ativado. Tem ABSOLUTA CERTEZA?'
+      'ðŸš¨ CONFIRMAÃ‡ÃƒO FINAL DE ROLLBACK',
+      'Esta Ã© uma operaÃ§Ã£o CRÃTICA que irÃ¡ reverter o sistema. Modo de manutenÃ§Ã£o serÃ¡ ativado. Tem ABSOLUTA CERTEZA?'
     );
     
     if (!doubleConfirm) return;
@@ -1372,7 +1372,7 @@ Object.assign(MasterControlSystem.prototype, {
       
       // Force reload
       setTimeout(() => {
-        alert('Rollback concluído. A página será recarregada.');
+        alert('Rollback concluÃ­do. A pÃ¡gina serÃ¡ recarregada.');
         window.location.reload();
       }, 1500);
       
@@ -1401,13 +1401,13 @@ Object.assign(MasterControlSystem.prototype, {
         <td>${flag.targetTenants.length > 0 ? flag.targetTenants.join(', ') : 'Todos'}</td>
         <td>
           <button class="btn btn-sm" onclick="masterCtrl.toggleFeatureFlag('${flag.name}')" title="${flag.enabled ? 'Desativar' : 'Ativar'}">
-            ${flag.enabled ? '🔴' : '🟢'}
+            ${flag.enabled ? 'ðŸ”´' : 'ðŸŸ¢'}
           </button>
           <button class="btn btn-sm" onclick="masterCtrl.editFeatureFlag('${flag.name}')" title="Editar">
-            ✏️
+            âœï¸
           </button>
           <button class="btn btn-sm btn-danger" onclick="masterCtrl.deleteFeatureFlag('${flag.name}')" title="Excluir">
-            🗑️
+            ðŸ—‘ï¸
           </button>
         </td>
       </tr>
@@ -1425,7 +1425,7 @@ Object.assign(MasterControlSystem.prototype, {
         <input type="number" id="ffRollout" class="input" value="0" min="0" max="100">
       </div>
       <div class="form-group">
-        <label>Clientes Alvo (separados por vírgula, deixe vazio para todos)</label>
+        <label>Clientes Alvo (separados por vÃ­rgula, deixe vazio para todos)</label>
         <input type="text" id="ffTenants" class="input" placeholder="property1, property2">
       </div>
       <div class="form-group">
@@ -1481,7 +1481,7 @@ Object.assign(MasterControlSystem.prototype, {
     const filtered = flags.filter(f => f.name !== name);
     localStorage.setItem('enterprise_feature_flags', JSON.stringify(filtered));
     
-    this.showToast('Feature flag excluída', 'success');
+    this.showToast('Feature flag excluÃ­da', 'success');
     this.loadFeatureFlags();
   },
   
@@ -1527,9 +1527,9 @@ Object.assign(MasterControlSystem.prototype, {
   
 });
 
-console.info('✅ Master Control Enterprise Integration loaded');
+console.info('âœ… Master Control Enterprise Integration loaded');
 
-// Se o controlador já estiver instanciado, inicializar Enterprise Systems/UI agora
+// Se o controlador jÃ¡ estiver instanciado, inicializar Enterprise Systems/UI agora
 try {
   if (window.masterCtrl) {
     if (typeof window.masterCtrl.initEnterpriseBackupSystems === 'function' && !window.masterCtrl.enterpriseBackup) {
@@ -1542,3 +1542,4 @@ try {
 } catch (e) {
   console.warn('Deferred enterprise initialization failed:', e);
 }
+

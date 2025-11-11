@@ -1,85 +1,85 @@
-# 🏗️ Plano de Reestruturação Arquitetural - IluxSys SaaS Híbrida
+﻿# ðŸ—ï¸ Plano de ReestruturaÃ§Ã£o Arquitetural - nexefii SaaS HÃ­brida
 
 ---
-**📄 Documento**: ARCHITECTURE_REFACTOR_PLAN.md  
-**📦 Versão**: 1.0.0  
-**📅 Criado em**: 08/11/2025  
-**👤 Autor**: IluxSys Development Team  
-**🎯 Objetivo**: Transformar sistema monolítico em arquitetura SaaS híbrida/cloud-native
+**ðŸ“„ Documento**: ARCHITECTURE_REFACTOR_PLAN.md  
+**ðŸ“¦ VersÃ£o**: 1.0.0  
+**ðŸ“… Criado em**: 08/11/2025  
+**ðŸ‘¤ Autor**: nexefii Development Team  
+**ðŸŽ¯ Objetivo**: Transformar sistema monolÃ­tico em arquitetura SaaS hÃ­brida/cloud-native
 
 ---
 
-## 🎯 Visão Geral da Transformação
+## ðŸŽ¯ VisÃ£o Geral da TransformaÃ§Ã£o
 
 ### Estado Atual (AS-IS)
-- ❌ Arquivos HTML estáticos por propriedade
-- ❌ LocalStorage único compartilhado
-- ❌ Sem isolamento de dados por tenant
-- ❌ Sem versionamento de schema
-- ❌ Sem sincronização cloud
-- ❌ Backups manuais sem automação
+- âŒ Arquivos HTML estÃ¡ticos por propriedade
+- âŒ LocalStorage Ãºnico compartilhado
+- âŒ Sem isolamento de dados por tenant
+- âŒ Sem versionamento de schema
+- âŒ Sem sincronizaÃ§Ã£o cloud
+- âŒ Backups manuais sem automaÃ§Ã£o
 
 ### Estado Futuro (TO-BE)
-- ✅ **Roteamento lógico** via `/property/{slug}`
-- ✅ **DB/Schema isolado** por propriedade
-- ✅ **Versionamento** com migrations forward/reverse
-- ✅ **OTA global** com compatibility gate
-- ✅ **Sync Service** híbrido com delta sync
-- ✅ **Backups automatizados** por propriedade
-- ✅ **Shell Architecture** com loading dinâmico
-- ✅ **Multi-tenant dashboard** com KPIs comparativos
+- âœ… **Roteamento lÃ³gico** via `/property/{slug}`
+- âœ… **DB/Schema isolado** por propriedade
+- âœ… **Versionamento** com migrations forward/reverse
+- âœ… **OTA global** com compatibility gate
+- âœ… **Sync Service** hÃ­brido com delta sync
+- âœ… **Backups automatizados** por propriedade
+- âœ… **Shell Architecture** com loading dinÃ¢mico
+- âœ… **Multi-tenant dashboard** com KPIs comparativos
 
 ---
 
-## 📐 Arquitetura Proposta
+## ðŸ“ Arquitetura Proposta
 
 ```
-┌─────────────────────────────────────────────────────────────────┐
-│                     MASTER CONTROL PANEL                         │
-│  (Orquestrador Central - Governança & Administração)            │
-├─────────────────────────────────────────────────────────────────┤
-│  • Implementation Wizard    • Sync Configuration                │
-│  • Multi-Property Dashboard • Backups & Restore                 │
-│  • OTA Management          • Logs & Audit                       │
-│  • Settings & i18n         • Releases & Rollback                │
-└─────────────────────────────────────────────────────────────────┘
-                              ↓
-┌─────────────────────────────────────────────────────────────────┐
-│                    SHELL ARCHITECTURE                            │
-│  index.html (Shell) → Core Loader (Router, i18n, Auth, Tokens) │
-└─────────────────────────────────────────────────────────────────┘
-                              ↓
-        ┌──────────────────┬──────────────────┬──────────────────┐
-        │   Property A     │   Property B     │   Property C     │
-        │  /property/miami │ /property/paulo  │ /property/rio    │
-        ├──────────────────┼──────────────────┼──────────────────┤
-        │ • Isolated DB    │ • Isolated DB    │ • Isolated DB    │
-        │ • schema_v1.0.0  │ • schema_v1.0.0  │ • schema_v1.0.0  │
-        │ • Admin User     │ • Admin User     │ • Admin User     │
-        │ • PMS+EMS+BMS    │ • PMS only       │ • PMS+EMS        │
-        │ • Auto Backups   │ • Auto Backups   │ • Auto Backups   │
-        │ • Delta Sync     │ • Delta Sync     │ • Delta Sync     │
-        └──────────────────┴──────────────────┴──────────────────┘
-                              ↓
-┌─────────────────────────────────────────────────────────────────┐
-│                    SYNC SERVICE (Híbrido)                        │
-│  • Delta Sync     • Conflict Resolution   • Retry Logic         │
-│  • Queue Manager  • Status Monitor        • Error Recovery      │
-└─────────────────────────────────────────────────────────────────┘
-                              ↓
-┌─────────────────────────────────────────────────────────────────┐
-│                    CLOUD BACKEND (Futuro)                        │
-│  • REST API       • PostgreSQL Multi-tenant  • S3 Backups       │
-│  • Auth Service   • Key Management Service   • Observability    │
-└─────────────────────────────────────────────────────────────────┘
+â”Œâ”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”
+â”‚                     MASTER CONTROL PANEL                         â”‚
+â”‚  (Orquestrador Central - GovernanÃ§a & AdministraÃ§Ã£o)            â”‚
+â”œâ”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”¤
+â”‚  â€¢ Implementation Wizard    â€¢ Sync Configuration                â”‚
+â”‚  â€¢ Multi-Property Dashboard â€¢ Backups & Restore                 â”‚
+â”‚  â€¢ OTA Management          â€¢ Logs & Audit                       â”‚
+â”‚  â€¢ Settings & i18n         â€¢ Releases & Rollback                â”‚
+â””â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”˜
+                              â†“
+â”Œâ”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”
+â”‚                    SHELL ARCHITECTURE                            â”‚
+â”‚  index.html (Shell) â†’ Core Loader (Router, i18n, Auth, Tokens) â”‚
+â””â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”˜
+                              â†“
+        â”Œâ”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”¬â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”¬â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”
+        â”‚   Property A     â”‚   Property B     â”‚   Property C     â”‚
+        â”‚  /property/miami â”‚ /property/paulo  â”‚ /property/rio    â”‚
+        â”œâ”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”¼â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”¼â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”¤
+        â”‚ â€¢ Isolated DB    â”‚ â€¢ Isolated DB    â”‚ â€¢ Isolated DB    â”‚
+        â”‚ â€¢ schema_v1.0.0  â”‚ â€¢ schema_v1.0.0  â”‚ â€¢ schema_v1.0.0  â”‚
+        â”‚ â€¢ Admin User     â”‚ â€¢ Admin User     â”‚ â€¢ Admin User     â”‚
+        â”‚ â€¢ PMS+EMS+BMS    â”‚ â€¢ PMS only       â”‚ â€¢ PMS+EMS        â”‚
+        â”‚ â€¢ Auto Backups   â”‚ â€¢ Auto Backups   â”‚ â€¢ Auto Backups   â”‚
+        â”‚ â€¢ Delta Sync     â”‚ â€¢ Delta Sync     â”‚ â€¢ Delta Sync     â”‚
+        â””â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”´â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”´â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”˜
+                              â†“
+â”Œâ”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”
+â”‚                    SYNC SERVICE (HÃ­brido)                        â”‚
+â”‚  â€¢ Delta Sync     â€¢ Conflict Resolution   â€¢ Retry Logic         â”‚
+â”‚  â€¢ Queue Manager  â€¢ Status Monitor        â€¢ Error Recovery      â”‚
+â””â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”˜
+                              â†“
+â”Œâ”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”
+â”‚                    CLOUD BACKEND (Futuro)                        â”‚
+â”‚  â€¢ REST API       â€¢ PostgreSQL Multi-tenant  â€¢ S3 Backups       â”‚
+â”‚  â€¢ Auth Service   â€¢ Key Management Service   â€¢ Observability    â”‚
+â””â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”˜
 ```
 
 ---
 
-## 🎯 Fase 1: Foundation & Core Refactoring
+## ðŸŽ¯ Fase 1: Foundation & Core Refactoring
 
 ### 1.1 Database Abstraction Layer (DAL)
-**Objetivo**: Criar camada de abstração para isolar dados por propriedade
+**Objetivo**: Criar camada de abstraÃ§Ã£o para isolar dados por propriedade
 
 **Arquivos a criar:**
 ```
@@ -154,21 +154,21 @@ class PropertyDatabase {
 
   // Migration Support
   async runMigrations(targetVersion) {
-    // Implementar lógica de migrations forward/reverse
+    // Implementar lÃ³gica de migrations forward/reverse
   }
 }
 ```
 
 ### 1.2 Router & Shell System
-**Objetivo**: Implementar roteamento lógico SPA
+**Objetivo**: Implementar roteamento lÃ³gico SPA
 
 **Arquivos a criar:**
 ```
 /core/
   router/
     Router.js                 # Router principal com history API
-    RouteConfig.js            # Configuração de rotas
-    RouteGuards.js            # Guards de autenticação/autorização
+    RouteConfig.js            # ConfiguraÃ§Ã£o de rotas
+    RouteGuards.js            # Guards de autenticaÃ§Ã£o/autorizaÃ§Ã£o
     PropertyResolver.js       # Resolve propriedade da rota
 ```
 
@@ -238,7 +238,7 @@ class Router {
     // Inicializar DB da propriedade
     window.propertyDB = new PropertyDatabase(property.key);
     
-    // Carregar módulos habilitados
+    // Carregar mÃ³dulos habilitados
     await this.loadPropertyModules(property.modulesPurchased);
     
     // Atualizar UI
@@ -246,7 +246,7 @@ class Router {
   }
 
   async loadPage(pagePath) {
-    // Carregar página dinamicamente
+    // Carregar pÃ¡gina dinamicamente
     const page = await this.fetchPage(pagePath);
     this.renderPage(page);
   }
@@ -254,7 +254,7 @@ class Router {
 ```
 
 ### 1.3 Shell HTML
-**Objetivo**: Criar shell que carrega conteúdo dinamicamente
+**Objetivo**: Criar shell que carrega conteÃºdo dinamicamente
 
 **index.html - Novo:**
 ```html
@@ -263,9 +263,9 @@ class Router {
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>IluxSys - Property Management System</title>
+  <title>nexefii - Property Management System</title>
   
-  <!-- Core CSS (Mínimo) -->
+  <!-- Core CSS (MÃ­nimo) -->
   <link rel="stylesheet" href="/core/styles/shell.css">
   <link rel="stylesheet" href="/core/styles/variables.css">
   
@@ -281,19 +281,19 @@ class Router {
   <!-- Loading Screen -->
   <div id="app-loader" class="loader-overlay">
     <div class="loader-spinner"></div>
-    <p>Carregando IluxSys...</p>
+    <p>Carregando nexefii...</p>
   </div>
 
   <!-- Shell Container -->
   <div id="app-shell" style="display: none;">
-    <!-- Top Bar (Sempre visível) -->
+    <!-- Top Bar (Sempre visÃ­vel) -->
     <header id="app-header">
       <!-- Renderizado dinamicamente -->
     </header>
 
-    <!-- Content Area (Dinâmico) -->
+    <!-- Content Area (DinÃ¢mico) -->
     <main id="app-content">
-      <!-- Páginas carregadas aqui -->
+      <!-- PÃ¡ginas carregadas aqui -->
     </main>
 
     <!-- Toasts/Notifications -->
@@ -305,7 +305,7 @@ class Router {
 
   <!-- Error Screen -->
   <div id="app-error" style="display: none;">
-    <h1>⚠️ Erro ao Carregar</h1>
+    <h1>âš ï¸ Erro ao Carregar</h1>
     <p id="error-message"></p>
     <button onclick="location.reload()">Recarregar</button>
   </div>
@@ -315,9 +315,9 @@ class Router {
 
 ---
 
-## 🎯 Fase 2: Implementation Wizard
+## ðŸŽ¯ Fase 2: Implementation Wizard
 
-### 2.1 Wizard de Criação de Propriedade
+### 2.1 Wizard de CriaÃ§Ã£o de Propriedade
 **Objetivo**: Interface guiada para provisionamento completo
 
 **Arquivos a criar:**
@@ -325,10 +325,10 @@ class Router {
 /master/
   implementation/
     ImplementationWizard.js   # Controller do wizard
-    WizardSteps.js            # Definição dos passos
-    PropertyProvisioner.js    # Lógica de provisioning
-    ModuleSelector.js         # Seletor de módulos
-    AdminCreator.js           # Criação de admin local
+    WizardSteps.js            # DefiniÃ§Ã£o dos passos
+    PropertyProvisioner.js    # LÃ³gica de provisioning
+    ModuleSelector.js         # Seletor de mÃ³dulos
+    AdminCreator.js           # CriaÃ§Ã£o de admin local
 ```
 
 **WizardSteps.js - Passos:**
@@ -336,7 +336,7 @@ class Router {
 const WIZARD_STEPS = [
   {
     id: 'property-info',
-    title: 'Informações da Propriedade',
+    title: 'InformaÃ§Ãµes da Propriedade',
     fields: [
       { name: 'key', label: 'Property ID', type: 'text', required: true },
       { name: 'name', label: 'Nome', type: 'text', required: true },
@@ -346,8 +346,8 @@ const WIZARD_STEPS = [
   },
   {
     id: 'modules',
-    title: 'Seleção de Módulos',
-    description: 'Escolha os módulos que serão habilitados',
+    title: 'SeleÃ§Ã£o de MÃ³dulos',
+    description: 'Escolha os mÃ³dulos que serÃ£o habilitados',
     modules: [
       { id: 'pms', name: 'PMS', description: 'Property Management System', required: true },
       { id: 'ems', name: 'EMS', description: 'Engineering Management System' },
@@ -366,16 +366,16 @@ const WIZARD_STEPS = [
   },
   {
     id: 'backup-config',
-    title: 'Configuração de Backups',
+    title: 'ConfiguraÃ§Ã£o de Backups',
     fields: [
-      { name: 'autoBackup', label: 'Backup Automático', type: 'checkbox', default: true },
-      { name: 'backupFrequency', label: 'Frequência', type: 'select', options: ['daily', 'weekly'] },
-      { name: 'retentionDays', label: 'Retenção (dias)', type: 'number', default: 30 }
+      { name: 'autoBackup', label: 'Backup AutomÃ¡tico', type: 'checkbox', default: true },
+      { name: 'backupFrequency', label: 'FrequÃªncia', type: 'select', options: ['daily', 'weekly'] },
+      { name: 'retentionDays', label: 'RetenÃ§Ã£o (dias)', type: 'number', default: 30 }
     ]
   },
   {
     id: 'ota-config',
-    title: 'Canal de Atualização',
+    title: 'Canal de AtualizaÃ§Ã£o',
     fields: [
       { name: 'otaChannel', label: 'Canal OTA', type: 'select', options: ['stable', 'beta', 'alpha'] },
       { name: 'autoUpdate', label: 'Auto-Update', type: 'checkbox', default: true }
@@ -383,13 +383,13 @@ const WIZARD_STEPS = [
   },
   {
     id: 'review',
-    title: 'Revisão Final',
+    title: 'RevisÃ£o Final',
     type: 'summary'
   }
 ];
 ```
 
-**PropertyProvisioner.js - Lógica:**
+**PropertyProvisioner.js - LÃ³gica:**
 ```javascript
 class PropertyProvisioner {
   async provision(wizardData) {
@@ -408,9 +408,9 @@ class PropertyProvisioner {
       const stepName = steps[i].name;
       try {
         await steps[i]();
-        this.updateProgress(i + 1, steps.length, `✅ ${stepName}`);
+        this.updateProgress(i + 1, steps.length, `âœ… ${stepName}`);
       } catch (error) {
-        this.updateProgress(i + 1, steps.length, `❌ ${stepName}: ${error.message}`);
+        this.updateProgress(i + 1, steps.length, `âŒ ${stepName}: ${error.message}`);
         throw new Error(`Provisioning failed at step: ${stepName}`);
       }
     }
@@ -421,7 +421,7 @@ class PropertyProvisioner {
       slug: wizardData.slug,
       adminCredentials: {
         username: wizardData.adminUsername,
-        password: wizardData.adminPassword // Exibir uma única vez!
+        password: wizardData.adminPassword // Exibir uma Ãºnica vez!
       }
     };
   }
@@ -479,10 +479,10 @@ class PropertyProvisioner {
 
 ---
 
-## 🎯 Fase 3: Multi-Property Dashboard
+## ðŸŽ¯ Fase 3: Multi-Property Dashboard
 
 ### 3.1 Dashboard com KPIs
-**Objetivo**: Visão consolidada de todas as propriedades
+**Objetivo**: VisÃ£o consolidada de todas as propriedades
 
 **Arquivos a criar:**
 ```
@@ -504,18 +504,18 @@ class MultiPropertyDashboard {
     return `
       <div class="multi-property-dashboard">
         <header>
-          <h1>🏨 Multi-Property Dashboard</h1>
+          <h1>ðŸ¨ Multi-Property Dashboard</h1>
           <div class="summary-cards">
             <div class="summary-card">
               <h3>Total de Propriedades</h3>
               <p class="metric">${properties.length}</p>
             </div>
             <div class="summary-card">
-              <h3>Ocupação Média</h3>
+              <h3>OcupaÃ§Ã£o MÃ©dia</h3>
               <p class="metric">${kpis.averageOccupancy}%</p>
             </div>
             <div class="summary-card">
-              <h3>ADR Médio</h3>
+              <h3>ADR MÃ©dio</h3>
               <p class="metric">R$ ${kpis.averageADR}</p>
             </div>
           </div>
@@ -537,7 +537,7 @@ class MultiPropertyDashboard {
           <strong>${kpi.roomsSold}/${kpi.totalRooms}</strong>
         </div>
         <div class="kpi-row">
-          <span>Ocupação:</span>
+          <span>OcupaÃ§Ã£o:</span>
           <strong>${kpi.occupancy}%</strong>
         </div>
         <div class="kpi-row">
@@ -574,7 +574,7 @@ class MultiPropertyDashboard {
 
 ---
 
-## 🎯 Fase 4: Sync Service (Híbrido)
+## ðŸŽ¯ Fase 4: Sync Service (HÃ­brido)
 
 ### 4.1 Sync Configuration Page
 **Arquivos a criar:**
@@ -650,7 +650,7 @@ class SyncService {
 
 ---
 
-## 🎯 Fase 5: OTA Management
+## ðŸŽ¯ Fase 5: OTA Management
 
 ### 5.1 Over-The-Air Updates
 **Arquivos a criar:**
@@ -692,25 +692,25 @@ class OTAManager {
   }
 
   async applyUpdate(propertyKey, version) {
-    // Criar backup de segurança
+    // Criar backup de seguranÃ§a
     await this.createRollbackPoint(propertyKey);
     
     try {
       // Aplicar migrations
       await this.runMigrations(propertyKey, version);
       
-      // Atualizar código
+      // Atualizar cÃ³digo
       await this.updateCode(propertyKey, version);
       
       // Verificar integridade
       await this.verifyIntegrity(propertyKey);
       
-      // Atualizar versão
+      // Atualizar versÃ£o
       await this.setVersion(propertyKey, version);
       
       return { success: true };
     } catch (error) {
-      // Rollback automático
+      // Rollback automÃ¡tico
       await this.rollback(propertyKey);
       throw error;
     }
@@ -720,9 +720,9 @@ class OTAManager {
 
 ---
 
-## 🎯 Fase 6: Observability
+## ðŸŽ¯ Fase 6: Observability
 
-### 6.1 Logs, Métricas e Alertas
+### 6.1 Logs, MÃ©tricas e Alertas
 **Arquivos a criar:**
 ```
 /core/
@@ -768,100 +768,100 @@ class MetricsCollector {
 
 ---
 
-## 📋 Cronograma de Implementação
+## ðŸ“‹ Cronograma de ImplementaÃ§Ã£o
 
 ### Sprint 1 (Semana 1-2): Foundation
-- ✅ PropertyDatabase.js
-- ✅ SchemaManager.js
-- ✅ Router.js
-- ✅ Shell HTML/CSS
-- ✅ QA Baseline (screenshots + computed CSS)
+- âœ… PropertyDatabase.js
+- âœ… SchemaManager.js
+- âœ… Router.js
+- âœ… Shell HTML/CSS
+- âœ… QA Baseline (screenshots + computed CSS)
 
 ### Sprint 2 (Semana 3-4): Implementation Wizard
-- ✅ ImplementationWizard.js
-- ✅ PropertyProvisioner.js
-- ✅ AdminCreator.js
-- ✅ QA Wizard completo
+- âœ… ImplementationWizard.js
+- âœ… PropertyProvisioner.js
+- âœ… AdminCreator.js
+- âœ… QA Wizard completo
 
 ### Sprint 3 (Semana 5-6): Multi-Property Dashboard
-- ✅ MultiPropertyDashboard.js
-- ✅ KPICalculator.js
-- ✅ PropertyCard.js
-- ✅ QA Dashboard + navegação
+- âœ… MultiPropertyDashboard.js
+- âœ… KPICalculator.js
+- âœ… PropertyCard.js
+- âœ… QA Dashboard + navegaÃ§Ã£o
 
 ### Sprint 4 (Semana 7-8): Sync Service
-- ✅ SyncService.js
-- ✅ SyncConfigPage.js
-- ✅ ConflictResolver.js
-- ✅ QA Sync completo
+- âœ… SyncService.js
+- âœ… SyncConfigPage.js
+- âœ… ConflictResolver.js
+- âœ… QA Sync completo
 
 ### Sprint 5 (Semana 9-10): OTA & Rollback
-- ✅ OTAManager.js
-- ✅ CompatibilityChecker.js
-- ✅ RollbackService.js
-- ✅ QA Updates + rollback
+- âœ… OTAManager.js
+- âœ… CompatibilityChecker.js
+- âœ… RollbackService.js
+- âœ… QA Updates + rollback
 
-### Sprint 6 (Semana 11-12): Observability & Polish ✅ CONCLUÍDA
-- ✅ Logger.js (níveis, categorias, export, persistência)
-- ✅ MetricsCollector.js (performance, recursos, análise P95/P99)
-- ✅ AlertManager.js (regras, handlers, cooldown, acknowledge)
-- ✅ observability.html (dashboard interativo)
-- ✅ QA Final + Performance (7/7 PASS, overhead <100ms)
+### Sprint 6 (Semana 11-12): Observability & Polish âœ… CONCLUÃDA
+- âœ… Logger.js (nÃ­veis, categorias, export, persistÃªncia)
+- âœ… MetricsCollector.js (performance, recursos, anÃ¡lise P95/P99)
+- âœ… AlertManager.js (regras, handlers, cooldown, acknowledge)
+- âœ… observability.html (dashboard interativo)
+- âœ… QA Final + Performance (7/7 PASS, overhead <100ms)
 
 ---
 
-## ✅ Critérios de Aceite (Checklist)
+## âœ… CritÃ©rios de Aceite (Checklist)
 
 ### Foundation
 - [ ] PropertyDatabase isola dados corretamente por tenant
 - [ ] Router navega via /property/{slug} sem reload
-- [ ] Shell carrega páginas dinamicamente
-- [ ] Visual/funcional idêntico ao baseline (QA aprovado)
+- [ ] Shell carrega pÃ¡ginas dinamicamente
+- [ ] Visual/funcional idÃªntico ao baseline (QA aprovado)
 
 ### Implementation Wizard
 - [ ] Wizard cria propriedade com DB isolado
 - [ ] schema_version definido corretamente
 - [ ] Admin local criado e funcional
-- [ ] Módulos ativados conforme seleção
+- [ ] MÃ³dulos ativados conforme seleÃ§Ã£o
 - [ ] Backups agendados automaticamente
 - [ ] Auditoria registrada
 
 ### Multi-Property Dashboard
 - [ ] Lista todas as propriedades
-- [ ] Exibe KPIs (vendidos/disponíveis/ocupação/ADR)
-- [ ] Botão "Abrir controle" navega para /property/{slug}
-- [ ] Performance aceitável (FCP < 2s)
+- [ ] Exibe KPIs (vendidos/disponÃ­veis/ocupaÃ§Ã£o/ADR)
+- [ ] BotÃ£o "Abrir controle" navega para /property/{slug}
+- [ ] Performance aceitÃ¡vel (FCP < 2s)
 
 ### Sync Service
 - [ ] Sync Config Page funcional
-- [ ] Delta sync calcula mudanças corretamente
-- [ ] Política de conflito aplicada
-- [ ] Logs e status visíveis
-- [ ] Retry automático em falhas
+- [ ] Delta sync calcula mudanÃ§as corretamente
+- [ ] PolÃ­tica de conflito aplicada
+- [ ] Logs e status visÃ­veis
+- [ ] Retry automÃ¡tico em falhas
 
 ### OTA
 - [ ] Verifica compatibilidade antes de atualizar
-- [ ] Rollback disponível e funcional
+- [ ] Rollback disponÃ­vel e funcional
 - [ ] Migrations executadas corretamente
-- [ ] Integridade verificada pós-update
+- [ ] Integridade verificada pÃ³s-update
 
 ### Observability
-- [ ] Logs estruturados e consultáveis
-- [ ] Métricas coletadas (performance, business)
+- [ ] Logs estruturados e consultÃ¡veis
+- [ ] MÃ©tricas coletadas (performance, business)
 - [ ] Alertas disparados em falhas
 - [ ] Dashboard de monitoramento
 
 ### QA Final
-- [ ] Todos os screenshots baseline vs pós-refactor idênticos
+- [ ] Todos os screenshots baseline vs pÃ³s-refactor idÃªnticos
 - [ ] Computed CSS mantido
-- [ ] Navegação funcional em todos os fluxos
+- [ ] NavegaÃ§Ã£o funcional em todos os fluxos
 - [ ] i18n funcionando (pt/en/es)
-- [ ] Modais e interações preservadas
-- [ ] FCP < 2s, peso CSS/JS não aumentou significativamente
+- [ ] Modais e interaÃ§Ãµes preservadas
+- [ ] FCP < 2s, peso CSS/JS nÃ£o aumentou significativamente
 
 ---
 
-## 🚀 Próximos Passos Imediatos
+## ðŸš€ PrÃ³ximos Passos Imediatos
 
 1. **Criar branch de refactor**: `git checkout -b feature/saas-architecture-refactor`
 2. **QA Baseline**: Capturar screenshots e computed CSS do estado atual
@@ -871,5 +871,6 @@ class MetricsCollector {
 
 ---
 
-**📌 Importante**: Esta transformação é **não-regressiva**. Qualquer quebra visual ou funcional não planejada **bloqueia a entrega** até correção.
+**ðŸ“Œ Importante**: Esta transformaÃ§Ã£o Ã© **nÃ£o-regressiva**. Qualquer quebra visual ou funcional nÃ£o planejada **bloqueia a entrega** atÃ© correÃ§Ã£o.
+
 

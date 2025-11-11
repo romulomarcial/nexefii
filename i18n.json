@@ -451,9 +451,17 @@
         }
       },
       "wizard": {
+        "title": "🪄 Property Creation Assistant",
+        "subtitle": "Set up your new property in 6 easy steps",
         "next": "Próximo",
         "back": "Voltar"
       },
+    "footer": {
+      "copy": "© 2025 NEXEFII. All rights reserved.",
+      "help": "Help",
+      "privacy": "Privacy",
+      "terms": "Terms"
+    },
       "modal": {
         "cancel": "Cancelar",
         "save": "Salvar"
@@ -573,6 +581,9 @@
           "placeholder": "Gráficos de performance serão exibidos aqui."
         }
       }
+    },
+    "footer": {
+      "copy": "© 2025 NEXEFII. Todos os direitos reservados."
     },
     "app": {
       "portalTitle": "NEXEFII · Portal de Hotéis",

@@ -13,7 +13,7 @@ class QABaselineCapture {
       metadata: {
         capturedAt: new Date().toISOString(),
         version: '1.0.0',
-        system: 'IluxSys',
+        system: 'nexefii',
         purpose: 'Pre-refactor baseline for architectural transformation'
       },
       pages: [],
@@ -63,8 +63,8 @@ class QABaselineCapture {
     
     const state = {};
     const keysToCapture = [
-      'iluxsys_users',
-      'iluxsys_session',
+      'nexefii_users',
+      'nexefii_session',
       'currentUser',
       'master_backups',
       'master_versions',
@@ -91,7 +91,7 @@ class QABaselineCapture {
     // Capturar contadores de itens
     state._statistics = {
       totalKeys: localStorage.length,
-      usersCount: state.iluxsys_users ? state.iluxsys_users.length : 0,
+      usersCount: state.nexefii_users ? state.nexefii_users.length : 0,
       backupsCount: state.master_backups ? state.master_backups.length : 0,
       propertiesCount: window.IluxProps ? window.IluxProps.listProperties().length : 0
     };
@@ -330,7 +330,7 @@ class QABaselineCapture {
     }
     
     // User management
-    const users = JSON.parse(localStorage.getItem('iluxsys_users') || '[]');
+    const users = JSON.parse(localStorage.getItem('nexefii_users') || '[]');
     interactions.push({
       feature: 'User Management',
       available: true,
@@ -423,7 +423,7 @@ class QABaselineCapture {
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>QA Baseline Report - IluxSys</title>
+  <title>QA Baseline Report - nexefii</title>
   <style>
     * { margin: 0; padding: 0; box-sizing: border-box; }
     body {
@@ -626,3 +626,4 @@ console.log(`
 
 ✅ Após captura, prosseguir para implementação da arquitetura.
 `);
+

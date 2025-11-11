@@ -1,6 +1,6 @@
-# Development Filesystem Backup Tool
+﻿# Development Filesystem Backup Tool
 
-This adds a lightweight Node-based backup system to create versioned ZIP archives of both `iluxsys/` and `IluxPrime_website/` folders.
+This adds a lightweight Node-based backup system to create versioned ZIP archives of both `nexefii/` and `IluxPrime_website/` folders.
 
 ## Features
 - Zip archive with timestamp and optional label (e.g. marco tag)
@@ -9,7 +9,7 @@ This adds a lightweight Node-based backup system to create versioned ZIP archive
 - Lightweight HTTP server (`npm run dev-backup-server`) exposes POST `/dev-backup` endpoint
 
 ## Setup
-1. Open PowerShell in `iluxsys/`
+1. Open PowerShell in `nexefii/`
 2. Install dependencies:
    npm install
 3. (Optional) Start server for automatic backups:
@@ -21,7 +21,7 @@ Run:
 Add a label:
    npm run backup -- label=marco-1
 
-Output files appear in `iluxsys/backups/` as:
+Output files appear in `nexefii/backups/` as:
 `dev-backup_YYYY-MM-DD_HH-mm-ss[_label].zip`
 
 ## Automatic on Version Creation
@@ -33,8 +33,8 @@ If the server responds OK, an activity log entry is recorded. Failure is silent.
 Start server:
    npm run dev-backup-server
 Endpoints:
-- GET /health → check server status
-- POST /dev-backup?label=mytag → perform backup; returns script output
+- GET /health â†’ check server status
+- POST /dev-backup?label=mytag â†’ perform backup; returns script output
 
 ## Exclusions
 Ignored paths: node_modules, .git, backups, *.zip, *.tmp
@@ -51,3 +51,4 @@ Ignored paths: node_modules, .git, backups, *.zip, *.tmp
 
 ## Security Note
 This tool is development-only. Do not expose the dev server publicly. For production, integrate authentication and cloud storage.
+

@@ -1,29 +1,29 @@
+﻿
+# NEXEFII Â· Portal de HotÃ©is (v4_4)
 
-# NEXEFII · Portal de Hotéis (v4_4)
-
-Estrutura organizada para apresentação/POC com i18n (PT/EN/ES).
+Estrutura organizada para apresentaÃ§Ã£o/POC com i18n (PT/EN/ES).
 
 ## Pastas e arquivos
 
-- `index.html` — Portal (cards dos hotéis, KPIs por hotel, botões de Controle/RTI).
-- `login.html` — Tela de login com i18n em tempo real (PT/EN/ES), campo de senha e persistência de idioma/usuário.
-- `app.js` — Lógica do portal, i18n das telas internas, calendário, modais (Controle e RTI).
-- `style.css` — Estilos gerais (layout leve, claro).
-- `assets/` — Imagens (logo e fotos dos hotéis).
+- `index.html` â€” Portal (cards dos hotÃ©is, KPIs por hotel, botÃµes de Controle/RTI).
+- `login.html` â€” Tela de login com i18n em tempo real (PT/EN/ES), campo de senha e persistÃªncia de idioma/usuÃ¡rio.
+- `app.js` â€” LÃ³gica do portal, i18n das telas internas, calendÃ¡rio, modais (Controle e RTI).
+- `style.css` â€” Estilos gerais (layout leve, claro).
+- `assets/` â€” Imagens (logo e fotos dos hotÃ©is).
 
 ## i18n
-- O **login** contém bloco i18n próprio, isolado e simples de editar (`I18N_LOGIN`).
-- As telas internas usam o i18n do `app.js`, que lê o idioma salvo em `localStorage.nexefii_lang`.
-- Idiomas suportados: Português (pt), English (en), Español (es).
+- O **login** contÃ©m bloco i18n prÃ³prio, isolado e simples de editar (`I18N_LOGIN`).
+- As telas internas usam o i18n do `app.js`, que lÃª o idioma salvo em `localStorage.nexefii_lang`.
+- Idiomas suportados: PortuguÃªs (pt), English (en), EspaÃ±ol (es).
 
 ## Fluxo
-1. Abrir `login.html`, escolher idioma, informar usuário/senha e entrar.
-2. O idioma é salvo e aplicado no portal e modais.
-3. Botão **Logout** no topo do portal limpa usuário e retorna ao login.
+1. Abrir `login.html`, escolher idioma, informar usuÃ¡rio/senha e entrar.
+2. O idioma Ã© salvo e aplicado no portal e modais.
+3. BotÃ£o **Logout** no topo do portal limpa usuÃ¡rio e retorna ao login.
 
-## Observações
-- Todos os textos dinâmicos possuem IDs para facilitar manutenção.
-- Dados (KPIs e calendário) simulados para demo.
+## ObservaÃ§Ãµes
+- Todos os textos dinÃ¢micos possuem IDs para facilitar manutenÃ§Ã£o.
+- Dados (KPIs e calendÃ¡rio) simulados para demo.
 
 ## Servidor de Desenvolvimento (Porta 8004)
 
@@ -31,10 +31,10 @@ Fornecemos agora um servidor Node minimal (`server.js`) para evitar erros de rot
 
 ### Iniciar
 
-Pré-requisito: Node instalado e estar na pasta do projeto:
+PrÃ©-requisito: Node instalado e estar na pasta do projeto:
 
 ```powershell
-Set-Location R:\Development\Projects\iluxsys
+Set-Location R:\Development\Projects\nexefii
 node server.js
 ```
 
@@ -52,50 +52,51 @@ http://localhost:8004/shell.html#/
 ```
 O hash `#/` garante que o Router (modo hash) resolva a rota inicial corretamente.
 
-### Forçar atualização do Service Worker
+### ForÃ§ar atualizaÃ§Ã£o do Service Worker
 1. DevTools > Application > Service Workers > Unregister
 2. Application > Clear storage > Clear site data
 3. Network > marcar "Disable cache"
 4. Hard reload (Ctrl+Shift+R)
-5. Verificar no Console: versão `nexefii-v1.0.1` e Router com `mode: 'hash'`
+5. Verificar no Console: versÃ£o `nexefii-v1.0.1` e Router com `mode: 'hash'`
 6. (Opcional) Executar no Console se precisar limpar cache novamente:
 ```js
 window.NEXEFII.clearSWCache()
 ```
 
-### Erros de conexão (ERR_CONNECTION_REFUSED)
-Se aparecer, o servidor não está rodando ou porta mudou.
-Verificar se algo está escutando:
+### Erros de conexÃ£o (ERR_CONNECTION_REFUSED)
+Se aparecer, o servidor nÃ£o estÃ¡ rodando ou porta mudou.
+Verificar se algo estÃ¡ escutando:
 ```powershell
 netstat -ano | Select-String ":8004"
 ```
-Se ocupado, alterar a porta (ex.: set variável antes de rodar):
+Se ocupado, alterar a porta (ex.: set variÃ¡vel antes de rodar):
 ```powershell
 $env:PORT=8010
 node server.js
 ```
-Então acessar:
+EntÃ£o acessar:
 ```
 http://localhost:8010/shell.html#/
 ```
 
 ### Porque hash mode?
-Como servidor estático simples não faz rewrite de todas as rotas para `shell.html`, usamos `mode: 'hash'` para evitar 404 do navegador em refresh profundo.
+Como servidor estÃ¡tico simples nÃ£o faz rewrite de todas as rotas para `shell.html`, usamos `mode: 'hash'` para evitar 404 do navegador em refresh profundo.
 
 
 
 ## i18n externo
-- Agora há um `i18n.json` com textos de **login** e **app**.
-- Quando abrir pelo **Live Server** (http://127.0.0.1:5500/), os textos são carregados desse JSON.
-- Em `file://`, se o `fetch` não puder ler o arquivo, há **fallback** embutido, então a UI continua funcionando.
+- Agora hÃ¡ um `i18n.json` com textos de **login** e **app**.
+- Quando abrir pelo **Live Server** (http://127.0.0.1:5500/), os textos sÃ£o carregados desse JSON.
+- Em `file://`, se o `fetch` nÃ£o puder ler o arquivo, hÃ¡ **fallback** embutido, entÃ£o a UI continua funcionando.
 
-## Sprint 4 – Sync Service (Resumo)
-- Configuração: abra `pages/sync-config.html` para escolher o modo (Manual / Agendado / Contínuo) e exportar logs.
-- Núcleo: `core/sync/SyncService.js` com fila priorizada, retry exponencial e métricas.
-- Conflitos: `core/sync/ConflictResolver.js` (estratégia LWW + manual opcional).
-- Logs/Métricas: `core/sync/SyncLogger.js` (export JSON).
-- QA: `qa-baseline/sprint4-sync-qa.html` executa testes automatizados (latência ≤ 2s e fila zerada ao final).
+## Sprint 4 â€“ Sync Service (Resumo)
+- ConfiguraÃ§Ã£o: abra `pages/sync-config.html` para escolher o modo (Manual / Agendado / ContÃ­nuo) e exportar logs.
+- NÃºcleo: `core/sync/SyncService.js` com fila priorizada, retry exponencial e mÃ©tricas.
+- Conflitos: `core/sync/ConflictResolver.js` (estratÃ©gia LWW + manual opcional).
+- Logs/MÃ©tricas: `core/sync/SyncLogger.js` (export JSON).
+- QA: `qa-baseline/sprint4-sync-qa.html` executa testes automatizados (latÃªncia â‰¤ 2s e fila zerada ao final).
 
-Atualiza��o: Sprint 5 conclu�da. Ver SPRINT_SUMMARY_5.md
+Atualização: Sprint 5 concluída. Ver SPRINT_SUMMARY_5.md
 
-Atualiza��o: Sprint 5 conclu�da. Ver SPRINT_SUMMARY_5.md
+Atualização: Sprint 5 concluída. Ver SPRINT_SUMMARY_5.md
+

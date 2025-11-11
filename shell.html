@@ -100,8 +100,17 @@
     }
 
     .logo img {
-      height: 36px;
+      height: 64px; /* increased for better visibility per UX */
       width: auto;
+      display: block;
+    }
+
+    /* Responsive logo sizes */
+    @media (max-width: 768px) {
+      .logo img { height: 52px; }
+    }
+    @media (max-width: 480px) {
+      .logo img { height: 40px; }
     }
 
     .logo-text {
@@ -463,9 +472,9 @@
   <header class="shell-header">
     <div class="header-content">
       <div class="header-left">
-        <a href="/" class="logo" data-router-link>
+        <a href="/" class="logo" data-router-link aria-label="Nexefii">
           <img src="/assets/Nexefii_logo_3d-official.png" alt="NEXEFII Logo">
-          <span class="logo-text">NEXEFII</span>
+          <!-- logo text removed to use only the visual mark for a cleaner header -->
         </a>
         
         <nav class="breadcrumb" id="breadcrumb">
@@ -512,11 +521,11 @@
   <!-- Footer -->
   <footer class="shell-footer">
     <div class="footer-content">
-      <div>&copy; 2025 NEXEFII. Todos os direitos reservados.</div>
-      <div class="footer-links">
-        <a href="/help" class="footer-link" data-router-link>Ajuda</a>
-        <a href="/privacy" class="footer-link" data-router-link>Privacidade</a>
-        <a href="/terms" class="footer-link" data-router-link>Termos</a>
+      <div data-i18n="footer.copy">&copy; 2025 NEXEFII. Todos os direitos reservados.</div>
+        <div class="footer-links">
+        <a href="/help" class="footer-link" data-router-link data-i18n="footer.help">Ajuda</a>
+        <a href="/privacy" class="footer-link" data-router-link data-i18n="footer.privacy">Privacidade</a>
+        <a href="/terms" class="footer-link" data-router-link data-i18n="footer.terms">Termos</a>
       </div>
     </div>
   </footer>
@@ -911,8 +920,8 @@
 
       const breadcrumbs = [];
 
-      // Home
-      breadcrumbs.push({ label: 'Início', path: '/' });
+      // Home (use i18n key so translations are applied dynamically)
+      breadcrumbs.push({ labelKey: 'master.breadcrumb.home', label: 'Início', path: '/' });
 
       // Property
       if (context.property) {
@@ -932,16 +941,29 @@
         const isLast = index === breadcrumbs.length - 1;
         
         if (isLast || !item.path) {
+          // If a translation key was provided, include data-i18n so I18nManager can replace it
+          if (item.labelKey) {
+            return `<span class="breadcrumb-current" data-i18n="${item.labelKey}">${item.label}</span>`;
+          }
           return `<span class="breadcrumb-current">${item.label}</span>`;
         }
         
         return `
           <div class="breadcrumb-item">
-            <a href="${item.path}" class="breadcrumb-link" data-router-link>${item.label}</a>
+            <a href="${item.path}" class="breadcrumb-link" data-router-link ${item.labelKey ? `data-i18n="${item.labelKey}"` : ''}>${item.label}</a>
             <span class="breadcrumb-separator">/</span>
           </div>
         `;
       }).join('');
+
+      // Apply i18n to the breadcrumb element if i18n is available
+      try {
+        if (window.NEXEFII && window.NEXEFII.i18n && typeof window.NEXEFII.i18n.applyToDOM === 'function') {
+          window.NEXEFII.i18n.applyToDOM(breadcrumbEl);
+        }
+      } catch (e) {
+        console.warn('[Shell] Breadcrumb i18n apply error', e);
+      }
     }
 
     function updatePropertyBadge(property) {

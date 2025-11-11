@@ -1,0 +1,247 @@
+[
+  {
+    "url": "http://localhost:8004/assets/Nexefii_logo_3d-official.png",
+    "method": "GET",
+    "status": 200
+  },
+  {
+    "url": "http://localhost:8004/shell.html",
+    "method": "GET",
+    "status": 200
+  },
+  {
+    "url": "http://localhost:8004/nexefii-auth.js",
+    "method": "GET",
+    "status": 200
+  },
+  {
+    "url": "http://localhost:8004/properties.js",
+    "method": "GET",
+    "status": 200
+  },
+  {
+    "url": "http://localhost:8004/core/database/PropertyDatabase.js",
+    "method": "GET",
+    "status": 200
+  },
+  {
+    "url": "http://localhost:8004/core/router/Router.js",
+    "method": "GET",
+    "status": 200
+  },
+  {
+    "url": "http://localhost:8004/core/wizard/WizardManager.js",
+    "method": "GET",
+    "status": 200
+  },
+  {
+    "url": "http://localhost:8004/core/i18n/I18nManager.js",
+    "method": "GET",
+    "status": 200
+  },
+  {
+    "url": "http://localhost:8004/pwa-installer.js",
+    "method": "GET",
+    "status": 200
+  },
+  {
+    "url": "http://localhost:8004/i18n.json",
+    "method": "GET",
+    "status": 200
+  },
+  {
+    "url": "http://localhost:8004/i18n/pt/common.json",
+    "method": "GET",
+    "status": 200
+  },
+  {
+    "url": "http://localhost:8004/assets/Nexefii_logo_3d-official.png",
+    "method": "GET",
+    "status": 200
+  },
+  {
+    "url": "http://localhost:8004/i18n/pt/wizard.json",
+    "method": "GET",
+    "status": 200
+  },
+  {
+    "url": "http://localhost:8004/i18n/pt/dashboard.json",
+    "method": "GET",
+    "status": 200
+  },
+  {
+    "url": "http://localhost:8004/i18n/pt/rooms.json",
+    "method": "GET",
+    "status": 200
+  },
+  {
+    "url": "http://localhost:8004/i18n/pt/frontdesk.json",
+    "method": "GET",
+    "status": 200
+  },
+  {
+    "url": "http://localhost:8004/i18n/pt/reservations.json",
+    "method": "GET",
+    "status": 200
+  },
+  {
+    "url": "http://localhost:8004/i18n/en/common.json",
+    "method": "GET",
+    "status": 200
+  },
+  {
+    "url": "http://localhost:8004/i18n/en/wizard.json",
+    "method": "GET",
+    "status": 200
+  },
+  {
+    "url": "http://localhost:8004/i18n/en/dashboard.json",
+    "method": "GET",
+    "status": 200
+  },
+  {
+    "url": "http://localhost:8004/i18n/en/rooms.json",
+    "method": "GET",
+    "status": 200
+  },
+  {
+    "url": "http://localhost:8004/i18n/en/frontdesk.json",
+    "method": "GET",
+    "status": 200
+  },
+  {
+    "url": "http://localhost:8004/i18n/en/reservations.json",
+    "method": "GET",
+    "status": 200
+  },
+  {
+    "url": "http://localhost:8004/i18n/es/common.json",
+    "method": "GET",
+    "status": 200
+  },
+  {
+    "url": "http://localhost:8004/i18n/es/wizard.json",
+    "method": "GET",
+    "status": 200
+  },
+  {
+    "url": "http://localhost:8004/i18n/es/dashboard.json",
+    "method": "GET",
+    "status": 200
+  },
+  {
+    "url": "http://localhost:8004/i18n/es/rooms.json",
+    "method": "GET",
+    "status": 200
+  },
+  {
+    "url": "http://localhost:8004/i18n/es/frontdesk.json",
+    "method": "GET",
+    "status": 200
+  },
+  {
+    "url": "http://localhost:8004/i18n/es/reservations.json",
+    "method": "GET",
+    "status": 200
+  },
+  {
+    "url": "http://localhost:8004/pages/home.html?cb=1762876846631",
+    "method": "GET",
+    "status": 200
+  },
+  {
+    "url": "http://localhost:8004/manifest.json",
+    "method": "GET",
+    "status": 200
+  },
+  {
+    "url": "http://localhost:8004/assets/Nexefii_logo_3d-official.png",
+    "method": "GET",
+    "status": 200
+  },
+  {
+    "url": "http://localhost:8004/pages/wizard.html?cb=1762876847320",
+    "method": "GET",
+    "status": 200
+  },
+  {
+    "url": "http://localhost:8004/pages/wizard.html?cb=1762876847321",
+    "method": "GET",
+    "status": 200
+  },
+  {
+    "url": "http://localhost:8004/assets/images/default-hotel-1.jpg",
+    "method": "GET",
+    "status": 200
+  },
+  {
+    "url": "http://localhost:8004/assets/images/default-hotel-2.jpg",
+    "method": "GET",
+    "status": 200
+  },
+  {
+    "url": "http://localhost:8004/assets/images/default-hotel-3.jpg",
+    "method": "GET",
+    "status": 200
+  },
+  {
+    "url": "http://localhost:8004/assets/images/default-hotel-4.jpg",
+    "method": "GET",
+    "status": 200
+  },
+  {
+    "url": "http://localhost:8004/assets/images/default-hotel-5.jpg",
+    "method": "GET",
+    "status": 200
+  },
+  {
+    "url": "http://localhost:8004/assets/images/default-hotel-6.jpg",
+    "method": "GET",
+    "status": 200
+  },
+  {
+    "url": "http://localhost:8004/assets/Nexefii_logo_3d-official.png",
+    "method": "GET",
+    "status": 200
+  },
+  {
+    "url": "http://localhost:8004/assets/images/default-hotel-1.jpg",
+    "method": "GET",
+    "status": 200
+  },
+  {
+    "url": "http://localhost:8004/assets/images/default-hotel-2.jpg",
+    "method": "GET",
+    "status": 200
+  },
+  {
+    "url": "http://localhost:8004/assets/images/default-hotel-3.jpg",
+    "method": "GET",
+    "status": 200
+  },
+  {
+    "url": "http://localhost:8004/assets/images/default-hotel-4.jpg",
+    "method": "GET",
+    "status": 200
+  },
+  {
+    "url": "http://localhost:8004/assets/images/default-hotel-5.jpg",
+    "method": "GET",
+    "status": 200
+  },
+  {
+    "url": "http://localhost:8004/assets/Nexefii_logo_3d-official.png",
+    "method": "GET",
+    "status": 200
+  },
+  {
+    "url": "http://localhost:8004/pages/dashboard.html?cb=1762876852004",
+    "method": "GET",
+    "status": 200
+  },
+  {
+    "url": "http://localhost:8004/pages/dashboard.html?cb=1762876852005",
+    "method": "GET",
+    "status": 200
+  }
+]

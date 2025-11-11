@@ -1,17 +1,17 @@
-# 🌐 Internationalization System (i18n) - IluxSys
+﻿# ðŸŒ Internationalization System (i18n) - nexefii
 
 ---
-**📄 Documento**: I18N_SYSTEM_README.md  
-**📦 Versão**: 2.0.0  
-**📅 Última Atualização**: 07/11/2025 - 15:30 BRT  
-**👤 Autor**: IluxSys Development Team  
-**🔄 Status**: ✅ Atualizado e Sincronizado
+**ðŸ“„ Documento**: I18N_SYSTEM_README.md  
+**ðŸ“¦ VersÃ£o**: 2.0.0  
+**ðŸ“… Ãšltima AtualizaÃ§Ã£o**: 07/11/2025 - 15:30 BRT  
+**ðŸ‘¤ Autor**: nexefii Development Team  
+**ðŸ”„ Status**: âœ… Atualizado e Sincronizado
 
 ---
 
-## 📋 Índice
+## ðŸ“‹ Ãndice
 
-1. [Visão Geral](#visão-geral)
+1. [VisÃ£o Geral](#visÃ£o-geral)
 2. [Idiomas Suportados](#idiomas-suportados)
 3. [Arquitetura](#arquitetura)
 4. [Estrutura de Arquivos](#estrutura-de-arquivos)
@@ -23,39 +23,39 @@
 
 ---
 
-## Visão Geral
+## VisÃ£o Geral
 
-O **Sistema de Internacionalização (i18n)** do IluxSys permite suporte multi-idioma com carregamento dinâmico, deep merge de traduções e aplicação automática via atributos HTML.
+O **Sistema de InternacionalizaÃ§Ã£o (i18n)** do nexefii permite suporte multi-idioma com carregamento dinÃ¢mico, deep merge de traduÃ§Ãµes e aplicaÃ§Ã£o automÃ¡tica via atributos HTML.
 
-### Características:
+### CaracterÃ­sticas:
 
-- ✅ 3 idiomas suportados (Português, Inglês, Espanhol)
-- ✅ Deep merge de arquivos i18n (main + enterprise)
-- ✅ Carregamento assíncrono e dinâmico
-- ✅ Aplicação automática via `data-i18n`
-- ✅ Placeholders traduzíveis via `data-i18n-placeholder`
-- ✅ Fallback para idioma padrão (pt)
-- ✅ Cache de traduções no localStorage
+- âœ… 3 idiomas suportados (PortuguÃªs, InglÃªs, Espanhol)
+- âœ… Deep merge de arquivos i18n (main + enterprise)
+- âœ… Carregamento assÃ­ncrono e dinÃ¢mico
+- âœ… AplicaÃ§Ã£o automÃ¡tica via `data-i18n`
+- âœ… Placeholders traduzÃ­veis via `data-i18n-placeholder`
+- âœ… Fallback para idioma padrÃ£o (pt)
+- âœ… Cache de traduÃ§Ãµes no localStorage
 
 ---
 
 ## Idiomas Suportados
 
-### 🇧🇷 Português (pt) - Padrão
-- Código: `pt`
-- Flag: 🇧🇷
+### ðŸ‡§ðŸ‡· PortuguÃªs (pt) - PadrÃ£o
+- CÃ³digo: `pt`
+- Flag: ðŸ‡§ðŸ‡·
 - Arquivo principal: `i18n.json`
 - Arquivo enterprise: `i18n-enterprise-pt.json`
 
-### 🇺🇸 Inglês (en)
-- Código: `en`
-- Flag: 🇺🇸
+### ðŸ‡ºðŸ‡¸ InglÃªs (en)
+- CÃ³digo: `en`
+- Flag: ðŸ‡ºðŸ‡¸
 - Arquivo principal: `i18n.json`
 - Arquivo enterprise: `i18n-enterprise-en.json`
 
-### 🇪🇸 Espanhol (es)
-- Código: `es`
-- Flag: 🇪🇸
+### ðŸ‡ªðŸ‡¸ Espanhol (es)
+- CÃ³digo: `es`
+- Flag: ðŸ‡ªðŸ‡¸
 - Arquivo principal: `i18n.json`
 - Arquivo enterprise: `i18n-enterprise-es.json`
 
@@ -66,26 +66,26 @@ O **Sistema de Internacionalização (i18n)** do IluxSys permite suporte multi-i
 ### Fluxo de Carregamento:
 
 ```
-Inicialização
-    ↓
-loadI18N() → master-control.js
-    ↓
+InicializaÃ§Ã£o
+    â†“
+loadI18N() â†’ master-control.js
+    â†“
 Fetch i18n.json (principal)
-    ↓
+    â†“
 Fetch i18n-enterprise-{locale}.json
-    ↓
+    â†“
 Deep Merge (main + enterprise)
-    ↓
+    â†“
 Cache no localStorage
-    ↓
+    â†“
 applyTranslations()
-    ↓
-DOM atualizado com traduções
+    â†“
+DOM atualizado com traduÃ§Ãµes
 ```
 
 ### Sistema de Deep Merge:
 
-O sistema combina traduções do arquivo principal com arquivos enterprise sem sobrescrever, usando merge recursivo:
+O sistema combina traduÃ§Ãµes do arquivo principal com arquivos enterprise sem sobrescrever, usando merge recursivo:
 
 ```javascript
 function deepMerge(target, source) {
@@ -140,7 +140,7 @@ function deepMerge(target, source) {
 
 ### i18n.json (Principal)
 
-Contém traduções básicas do sistema para todos os idiomas:
+ContÃ©m traduÃ§Ãµes bÃ¡sicas do sistema para todos os idiomas:
 
 ```json
 {
@@ -170,7 +170,7 @@ Contém traduções básicas do sistema para todos os idiomas:
 
 ### i18n-enterprise-pt.json
 
-Traduções enterprise em Português:
+TraduÃ§Ãµes enterprise em PortuguÃªs:
 
 ```json
 {
@@ -181,9 +181,9 @@ Traduções enterprise em Português:
       "releases": "Releases & Rollback"
     },
     "propertyBackups": {
-      "metricsTitle": "Métricas de Backup por Propriedade",
+      "metricsTitle": "MÃ©tricas de Backup por Propriedade",
       "totalBackups": "Total de Backups",
-      "last24h": "Últimas 24h",
+      "last24h": "Ãšltimas 24h",
       "successRate": "Taxa de Sucesso"
     }
   }
@@ -192,7 +192,7 @@ Traduções enterprise em Português:
 
 ### i18n-enterprise-en.json
 
-Traduções enterprise em Inglês:
+TraduÃ§Ãµes enterprise em InglÃªs:
 
 ```json
 {
@@ -214,7 +214,7 @@ Traduções enterprise em Inglês:
 
 ### i18n-enterprise-es.json
 
-Traduções enterprise em Espanhol:
+TraduÃ§Ãµes enterprise em Espanhol:
 
 ```json
 {
@@ -225,10 +225,10 @@ Traduções enterprise em Espanhol:
       "releases": "Releases & Rollback"
     },
     "propertyBackups": {
-      "metricsTitle": "Métricas de Backup por Propiedad",
+      "metricsTitle": "MÃ©tricas de Backup por Propiedad",
       "totalBackups": "Backups Totales",
-      "last24h": "Últimas 24h",
-      "successRate": "Tasa de Éxito"
+      "last24h": "Ãšltimas 24h",
+      "successRate": "Tasa de Ã‰xito"
     }
   }
 }
@@ -238,7 +238,7 @@ Traduções enterprise em Espanhol:
 
 ## Deep Merge System
 
-### Implementação (master-control.js):
+### ImplementaÃ§Ã£o (master-control.js):
 
 ```javascript
 async loadI18N(locale = 'pt') {
@@ -247,7 +247,7 @@ async loadI18N(locale = 'pt') {
     const mainResponse = await fetch('./i18n.json');
     const mainI18n = await mainResponse.json();
     
-    // 2. Carregar i18n enterprise específico do locale
+    // 2. Carregar i18n enterprise especÃ­fico do locale
     let enterpriseI18n = {};
     try {
       const enterpriseResponse = await fetch(`./i18n-enterprise-${locale}.json`);
@@ -269,12 +269,12 @@ async loadI18N(locale = 'pt') {
     localStorage.setItem('cached_i18n', JSON.stringify(mergedTranslations));
     localStorage.setItem('i18n_locale', locale);
     
-    // 5. Aplicar traduções
+    // 5. Aplicar traduÃ§Ãµes
     this.applyTranslations();
     
   } catch (error) {
     console.error('Error loading i18n:', error);
-    // Fallback para português
+    // Fallback para portuguÃªs
     if (locale !== 'pt') {
       await this.loadI18N('pt');
     }
@@ -308,30 +308,30 @@ isObject(item) {
 
 ## API Reference
 
-### Métodos Principais:
+### MÃ©todos Principais:
 
 #### `loadI18N(locale = 'pt')`
 
-Carrega traduções para o locale especificado.
+Carrega traduÃ§Ãµes para o locale especificado.
 
-**Parâmetros:**
-- `locale` (string): Código do idioma ('pt', 'en', 'es')
+**ParÃ¢metros:**
+- `locale` (string): CÃ³digo do idioma ('pt', 'en', 'es')
 
 **Comportamento:**
 1. Fetch do i18n.json principal
 2. Fetch do i18n-enterprise-{locale}.json
-3. Deep merge das traduções
+3. Deep merge das traduÃ§Ãµes
 4. Cache no localStorage
-5. Aplicação automática no DOM
+5. AplicaÃ§Ã£o automÃ¡tica no DOM
 
 **Exemplo:**
 ```javascript
-await masterCtrl.loadI18N('en'); // Carregar inglês
+await masterCtrl.loadI18N('en'); // Carregar inglÃªs
 ```
 
 #### `applyTranslations()`
 
-Aplica traduções carregadas aos elementos HTML.
+Aplica traduÃ§Ãµes carregadas aos elementos HTML.
 
 **Busca elementos com:**
 - `data-i18n="key.path"` - Para textos
@@ -339,19 +339,19 @@ Aplica traduções carregadas aos elementos HTML.
 
 **Exemplo HTML:**
 ```html
-<h1 data-i18n="master.title">Título padrão</h1>
+<h1 data-i18n="master.title">TÃ­tulo padrÃ£o</h1>
 <input data-i18n-placeholder="propertyBackups.search" placeholder="Search...">
 ```
 
 #### `t(key)`
 
-Obtém tradução por chave (helper function).
+ObtÃ©m traduÃ§Ã£o por chave (helper function).
 
-**Parâmetros:**
+**ParÃ¢metros:**
 - `key` (string): Caminho da chave (ex: 'master.tabs.overview')
 
 **Retorno:**
-- string: Tradução encontrada ou a própria chave se não encontrada
+- string: TraduÃ§Ã£o encontrada ou a prÃ³pria chave se nÃ£o encontrada
 
 **Exemplo:**
 ```javascript
@@ -363,12 +363,12 @@ const title = masterCtrl.t('master.title');
 
 Troca idioma dinamicamente.
 
-**Parâmetros:**
+**ParÃ¢metros:**
 - `locale` (string): Novo idioma ('pt', 'en', 'es')
 
 **Comportamento:**
 1. Carrega novo idioma via loadI18N()
-2. Reaplica todas as traduções
+2. Reaplica todas as traduÃ§Ãµes
 3. Atualiza flag/indicador de idioma
 
 **Exemplo:**
@@ -385,10 +385,10 @@ masterCtrl.switchLanguage('es'); // Trocar para espanhol
 #### Traduzir Textos:
 
 ```html
-<!-- Título -->
-<h1 data-i18n="master.title">Título Padrão</h1>
+<!-- TÃ­tulo -->
+<h1 data-i18n="master.title">TÃ­tulo PadrÃ£o</h1>
 
-<!-- Botão -->
+<!-- BotÃ£o -->
 <button data-i18n="common.save">Salvar</button>
 
 <!-- Span dentro de elemento -->
@@ -412,7 +412,7 @@ masterCtrl.switchLanguage('es'); // Trocar para espanhol
 <!-- Textarea -->
 <textarea 
   data-i18n-placeholder="generalBackups.description"
-  placeholder="Descrição..."></textarea>
+  placeholder="DescriÃ§Ã£o..."></textarea>
 ```
 
 #### Traduzir Options:
@@ -427,10 +427,10 @@ masterCtrl.switchLanguage('es'); // Trocar para espanhol
 
 ### No JavaScript:
 
-#### Obter Tradução:
+#### Obter TraduÃ§Ã£o:
 
 ```javascript
-// Usando método t()
+// Usando mÃ©todo t()
 const title = this.t('master.title');
 console.log(title); // "Painel Master"
 
@@ -440,16 +440,16 @@ const tabName = translations.master.tabs.propertyBackups;
 console.log(tabName); // "Backup de Propriedades"
 ```
 
-#### Tradução Dinâmica:
+#### TraduÃ§Ã£o DinÃ¢mica:
 
 ```javascript
-// Criar elemento com tradução
+// Criar elemento com traduÃ§Ã£o
 const button = document.createElement('button');
 button.setAttribute('data-i18n', 'common.save');
 button.textContent = this.t('common.save');
 document.body.appendChild(button);
 
-// Reaplicar traduções após adicionar elementos
+// Reaplicar traduÃ§Ãµes apÃ³s adicionar elementos
 this.applyTranslations();
 ```
 
@@ -458,9 +458,9 @@ this.applyTranslations();
 ```javascript
 // HTML para seletor de idioma
 <select id="languageSelector">
-  <option value="pt">🇧🇷 Português</option>
-  <option value="en">🇺🇸 English</option>
-  <option value="es">🇪🇸 Español</option>
+  <option value="pt">ðŸ‡§ðŸ‡· PortuguÃªs</option>
+  <option value="en">ðŸ‡ºðŸ‡¸ English</option>
+  <option value="es">ðŸ‡ªðŸ‡¸ EspaÃ±ol</option>
 </select>
 
 // JavaScript
@@ -475,21 +475,21 @@ document.getElementById('languageSelector').addEventListener('change', (e) => {
 
 ### Passo 1: Criar Arquivo i18n-enterprise-{locale}.json
 
-Exemplo para Francês (fr):
+Exemplo para FrancÃªs (fr):
 
 ```json
 {
   "master": {
     "tabs": {
-      "propertyBackups": "Sauvegardes de Propriété",
-      "generalBackups": "Structure Générale",
+      "propertyBackups": "Sauvegardes de PropriÃ©tÃ©",
+      "generalBackups": "Structure GÃ©nÃ©rale",
       "releases": "Versions & Retour"
     },
     "propertyBackups": {
-      "metricsTitle": "Métriques de Sauvegarde par Propriété",
+      "metricsTitle": "MÃ©triques de Sauvegarde par PropriÃ©tÃ©",
       "totalBackups": "Sauvegardes Totales",
-      "last24h": "Dernières 24h",
-      "successRate": "Taux de Réussite"
+      "last24h": "DerniÃ¨res 24h",
+      "successRate": "Taux de RÃ©ussite"
     }
   }
 }
@@ -501,9 +501,9 @@ Exemplo para Francês (fr):
 {
   "fr": {
     "master": {
-      "title": "Panneau Maître",
+      "title": "Panneau MaÃ®tre",
       "badge": "SUPER ADMIN",
-      "logout": "Déconnexion"
+      "logout": "DÃ©connexion"
     }
   }
 }
@@ -513,10 +513,10 @@ Exemplo para Francês (fr):
 
 ```html
 <select id="languageSelector">
-  <option value="pt">🇧🇷 Português</option>
-  <option value="en">🇺🇸 English</option>
-  <option value="es">🇪🇸 Español</option>
-  <option value="fr">🇫🇷 Français</option>
+  <option value="pt">ðŸ‡§ðŸ‡· PortuguÃªs</option>
+  <option value="en">ðŸ‡ºðŸ‡¸ English</option>
+  <option value="es">ðŸ‡ªðŸ‡¸ EspaÃ±ol</option>
+  <option value="fr">ðŸ‡«ðŸ‡· FranÃ§ais</option>
 </select>
 ```
 
@@ -530,38 +530,38 @@ await masterCtrl.loadI18N('fr');
 
 ## Estrutura de Chaves
 
-### Padrão de Nomenclatura:
+### PadrÃ£o de Nomenclatura:
 
 ```
 {section}.{subsection}.{key}
 ```
 
 **Exemplos:**
-- `master.title` - Título do Master Panel
-- `master.tabs.overview` - Aba de visão geral
-- `propertyBackups.metricsTitle` - Título das métricas
-- `common.save` - Botão salvar (comum)
-- `common.cancel` - Botão cancelar (comum)
+- `master.title` - TÃ­tulo do Master Panel
+- `master.tabs.overview` - Aba de visÃ£o geral
+- `propertyBackups.metricsTitle` - TÃ­tulo das mÃ©tricas
+- `common.save` - BotÃ£o salvar (comum)
+- `common.cancel` - BotÃ£o cancelar (comum)
 
-### Seções Principais:
+### SeÃ§Ãµes Principais:
 
 #### master
-- Traduções do Master Control Panel
-- Subseções: tabs, badge, logout
+- TraduÃ§Ãµes do Master Control Panel
+- SubseÃ§Ãµes: tabs, badge, logout
 
 #### propertyBackups
-- Traduções de Property Backups
-- Subseções: metrics, catalog, restore, scheduling
+- TraduÃ§Ãµes de Property Backups
+- SubseÃ§Ãµes: metrics, catalog, restore, scheduling
 
 #### generalBackups
-- Traduções de General Structure Backups
-- Subseções: components, metrics
+- TraduÃ§Ãµes de General Structure Backups
+- SubseÃ§Ãµes: components, metrics
 
 #### releases
-- Traduções de Releases & Rollback
+- TraduÃ§Ãµes de Releases & Rollback
 
 #### common
-- Traduções comuns (botões, mensagens)
+- TraduÃ§Ãµes comuns (botÃµes, mensagens)
 - Exemplos: save, cancel, delete, confirm
 
 #### errors
@@ -576,11 +576,11 @@ await masterCtrl.loadI18N('fr');
 
 ### LocalStorage Cache:
 
-O sistema cacheia traduções para melhorar performance:
+O sistema cacheia traduÃ§Ãµes para melhorar performance:
 
 ```javascript
 // Chaves de cache
-'cached_i18n'      // Traduções merged
+'cached_i18n'      // TraduÃ§Ãµes merged
 'i18n_locale'      // Idioma atual
 'i18n_main'        // i18n.json completo
 'i18n_enterprise_pt'  // Enterprise PT
@@ -588,7 +588,7 @@ O sistema cacheia traduções para melhorar performance:
 'i18n_enterprise_es'  // Enterprise ES
 ```
 
-### Estratégia de Carregamento:
+### EstratÃ©gia de Carregamento:
 
 1. **Primeira carga:**
    - Fetch de todos os arquivos
@@ -597,7 +597,7 @@ O sistema cacheia traduções para melhorar performance:
 
 2. **Cargas subsequentes:**
    - Tentar ler do cache primeiro
-   - Se não houver ou for muito antigo, re-fetch
+   - Se nÃ£o houver ou for muito antigo, re-fetch
    - Sempre fazer deep merge
 
 3. **Troca de idioma:**
@@ -611,41 +611,42 @@ O sistema cacheia traduções para melhorar performance:
 
 ### v2.0.0 (07/11/2025)
 
-**✨ Novas Funcionalidades:**
-- ✅ Sistema de deep merge implementado
-- ✅ Arquivos enterprise separados (pt/en/es)
-- ✅ Suporte para 3 idiomas completo
-- ✅ Cache inteligente no localStorage
-- ✅ Tradução de placeholders via data-i18n-placeholder
-- ✅ Fallback automático para idioma padrão
+**âœ¨ Novas Funcionalidades:**
+- âœ… Sistema de deep merge implementado
+- âœ… Arquivos enterprise separados (pt/en/es)
+- âœ… Suporte para 3 idiomas completo
+- âœ… Cache inteligente no localStorage
+- âœ… TraduÃ§Ã£o de placeholders via data-i18n-placeholder
+- âœ… Fallback automÃ¡tico para idioma padrÃ£o
 
-**🔧 Melhorias:**
+**ðŸ”§ Melhorias:**
 - Performance otimizada com cache
 - Deep merge recursivo sem sobrescrever
-- Feature detection para idiomas não suportados
-- Aplicação automática de traduções no DOM
+- Feature detection para idiomas nÃ£o suportados
+- AplicaÃ§Ã£o automÃ¡tica de traduÃ§Ãµes no DOM
 
-**🐛 Correções:**
-- Emoji duplicado no botão de logout corrigido
-- Renomeado "Tenant Backups" → "Property Backups" em todos os idiomas
+**ðŸ› CorreÃ§Ãµes:**
+- Emoji duplicado no botÃ£o de logout corrigido
+- Renomeado "Tenant Backups" â†’ "Property Backups" em todos os idiomas
 
-**📚 Documentação:**
+**ðŸ“š DocumentaÃ§Ã£o:**
 - README completo criado
 - Exemplos de uso documentados
 - Guia para adicionar novos idiomas
 
 ### v1.0.0 (Outubro 2025)
-- Sistema i18n básico implementado
-- Suporte apenas para português
+- Sistema i18n bÃ¡sico implementado
+- Suporte apenas para portuguÃªs
 
 ---
 
-## 🔗 Links Relacionados
+## ðŸ”— Links Relacionados
 
 - [Master Control README](./MASTER_CONTROL_README.md)
 - [Enterprise Backup System README](./ENTERPRISE_BACKUP_SYSTEM_README.md)
 
 ---
 
-**Desenvolvido por IluxSys Development Team**  
-**© 2025 IluxSys - Todos os direitos reservados**
+**Desenvolvido por nexefii Development Team**  
+**Â© 2025 nexefii - Todos os direitos reservados**
+

@@ -32,3 +32,23 @@ const NexefiiAuth = {
     } catch (e) { console.warn('NexefiiAuth.setSession failed', e); }
   }
 };
+
+// Expose compatibility shims/globals for pages that expect a global safeIsAuthenticated helper
+try {
+  if (typeof window !== 'undefined') {
+    window.NexefiiAuth = window.NexefiiAuth || NexefiiAuth;
+    window.safeIsAuthenticated = window.safeIsAuthenticated || function() {
+      try {
+        if (window.NexefiiAuth && typeof window.NexefiiAuth.isAuthenticated === 'function') {
+          return window.NexefiiAuth.isAuthenticated();
+        }
+        if (window.IluxAuth && typeof window.IluxAuth.isAuthenticated === 'function') {
+          return window.IluxAuth.isAuthenticated();
+        }
+      } catch (e) {
+        // swallow and return false
+      }
+      return false;
+    };
+  }
+} catch (e) { /* ignore in non-browser env */ }

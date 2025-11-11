@@ -1,27 +1,27 @@
-# 📸 QA Baseline - Manual de Captura
+﻿# ðŸ“¸ QA Baseline - Manual de Captura
 
 **Data:** 08/11/2025  
-**Objetivo:** Capturar estado visual e funcional do sistema ANTES da refatoração arquitetural  
-**Propósito:** Garantir zero regressão visual/funcional após transformação SaaS
+**Objetivo:** Capturar estado visual e funcional do sistema ANTES da refatoraÃ§Ã£o arquitetural  
+**PropÃ³sito:** Garantir zero regressÃ£o visual/funcional apÃ³s transformaÃ§Ã£o SaaS
 
 ---
 
-## 🎯 Visão Geral
+## ðŸŽ¯ VisÃ£o Geral
 
-Este baseline servirá como **referência golden** para validar que a refatoração arquitetural:
-- ✅ Não alterou aparência visual
-- ✅ Não quebrou funcionalidades
-- ✅ Mantém performance
-- ✅ Preserva dados
+Este baseline servirÃ¡ como **referÃªncia golden** para validar que a refatoraÃ§Ã£o arquitetural:
+- âœ… NÃ£o alterou aparÃªncia visual
+- âœ… NÃ£o quebrou funcionalidades
+- âœ… MantÃ©m performance
+- âœ… Preserva dados
 
 ---
 
-## 🚀 Passo 1: Executar Script Automatizado
+## ðŸš€ Passo 1: Executar Script Automatizado
 
 ### 1.1 Abrir Master Control Panel
 
-1. Navegue até: `r:\Development\Projects\iluxsys\master-control.html`
-2. Faça login com credenciais master
+1. Navegue atÃ©: `r:\Development\Projects\nexefii\master-control.html`
+2. FaÃ§a login com credenciais master
 3. Abra Developer Tools (F12)
 
 ### 1.2 Carregar Script de Captura
@@ -35,9 +35,9 @@ document.head.appendChild(script);
 
 **Aguarde mensagem:**
 ```
-╔════════════════════════════════════════════════════════════════╗
-║                 🎯 QA Baseline Capture System                  ║
-╚════════════════════════════════════════════════════════════════╝
+â•”â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•—
+â•‘                 ðŸŽ¯ QA Baseline Capture System                  â•‘
+â•šâ•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
 ```
 
 ### 1.3 Capturar Baseline Automaticamente
@@ -49,129 +49,129 @@ await qaBaseline.captureFullBaseline();
 
 **Resultado esperado:**
 ```
-🎯 Iniciando captura de QA Baseline...
-📦 Capturando estado do LocalStorage...
-✅ Capturados X chaves do LocalStorage
-📄 Capturando página atual...
-✅ Página capturada: Master Control Panel
-🎨 Capturando computed styles...
-✅ Capturados computed styles de X componentes
-⚙️ Capturando funcionalidades...
-✅ Capturadas X funcionalidades
-📊 Gerando relatório...
-✅ Relatório salvo no localStorage
-✅ Baseline capturado com sucesso!
+ðŸŽ¯ Iniciando captura de QA Baseline...
+ðŸ“¦ Capturando estado do LocalStorage...
+âœ… Capturados X chaves do LocalStorage
+ðŸ“„ Capturando pÃ¡gina atual...
+âœ… PÃ¡gina capturada: Master Control Panel
+ðŸŽ¨ Capturando computed styles...
+âœ… Capturados computed styles de X componentes
+âš™ï¸ Capturando funcionalidades...
+âœ… Capturadas X funcionalidades
+ðŸ“Š Gerando relatÃ³rio...
+âœ… RelatÃ³rio salvo no localStorage
+âœ… Baseline capturado com sucesso!
 ```
 
-### 1.4 Exportar Relatórios
+### 1.4 Exportar RelatÃ³rios
 
 ```javascript
 // Exportar JSON (dados brutos)
 qaBaseline.exportReport();
 
-// Exportar HTML (relatório visual)
+// Exportar HTML (relatÃ³rio visual)
 qaBaseline.exportHTMLReport();
 ```
 
 **Arquivos gerados:**
 - `qa-baseline-2025-11-08.json` (dados estruturados)
-- `qa-baseline-report-2025-11-08.html` (relatório visual)
+- `qa-baseline-report-2025-11-08.html` (relatÃ³rio visual)
 
 ---
 
-## 📸 Passo 2: Capturas Manuais de Screenshots
+## ðŸ“¸ Passo 2: Capturas Manuais de Screenshots
 
 ### 2.1 Master Control Panel - Dashboard
 
 **URL:** `master-control.html`  
 **Tab:** Dashboard (primeira tab)
 
-**Capturas necessárias:**
+**Capturas necessÃ¡rias:**
 
 1. **Estado inicial**
-   - [ ] Dashboard completo visível
-   - [ ] Estatísticas do sistema exibidas
-   - [ ] Ações rápidas visíveis
-   - [ ] Métricas enterprise visíveis
+   - [ ] Dashboard completo visÃ­vel
+   - [ ] EstatÃ­sticas do sistema exibidas
+   - [ ] AÃ§Ãµes rÃ¡pidas visÃ­veis
+   - [ ] MÃ©tricas enterprise visÃ­veis
    - Screenshot: `01-dashboard-initial.png`
 
 2. **Modal de Backups**
-   - [ ] Clicar em "📋 Ver Backups"
+   - [ ] Clicar em "ðŸ“‹ Ver Backups"
    - [ ] Modal aberto com lista
-   - [ ] Filtros visíveis
+   - [ ] Filtros visÃ­veis
    - Screenshot: `02-dashboard-backups-modal.png`
 
-3. **Confirmação de operação**
-   - [ ] Clicar em "💾 Backup Completo"
-   - [ ] Modal de confirmação aberto
+3. **ConfirmaÃ§Ã£o de operaÃ§Ã£o**
+   - [ ] Clicar em "ðŸ’¾ Backup Completo"
+   - [ ] Modal de confirmaÃ§Ã£o aberto
    - Screenshot: `03-dashboard-confirm-modal.png`
 
 ### 2.2 Master Control Panel - Backup & Restore
 
 **Tab:** Backup & Restore
 
-**Capturas necessárias:**
+**Capturas necessÃ¡rias:**
 
 1. **Tela principal**
    - [ ] Tab "Backup & Restore" ativa
-   - [ ] Formulário de backup visível
-   - [ ] Opções de tipo (Completo/Incremental/Seletivo)
-   - [ ] Checkboxes de opções
+   - [ ] FormulÃ¡rio de backup visÃ­vel
+   - [ ] OpÃ§Ãµes de tipo (Completo/Incremental/Seletivo)
+   - [ ] Checkboxes de opÃ§Ãµes
    - Screenshot: `04-backup-main.png`
 
-2. **Seleção de módulos**
+2. **SeleÃ§Ã£o de mÃ³dulos**
    - [ ] Selecionar "Backup Seletivo"
-   - [ ] Lista de módulos exibida
+   - [ ] Lista de mÃ³dulos exibida
    - Screenshot: `05-backup-selective.png`
 
 3. **Lista de backups**
-   - [ ] Scroll até seção "Backups Disponíveis"
-   - [ ] Tabela de backups visível
-   - [ ] Ações (Restaurar/Ver/Excluir) visíveis
+   - [ ] Scroll atÃ© seÃ§Ã£o "Backups DisponÃ­veis"
+   - [ ] Tabela de backups visÃ­vel
+   - [ ] AÃ§Ãµes (Restaurar/Ver/Excluir) visÃ­veis
    - Screenshot: `06-backup-list.png`
 
 4. **Modal de detalhes**
-   - [ ] Clicar em "👁️ Ver" em qualquer backup
+   - [ ] Clicar em "ðŸ‘ï¸ Ver" em qualquer backup
    - [ ] Modal de detalhes aberto
    - Screenshot: `07-backup-details-modal.png`
 
 5. **Restore wizard**
-   - [ ] Clicar em "♻️ Restaurar"
-   - [ ] Wizard de restauração aberto
+   - [ ] Clicar em "â™»ï¸ Restaurar"
+   - [ ] Wizard de restauraÃ§Ã£o aberto
    - Screenshot: `08-restore-wizard.png`
 
 ### 2.3 Master Control Panel - Property Backups
 
 **Tab:** Property Backups
 
-**Capturas necessárias:**
+**Capturas necessÃ¡rias:**
 
 1. **Tela principal**
    - [ ] Tab "Property Backups" ativa
-   - [ ] Métricas por propriedade visíveis
-   - [ ] Cards de estatísticas
+   - [ ] MÃ©tricas por propriedade visÃ­veis
+   - [ ] Cards de estatÃ­sticas
    - Screenshot: `09-property-backups-main.png`
 
 2. **Criar backup de propriedade**
-   - [ ] Formulário de criação visível
+   - [ ] FormulÃ¡rio de criaÃ§Ã£o visÃ­vel
    - [ ] Select de propriedade aberto
-   - [ ] Opções de tipo (Full/Incremental)
+   - [ ] OpÃ§Ãµes de tipo (Full/Incremental)
    - Screenshot: `10-property-backup-create.png`
 
-3. **Catálogo de backups**
+3. **CatÃ¡logo de backups**
    - [ ] Tabela de backups por propriedade
-   - [ ] Filtros visíveis (All/Full/Incremental)
+   - [ ] Filtros visÃ­veis (All/Full/Incremental)
    - [ ] Busca funcional
    - Screenshot: `11-property-backup-catalog.png`
 
 4. **Restore wizard por propriedade**
    - [ ] Clicar em "Restore" em um backup
-   - [ ] Wizard com 3 steps visível
+   - [ ] Wizard com 3 steps visÃ­vel
    - Screenshot: `12-property-restore-wizard.png`
 
 5. **Agendamento**
-   - [ ] Seção de agendamento visível
-   - [ ] Formulário de cron schedule
+   - [ ] SeÃ§Ã£o de agendamento visÃ­vel
+   - [ ] FormulÃ¡rio de cron schedule
    - [ ] Lista de schedules ativos
    - Screenshot: `13-property-backup-schedule.png`
 
@@ -179,215 +179,215 @@ qaBaseline.exportHTMLReport();
 
 **Tab:** General Structure Backups
 
-**Capturas necessárias:**
+**Capturas necessÃ¡rias:**
 
 1. **Tela principal**
    - [ ] Tab "General Structure" ativa
-   - [ ] Métricas de estrutura geral
-   - [ ] Formulário de criação
+   - [ ] MÃ©tricas de estrutura geral
+   - [ ] FormulÃ¡rio de criaÃ§Ã£o
    - Screenshot: `14-general-backup-main.png`
 
 2. **Criar backup de estrutura**
-   - [ ] Checkboxes de componentes visíveis
-   - [ ] Campo de tag de versão
-   - [ ] Campo de descrição
-   - [ ] Opções compress/encrypt
+   - [ ] Checkboxes de componentes visÃ­veis
+   - [ ] Campo de tag de versÃ£o
+   - [ ] Campo de descriÃ§Ã£o
+   - [ ] OpÃ§Ãµes compress/encrypt
    - Screenshot: `15-general-backup-create.png`
 
 3. **Lista de backups de estrutura**
    - [ ] Tabela com backups criados
    - [ ] Colunas: Version, Components, Date, Size
-   - [ ] Ações: Restore, View, Delete
+   - [ ] AÃ§Ãµes: Restore, View, Delete
    - Screenshot: `16-general-backup-list.png`
 
 4. **Detalhes de backup**
    - [ ] Modal de detalhes aberto
    - [ ] Componentes capturados listados
-   - [ ] Metadata visível
+   - [ ] Metadata visÃ­vel
    - Screenshot: `17-general-backup-details.png`
 
 ### 2.5 Master Control Panel - Releases & Rollback
 
 **Tab:** Releases & Rollback
 
-**Capturas necessárias:**
+**Capturas necessÃ¡rias:**
 
 1. **Tela principal**
    - [ ] Tab "Releases & Rollback" ativa
    - [ ] Timeline de releases
-   - [ ] Formulário de criação
+   - [ ] FormulÃ¡rio de criaÃ§Ã£o
    - Screenshot: `18-releases-main.png`
 
 2. **Criar release**
-   - [ ] Formulário preenchido
+   - [ ] FormulÃ¡rio preenchido
    - [ ] Tags (stable/beta/alpha)
    - [ ] Campo de changelog
    - Screenshot: `19-releases-create.png`
 
-3. **Histórico de releases**
+3. **HistÃ³rico de releases**
    - [ ] Lista de releases criados
    - [ ] Indicador de release atual
-   - [ ] Botões de rollback
+   - [ ] BotÃµes de rollback
    - Screenshot: `20-releases-history.png`
 
-### 2.6 Master Control Panel - Gestão de Usuários
+### 2.6 Master Control Panel - GestÃ£o de UsuÃ¡rios
 
-**Tab:** Gestão de Usuários
+**Tab:** GestÃ£o de UsuÃ¡rios
 
-**Capturas necessárias:**
+**Capturas necessÃ¡rias:**
 
 1. **Tela principal**
-   - [ ] Tab "Gestão de Usuários" ativa
-   - [ ] Tabela de usuários
+   - [ ] Tab "GestÃ£o de UsuÃ¡rios" ativa
+   - [ ] Tabela de usuÃ¡rios
    - [ ] Filtros de status/role
    - Screenshot: `21-users-main.png`
 
-2. **Criar usuário**
-   - [ ] Modal de criação aberto
-   - [ ] Formulário completo
+2. **Criar usuÃ¡rio**
+   - [ ] Modal de criaÃ§Ã£o aberto
+   - [ ] FormulÃ¡rio completo
    - [ ] Campos: username, email, role, properties
    - Screenshot: `22-users-create.png`
 
-3. **Editar usuário**
-   - [ ] Modal de edição aberto
-   - [ ] Dados de usuário carregados
+3. **Editar usuÃ¡rio**
+   - [ ] Modal de ediÃ§Ã£o aberto
+   - [ ] Dados de usuÃ¡rio carregados
    - [ ] Select de properties (multiple)
    - Screenshot: `23-users-edit.png`
 
-4. **Detalhes de usuário**
+4. **Detalhes de usuÃ¡rio**
    - [ ] Modal de detalhes aberto
-   - [ ] Todas as informações visíveis
+   - [ ] Todas as informaÃ§Ãµes visÃ­veis
    - Screenshot: `24-users-details.png`
 
 ### 2.7 Master Control Panel - Logs & Auditoria
 
 **Tab:** Logs & Auditoria
 
-**Capturas necessárias:**
+**Capturas necessÃ¡rias:**
 
 1. **Tela principal**
    - [ ] Tab "Logs & Auditoria" ativa
-   - [ ] Filtros avançados visíveis
+   - [ ] Filtros avanÃ§ados visÃ­veis
    - [ ] Tabela de logs
    - Screenshot: `25-logs-main.png`
 
 2. **Filtros aplicados**
    - [ ] Filtrar por tipo (tenant_backup)
-   - [ ] Filtrar por nível (info)
+   - [ ] Filtrar por nÃ­vel (info)
    - [ ] Filtrar por data range
    - [ ] Resultados filtrados
    - Screenshot: `26-logs-filtered.png`
 
 3. **Detalhes de log**
    - [ ] Expandir detalhes de um log
-   - [ ] JSON completo visível
+   - [ ] JSON completo visÃ­vel
    - Screenshot: `27-logs-details.png`
 
-### 2.8 Master Control Panel - Configurações
+### 2.8 Master Control Panel - ConfiguraÃ§Ãµes
 
-**Tab:** Configurações do Sistema
+**Tab:** ConfiguraÃ§Ãµes do Sistema
 
-**Capturas necessárias:**
+**Capturas necessÃ¡rias:**
 
 1. **Tela principal**
-   - [ ] Tab "Configurações" ativa
-   - [ ] Seções: Backup, Retenção, Versionamento, Logs
+   - [ ] Tab "ConfiguraÃ§Ãµes" ativa
+   - [ ] SeÃ§Ãµes: Backup, RetenÃ§Ã£o, Versionamento, Logs
    - [ ] Feature toggles (compress/encrypt)
    - Screenshot: `28-settings-main.png`
 
-2. **Configurações alteradas**
-   - [ ] Modificar alguma configuração
+2. **ConfiguraÃ§Ãµes alteradas**
+   - [ ] Modificar alguma configuraÃ§Ã£o
    - [ ] Estado antes de salvar
    - Screenshot: `29-settings-modified.png`
 
-### 2.9 Master Control Panel - Manutenção
+### 2.9 Master Control Panel - ManutenÃ§Ã£o
 
-**Tab:** Manutenção do Sistema
+**Tab:** ManutenÃ§Ã£o do Sistema
 
-**Capturas necessárias:**
+**Capturas necessÃ¡rias:**
 
 1. **Tela principal**
-   - [ ] Tab "Manutenção" ativa
-   - [ ] Botões de manutenção
-   - [ ] Seção de storage
+   - [ ] Tab "ManutenÃ§Ã£o" ativa
+   - [ ] BotÃµes de manutenÃ§Ã£o
+   - [ ] SeÃ§Ã£o de storage
    - Screenshot: `30-maintenance-main.png`
 
 2. **Storage monitor**
-   - [ ] Gráfico de uso visível
-   - [ ] Estatísticas de espaço
+   - [ ] GrÃ¡fico de uso visÃ­vel
+   - [ ] EstatÃ­sticas de espaÃ§o
    - Screenshot: `31-maintenance-storage.png`
 
-### 2.10 Índice do Sistema (index.html)
+### 2.10 Ãndice do Sistema (index.html)
 
 **URL:** `index.html`
 
-**Capturas necessárias:**
+**Capturas necessÃ¡rias:**
 
-1. **Página inicial sem property**
+1. **PÃ¡gina inicial sem property**
    - [ ] index.html sem query string
-   - [ ] Estado padrão
+   - [ ] Estado padrÃ£o
    - Screenshot: `32-index-default.png`
 
-2. **Página com property selecionada**
+2. **PÃ¡gina com property selecionada**
    - [ ] index.html?property=modelhotel
-   - [ ] Conteúdo da propriedade carregado
+   - [ ] ConteÃºdo da propriedade carregado
    - Screenshot: `33-index-with-property.png`
 
 ### 2.11 Property Test Generator
 
-**URL:** Acesso via Master Control → Properties → Test Property
+**URL:** Acesso via Master Control â†’ Properties â†’ Test Property
 
-**Capturas necessárias:**
+**Capturas necessÃ¡rias:**
 
 1. **Tela de teste de propriedade**
-   - [ ] Informações da propriedade
-   - [ ] Módulos listados
-   - [ ] Validação de dados
-   - [ ] Botões de ação
+   - [ ] InformaÃ§Ãµes da propriedade
+   - [ ] MÃ³dulos listados
+   - [ ] ValidaÃ§Ã£o de dados
+   - [ ] BotÃµes de aÃ§Ã£o
    - Screenshot: `34-property-test-main.png`
 
-2. **Modal de aprovação**
+2. **Modal de aprovaÃ§Ã£o**
    - [ ] Clicar em "Aprovar e Publicar"
-   - [ ] Modal de confirmação
+   - [ ] Modal de confirmaÃ§Ã£o
    - Screenshot: `35-property-test-approve.png`
 
 ---
 
-## 🎨 Passo 3: Captura de Estados Variados
+## ðŸŽ¨ Passo 3: Captura de Estados Variados
 
 ### 3.1 Estados de Sucesso
 
 Capturar toasts/alertas de sucesso:
 
 - [ ] Backup criado com sucesso
-- [ ] Usuário criado com sucesso
-- [ ] Configurações salvas
-- [ ] Restauração concluída
+- [ ] UsuÃ¡rio criado com sucesso
+- [ ] ConfiguraÃ§Ãµes salvas
+- [ ] RestauraÃ§Ã£o concluÃ­da
 - Screenshots: `success-*.png`
 
 ### 3.2 Estados de Erro
 
-Capturar validações e erros:
+Capturar validaÃ§Ãµes e erros:
 
-- [ ] Campo obrigatório não preenchido
-- [ ] Erro de validação (email inválido)
-- [ ] Erro de operação (backup falhou)
+- [ ] Campo obrigatÃ³rio nÃ£o preenchido
+- [ ] Erro de validaÃ§Ã£o (email invÃ¡lido)
+- [ ] Erro de operaÃ§Ã£o (backup falhou)
 - Screenshots: `error-*.png`
 
-### 3.3 Estados de Confirmação
+### 3.3 Estados de ConfirmaÃ§Ã£o
 
-Capturar modals de confirmação:
+Capturar modals de confirmaÃ§Ã£o:
 
-- [ ] Confirmar exclusão de usuário
+- [ ] Confirmar exclusÃ£o de usuÃ¡rio
 - [ ] Confirmar reset do sistema
-- [ ] Confirmar restauração completa
+- [ ] Confirmar restauraÃ§Ã£o completa
 - Screenshots: `confirm-*.png`
 
 ---
 
-## 📊 Passo 4: Validação de Computed Styles
+## ðŸ“Š Passo 4: ValidaÃ§Ã£o de Computed Styles
 
-### 4.1 Verificar Captura Automática
+### 4.1 Verificar Captura AutomÃ¡tica
 
 ```javascript
 // No console, verifique:
@@ -402,7 +402,7 @@ Components capturados: 15+
 Selectors: [".tab-btn", ".tab-btn.active", ".card", ".btn", ...]
 ```
 
-### 4.2 Selectors Críticos
+### 4.2 Selectors CrÃ­ticos
 
 Confirme que foram capturados:
 
@@ -415,185 +415,185 @@ Confirme que foram capturados:
 
 ---
 
-## 🔍 Passo 5: Checklist de Funcionalidades
+## ðŸ” Passo 5: Checklist de Funcionalidades
 
 ### 5.1 Master Control Panel
 
 **Dashboard:**
-- [ ] Estatísticas atualizam corretamente
-- [ ] Ações rápidas funcionam
+- [ ] EstatÃ­sticas atualizam corretamente
+- [ ] AÃ§Ãµes rÃ¡pidas funcionam
 - [ ] Modals abrem/fecham
-- [ ] Métricas carregam
+- [ ] MÃ©tricas carregam
 
 **Backup & Restore:**
-- [ ] Criar backup completo ✅
-- [ ] Criar backup incremental ✅
-- [ ] Criar backup seletivo ✅
-- [ ] Restaurar backup (completo) ✅
-- [ ] Restaurar backup (mesclar) ✅
-- [ ] Restaurar backup (seletivo) ✅
-- [ ] Excluir backup ✅
-- [ ] Ver detalhes de backup ✅
-- [ ] Exportar backup ✅
+- [ ] Criar backup completo âœ…
+- [ ] Criar backup incremental âœ…
+- [ ] Criar backup seletivo âœ…
+- [ ] Restaurar backup (completo) âœ…
+- [ ] Restaurar backup (mesclar) âœ…
+- [ ] Restaurar backup (seletivo) âœ…
+- [ ] Excluir backup âœ…
+- [ ] Ver detalhes de backup âœ…
+- [ ] Exportar backup âœ…
 
 **Property Backups:**
-- [ ] Criar full backup de propriedade ✅
-- [ ] Criar incremental backup ✅
-- [ ] Restaurar property backup ✅
-- [ ] Agendar backups automáticos ✅
-- [ ] Buscar backups por propriedade ✅
-- [ ] Filtrar por tipo (Full/Incremental) ✅
-- [ ] Excluir backup de propriedade ✅
+- [ ] Criar full backup de propriedade âœ…
+- [ ] Criar incremental backup âœ…
+- [ ] Restaurar property backup âœ…
+- [ ] Agendar backups automÃ¡ticos âœ…
+- [ ] Buscar backups por propriedade âœ…
+- [ ] Filtrar por tipo (Full/Incremental) âœ…
+- [ ] Excluir backup de propriedade âœ…
 
 **General Structure:**
-- [ ] Criar backup de estrutura geral ✅
-- [ ] Selecionar componentes específicos ✅
-- [ ] Tag de versão funciona ✅
-- [ ] Compressão habilitada ✅
-- [ ] Criptografia habilitada ✅
-- [ ] Restaurar estrutura (rollback) ✅
-- [ ] Ver detalhes de backup de estrutura ✅
+- [ ] Criar backup de estrutura geral âœ…
+- [ ] Selecionar componentes especÃ­ficos âœ…
+- [ ] Tag de versÃ£o funciona âœ…
+- [ ] CompressÃ£o habilitada âœ…
+- [ ] Criptografia habilitada âœ…
+- [ ] Restaurar estrutura (rollback) âœ…
+- [ ] Ver detalhes de backup de estrutura âœ…
 
 **Releases & Rollback:**
-- [ ] Criar release ✅
-- [ ] Marcar como stable/beta/alpha ✅
-- [ ] Rollback para release anterior ✅
-- [ ] Ver changelog ✅
-- [ ] Histórico completo ✅
+- [ ] Criar release âœ…
+- [ ] Marcar como stable/beta/alpha âœ…
+- [ ] Rollback para release anterior âœ…
+- [ ] Ver changelog âœ…
+- [ ] HistÃ³rico completo âœ…
 
-**Gestão de Usuários:**
-- [ ] Criar usuário ✅
-- [ ] Editar usuário ✅
-- [ ] Excluir usuário ✅
-- [ ] Suspender usuário ✅
-- [ ] Ativar usuário ✅
-- [ ] Ver detalhes ✅
-- [ ] Associar properties (multiple select) ✅
-- [ ] Filtrar por role/status ✅
+**GestÃ£o de UsuÃ¡rios:**
+- [ ] Criar usuÃ¡rio âœ…
+- [ ] Editar usuÃ¡rio âœ…
+- [ ] Excluir usuÃ¡rio âœ…
+- [ ] Suspender usuÃ¡rio âœ…
+- [ ] Ativar usuÃ¡rio âœ…
+- [ ] Ver detalhes âœ…
+- [ ] Associar properties (multiple select) âœ…
+- [ ] Filtrar por role/status âœ…
 
 **Logs & Auditoria:**
-- [ ] Visualizar todos os logs ✅
-- [ ] Filtrar por tipo ✅
-- [ ] Filtrar por nível ✅
-- [ ] Filtrar por data range ✅
-- [ ] Busca de texto ✅
-- [ ] Exportar logs (JSON) ✅
-- [ ] Ver detalhes de log ✅
+- [ ] Visualizar todos os logs âœ…
+- [ ] Filtrar por tipo âœ…
+- [ ] Filtrar por nÃ­vel âœ…
+- [ ] Filtrar por data range âœ…
+- [ ] Busca de texto âœ…
+- [ ] Exportar logs (JSON) âœ…
+- [ ] Ver detalhes de log âœ…
 
-**Configurações:**
-- [ ] Alterar configurações ✅
-- [ ] Salvar alterações ✅
-- [ ] Toggles funcionam ✅
-- [ ] Reset para padrões ✅
+**ConfiguraÃ§Ãµes:**
+- [ ] Alterar configuraÃ§Ãµes âœ…
+- [ ] Salvar alteraÃ§Ãµes âœ…
+- [ ] Toggles funcionam âœ…
+- [ ] Reset para padrÃµes âœ…
 
-**Manutenção:**
-- [ ] Limpeza de cache ✅
-- [ ] Otimizar banco ✅
-- [ ] Reparar integridade ✅
-- [ ] Monitor de storage ✅
-- [ ] Reset sistema (com confirmação) ✅
+**ManutenÃ§Ã£o:**
+- [ ] Limpeza de cache âœ…
+- [ ] Otimizar banco âœ…
+- [ ] Reparar integridade âœ…
+- [ ] Monitor de storage âœ…
+- [ ] Reset sistema (com confirmaÃ§Ã£o) âœ…
 
 ### 5.2 Property Management
 
 **Properties:**
-- [ ] Criar propriedade ✅ (FIXED: async/await)
-- [ ] Editar propriedade ✅
-- [ ] Excluir propriedade ✅ (FIXED: confirmAction)
-- [ ] Auto-criar admin user ✅ (FIXED: getAllUsers/createUser)
-- [ ] Associar módulos ✅
-- [ ] Test property ✅ (FIXED: modulesPurchased)
-- [ ] Abrir index da propriedade ✅ (NEW: green button)
+- [ ] Criar propriedade âœ… (FIXED: async/await)
+- [ ] Editar propriedade âœ…
+- [ ] Excluir propriedade âœ… (FIXED: confirmAction)
+- [ ] Auto-criar admin user âœ… (FIXED: getAllUsers/createUser)
+- [ ] Associar mÃ³dulos âœ…
+- [ ] Test property âœ… (FIXED: modulesPurchased)
+- [ ] Abrir index da propriedade âœ… (NEW: green button)
 
 **Property Test Generator:**
-- [ ] Gerar página de teste ✅
-- [ ] Validar dados completos ✅ (FIXED: validation)
-- [ ] Mostrar módulos corretos ✅ (FIXED: field name)
-- [ ] Aprovar e publicar ✅
-- [ ] Navegação para index ✅ (NEW: button)
+- [ ] Gerar pÃ¡gina de teste âœ…
+- [ ] Validar dados completos âœ… (FIXED: validation)
+- [ ] Mostrar mÃ³dulos corretos âœ… (FIXED: field name)
+- [ ] Aprovar e publicar âœ…
+- [ ] NavegaÃ§Ã£o para index âœ… (NEW: button)
 
 ### 5.3 i18n
 
-**Internacionalização:**
-- [ ] Trocar idioma (pt/en/es) ✅
-- [ ] Traduções carregam ✅
-- [ ] Deep merge funciona ✅
-- [ ] Enterprise i18n funciona ✅
-- [ ] Fallback para pt ✅
+**InternacionalizaÃ§Ã£o:**
+- [ ] Trocar idioma (pt/en/es) âœ…
+- [ ] TraduÃ§Ãµes carregam âœ…
+- [ ] Deep merge funciona âœ…
+- [ ] Enterprise i18n funciona âœ…
+- [ ] Fallback para pt âœ…
 
 ---
 
-## 📋 Passo 6: Acceptance Criteria
+## ðŸ“‹ Passo 6: Acceptance Criteria
 
 ### 6.1 Visual Acceptance
 
-**Após refatoração, validar:**
+**ApÃ³s refatoraÃ§Ã£o, validar:**
 
-- [ ] **Layout idêntico**: Nenhum elemento moveu de posição
-- [ ] **Cores idênticas**: RGB values exatos (use eyedropper)
-- [ ] **Fontes idênticas**: Tamanho, família, peso
-- [ ] **Espaçamentos idênticos**: Padding/margin preservados
-- [ ] **Bordas idênticas**: Radius, color, width
-- [ ] **Sombras idênticas**: Box-shadow values
-- [ ] **Transições idênticas**: Animações funcionam igual
-- [ ] **Responsividade idêntica**: Breakpoints funcionam
+- [ ] **Layout idÃªntico**: Nenhum elemento moveu de posiÃ§Ã£o
+- [ ] **Cores idÃªnticas**: RGB values exatos (use eyedropper)
+- [ ] **Fontes idÃªnticas**: Tamanho, famÃ­lia, peso
+- [ ] **EspaÃ§amentos idÃªnticos**: Padding/margin preservados
+- [ ] **Bordas idÃªnticas**: Radius, color, width
+- [ ] **Sombras idÃªnticas**: Box-shadow values
+- [ ] **TransiÃ§Ãµes idÃªnticas**: AnimaÃ§Ãµes funcionam igual
+- [ ] **Responsividade idÃªntica**: Breakpoints funcionam
 
 ### 6.2 Functional Acceptance
 
-**Após refatoração, validar:**
+**ApÃ³s refatoraÃ§Ã£o, validar:**
 
 - [ ] **Todas as funcionalidades** da checklist acima funcionam
 - [ ] **Nenhum erro no console**
 - [ ] **Performance** igual ou melhor (medir com DevTools)
 - [ ] **LocalStorage** estrutura preservada
-- [ ] **Dados não perdidos**
+- [ ] **Dados nÃ£o perdidos**
 - [ ] **Novos bugs**: Zero
 
 ### 6.3 Data Acceptance
 
-**Após refatoração, validar:**
+**ApÃ³s refatoraÃ§Ã£o, validar:**
 
-- [ ] **Usuários**: Todos presentes e corretos
-- [ ] **Properties**: Todas presentes com módulos corretos
-- [ ] **Backups**: Todos acessíveis
-- [ ] **Logs**: Histórico preservado
-- [ ] **Configurações**: Settings mantidos
-- [ ] **Sessões**: Login/logout funciona
+- [ ] **UsuÃ¡rios**: Todos presentes e corretos
+- [ ] **Properties**: Todas presentes com mÃ³dulos corretos
+- [ ] **Backups**: Todos acessÃ­veis
+- [ ] **Logs**: HistÃ³rico preservado
+- [ ] **ConfiguraÃ§Ãµes**: Settings mantidos
+- [ ] **SessÃµes**: Login/logout funciona
 - [ ] **Migrations**: Applied correctly
 
 ---
 
-## 💾 Passo 7: Armazenar Baseline
+## ðŸ’¾ Passo 7: Armazenar Baseline
 
 ### 7.1 Organizar Arquivos
 
 Criar estrutura:
 
 ```
-r:\Development\Projects\iluxsys\qa-baseline\
-  ├── 2025-11-08\
-  │   ├── reports\
-  │   │   ├── qa-baseline-2025-11-08.json
-  │   │   └── qa-baseline-report-2025-11-08.html
-  │   ├── screenshots\
-  │   │   ├── 01-dashboard-initial.png
-  │   │   ├── 02-dashboard-backups-modal.png
-  │   │   └── ... (todos os screenshots)
-  │   ├── computed-styles\
-  │   │   └── extracted-from-report.json
-  │   └── acceptance-criteria\
-  │       └── checklist.md (este documento)
+r:\Development\Projects\nexefii\qa-baseline\
+  â”œâ”€â”€ 2025-11-08\
+  â”‚   â”œâ”€â”€ reports\
+  â”‚   â”‚   â”œâ”€â”€ qa-baseline-2025-11-08.json
+  â”‚   â”‚   â””â”€â”€ qa-baseline-report-2025-11-08.html
+  â”‚   â”œâ”€â”€ screenshots\
+  â”‚   â”‚   â”œâ”€â”€ 01-dashboard-initial.png
+  â”‚   â”‚   â”œâ”€â”€ 02-dashboard-backups-modal.png
+  â”‚   â”‚   â””â”€â”€ ... (todos os screenshots)
+  â”‚   â”œâ”€â”€ computed-styles\
+  â”‚   â”‚   â””â”€â”€ extracted-from-report.json
+  â”‚   â””â”€â”€ acceptance-criteria\
+  â”‚       â””â”€â”€ checklist.md (este documento)
 ```
 
 ### 7.2 Backup Externo
 
-**CRÍTICO:**
+**CRÃTICO:**
 
 - [ ] Copiar pasta `qa-baseline\` para local seguro
 - [ ] Upload para cloud (Dropbox, Google Drive, etc.)
 - [ ] Criar ZIP compactado
-- [ ] Commit no Git (se houver repositório)
+- [ ] Commit no Git (se houver repositÃ³rio)
 
-### 7.3 Documentar Versão
+### 7.3 Documentar VersÃ£o
 
 Criar arquivo `VERSION.txt`:
 
@@ -602,7 +602,7 @@ QA Baseline - Pre-Refactor
 ==========================
 
 Date: 2025-11-08
-System: IluxSys
+System: nexefii
 Version: Current (before SaaS transformation)
 Branch: master (if applicable)
 Commit: [git hash] (if applicable)
@@ -638,18 +638,18 @@ Contact:
 
 ---
 
-## ✅ Passo 8: Checklist Final
+## âœ… Passo 8: Checklist Final
 
-Antes de prosseguir com refatoração:
+Antes de prosseguir com refatoraÃ§Ã£o:
 
 ### 8.1 Capturas Completas
 
 - [ ] Todas as 35+ screenshots capturadas
-- [ ] Estados de sucesso/erro/confirmação
+- [ ] Estados de sucesso/erro/confirmaÃ§Ã£o
 - [ ] Modals em diferentes estados
 - [ ] Tabs ativas/inativas
 
-### 8.2 Relatórios Gerados
+### 8.2 RelatÃ³rios Gerados
 
 - [ ] JSON report exportado
 - [ ] HTML report exportado
@@ -667,39 +667,40 @@ Antes de prosseguir com refatoração:
 - [ ] Arquivos organizados em pasta estruturada
 - [ ] Backup externo criado (cloud/zip)
 - [ ] VERSION.txt documentado
-- [ ] Commit no Git (se aplicável)
+- [ ] Commit no Git (se aplicÃ¡vel)
 
 ### 8.5 Acceptance Criteria Definido
 
-- [ ] Critérios visuais claros
-- [ ] Critérios funcionais claros
-- [ ] Critérios de dados claros
-- [ ] Método de comparação definido
+- [ ] CritÃ©rios visuais claros
+- [ ] CritÃ©rios funcionais claros
+- [ ] CritÃ©rios de dados claros
+- [ ] MÃ©todo de comparaÃ§Ã£o definido
 
 ---
 
-## 🚀 Próximos Passos
+## ðŸš€ PrÃ³ximos Passos
 
-Após completar este baseline:
+ApÃ³s completar este baseline:
 
 1. **Revisar ARCHITECTURE_REFACTOR_PLAN.md**
-2. **Decidir implementação**: Sprint 1-2 (Foundation) ou PoC
+2. **Decidir implementaÃ§Ã£o**: Sprint 1-2 (Foundation) ou PoC
 3. **Criar branch**: `feature/saas-transformation`
-4. **Iniciar implementação**: PropertyDatabase.js first
-5. **Validar incrementalmente**: Comparar com baseline após cada mudança
+4. **Iniciar implementaÃ§Ã£o**: PropertyDatabase.js first
+5. **Validar incrementalmente**: Comparar com baseline apÃ³s cada mudanÃ§a
 
 ---
 
-## 📞 Suporte
+## ðŸ“ž Suporte
 
-Em caso de dúvidas durante captura:
+Em caso de dÃºvidas durante captura:
 
 - Consultar `MASTER_CONTROL_README.md`
 - Consultar `ARCHITECTURE_REFACTOR_PLAN.md`
-- Revisar código em `master-control.js`
+- Revisar cÃ³digo em `master-control.js`
 
 ---
 
-**✅ Este documento será atualizado conforme captura progride.**
+**âœ… Este documento serÃ¡ atualizado conforme captura progride.**
 
-**Última atualização:** 08/11/2025
+**Ãšltima atualizaÃ§Ã£o:** 08/11/2025
+

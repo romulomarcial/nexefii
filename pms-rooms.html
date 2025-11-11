@@ -1,25 +1,25 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="pt-BR">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Gestão de Quartos - IluxSys PMS</title>
+  <title>GestÃ£o de Quartos - nexefii PMS</title>
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
   <div class="rooms-container">
     <!-- Header -->
     <div class="rooms-header">
-      <h1 data-i18n="rmPageTitle">🛏️ Gestão de Quartos</h1>
+      <h1 data-i18n="rmPageTitle">ðŸ›ï¸ GestÃ£o de Quartos</h1>
       <div class="header-actions">
-        <a class="btn" href="index.html#pms" style="display:inline-flex;align-items:center;gap:8px;text-decoration:none;" title="Voltar ao Card PMS">← PMS</a>
+        <a class="btn" href="index.html#pms" style="display:inline-flex;align-items:center;gap:8px;text-decoration:none;" title="Voltar ao Card PMS">â† PMS</a>
         <select id="pmsModuleSwitcher" class="select" style="padding:8px;border-radius:8px;border:1px solid #e2e8f0"></select>
         <button class="btn" id="btnRefreshRooms">
-          <span>🔄</span>
+          <span>ðŸ”„</span>
           <span data-i18n="rmRefresh">Atualizar</span>
         </button>
         <button class="btn" id="btnExportRooms">
-          <span>📊</span>
+          <span>ðŸ“Š</span>
           <span data-i18n="rmExport">Exportar</span>
         </button>
       </div>
@@ -35,7 +35,7 @@
       <div class="stat-card occupied">
         <h4 data-i18n="rmOccupied">Ocupados</h4>
         <div class="value" id="statOccupiedValue">0</div>
-        <div class="subvalue"><span id="statOccupiedPercent">0%</span> <span data-i18n="rmOccupancy">ocupação</span></div>
+        <div class="subvalue"><span id="statOccupiedPercent">0%</span> <span data-i18n="rmOccupancy">ocupaÃ§Ã£o</span></div>
       </div>
       <div class="stat-card dirty">
         <h4 data-i18n="rmDirty">Sujos</h4>
@@ -43,9 +43,9 @@
         <div class="subview"><span data-i18n="rmNeedCleaning">necessitam limpeza</span></div>
       </div>
       <div class="stat-card ooo">
-        <h4 data-i18n="rmOutOfOrder">Fora de Serviço</h4>
+        <h4 data-i18n="rmOutOfOrder">Fora de ServiÃ§o</h4>
         <div class="value" id="statOOOValue">0</div>
-        <div class="subvalue"><span data-i18n="rmMaintenance">em manutenção</span></div>
+        <div class="subvalue"><span data-i18n="rmMaintenance">em manutenÃ§Ã£o</span></div>
       </div>
     </div>
 
@@ -53,9 +53,9 @@
     <div class="rooms-toolbar">
       <div class="toolbar-left">
         <div class="view-toggles">
-          <button class="view-toggle-btn active" data-view="grid">🏨 <span data-i18n="rmViewGrid">Grade</span></button>
-          <button class="view-toggle-btn" data-view="list">📋 <span data-i18n="rmViewList">Lista</span></button>
-          <button class="view-toggle-btn" data-view="floor">🏢 <span data-i18n="rmViewFloor">Por Andar</span></button>
+          <button class="view-toggle-btn active" data-view="grid">ðŸ¨ <span data-i18n="rmViewGrid">Grade</span></button>
+          <button class="view-toggle-btn" data-view="list">ðŸ“‹ <span data-i18n="rmViewList">Lista</span></button>
+          <button class="view-toggle-btn" data-view="floor">ðŸ¢ <span data-i18n="rmViewFloor">Por Andar</span></button>
         </div>
       </div>
       <div class="toolbar-right">
@@ -74,7 +74,7 @@
             <option value="dirty" data-i18n="rmStatusDirty">Sujo</option>
             <option value="clean" data-i18n="rmStatusClean">Limpo</option>
             <option value="out_of_order" data-i18n="rmStatusOutOfOrder">Fora de Ordem</option>
-            <option value="out_of_service" data-i18n="rmStatusOutOfService">Fora de Serviço</option>
+            <option value="out_of_service" data-i18n="rmStatusOutOfService">Fora de ServiÃ§o</option>
           </select>
         </div>
         <div class="search-box">
@@ -98,9 +98,9 @@
             <th data-i18n="rmColType">Tipo</th>
             <th data-i18n="rmColStatus">Status</th>
             <th data-i18n="rmColCleaning">Limpeza</th>
-            <th data-i18n="rmColGuest">Hóspede</th>
+            <th data-i18n="rmColGuest">HÃ³spede</th>
             <th data-i18n="rmColCheckOut">Check-out</th>
-            <th data-i18n="rmColActions">Ações</th>
+            <th data-i18n="rmColActions">AÃ§Ãµes</th>
           </tr>
         </thead>
         <tbody id="roomsTableBody">
@@ -129,7 +129,7 @@
         </div>
         <div class="room-detail-actions" style="margin-top:20px;display:flex;gap:10px;flex-wrap:wrap;">
           <button class="btn" id="btnChangeStatus" data-i18n="rmChangeStatus">Alterar Status</button>
-          <button class="btn" id="btnAssignGuest" data-i18n="rmAssignGuest">Alocar Hóspede</button>
+          <button class="btn" id="btnAssignGuest" data-i18n="rmAssignGuest">Alocar HÃ³spede</button>
           <button class="btn" id="btnRequestCleaning" data-i18n="rmRequestCleaning">Solicitar Limpeza</button>
           <button class="btn btn-danger" id="btnBlockRoom" data-i18n="rmBlockRoom">Bloquear</button>
         </div>
@@ -155,12 +155,12 @@
               <option value="dirty" data-i18n="rmStatusDirty">Sujo</option>
               <option value="clean" data-i18n="rmStatusClean">Limpo</option>
               <option value="out_of_order" data-i18n="rmStatusOutOfOrder">Fora de Ordem</option>
-              <option value="out_of_service" data-i18n="rmStatusOutOfService">Fora de Serviço</option>
+              <option value="out_of_service" data-i18n="rmStatusOutOfService">Fora de ServiÃ§o</option>
             </select>
           </div>
           <div class="form-group">
             <label for="statusReason" data-i18n="rmStatusReason">Motivo (opcional)</label>
-            <textarea id="statusReason" rows="3" data-i18n-placeholder="rmStatusReasonPlaceholder" placeholder="Descreva o motivo da alteração..."></textarea>
+            <textarea id="statusReason" rows="3" data-i18n-placeholder="rmStatusReasonPlaceholder" placeholder="Descreva o motivo da alteraÃ§Ã£o..."></textarea>
           </div>
           <div class="form-actions">
             <button type="button" id="btnCancelChangeStatus" class="btn btn-secondary" data-i18n="rmBtnCancel">Cancelar</button>
@@ -184,3 +184,4 @@
   </script>
 </body>
 </html>
+

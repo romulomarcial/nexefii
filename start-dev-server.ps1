@@ -1,7 +1,8 @@
 # Start NEXEFII Dev Server
-# Ensures server runs from correct directory on port 8004
+# Ensures server runs from script directory on port 8004 (no hardcoded paths)
 
-$ServerDir = "r:\Development\Projects\iluxsys"
+$ScriptDir = Split-Path -Parent $MyInvocation.MyCommand.Path
+$ServerDir = $ScriptDir
 $Port = 8004
 
 Write-Host "`n=== NEXEFII Dev Server ===" -ForegroundColor Cyan
