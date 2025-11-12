@@ -1,0 +1,163 @@
+<div class="help-page">
+  <style>
+    .help-hero {
+      text-align: center;
+      padding: 2rem 0 3rem;
+      border-bottom: 1px solid #E0E0E0;
+      margin-bottom: 3rem;
+    }
+
+    .help-hero h1 {
+      font-size: 2.5rem;
+      font-weight: 700;
+      color: #1A1A1A;
+      margin-bottom: 0.5rem;
+    }
+
+    .help-hero p {
+      font-size: 1.125rem;
+      color: #666;
+    }
+
+    .help-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 1.5rem;
+      margin-bottom: 3rem;
+    }
+
+    .help-card {
+      background: white;
+      border: 1px solid #E0E0E0;
+      border-radius: 12px;
+      padding: 1.5rem;
+      transition: all 0.2s;
+      cursor: pointer;
+    }
+
+    .help-card:hover {
+      border-color: #E42121;
+      box-shadow: 0 4px 12px rgba(228, 33, 33, 0.15);
+    }
+
+    .help-card-icon {
+      font-size: 2.5rem;
+      margin-bottom: 1rem;
+    }
+
+    .help-card-title {
+      font-size: 1.25rem;
+      font-weight: 600;
+      color: #1A1A1A;
+      margin-bottom: 0.5rem;
+    }
+
+    .help-card-description {
+      color: #666;
+      font-size: 0.875rem;
+      line-height: 1.5;
+    }
+
+    .contact-section {
+      background: linear-gradient(135deg, #E42121, #C41A1A);
+      color: white;
+      border-radius: 12px;
+      padding: 2rem;
+      text-align: center;
+    }
+
+    .contact-section h2 {
+      font-size: 1.75rem;
+      margin-bottom: 1rem;
+    }
+
+    .contact-section p {
+      margin-bottom: 1.5rem;
+      opacity: 0.95;
+    }
+
+    .contact-button {
+      display: inline-block;
+      padding: 0.75rem 2rem;
+      background: white;
+      color: #E42121;
+      border-radius: 6px;
+      font-weight: 600;
+      text-decoration: none;
+      transition: transform 0.2s;
+    }
+
+    .contact-button:hover {
+      transform: scale(1.05);
+    }
+  </style>
+
+  <div class="help-hero">
+    <h1>Central de Ajuda</h1>
+    <p>Encontre respostas e aprenda a usar o NEXEFII</p>
+  </div>
+
+  <div class="help-grid">
+    <div class="help-card">
+      <div class="help-card-icon">🚀</div>
+      <h3 class="help-card-title">Primeiros Passos</h3>
+      <p class="help-card-description">
+        Aprenda como configurar sua primeira propriedade e começar a usar o sistema.
+      </p>
+    </div>
+
+    <div class="help-card">
+      <div class="help-card-icon">🏨</div>
+      <h3 class="help-card-title">Gestão de Quartos</h3>
+      <p class="help-card-description">
+        Como cadastrar quartos, definir preços e gerenciar disponibilidade.
+      </p>
+    </div>
+
+    <div class="help-card">
+      <div class="help-card-icon">📅</div>
+      <h3 class="help-card-title">Reservas</h3>
+      <p class="help-card-description">
+        Tudo sobre criar, editar e gerenciar reservas de hóspedes.
+      </p>
+    </div>
+
+    <div class="help-card">
+      <div class="help-card-icon">💰</div>
+      <h3 class="help-card-title">Financeiro</h3>
+      <p class="help-card-description">
+        Controle receitas, despesas e gere relatórios financeiros.
+      </p>
+    </div>
+
+    <div class="help-card">
+      <div class="help-card-icon">📊</div>
+      <h3 class="help-card-title">Relatórios</h3>
+      <p class="help-card-description">
+        Entenda seus dados com relatórios detalhados e dashboards.
+      </p>
+    </div>
+
+    <div class="help-card">
+      <div class="help-card-icon">⚙️</div>
+      <h3 class="help-card-title">Configurações</h3>
+      <p class="help-card-description">
+        Personalize o sistema de acordo com suas necessidades.
+      </p>
+    </div>
+  </div>
+
+  <div class="contact-section">
+    <h2>Ainda precisa de ajuda?</h2>
+    <p>Nossa equipe de suporte está pronta para ajudar você</p>
+    <a href="mailto:suporte@nexefii.com" class="contact-button">
+      Entrar em Contato
+    </a>
+  </div>
+</div>
+
+<script>
+  async function initHelpPage() {
+    console.log('[Help] Help page initialized');
+  }
+</script>

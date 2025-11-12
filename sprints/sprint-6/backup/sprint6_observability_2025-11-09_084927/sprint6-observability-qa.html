@@ -1,0 +1,289 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Sprint 6 - Observability QA</title>
+  <style>
+    *{margin:0;padding:0;box-sizing:border-box}
+    body{font-family:monospace;background:#0f172a;color:#e2e8f0;padding:20px}
+    h1{margin-bottom:12px}
+    .test{background:#1e293b;border:1px solid #334155;border-radius:8px;padding:16px;margin-bottom:12px}
+    .test h3{color:#93c5fd;margin-bottom:8px}
+    .pass{color:#22c55e}
+    .fail{color:#ef4444}
+    button{background:#0ea5e9;color:#fff;border:0;border-radius:6px;padding:10px 20px;cursor:pointer;font-size:14px;margin-right:10px}
+    pre{background:#0b1220;padding:10px;border-radius:4px;margin-top:8px;font-size:11px;max-height:200px;overflow:auto}
+    #summary{background:#1e3a8a;padding:16px;border-radius:8px;margin-bottom:16px}
+  </style>
+</head>
+<body>
+  <h1>📋 Sprint 6 QA - Observability & Polish</h1>
+  <div id="summary">Aguardando execução dos testes...</div>
+  <button id="runAll">🚀 Executar Todos os Testes</button>
+  <button onclick="location.reload()">🔄 Reiniciar</button>
+  <hr style="margin:16px 0;border:1px solid #334155">
+  <div id="results"></div>
+
+  <script type="module">
+    import Logger from '../core/observability/Logger.js';
+    import MetricsCollector from '../core/observability/MetricsCollector.js';
+    import AlertManager from '../core/observability/AlertManager.js';
+
+    const tests = [];
+    const results = [];
+
+    function addTest(name, fn) {
+      tests.push({ name, fn });
+    }
+
+    function assert(condition, message) {
+      if (!condition) throw new Error(message);
+    }
+
+    function sleep(ms) {
+      return new Promise(resolve => setTimeout(resolve, ms));
+    }
+
+    // ==========================
+    // TESTE 1: Logger Básico
+    // ==========================
+    addTest('Logger: Níveis e Categorias', async () => {
+      const logger = new Logger({ level: 'DEBUG' });
+      logger.debug('Debug message', { category: 'test' });
+      logger.info('Info message');
+      logger.warn('Warn message');
+      logger.error('Error message');
+
+      const all = logger.query({});
+      assert(all.length === 4, `Esperado 4 logs, obtido ${all.length}`);
+
+      const errors = logger.query({ level: 'ERROR' });
+      assert(errors.length === 1, `Esperado 1 error, obtido ${errors.length}`);
+
+      const testLogs = logger.query({ category: 'test' });
+      assert(testLogs.length === 1, `Esperado 1 log categoria test, obtido ${testLogs.length}`);
+
+      const stats = logger.getStats();
+      assert(stats.total === 4, `Stats total esperado 4, obtido ${stats.total}`);
+
+      return `✅ Logger funcionando (4 logs, 1 error, 1 test category)`;
+    });
+
+    // ==========================
+    // TESTE 2: Logger Export
+    // ==========================
+    addTest('Logger: Export e Subscribe', async () => {
+      const logger = new Logger();
+      let streamedLogs = 0;
+
+      logger.subscribe(() => {
+        streamedLogs++;
+      });
+
+      logger.info('Stream test 1');
+      logger.info('Stream test 2');
+
+      assert(streamedLogs === 2, `Esperado 2 logs streamados, obtido ${streamedLogs}`);
+
+      const exported = logger.export();
+      assert(exported.format === 'json', 'Formato de export incorreto');
+      assert(JSON.parse(exported.data).length === 2, 'Export não contém 2 logs');
+
+      return `✅ Logger export e subscribe OK (2 logs streamados)`;
+    });
+
+    // ==========================
+    // TESTE 3: MetricsCollector
+    // ==========================
+    addTest('MetricsCollector: Performance & Resources', async () => {
+      const logger = new Logger();
+      const metrics = new MetricsCollector({ logger, interval: 1000 });
+
+      metrics.start();
+      await sleep(2500); // Aguardar pelo menos 2 coletas
+
+      const snapshot = metrics.getSnapshot();
+      assert(snapshot.performance, 'Snapshot não contém performance');
+      assert(snapshot.resources, 'Snapshot não contém resources');
+      assert(typeof snapshot.performance.avg === 'number', 'Performance avg inválido');
+      assert(snapshot.performance.count >= 2, `Esperado >=2 coletas, obtido ${snapshot.performance.count}`);
+
+      metrics.stop();
+
+      return `✅ MetricsCollector OK (${snapshot.performance.count} coletas, avg=${snapshot.performance.avg.toFixed(2)}ms)`;
+    });
+
+    // ==========================
+    // TESTE 4: MetricsCollector Análise Estatística
+    // ==========================
+    addTest('MetricsCollector: Análise Estatística (P95/P99)', async () => {
+      const metrics = new MetricsCollector();
+
+      // Registrar métricas customizadas
+      metrics.recordCustom('responseTime', 100);
+      metrics.recordCustom('responseTime', 200);
+      metrics.recordCustom('responseTime', 150);
+      metrics.recordCustom('responseTime', 300);
+      metrics.recordCustom('responseTime', 120);
+
+      const snapshot = metrics.getSnapshot();
+      assert(snapshot.custom.responseTime, 'Custom metric responseTime não encontrado');
+      assert(snapshot.custom.responseTime.count === 5, `Esperado 5 amostras, obtido ${snapshot.custom.responseTime.count}`);
+      assert(typeof snapshot.custom.responseTime.p95 === 'number', 'P95 não calculado');
+      assert(typeof snapshot.custom.responseTime.p99 === 'number', 'P99 não calculado');
+
+      const exported = metrics.export();
+      assert(exported.snapshot, 'Export sem snapshot');
+      assert(exported.raw, 'Export sem raw data');
+
+      return `✅ Análise estatística OK (P95=${snapshot.custom.responseTime.p95.toFixed(0)}, P99=${snapshot.custom.responseTime.p99.toFixed(0)})`;
+    });
+
+    // ==========================
+    // TESTE 5: AlertManager Regras
+    // ==========================
+    addTest('AlertManager: Regras e Triggers', async () => {
+      const logger = new Logger();
+      const metrics = new MetricsCollector({ logger });
+      const alerts = new AlertManager({ logger, metricsCollector: metrics });
+
+      let alertFired = false;
+
+      alerts.registerHandler('test', (alert) => {
+        alertFired = true;
+      });
+
+      alerts.addRule({
+        id: 'test-rule',
+        name: 'Test Rule',
+        condition: () => true, // Sempre dispara
+        severity: 'warning',
+        message: 'Test alert triggered',
+        cooldown: 5000
+      });
+
+      alerts.start();
+      await sleep(500);
+
+      assert(alertFired, 'Alerta não foi disparado');
+
+      const alertsList = alerts.getAlerts();
+      assert(alertsList.length === 1, `Esperado 1 alerta, obtido ${alertsList.length}`);
+      assert(alertsList[0].ruleName === 'Test Rule', 'Nome da regra incorreto');
+
+      alerts.stop();
+
+      return `✅ AlertManager OK (1 alerta disparado, handler funcionando)`;
+    });
+
+    // ==========================
+    // TESTE 6: AlertManager Cooldown
+    // ==========================
+    addTest('AlertManager: Cooldown e Acknowledge', async () => {
+      const logger = new Logger();
+      const metrics = new MetricsCollector({ logger });
+      const alerts = new AlertManager({ logger, metricsCollector: metrics, checkInterval: 500 });
+
+      let triggerCount = 0;
+
+      alerts.registerHandler('counter', () => {
+        triggerCount++;
+      });
+
+      alerts.addRule({
+        id: 'cooldown-test',
+        name: 'Cooldown Test',
+        condition: () => true,
+        severity: 'info',
+        message: 'Cooldown test',
+        cooldown: 2000
+      });
+
+      alerts.start();
+      await sleep(1500); // Deve disparar 1x (não 2x devido ao cooldown)
+
+      assert(triggerCount === 1, `Esperado 1 trigger devido ao cooldown, obtido ${triggerCount}`);
+
+      const alertsList = alerts.getAlerts();
+      const alertId = alertsList[0].id;
+      alerts.acknowledge(alertId);
+
+      const acknowledged = alerts.getAlerts({ acknowledged: true });
+      assert(acknowledged.length === 1, 'Acknowledge não funcionou');
+
+      alerts.stop();
+
+      return `✅ Cooldown e acknowledge OK (1 trigger, acknowledged)`;
+    });
+
+    // ==========================
+    // TESTE 7: Performance Overhead
+    // ==========================
+    addTest('Performance: Overhead de Coleta (<100ms)', async () => {
+      const logger = new Logger();
+      const metrics = new MetricsCollector({ logger, interval: 100 });
+
+      const startTime = performance.now();
+      metrics.start();
+      await sleep(500);
+      metrics.stop();
+      const elapsed = performance.now() - startTime;
+
+      const snapshot = metrics.getSnapshot();
+      const collectionTime = snapshot.performance?.max || 0;
+
+      assert(collectionTime < 100, `Collection time ${collectionTime.toFixed(2)}ms excede limite de 100ms`);
+
+      return `✅ Performance OK (max collection time: ${collectionTime.toFixed(2)}ms)`;
+    });
+
+    // ==========================
+    // EXECUTAR TESTES
+    // ==========================
+    async function runTests() {
+      results.length = 0;
+      document.getElementById('results').innerHTML = '<p>Executando testes...</p>';
+
+      for (const test of tests) {
+        const testDiv = document.createElement('div');
+        testDiv.className = 'test';
+        testDiv.innerHTML = `<h3>${test.name}</h3><p>Executando...</p>`;
+        document.getElementById('results').appendChild(testDiv);
+
+        try {
+          const result = await test.fn();
+          results.push({ name: test.name, status: 'PASS', message: result });
+          testDiv.innerHTML = `<h3>${test.name}</h3><p class="pass">${result}</p>`;
+        } catch (error) {
+          results.push({ name: test.name, status: 'FAIL', message: error.message });
+          testDiv.innerHTML = `<h3>${test.name}</h3><p class="fail">❌ FALHOU: ${error.message}</p><pre>${error.stack}</pre>`;
+        }
+      }
+
+      updateSummary();
+    }
+
+    function updateSummary() {
+      const passed = results.filter(r => r.status === 'PASS').length;
+      const failed = results.filter(r => r.status === 'FAIL').length;
+      const total = results.length;
+
+      const summaryHtml = `
+        <strong>Resultados:</strong> ${passed}/${total} testes passaram<br>
+        <span class="${failed === 0 ? 'pass' : 'fail'}">${failed === 0 ? '✅ TODOS OS TESTES PASSARAM' : `❌ ${failed} teste(s) falharam`}</span>
+      `;
+      document.getElementById('summary').innerHTML = summaryHtml;
+
+      console.log('[QA] Resultados:', results);
+    }
+
+    document.getElementById('runAll').addEventListener('click', runTests);
+
+    // Auto-run QA on load
+    window.addEventListener('load', () => {
+      setTimeout(runTests, 200);
+    });
+  </script>
+</body>
+</html>

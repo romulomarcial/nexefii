@@ -1,0 +1,1726 @@
+<div class="wizard-page">
+  <style>
+    .wizard-page {
+      max-width: 900px;
+      margin: 0 auto;
+    }
+
+    @media (max-width: 768px) {
+      .wizard-page {
+        max-width: 100%;
+        padding: 0 1rem;
+      }
+    }
+
+    @media (max-width: 480px) {
+      .wizard-page {
+        padding: 0 0.5rem;
+      }
+    }
+
+    .wizard-header {
+      text-align: center;
+      margin-bottom: 2rem;
+    }
+
+    @media (max-width: 768px) {
+      .wizard-header {
+        margin-bottom: 1.5rem;
+      }
+    }
+
+    .wizard-title {
+      font-size: 2rem;
+      font-weight: 700;
+      color: #1A1A1A;
+      margin-bottom: 0.5rem;
+    }
+
+    @media (max-width: 768px) {
+      .wizard-title {
+        font-size: 1.5rem;
+      }
+    }
+
+    @media (max-width: 480px) {
+      .wizard-title {
+        font-size: 1.25rem;
+      }
+    }
+
+    .wizard-subtitle {
+      color: #666;
+      font-size: 1rem;
+    }
+
+    @media (max-width: 480px) {
+      .wizard-subtitle {
+        font-size: 0.875rem;
+      }
+    }
+
+    /* Progress Bar */
+    .progress-container {
+      margin-bottom: 3rem;
+    }
+
+    @media (max-width: 768px) {
+      .progress-container {
+        margin-bottom: 2rem;
+      }
+    }
+
+    .progress-steps {
+      display: flex;
+      justify-content: space-between;
+      margin-bottom: 1rem;
+      position: relative;
+    }
+
+    @media (max-width: 480px) {
+      .progress-steps {
+        overflow-x: auto;
+        justify-content: flex-start;
+        gap: 2rem;
+        padding-bottom: 0.5rem;
+      }
+    }
+
+    .progress-steps::before {
+      content: '';
+      position: absolute;
+      top: 20px;
+      left: 0;
+      right: 0;
+      height: 2px;
+      background: #E0E0E0;
+      z-index: 0;
+    }
+
+    .progress-step {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 0.5rem;
+      position: relative;
+      z-index: 1;
+      flex: 1;
+    }
+
+    .step-circle {
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      background: white;
+      border: 2px solid #E0E0E0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 600;
+      color: #999;
+      transition: all 0.3s;
+    }
+
+    .step-circle.active {
+      background: #E42121;
+      border-color: #E42121;
+      color: white;
+      transform: scale(1.1);
+    }
+
+    .step-circle.completed {
+      background: #28A745;
+      border-color: #28A745;
+      color: white;
+    }
+
+    .step-label {
+      font-size: 0.75rem;
+      color: #999;
+      text-align: center;
+    }
+
+    @media (max-width: 480px) {
+      .step-label {
+        font-size: 0.65rem;
+        white-space: nowrap;
+      }
+    }
+
+    .step-label.active {
+      color: #E42121;
+      font-weight: 600;
+    }
+
+    /* Form Container */
+    .wizard-content {
+      background: white;
+      border: 1px solid #E0E0E0;
+      border-radius: 12px;
+      padding: 2rem;
+      margin-bottom: 2rem;
+      min-height: 400px;
+    }
+
+    @media (max-width: 768px) {
+      .wizard-content {
+        padding: 1.5rem;
+        border-radius: 8px;
+      }
+    }
+
+    @media (max-width: 480px) {
+      .wizard-content {
+        padding: 1rem;
+        border-radius: 4px;
+        min-height: 300px;
+      }
+    }
+
+    .step-content {
+      display: none;
+    }
+
+    .step-content.active {
+      display: block;
+      animation: fadeIn 0.3s;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(10px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .step-title {
+      font-size: 1.5rem;
+      font-weight: 600;
+      color: #1A1A1A;
+      margin-bottom: 1.5rem;
+    }
+
+    /* Form Elements */
+    .form-group {
+      margin-bottom: 1.5rem;
+    }
+
+    .form-label {
+      display: block;
+      font-weight: 600;
+      color: #1A1A1A;
+      margin-bottom: 0.5rem;
+      font-size: 0.875rem;
+    }
+
+    .form-label.required::after {
+      content: '*';
+      color: #E42121;
+      margin-left: 0.25rem;
+    }
+
+    .form-input,
+    .form-select,
+    .form-textarea {
+      width: 100%;
+      padding: 0.75rem;
+      border: 2px solid #E0E0E0;
+      border-radius: 6px;
+      font-size: 1rem;
+      transition: border-color 0.2s;
+    }
+
+    .form-input:focus,
+    .form-select:focus,
+    .form-textarea:focus {
+      outline: none;
+      border-color: #E42121;
+    }
+
+    .form-input.error,
+    .form-select.error {
+      border-color: #DC3545;
+    }
+
+    .form-error {
+      color: #DC3545;
+      font-size: 0.875rem;
+      margin-top: 0.25rem;
+      display: none;
+    }
+
+    .form-error.show {
+      display: block;
+    }
+
+    .form-hint {
+      color: #999;
+      font-size: 0.875rem;
+      margin-top: 0.25rem;
+    }
+
+    .form-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1rem;
+    }
+
+    /* Icon Selector */
+    .icon-selector {
+      display: grid;
+      grid-template-columns: repeat(8, 1fr);
+      gap: 0.5rem;
+      margin-top: 0.5rem;
+    }
+
+    @media (max-width: 768px) {
+      .icon-selector {
+        grid-template-columns: repeat(6, 1fr);
+      }
+    }
+
+    @media (max-width: 480px) {
+      .icon-selector {
+        grid-template-columns: repeat(4, 1fr);
+        gap: 0.3rem;
+      }
+    }
+
+    .icon-option {
+      width: 50px;
+      height: 50px;
+      border: 2px solid #E0E0E0;
+      border-radius: 8px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.5rem;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+
+    .icon-option:hover {
+      border-color: #E42121;
+      transform: scale(1.1);
+    }
+
+    .icon-option.selected {
+      border-color: #E42121;
+      background: #FFF5F5;
+    }
+
+    /* Image Upload Section */
+    .image-upload-section {
+      margin-top: 0.5rem;
+    }
+
+    .image-upload-tabs {
+      display: flex;
+      gap: 0.5rem;
+      margin-bottom: 1rem;
+      border-bottom: 2px solid #E0E0E0;
+    }
+
+    .image-tab {
+      background: none;
+      border: none;
+      padding: 0.75rem 1.5rem;
+      font-size: 0.875rem;
+      font-weight: 500;
+      color: #666;
+      cursor: pointer;
+      transition: all 0.2s;
+      border-bottom: 2px solid transparent;
+      margin-bottom: -2px;
+    }
+
+    .image-tab:hover {
+      color: #E42121;
+    }
+
+    .image-tab.active {
+      color: #E42121;
+      border-bottom-color: #E42121;
+    }
+
+    .image-tab-content {
+      display: none;
+    }
+
+    .image-tab-content.active {
+      display: block;
+    }
+
+    .image-gallery {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 1rem;
+      padding: 1rem 0;
+    }
+
+    @media (max-width: 768px) {
+      .image-gallery {
+        grid-template-columns: repeat(2, 1fr);
+      }
+    }
+
+    @media (max-width: 480px) {
+      .image-gallery {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    .gallery-image {
+      position: relative;
+      aspect-ratio: 16/9;
+      border-radius: 8px;
+      overflow: hidden;
+      cursor: pointer;
+      border: 3px solid transparent;
+      transition: all 0.2s;
+    }
+
+    .gallery-image:hover {
+      border-color: #E42121;
+      transform: scale(1.05);
+    }
+
+    .gallery-image.selected {
+      border-color: #E42121;
+    }
+
+    .gallery-image img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    .gallery-overlay {
+      position: absolute;
+      top: 0;
+      right: 0;
+      background: #E42121;
+      color: white;
+      padding: 0.25rem 0.5rem;
+      border-radius: 0 0 0 8px;
+      font-weight: bold;
+      opacity: 0;
+      transition: opacity 0.2s;
+    }
+
+    .gallery-image.selected .gallery-overlay {
+      opacity: 1;
+    }
+
+    .upload-area {
+      padding: 2rem;
+      border: 2px dashed #E0E0E0;
+      border-radius: 8px;
+      text-align: center;
+      transition: all 0.2s;
+    }
+
+    .upload-area:hover {
+      border-color: #E42121;
+      background: #FFF5F5;
+    }
+
+    .upload-label {
+      cursor: pointer;
+      display: block;
+    }
+
+    .upload-icon {
+      font-size: 3rem;
+      margin-bottom: 0.5rem;
+    }
+
+    .upload-text {
+      font-weight: 600;
+      color: #1A1A1A;
+      margin-bottom: 0.25rem;
+    }
+
+    .upload-hint {
+      font-size: 0.875rem;
+      color: #666;
+    }
+
+    .upload-preview {
+      margin-top: 1rem;
+      display: none;
+    }
+
+    .upload-preview.show {
+      display: block;
+    }
+
+    .upload-preview img {
+      max-width: 100%;
+      max-height: 300px;
+      border-radius: 8px;
+    }
+
+    .btn-preview {
+      margin-top: 1rem;
+      padding: 0.5rem 1.5rem;
+      background: #E42121;
+      color: white;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+      font-weight: 500;
+    }
+
+    .btn-preview:hover {
+      background: #C11919;
+    }
+
+    /* Room Category Cards */
+    .category-list {
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+      margin-bottom: 1rem;
+    }
+
+    .category-card {
+      background: #F8F9FA;
+      border: 1px solid #E0E0E0;
+      border-radius: 8px;
+      padding: 1rem;
+      position: relative;
+    }
+
+    .category-card-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 1rem;
+    }
+
+    .category-name {
+      font-weight: 600;
+      color: #1A1A1A;
+    }
+
+    .btn-remove {
+      background: #DC3545;
+      color: white;
+      border: none;
+      padding: 0.25rem 0.75rem;
+      border-radius: 4px;
+      cursor: pointer;
+      font-size: 0.875rem;
+    }
+
+    .btn-remove:hover {
+      background: #C82333;
+    }
+
+    /* Templates */
+    .template-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 1rem;
+      margin-bottom: 2rem;
+    }
+
+    .template-card {
+      background: white;
+      border: 2px solid #E0E0E0;
+      border-radius: 8px;
+      padding: 1.5rem;
+      cursor: pointer;
+      transition: all 0.2s;
+      text-align: center;
+    }
+
+    .template-card:hover {
+      border-color: #E42121;
+      box-shadow: 0 4px 12px rgba(228, 33, 33, 0.15);
+    }
+
+    .template-icon {
+      font-size: 3rem;
+      margin-bottom: 0.5rem;
+    }
+
+    .template-name {
+      font-weight: 600;
+      color: #1A1A1A;
+      margin-bottom: 0.5rem;
+    }
+
+    .template-desc {
+      font-size: 0.875rem;
+      color: #666;
+    }
+
+    /* Review Section */
+    .review-section {
+      background: #F8F9FA;
+      border-radius: 8px;
+      padding: 1.5rem;
+      margin-bottom: 1.5rem;
+    }
+
+    .review-section-title {
+      font-weight: 600;
+      color: #1A1A1A;
+      margin-bottom: 1rem;
+      font-size: 1.125rem;
+    }
+
+    .review-item {
+      display: flex;
+      justify-content: space-between;
+      padding: 0.5rem 0;
+      border-bottom: 1px solid #E0E0E0;
+    }
+
+    .review-item:last-child {
+      border-bottom: none;
+    }
+
+    .review-label {
+      color: #666;
+      font-size: 0.875rem;
+    }
+
+    .review-value {
+      font-weight: 600;
+      color: #1A1A1A;
+    }
+
+    /* Buttons */
+    .wizard-actions {
+      display: flex;
+      justify-content: space-between;
+      gap: 1rem;
+    }
+
+    .btn {
+      padding: 0.75rem 2rem;
+      border: none;
+      border-radius: 6px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.2s;
+      font-size: 1rem;
+    }
+
+    .btn-primary {
+      background: #E42121;
+      color: white;
+    }
+
+    .btn-primary:hover {
+      background: #C41A1A;
+    }
+
+    .btn-primary:disabled {
+      background: #CCC;
+      cursor: not-allowed;
+    }
+
+    .btn-secondary {
+      background: #6C757D;
+      color: white;
+    }
+
+    .btn-secondary:hover {
+      background: #5A6268;
+    }
+
+    .btn-success {
+      background: #28A745;
+      color: white;
+      font-size: 1.125rem;
+      padding: 1rem 3rem;
+    }
+
+    .btn-success:hover {
+      background: #218838;
+    }
+
+    .checkbox-group {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      margin-bottom: 1rem;
+    }
+
+    .checkbox {
+      width: 20px;
+      height: 20px;
+      cursor: pointer;
+    }
+
+    .modules-checkboxes {
+      margin: 1.5rem 0;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 1rem 2rem;
+    }
+
+    .module-checkbox {
+      font-size: 1rem;
+      font-weight: 500;
+      color: #333;
+      background: #f7f7f7;
+      border-radius: 6px;
+      padding: 0.5rem 1rem;
+      margin-bottom: 0.5rem;
+      display: flex;
+      align-items: center;
+      cursor: pointer;
+      transition: background 0.2s;
+    }
+
+    .module-checkbox input[type="checkbox"] {
+      margin-right: 0.5rem;
+      accent-color: #E42121;
+    }
+
+    .module-checkbox:hover {
+      background: #eaeaea;
+    }
+
+    @media (max-width: 768px) {
+      .form-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .template-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .icon-selector {
+        grid-template-columns: repeat(6, 1fr);
+      }
+
+      .modules-checkboxes {
+        flex-direction: column;
+        gap: 0.5rem;
+      }
+    }
+  </style>
+
+  <!-- Wizard Header -->
+  <div class="wizard-header">
+    <h1 class="wizard-title">🪄 Assistente de Criação de Propriedade</h1>
+    <p class="wizard-subtitle">Configure sua nova propriedade em 6 passos simples</p>
+  </div>
+
+  <!-- Progress Bar -->
+  <div class="progress-container">
+    <div class="progress-steps" id="progress-steps">
+      <div class="progress-step">
+        <div class="step-circle active">1</div>
+        <div class="step-label active">Básico</div>
+      </div>
+      <div class="progress-step">
+        <div class="step-circle">2</div>
+        <div class="step-label">Detalhes</div>
+      </div>
+      <div class="progress-step">
+        <div class="step-circle">3</div>
+        <div class="step-label">Módulos</div>
+      </div>
+      <div class="progress-step">
+        <div class="step-circle">4</div>
+        <div class="step-label">Quartos</div>
+      </div>
+      <div class="progress-step">
+        <div class="step-circle">5</div>
+        <div class="step-label">Config</div>
+      </div>
+      <div class="progress-step">
+        <div class="step-circle">6</div>
+        <div class="step-label">Dados</div>
+      </div>
+      <div class="progress-step">
+        <div class="step-circle">7</div>
+        <div class="step-label">Revisão</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Wizard Content -->
+  <div class="wizard-content">
+    <!-- Step 1: Basic Info -->
+    <div class="step-content active" id="step-1">
+      <h2 class="step-title">Informações Básicas</h2>
+      
+      <div class="form-group">
+        <label class="form-label required">Nome da Propriedade</label>
+        <input type="text" class="form-input" id="name" placeholder="Ex: Hotel Paraíso">
+        <div class="form-error" id="error-name"></div>
+        <div class="form-hint">O nome que aparecerá no sistema</div>
+      </div>
+
+      <div class="form-group">
+        <label class="form-label required">Slug (URL)</label>
+        <input type="text" class="form-input" id="slug" placeholder="hotel-paraiso" readonly>
+        <div class="form-error" id="error-slug"></div>
+        <div class="form-hint">Gerado automaticamente a partir do nome</div>
+      </div>
+
+      <div class="form-group">
+        <label class="form-label">Descrição</label>
+        <textarea class="form-textarea" id="description" rows="3" placeholder="Descrição breve da propriedade"></textarea>
+      </div>
+
+      <div class="form-group">
+        <label class="form-label required">Ícone</label>
+        <div class="icon-selector">
+          <div class="icon-option selected" data-icon="🏨">🏨</div>
+          <div class="icon-option" data-icon="🏩">🏩</div>
+          <div class="icon-option" data-icon="�">🏢</div>
+          <div class="icon-option" data-icon="�🏛️">🏛️</div>
+          <div class="icon-option" data-icon="🏝️">🏝️</div>
+          <div class="icon-option" data-icon="🏰">🏰</div>
+          <div class="icon-option" data-icon="�️">🏔️</div>
+          <div class="icon-option" data-icon="�🌴">🌴</div>
+          <div class="icon-option" data-icon="⛱️">⛱️</div>
+          <div class="icon-option" data-icon="🏖️">🏖️</div>
+          <div class="icon-option" data-icon="🌊">🌊</div>
+          <div class="icon-option" data-icon="🌅">🌅</div>
+          <div class="icon-option" data-icon="🎯">🎯</div>
+          <div class="icon-option" data-icon="⭐">⭐</div>
+          <div class="icon-option" data-icon="💎">💎</div>
+          <div class="icon-option" data-icon="🎪">🎪</div>
+        </div>
+        <div class="form-error" id="error-icon"></div>
+      </div>
+
+      <div class="form-group">
+        <label class="form-label">Imagem da Propriedade</label>
+        <div class="image-upload-section">
+          <div class="image-upload-tabs">
+            <button type="button" class="image-tab active" data-tab="gallery">Galeria</button>
+            <button type="button" class="image-tab" data-tab="upload">Upload</button>
+            <button type="button" class="image-tab" data-tab="url">URL</button>
+          </div>
+
+          <!-- Gallery Tab -->
+          <div class="image-tab-content active" id="gallery-tab">
+            <div class="image-gallery">
+              <div class="gallery-image selected" data-image="assets/images/default-hotel-1.jpg">
+                <img src="assets/images/default-hotel-1.jpg" alt="Hotel Moderno">
+                <div class="gallery-overlay">✓</div>
+              </div>
+              <div class="gallery-image" data-image="assets/images/default-hotel-2.jpg">
+                <img src="assets/images/default-hotel-2.jpg" alt="Resort Praia">
+                <div class="gallery-overlay">✓</div>
+              </div>
+              <div class="gallery-image" data-image="assets/images/default-hotel-3.jpg">
+                <img src="assets/images/default-hotel-3.jpg" alt="Hotel Urbano">
+                <div class="gallery-overlay">✓</div>
+              </div>
+              <div class="gallery-image" data-image="assets/images/default-hotel-4.jpg">
+                <img src="assets/images/default-hotel-4.jpg" alt="Pousada">
+                <div class="gallery-overlay">✓</div>
+              </div>
+              <div class="gallery-image" data-image="assets/images/default-hotel-5.jpg">
+                <img src="assets/images/default-hotel-5.jpg" alt="Hotel Boutique">
+                <div class="gallery-overlay">✓</div>
+              </div>
+              <div class="gallery-image" data-image="assets/images/default-hotel-6.jpg">
+                <img src="assets/images/default-hotel-6.jpg" alt="Resort Montanha">
+                <div class="gallery-overlay">✓</div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Upload Tab -->
+          <div class="image-tab-content" id="upload-tab">
+            <div class="upload-area">
+              <input type="file" id="image-file" accept="image/*" style="display: none;">
+              <label for="image-file" class="upload-label">
+                <div class="upload-icon">📁</div>
+                <div class="upload-text">Clique para selecionar uma imagem</div>
+                <div class="upload-hint">JPG, PNG ou WEBP até 5MB</div>
+              </label>
+              <div id="upload-preview" class="upload-preview"></div>
+            </div>
+          </div>
+
+          <!-- URL Tab -->
+          <div class="image-tab-content" id="url-tab">
+            <input type="url" class="form-input" id="image-url" placeholder="https://exemplo.com/imagem.jpg">
+            <div id="url-preview" class="upload-preview"></div>
+            <button type="button" class="btn-preview" id="btn-preview-url">Pré-visualizar</button>
+          </div>
+
+          <input type="hidden" id="propertyImage" value="assets/images/default-hotel-1.jpg">
+        </div>
+      </div>
+    </div>
+
+    <!-- Step 2: Property Details -->
+    <div class="step-content" id="step-2">
+      <h2 class="step-title">Detalhes da Propriedade</h2>
+
+      <div class="form-group">
+        <label class="form-label required">Tipo</label>
+        <select class="form-select" id="type">
+          <option value="hotel">Hotel</option>
+          <option value="resort">Resort</option>
+          <option value="hostel">Hostel</option>
+          <option value="pousada">Pousada</option>
+        </select>
+        <div class="form-error" id="error-type"></div>
+      </div>
+
+      <div class="form-group">
+        <label class="form-label required">Número Total de Quartos</label>
+        <input type="number" class="form-input" id="roomsCount" placeholder="Ex: 50" min="1" max="1000">
+        <div class="form-error" id="error-roomsCount"></div>
+      </div>
+
+      <div class="form-grid">
+        <div class="form-group">
+          <label class="form-label">Cidade</label>
+          <input type="text" class="form-input" id="city" placeholder="São Paulo">
+        </div>
+
+        <div class="form-group">
+          <label class="form-label">Estado</label>
+          <input type="text" class="form-input" id="state" placeholder="SP">
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label class="form-label">Endereço</label>
+        <input type="text" class="form-input" id="street" placeholder="Rua, número">
+      </div>
+
+      <div class="form-grid">
+        <div class="form-group">
+          <label class="form-label">CEP</label>
+          <input type="text" class="form-input" id="zip" placeholder="00000-000">
+        </div>
+
+        <div class="form-group">
+          <label class="form-label">País</label>
+          <input type="text" class="form-input" id="country" value="Brasil">
+        </div>
+      </div>
+    </div>
+
+    <!-- Step 2.5: Module Selection -->
+    <div class="step-content" id="step-modules">
+      <h2 class="step-title">Módulos da Propriedade</h2>
+      <p style="color: #666; margin-bottom: 1.5rem;">Selecione os módulos que deseja ativar/vender para esta propriedade:</p>
+      <div class="modules-checkboxes">
+        <label class="module-checkbox"><input type="checkbox" id="module-ems" value="EMS"> EMS (Energy Management)</label><br>
+        <label class="module-checkbox"><input type="checkbox" id="module-bms" value="BMS"> BMS (Building Management)</label><br>
+        <label class="module-checkbox"><input type="checkbox" id="module-automation" value="Automation"> Automação</label><br>
+        <label class="module-checkbox"><input type="checkbox" id="module-analytics" value="Analytics"> Analytics</label><br>
+        <label class="module-checkbox"><input type="checkbox" id="module-pms" value="PMS"> PMS (Property Management)</label><br>
+        <label class="module-checkbox"><input type="checkbox" id="module-iot" value="IoT"> IoT Devices</label><br>
+        <label class="module-checkbox"><input type="checkbox" id="module-access" value="Access"> Controle de Acesso</label><br>
+        <label class="module-checkbox"><input type="checkbox" id="module-other" value="Other"> Outros</label>
+      </div>
+    </div>
+
+    <!-- Step 3: Room Configuration -->
+    <div class="step-content" id="step-3">
+      <h2 class="step-title">Configuração de Quartos</h2>
+
+      <p style="color: #666; margin-bottom: 1.5rem;">
+        Configure as categorias de quartos. O total deve ser igual a <strong id="total-rooms-needed">0</strong> quartos.
+      </p>
+
+      <div class="template-grid">
+        <div class="template-card" onclick="applyTemplate('small-hotel')">
+          <div class="template-icon">🏨</div>
+          <div class="template-name">Hotel Pequeno</div>
+          <div class="template-desc">20 quartos (3 categorias)</div>
+        </div>
+        <div class="template-card" onclick="applyTemplate('medium-hotel')">
+          <div class="template-icon">🏩</div>
+          <div class="template-name">Hotel Médio</div>
+          <div class="template-desc">50 quartos (3 categorias)</div>
+        </div>
+        <div class="template-card" onclick="applyTemplate('resort')">
+          <div class="template-icon">🏝️</div>
+          <div class="template-name">Resort</div>
+          <div class="template-desc">100 quartos (4 categorias)</div>
+        </div>
+        <div class="template-card" onclick="applyTemplate('hostel')">
+          <div class="template-icon">🛏️</div>
+          <div class="template-name">Hostel</div>
+          <div class="template-desc">30 quartos (3 categorias)</div>
+        </div>
+      </div>
+
+      <div class="category-list" id="category-list">
+        <!-- Categories rendered here -->
+      </div>
+
+      <div class="form-error show" id="error-roomCategories"></div>
+      <div class="form-error show" id="error-totalRooms"></div>
+
+      <button class="btn btn-secondary" onclick="addCategory()">+ Adicionar Categoria</button>
+    </div>
+
+    <!-- Step 4: Settings -->
+    <div class="step-content" id="step-4">
+      <h2 class="step-title">Configurações</h2>
+
+      <div class="form-grid">
+        <div class="form-group">
+          <label class="form-label required">Moeda</label>
+          <select class="form-select" id="currency">
+            <option value="BRL">BRL - Real Brasileiro (R$)</option>
+            <option value="USD">USD - Dólar Americano ($)</option>
+            <option value="EUR">EUR - Euro (€)</option>
+            <option value="GBP">GBP - Libra Esterlina (£)</option>
+            <option value="JPY">JPY - Iene Japonês (¥)</option>
+            <option value="CAD">CAD - Dólar Canadense (C$)</option>
+            <option value="AUD">AUD - Dólar Australiano (A$)</option>
+            <option value="CHF">CHF - Franco Suíço (CHF)</option>
+            <option value="CNY">CNY - Yuan Chinês (¥)</option>
+            <option value="MXN">MXN - Peso Mexicano (MX$)</option>
+            <option value="ARS">ARS - Peso Argentino (AR$)</option>
+            <option value="COP">COP - Peso Colombiano (COL$)</option>
+            <option value="CLP">CLP - Peso Chileno (CLP$)</option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label required">Fuso Horário</label>
+          <select class="form-select" id="timezone">
+            <!-- Americas -->
+            <optgroup label="🌎 Américas">
+              <option value="America/New_York">Nova York (UTC-5/-4)</option>
+              <option value="America/Los_Angeles">Los Angeles (UTC-8/-7)</option>
+              <option value="America/Chicago">Chicago (UTC-6/-5)</option>
+              <option value="America/Denver">Denver (UTC-7/-6)</option>
+              <option value="America/Toronto">Toronto (UTC-5/-4)</option>
+              <option value="America/Sao_Paulo" selected>São Paulo (UTC-3)</option>
+              <option value="America/Manaus">Manaus (UTC-4)</option>
+              <option value="America/Rio_Branco">Rio Branco (UTC-5)</option>
+              <option value="America/Fortaleza">Fortaleza (UTC-3)</option>
+              <option value="America/Buenos_Aires">Buenos Aires (UTC-3)</option>
+              <option value="America/Santiago">Santiago (UTC-3/-4)</option>
+              <option value="America/Lima">Lima (UTC-5)</option>
+              <option value="America/Bogota">Bogotá (UTC-5)</option>
+              <option value="America/Mexico_City">Cidade do México (UTC-6)</option>
+              <option value="America/Caracas">Caracas (UTC-4)</option>
+            </optgroup>
+            <!-- Europe -->
+            <optgroup label="🌍 Europa">
+              <option value="Europe/London">Londres (UTC+0/+1)</option>
+              <option value="Europe/Paris">Paris (UTC+1/+2)</option>
+              <option value="Europe/Berlin">Berlim (UTC+1/+2)</option>
+              <option value="Europe/Madrid">Madri (UTC+1/+2)</option>
+              <option value="Europe/Rome">Roma (UTC+1/+2)</option>
+              <option value="Europe/Amsterdam">Amsterdã (UTC+1/+2)</option>
+              <option value="Europe/Brussels">Bruxelas (UTC+1/+2)</option>
+              <option value="Europe/Zurich">Zurique (UTC+1/+2)</option>
+              <option value="Europe/Lisbon">Lisboa (UTC+0/+1)</option>
+              <option value="Europe/Moscow">Moscou (UTC+3)</option>
+            </optgroup>
+            <!-- Asia & Pacific -->
+            <optgroup label="🌏 Ásia & Pacífico">
+              <option value="Asia/Tokyo">Tóquio (UTC+9)</option>
+              <option value="Asia/Shanghai">Xangai (UTC+8)</option>
+              <option value="Asia/Hong_Kong">Hong Kong (UTC+8)</option>
+              <option value="Asia/Singapore">Singapura (UTC+8)</option>
+              <option value="Asia/Seoul">Seul (UTC+9)</option>
+              <option value="Asia/Dubai">Dubai (UTC+4)</option>
+              <option value="Asia/Bangkok">Bangkok (UTC+7)</option>
+              <option value="Asia/Kolkata">Mumbai (UTC+5:30)</option>
+              <option value="Australia/Sydney">Sydney (UTC+10/+11)</option>
+              <option value="Australia/Melbourne">Melbourne (UTC+10/+11)</option>
+              <option value="Pacific/Auckland">Auckland (UTC+12/+13)</option>
+            </optgroup>
+            <!-- Africa & Middle East -->
+            <optgroup label="🌍 África & Oriente Médio">
+              <option value="Africa/Cairo">Cairo (UTC+2)</option>
+              <option value="Africa/Johannesburg">Joanesburgo (UTC+2)</option>
+              <option value="Africa/Lagos">Lagos (UTC+1)</option>
+              <option value="Asia/Jerusalem">Jerusalém (UTC+2/+3)</option>
+              <option value="Asia/Istanbul">Istambul (UTC+3)</option>
+            </optgroup>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label required">Horário Check-in</label>
+          <input type="time" class="form-input" id="checkInTime" value="14:00">
+        </div>
+
+        <div class="form-group">
+          <label class="form-label required">Horário Check-out</label>
+          <input type="time" class="form-input" id="checkOutTime" value="12:00">
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label class="form-label">Idioma</label>
+        <select class="form-select" id="language">
+          <option value="pt-BR">Português (Brasil)</option>
+          <option value="en-US">English (US)</option>
+          <option value="es-ES">Español</option>
+        </select>
+      </div>
+    </div>
+
+    <!-- Step 5: Seed Data -->
+    <div class="step-content" id="step-5">
+      <h2 class="step-title">Dados Iniciais</h2>
+
+      <p style="color: #666; margin-bottom: 2rem;">
+        Escolha quais dados de exemplo você quer que sejam criados automaticamente:
+      </p>
+
+      <div class="checkbox-group">
+        <input type="checkbox" class="checkbox" id="createSampleRooms" checked>
+        <label for="createSampleRooms">
+          <strong>Criar quartos de exemplo</strong><br>
+          <span style="font-size: 0.875rem; color: #666;">
+            Cria automaticamente todos os quartos conforme as categorias configuradas
+          </span>
+        </label>
+      </div>
+
+      <div class="checkbox-group">
+        <input type="checkbox" class="checkbox" id="createSampleGuests" checked>
+        <label for="createSampleGuests">
+          <strong>Criar hóspedes de exemplo</strong><br>
+          <span style="font-size: 0.875rem; color: #666;">
+            Adiciona 3 hóspedes fictícios para testes
+          </span>
+        </label>
+      </div>
+
+      <div class="checkbox-group">
+        <input type="checkbox" class="checkbox" id="createSampleReservations">
+        <label for="createSampleReservations">
+          <strong>Criar reserva de exemplo</strong><br>
+          <span style="font-size: 0.875rem; color: #666;">
+            Cria 1 reserva confirmada para demonstração
+          </span>
+        </label>
+      </div>
+    </div>
+
+    <!-- Step 6: Review -->
+    <div class="step-content" id="step-6">
+      <h2 class="step-title">Revisão Final</h2>
+
+      <p style="color: #666; margin-bottom: 2rem;">
+        Revise as informações antes de criar a propriedade:
+      </p>
+
+      <div class="review-section">
+        <div class="review-section-title">Informações Básicas</div>
+        <div class="review-item">
+          <span class="review-label">Nome</span>
+          <span class="review-value" id="review-name">-</span>
+        </div>
+        <div class="review-item">
+          <span class="review-label">Slug</span>
+          <span class="review-value" id="review-slug">-</span>
+        </div>
+        <div class="review-item">
+          <span class="review-label">Tipo</span>
+          <span class="review-value" id="review-type">-</span>
+        </div>
+        <div class="review-item">
+          <span class="review-label">Total de Quartos</span>
+          <span class="review-value" id="review-roomsCount">-</span>
+        </div>
+      </div>
+
+      <div class="review-section">
+        <div class="review-section-title">Categorias de Quartos</div>
+        <div id="review-categories">
+          <!-- Categories rendered here -->
+        </div>
+      </div>
+
+      <div class="review-section">
+        <div class="review-section-title">Configurações</div>
+        <div class="review-item">
+          <span class="review-label">Moeda</span>
+          <span class="review-value" id="review-currency">-</span>
+        </div>
+        <div class="review-item">
+          <span class="review-label">Check-in / Check-out</span>
+          <span class="review-value" id="review-checktimes">-</span>
+        </div>
+      </div>
+
+      <div class="review-section">
+        <div class="review-section-title">Módulos Selecionados</div>
+        <div id="review-modules">
+          <!-- Modules rendered here -->
+        </div>
+      </div>
+
+      <div style="text-align: center; margin-top: 3rem;">
+        <button class="btn btn-success" onclick="createProperty()" id="btn-create">
+          ✨ Criar Propriedade
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Wizard Actions -->
+  <div class="wizard-actions">
+    <button class="btn btn-secondary" id="btn-prev" onclick="prevStep()" style="display: none;">
+      ← Anterior
+    </button>
+    <div style="flex: 1;"></div>
+    <button class="btn btn-primary" id="btn-next" onclick="nextStep()">
+      Próximo →
+    </button>
+  </div>
+</div>
+
+<script>
+  // Initialize Wizard Manager (idempotent / safe re-entry)
+  // Ensure global WizardManager is available (loaded by shell)
+  if (typeof WizardManager === 'undefined') {
+    console.error('[Wizard] WizardManager not loaded');
+  }
+  // Reuse existing instance if present to avoid redeclaration errors on re-navigation
+  window.wizard = (window.wizard && window.wizard instanceof WizardManager)
+    ? window.wizard
+    : new WizardManager();
+  var wizard = window.wizard;
+
+  // ============================================================================
+  // Step Navigation
+  // ============================================================================
+
+  function updateUI() {
+    // Update progress steps
+    const steps = document.querySelectorAll('.progress-step');
+    steps.forEach((step, index) => {
+      const stepNum = index + 1;
+      const circle = step.querySelector('.step-circle');
+      const label = step.querySelector('.step-label');
+
+      if (stepNum < wizard.currentStep) {
+        circle.classList.add('completed');
+        circle.classList.remove('active');
+        circle.textContent = '✓';
+      } else if (stepNum === wizard.currentStep) {
+        circle.classList.add('active');
+        circle.classList.remove('completed');
+        circle.textContent = stepNum;
+        label.classList.add('active');
+      } else {
+        circle.classList.remove('active', 'completed');
+        circle.textContent = stepNum;
+        label.classList.remove('active');
+      }
+    });
+
+    // Update step content visibility
+    document.querySelectorAll('.step-content').forEach((content, index) => {
+      // Step order: 1 (basic), 2 (details), modules, 3 (rooms), 4 (settings), 5 (seed), 6 (review)
+      if (
+        (wizard.currentStep === 1 && content.id === 'step-1') ||
+        (wizard.currentStep === 2 && content.id === 'step-2') ||
+        (wizard.currentStep === 3 && content.id === 'step-modules') ||
+        (wizard.currentStep === 4 && content.id === 'step-3') ||
+        (wizard.currentStep === 5 && content.id === 'step-4') ||
+        (wizard.currentStep === 6 && content.id === 'step-5') ||
+        (wizard.currentStep === 7 && content.id === 'step-6')
+      ) {
+        content.classList.add('active');
+      } else {
+        content.classList.remove('active');
+      }
+    });
+
+    // Update buttons
+    const btnPrev = document.getElementById('btn-prev');
+    const btnNext = document.getElementById('btn-next');
+
+    btnPrev.style.display = wizard.isFirstStep() ? 'none' : 'block';
+    btnNext.textContent = wizard.isLastStep() ? 'Concluir →' : 'Próximo →';
+    btnNext.style.display = wizard.isLastStep() ? 'none' : 'block';
+
+    // Update step-specific UI
+    if (wizard.currentStep === 3) {
+      document.getElementById('total-rooms-needed').textContent = wizard.data.roomsCount || 0;
+      renderCategories();
+    }
+
+    if (wizard.currentStep === 6) {
+      updateReview();
+    }
+  }
+
+  function nextStep() {
+    if (wizard.nextStep()) {
+      clearErrors();
+      updateUI();
+    } else {
+      showErrors();
+    }
+  }
+
+  function prevStep() {
+    if (wizard.prevStep()) {
+      clearErrors();
+      updateUI();
+    }
+  }
+
+  // ============================================================================
+  // Form Handling
+  // ============================================================================
+
+  function clearErrors() {
+    document.querySelectorAll('.form-error').forEach(el => {
+      el.classList.remove('show');
+      el.textContent = '';
+    });
+    document.querySelectorAll('.form-input, .form-select').forEach(el => {
+      el.classList.remove('error');
+    });
+  }
+
+  function showErrors() {
+    const errors = wizard.getValidationErrors();
+    
+    for (const [field, message] of Object.entries(errors)) {
+      const errorEl = document.getElementById(`error-${field}`);
+      const inputEl = document.getElementById(field);
+      
+      if (errorEl) {
+        errorEl.textContent = message;
+        errorEl.classList.add('show');
+      }
+      
+      if (inputEl) {
+        inputEl.classList.add('error');
+      }
+    }
+  }
+
+  // Bind input events
+  ['name', 'description', 'type', 'roomsCount', 'city', 'state', 'street', 'zip', 'country', 
+   'currency', 'timezone', 'checkInTime', 'checkOutTime', 'language'].forEach(field => {
+    const el = document.getElementById(field);
+    if (el) {
+      el.addEventListener('input', (e) => {
+        const value = e.target.value;
+        
+        if (field === 'roomsCount') {
+          wizard.updateData(field, parseInt(value) || 0);
+        } else if (field.startsWith('address.')) {
+          wizard.updateData(`address.${field.split('.')[1]}`, value);
+        } else if (['city', 'state', 'street', 'zip', 'country'].includes(field)) {
+          wizard.updateData(`address.${field}`, value);
+        } else if (['currency', 'timezone', 'language', 'checkInTime', 'checkOutTime'].includes(field)) {
+          wizard.updateData(`settings.${field}`, value);
+        } else {
+          wizard.updateData(field, value);
+        }
+
+        // Auto-update slug field
+        if (field === 'name') {
+          document.getElementById('slug').value = wizard.data.slug;
+        }
+      });
+    }
+  });
+
+  // Icon selector
+  document.querySelectorAll('.icon-option').forEach(option => {
+    option.addEventListener('click', () => {
+      document.querySelectorAll('.icon-option').forEach(o => o.classList.remove('selected'));
+      option.classList.add('selected');
+      wizard.updateData('icon', option.dataset.icon);
+    });
+  });
+
+  // Seed data checkboxes
+  ['createSampleRooms', 'createSampleGuests', 'createSampleReservations'].forEach(field => {
+    const el = document.getElementById(field);
+    if (el) {
+      el.addEventListener('change', (e) => {
+        wizard.updateData(`seedData.${field}`, e.target.checked);
+      });
+    }
+  });
+
+  // Module selection checkboxes
+  const moduleIds = [
+    'module-ems', 'module-bms', 'module-automation', 'module-analytics',
+    'module-pms', 'module-iot', 'module-access', 'module-other'
+  ];
+  moduleIds.forEach(id => {
+    const el = document.getElementById(id);
+    if (el) {
+      el.addEventListener('change', () => {
+        wizard.data.modules = moduleIds
+          .filter(mid => document.getElementById(mid)?.checked)
+          .map(mid => document.getElementById(mid).value);
+        updateReview();
+      });
+    }
+  });
+
+  // ============================================================================
+  // Image Upload Management
+  // ============================================================================
+
+  // Tab switching
+  document.querySelectorAll('.image-tab').forEach(tab => {
+    tab.addEventListener('click', function() {
+      const targetTab = this.dataset.tab;
+      
+      // Update active tab button
+      document.querySelectorAll('.image-tab').forEach(t => t.classList.remove('active'));
+      this.classList.add('active');
+      
+      // Update active tab content
+      document.querySelectorAll('.image-tab-content').forEach(content => {
+        content.classList.remove('active');
+      });
+      document.getElementById(`${targetTab}-tab`).classList.add('active');
+    });
+  });
+
+  // Gallery image selection
+  document.querySelectorAll('.gallery-image').forEach(img => {
+    img.addEventListener('click', function() {
+      // Remove previous selection
+      document.querySelectorAll('.gallery-image').forEach(i => i.classList.remove('selected'));
+      
+      // Select this image
+      this.classList.add('selected');
+      
+      // Update hidden field
+      const imagePath = this.dataset.image;
+      document.getElementById('propertyImage').value = imagePath;
+      wizard.updateData('image', imagePath);
+    });
+  });
+
+  // File upload
+  const fileInput = document.getElementById('image-file');
+  const uploadPreview = document.getElementById('upload-preview');
+  
+  fileInput.addEventListener('change', function(e) {
+    const file = e.target.files[0];
+    if (!file) return;
+    
+    // Validate file size (5MB max)
+    if (file.size > 5 * 1024 * 1024) {
+      alert('❌ Arquivo muito grande! Máximo 5MB.');
+      return;
+    }
+    
+    // Validate file type
+    if (!file.type.startsWith('image/')) {
+      alert('❌ Por favor, selecione uma imagem válida.');
+      return;
+    }
+    
+    // Read and display preview
+    const reader = new FileReader();
+    reader.onload = function(event) {
+      const imageData = event.target.result;
+      uploadPreview.innerHTML = `<img src="${imageData}" alt="Preview">`;
+      uploadPreview.classList.add('show');
+      
+      // Update hidden field
+      document.getElementById('propertyImage').value = imageData;
+      wizard.updateData('image', imageData);
+    };
+    reader.readAsDataURL(file);
+  });
+
+  // URL preview
+  const urlInput = document.getElementById('image-url');
+  const urlPreview = document.getElementById('url-preview');
+  const btnPreviewUrl = document.getElementById('btn-preview-url');
+  
+  btnPreviewUrl.addEventListener('click', function() {
+    const url = urlInput.value.trim();
+    if (!url) {
+      alert('❌ Digite uma URL válida.');
+      return;
+    }
+    
+    // Create image element to test URL
+    const img = new Image();
+    img.onload = function() {
+      urlPreview.innerHTML = `<img src="${url}" alt="Preview">`;
+      urlPreview.classList.add('show');
+      
+      // Update hidden field
+      document.getElementById('propertyImage').value = url;
+      wizard.updateData('image', url);
+    };
+    img.onerror = function() {
+      alert('❌ Não foi possível carregar a imagem. Verifique a URL.');
+    };
+    img.src = url;
+  });
+
+  // ============================================================================
+  // Room Categories
+  // ============================================================================
+
+  function applyTemplate(templateName) {
+    wizard.applyTemplate(templateName);
+    renderCategories();
+  }
+
+  function renderCategories() {
+    const container = document.getElementById('category-list');
+    const categories = wizard.data.roomCategories;
+
+    if (categories.length === 0) {
+      container.innerHTML = '<p style="color: #999; text-align: center; padding: 2rem;">Nenhuma categoria adicionada. Use um template ou adicione manualmente.</p>';
+      return;
+    }
+
+    container.innerHTML = categories.map((cat, index) => `
+      <div class="category-card">
+        <div class="category-card-header">
+          <div class="category-name">${cat.name}</div>
+          <button class="btn-remove" onclick="removeCategory(${index})">Remover</button>
+        </div>
+        <div class="form-grid">
+          <div>
+            <strong>Preço:</strong> R$ ${cat.price}
+          </div>
+          <div>
+            <strong>Quantidade:</strong> ${cat.count} quartos
+          </div>
+        </div>
+      </div>
+    `).join('');
+  }
+
+  function addCategory() {
+    const name = prompt('Nome da categoria:');
+    if (!name) return;
+
+    const price = parseInt(prompt('Preço por noite (R$):')) || 0;
+    const count = parseInt(prompt('Quantidade de quartos:')) || 0;
+
+    wizard.addRoomCategory({ name, price, count, capacity: 2 });
+    renderCategories();
+  }
+
+  function removeCategory(index) {
+    wizard.removeRoomCategory(index);
+    renderCategories();
+  }
+
+  // ============================================================================
+  // Review
+  // ============================================================================
+
+  function updateReview() {
+    const data = wizard.getData();
+
+    document.getElementById('review-name').textContent = data.name;
+    document.getElementById('review-slug').textContent = data.slug;
+    document.getElementById('review-type').textContent = data.type;
+    document.getElementById('review-roomsCount').textContent = data.roomsCount;
+    document.getElementById('review-currency').textContent = data.settings.currency;
+    document.getElementById('review-checktimes').textContent = 
+      `${data.settings.checkInTime} / ${data.settings.checkOutTime}`;
+
+    // Render categories
+    const categoriesHTML = data.roomCategories.map(cat => `
+      <div class="review-item">
+        <span class="review-label">${cat.name}</span>
+        <span class="review-value">${cat.count} quartos × R$ ${cat.price}</span>
+      </div>
+    `).join('');
+    document.getElementById('review-categories').innerHTML = categoriesHTML;
+
+    // Render selected modules
+    const modulesContainer = document.getElementById('review-modules');
+    if (modulesContainer) {
+      if (data.modules && data.modules.length > 0) {
+        modulesContainer.innerHTML = data.modules.map(m => `<span class="review-value">${m}</span>`).join(', ');
+      } else {
+        modulesContainer.innerHTML = '<span style="color:#999;">Nenhum módulo selecionado</span>';
+      }
+    }
+  }
+
+  // ============================================================================
+  // Create Property
+  // ============================================================================
+
+  function showProgressModal() {
+    // Create modal overlay
+    const overlay = document.createElement('div');
+    overlay.id = 'progress-modal';
+    overlay.style.cssText = `
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0, 0, 0, 0.7);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 10000;
+      backdrop-filter: blur(5px);
+    `;
+
+    // Create modal content
+    const modal = document.createElement('div');
+    modal.style.cssText = `
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      border-radius: 20px;
+      padding: 40px;
+      max-width: 500px;
+      width: 90%;
+      box-shadow: 0 20px 60px rgba(0, 0, 0, 0.4);
+      text-align: center;
+      color: white;
+    `;
+
+    modal.innerHTML = `
+      <div style="font-size: 48px; margin-bottom: 20px;">🏨</div>
+      <h2 style="margin: 0 0 10px; font-size: 24px; font-weight: 600;">Criando sua propriedade</h2>
+      <p id="progress-status" style="margin: 0 0 30px; font-size: 16px; opacity: 0.9;">Preparando...</p>
+      
+      <div style="background: rgba(255, 255, 255, 0.2); border-radius: 10px; height: 12px; overflow: hidden; margin-bottom: 20px;">
+        <div id="progress-bar" style="background: white; height: 100%; width: 0%; transition: width 0.5s ease-out; border-radius: 10px;"></div>
+      </div>
+      
+      <div id="progress-steps" style="font-size: 14px; opacity: 0.8; line-height: 1.6;">
+        <div id="step-1">⏳ Criando estrutura...</div>
+        <div id="step-2">⏳ Gerando quartos...</div>
+        <div id="step-3">⏳ Criando hóspedes...</div>
+        <div id="step-4">⏳ Gerando reservas...</div>
+        <div id="step-5">⏳ Salvando dados...</div>
+      </div>
+    `;
+
+    overlay.appendChild(modal);
+    document.body.appendChild(overlay);
+    
+    return {
+      updateProgress: (percent, status) => {
+        document.getElementById('progress-bar').style.width = percent + '%';
+        document.getElementById('progress-status').textContent = status;
+      },
+      completeStep: (stepNum) => {
+        const stepEl = document.getElementById(`step-${stepNum}`);
+        if (stepEl) {
+          stepEl.innerHTML = stepEl.innerHTML.replace('⏳', '✅');
+          stepEl.style.opacity = '1';
+          stepEl.style.fontWeight = '600';
+        }
+      },
+      showSuccess: (propertyName) => {
+        modal.innerHTML = `
+          <div style="font-size: 64px; margin-bottom: 20px; animation: bounce 0.6s;">🎉</div>
+          <h2 style="margin: 0 0 10px; font-size: 28px; font-weight: 600;">Pronto!</h2>
+          <p style="margin: 0 0 20px; font-size: 18px; opacity: 0.95;">
+            "${propertyName}" foi criada com sucesso!
+          </p>
+          <p style="margin: 0; font-size: 16px; opacity: 0.8;">
+            Redirecionando para o dashboard...
+          </p>
+          <style>
+            @keyframes bounce {
+              0%, 100% { transform: translateY(0); }
+              50% { transform: translateY(-20px); }
+            }
+          </style>
+        `;
+      },
+      close: () => {
+        overlay.remove();
+      }
+    };
+  }
+
+  async function createProperty() {
+    const btnCreate = document.getElementById('btn-create');
+    btnCreate.disabled = true;
+    btnCreate.textContent = 'Criando...';
+
+    const progress = showProgressModal();
+
+    try {
+      // Step 1: Create structure (20%)
+      progress.updateProgress(10, 'Criando estrutura da propriedade...');
+      await new Promise(resolve => setTimeout(resolve, 300));
+      progress.completeStep(1);
+      progress.updateProgress(20, 'Estrutura criada!');
+      
+      // Step 2: Generate rooms (40%)
+      progress.updateProgress(30, 'Gerando quartos...');
+      await new Promise(resolve => setTimeout(resolve, 400));
+      progress.completeStep(2);
+      progress.updateProgress(40, 'Quartos criados!');
+      
+      // Step 3: Create guests (60%)
+      progress.updateProgress(50, 'Criando hóspedes de exemplo...');
+      await new Promise(resolve => setTimeout(resolve, 300));
+      progress.completeStep(3);
+      progress.updateProgress(60, 'Hóspedes criados!');
+      
+      // Step 4: Generate reservations (80%)
+      progress.updateProgress(70, 'Gerando reservas...');
+      await new Promise(resolve => setTimeout(resolve, 400));
+      progress.completeStep(4);
+      progress.updateProgress(80, 'Reservas criadas!');
+      
+      // Step 5: Save everything (100%)
+      progress.updateProgress(90, 'Salvando dados...');
+      const property = await wizard.createProperty();
+      property.modules = wizard.data.modules || [];
+      progress.completeStep(5);
+      progress.updateProgress(100, 'Concluído!');
+      
+      // Show success message
+      await new Promise(resolve => setTimeout(resolve, 300));
+      progress.showSuccess(property.name);
+      
+      // Wait a bit then redirect
+      await new Promise(resolve => setTimeout(resolve, 2000));
+      progress.close();
+      
+      // Reload user session to get updated properties list
+      const sessionData = localStorage.getItem('nexefii_session');
+      if (sessionData) {
+        window.NEXEFII.currentUser = JSON.parse(sessionData);
+      }
+      
+      // Redirect to property dashboard
+      window.NEXEFII.router.navigate(`/property/${property.slug}/dashboard`);
+      
+    } catch (error) {
+      console.error('[Wizard] Error creating property:', error);
+      progress.close();
+      alert(`❌ Erro ao criar propriedade:\n\n${error.message}`);
+      btnCreate.disabled = false;
+      btnCreate.textContent = '✨ Criar Propriedade';
+    }
+  }
+
+  // ============================================================================
+  // Initialize
+  // ============================================================================
+
+  async function initWizardPage() {
+    console.log('[Wizard] Initializing wizard page');
+    updateUI();
+  }
+</script>

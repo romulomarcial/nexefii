@@ -1,0 +1,352 @@
+<!DOCTYPE html><html lang="pt-br"><head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="description" content="NEXEFII - Next-generation multi-tenant hospitality platform with PMS, EMS, and Engineering modules">
+<meta name="theme-color" content="#E42121">
+<link rel="manifest" href="/manifest.json">
+<link rel="icon" type="image/png" href="/assets/Nexefii_logo_3d-official.png">
+<link rel="apple-touch-icon" href="/assets/Nexefii_logo_3d-official.png">
+<title id="page-title">NEXEFII · Portal de Hotéis</title>
+<link rel="stylesheet" href="style.css">
+<link rel="stylesheet" href="css/property-dashboard.css">
+<link rel="stylesheet" href="css/property-dashboard-pms.css">
+<script src="auth.js"></script>
+<script src="pms-modules.js"></script>
+<script src="properties.js"></script>
+<script src="demo-data-generator.js"></script>
+<script src="property-dashboard-manager.js" defer></script>
+<script>
+  // Auth guard - redirect to login if not authenticated (guarded)
+  if(!(window.NexefiiAuth && typeof NexefiiAuth.isAuthenticated === 'function' ? NexefiiAuth.isAuthenticated() : (window.IluxAuth && typeof IluxAuth.isAuthenticated === 'function' ? IluxAuth.isAuthenticated() : false))) {
+    window.location.href = 'login.html';
+  }
+</script>
+</head><body>
+<div id="loadingOverlay" class="loading-overlay">
+  <div class="loading-spinner"></div>
+</div>
+<header><div class="brand"><img src="assets/Nexefii_logo_3d-official.png" style="height:40px"></div><div style="display:flex;align-items:center;gap:8px">
+  <button class="btn ghost" id="btnAdmin" onclick="window.location.href='admin.html'" style="display:none">Admin</button>
+  <select id="langSelect" onchange="changeLanguage(this.value)" style="padding:6px;border-radius:8px;border:1px solid var(--line)">
+    <option value="pt">Português</option>
+    <option value="en">English</option>
+    <option value="es">Español</option>
+  </select>
+  <div class="user" id="userBox">demo@nexefii.com</div>
+  <button class="btn ghost" id="btnLogout" onclick="logout()">Sair</button>
+</div></header>
+<div class="container">
+<section class="card"><h2 id="t-summary">Resumo por hotel</h2>
+<div class="summary-grid">
+  <div class="tile"><h4>Nexefii Hotel São Paulo</h4><div class="kpis">
+    <div class="kpi"><div class="label" id="l-occ1">Ocupação</div><div class="value" id="v-occ1">—</div></div>
+    <div class="kpi"><div class="label" id="l-rev1">Receita (M)</div><div class="value" id="v-rev1">—</div></div>
+    <div class="kpi"><div class="label" id="l-sold1">Vendidos</div><div class="value" id="v-sold1">—</div></div>
+    <div class="kpi"><div class="label" id="l-av1">Disponíveis</div><div class="value" id="v-av1">—</div></div>
+  </div></div>
+  <div class="tile"><h4>Nexefii Hotel Miami</h4><div class="kpis">
+    <div class="kpi"><div class="label" id="l-occ2">Ocupação</div><div class="value" id="v-occ2">—</div></div>
+    <div class="kpi"><div class="label" id="l-rev2">Receita (M)</div><div class="value" id="v-rev2">—</div></div>
+    <div class="kpi"><div class="label" id="l-sold2">Vendidos</div><div class="value" id="v-sold2">—</div></div>
+    <div class="kpi"><div class="label" id="l-av2">Disponíveis</div><div class="value" id="v-av2">—</div></div>
+  </div></div>
+  <div class="tile"><h4>Nexefii Hotel Rio de Janeiro</h4><div class="kpis">
+    <div class="kpi"><div class="label" id="l-occ3">Ocupação</div><div class="value" id="v-occ3">—</div></div>
+    <div class="kpi"><div class="label" id="l-rev3">Receita (M)</div><div class="value" id="v-rev3">—</div></div>
+    <div class="kpi"><div class="label" id="l-sold3">Vendidos</div><div class="value" id="v-sold3">—</div></div>
+    <div class="kpi"><div class="label" id="l-av3">Disponíveis</div><div class="value" id="v-av3">—</div></div>
+  </div></div>
+</div></section>
+<section class="card" id="compareSection" style="display:none;margin-top:16px">
+  <div id="compareGrid"></div>
+</section>
+<h3 style="margin-top:20px" id="t-hotels">Hotéis</h3>
+<div class="hotels">
+  <!-- Cards serão renderizados dinamicamente pelo property-dashboard-manager.js -->
+  <div class="loading-placeholder" style="text-align:center;padding:40px;color:var(--slate)">
+    <div style="font-size:48px;margin-bottom:16px">🏨</div>
+    <div data-i18n="dashboard.loading">Carregando propriedades...</div>
+  </div>
+</div></div>
+      </div>
+    </div>
+    <div class="actions" style="display:flex;gap:8px;padding:12px">
+      <button class="btn primary" id="btn-ctl-mi" onclick="openControl('Miami')">Abrir Controle</button>
+      <button class="btn ghost" id="btn-rti-mi" onclick="openRTI('Miami')">Abrir Painel Virtual RTI</button>
+    </div>
+  </div>
+  <div class="hotel-card">
+    <img class="thumb" src="assets/hotel_rio.jpg">
+    <div class="weather-overlay" id="weather-rio">
+      <div class="weather-icon">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
+          <path d="M18 10h-1.26A8 8 0 1 0 9 20h9a5 5 0 0 0 0-10z" fill="#E5E7EB" stroke="#9CA3AF" stroke-width="1.5"/>
+          <path d="M6 16a3 3 0 0 1 3-3h2" fill="none" stroke="#D1D5DB" stroke-width="1"/>
+        </svg>
+      </div>
+      <div class="weather-temp">26°C</div>
+    </div>
+    <div class="hotel-body">
+      <div class="hotel-header">
+        <div class="hotel-title" id="hotel-name-rio">Nexefii Hotel Rio de Janeiro</div>
+        <div class="hotel-time" id="time-rio">--:-- --</div>
+      </div>
+      <div class="hotel-meta">
+        <span class="pill" id="occ-rio">Ocupação hoje: —</span>
+        <span class="pill"><span id="t-rooms-rio">Quartos</span>: 64</span>
+      </div>
+    </div>
+    <div class="actions" style="display:flex;gap:8px;padding:12px">
+      <button class="btn primary" id="btn-ctl-rj" onclick="openControl('Rio de Janeiro')">Abrir Controle</button>
+      <button class="btn ghost" id="btn-rti-rj" onclick="openRTI('Rio de Janeiro')">Abrir Painel Virtual RTI</button>
+    </div>
+  </div>
+</div></div>
+
+  <div id="rtiModal" class="modal" aria-hidden="true"><div class="modal-card"><div class="modal-header"><div class="brand"><img src="assets/Nexefii_logo_3d-official.png" style="height:32px"><div id="rtiTitle"></div></div><div><button class="btn ghost" id="btn-close-rti" onclick="closeRTI()">Fechar</button></div></div>
+  <div class="modal-body" style="grid-template-columns:1fr 1fr"><div class="modal-subtitle" id="rtiSubtitle"></div><div class="rti-tile"><div class="rti-title">Status</div><div class="status" id="rtiStatusBox"></div></div>
+    <div class="rti-tile"><div class="rti-title">Atalhos</div><div class="rti-wrap"><button class="btn primary" id="btn-rti-l1"> </button><button class="btn" id="btn-rti-l2"> </button><button class="btn" id="btn-rti-l3"> </button><button class="btn" id="btn-rti-l4"> </button></div></div>
+  <div class="rti-tile" style="grid-column:1/3"><div class="rti-title">Visualização ao Vivo (simulação)</div><div class="status" id="rtiLiveHint"></div><div style="height:360px;border:1px dashed var(--line);border-radius:12px;margin-top:8px;background:linear-gradient(135deg,#f8fafc,#ffffff)"></div></div></div></div></div>
+
+<div id="controlModal" class="modal" aria-hidden="true"><div class="modal-card"><div class="modal-header"><div class="brand"><img src="assets/Nexefii_logo_3d-official.png" style="height:32px"><div id="controlTitle"></div></div><div><button class="btn ghost" id="btn-close-control" onclick="closeControl()">Fechar</button></div></div>
+<div class="modal-body control-layout">
+  <div class="modal-subtitle" id="controlSubtitle"></div>
+  
+  <!-- Left Column: Status and Metrics -->
+  <div class="control-left-col">
+    <!-- Hotel Status Section -->
+    <div class="status-card">
+      <h2 id="roomStatusTitle" style="margin:0 0 16px 0;font-size:16px;font-weight:700;color:var(--ink)">Status dos Quartos</h2>
+      <div id="roomStats" style="display:grid;grid-template-columns:repeat(2,1fr);gap:12px"></div>
+    </div>
+    
+    <!-- Monthly Metrics Section -->
+    <div class="metrics-card">
+      <h3 id="t-metrics" style="margin:0 0 16px 0;font-size:16px;font-weight:700;color:var(--ink)">Métricas do Mês</h3>
+      <div style="display:grid;gap:12px;grid-template-columns:1fr">
+        <div class="metric-tile">
+          <div class="metric-label" id="t-metric-revenue">Receita</div>
+          <div class="metric-value" id="kpiRevMonth">—</div>
+        </div>
+        <div class="metric-tile">
+          <div class="metric-label" id="t-metric-forecast">Previsão</div>
+          <div class="metric-value" id="kpiRevForecast">—</div>
+        </div>
+        <div class="metric-tile">
+          <div class="metric-label" id="t-metric-rooms-sold">Quartos Vendidos</div>
+          <div class="metric-value" id="kpiRoomsSold">—</div>
+        </div>
+      </div>
+    </div>
+  </div>
+  
+  <!-- Right Column: Calendar and Modules -->
+  <div class="control-right-col">
+    <!-- Calendar Section -->
+    <div class="calendar-section">
+      <div class="cal-head">
+        <div class="cal-title" id="calTitle">Calendário de Reservas</div>
+        <div class="cal-nav">
+          <button class="cal-btn" onclick="navCal(-1)">◀</button>
+          <button class="cal-btn" onclick="navCal(1)">▶</button>
+        </div>
+      </div>
+      <div id="calMini" class="legend" style="gap:10px;margin-bottom:6px"></div>
+      <div id="calendarBox"></div>
+      <div class="calendar-legend" style="margin-top:12px">
+        <h4 id="t-legend-title">Legenda</h4>
+        <div class="legend" style="margin-top:8px">
+          <span class="dot r"></span><span id="t-low">Baixa</span>
+          <span class="dot y"></span><span id="t-mid">Média</span>
+          <span class="dot g"></span><span id="t-high">Alta</span>
+        </div>
+        <p class="sub" id="t-click" style="margin-top:6px;font-size:12px">Clique em um hotel para abrir o painel de controle ou o calendário do mês.</p>
+      </div>
+    </div>
+    
+    <!-- Module Cards Section -->
+    <div class="modules-section">
+      <h3 style="margin:0 0 12px 0;font-size:16px;font-weight:700;color:var(--ink)">Módulos de Controle</h3>
+      <div id="dashboardCards" class="dashboard-cards"></div>
+    </div>
+  </div>
+</div></div></div>
+
+<!-- Engineering List Modal (inside Control) -->
+<div id="engListModal" class="modal" aria-hidden="true">
+  <div class="modal-card">
+    <div class="modal-header">
+  <div class="brand"><img src="assets/Nexefii_logo_3d-official.png" style="height:32px"><div id="engListTitle"></div></div>
+      <div><button class="btn ghost" onclick="closeEngineeringListModal()" id="btn-close-englist">Fechar</button></div>
+    </div>
+    <div class="modal-body" style="grid-template-columns:1fr">
+      <div class="modal-subtitle" id="engListSubtitle"></div>
+      <div class="card" style="padding:12px">
+        <div style="display:flex;gap:8px;flex-wrap:wrap;align-items:center;justify-content:space-between;margin-bottom:8px">
+          <h3 id="engListHeading" style="margin:0;font-size:16px">ENGENHARIA · <span id="engMetricLabel">HVAC On</span></h3>
+          <div style="display:flex;gap:8px;align-items:center">
+            <label for="engMetricSelect" style="font-size:12px;color:#64748b">Visualizar</label>
+            <select id="engMetricSelect" class="select" style="width:160px"></select>
+            <select id="engFloorSelect" class="select" style="width:140px">
+              <option value="all">Todos andares</option>
+              <option value="1">1º Andar</option>
+              <option value="2">2º Andar</option>
+              <option value="3">3º Andar</option>
+              <option value="4">4º Andar</option>
+              <option value="5">5º Andar</option>
+              <option value="6">6º Andar</option>
+              <option value="7">7º Andar</option>
+              <option value="8">8º Andar</option>
+              <option value="9">9º Andar</option>
+              <option value="10">10º Andar</option>
+              <option value="11">11º Andar</option>
+            </select>
+            <input id="engSearch" class="input" style="width:160px" placeholder="Buscar quarto" />
+            <button class="btn" id="engExportBtn">Exportar CSV</button>
+          </div>
+        </div>
+        <div class="sub" id="engListInfo" style="margin-bottom:8px">—</div>
+        <div id="engFloorCounters" class="legend" style="flex-wrap:wrap;gap:8px;margin-bottom:8px"></div>
+        <div id="engListContainer" style="overflow:auto">
+          <table style="width:100%;border-collapse:collapse" id="engListTable">
+            <thead>
+              <tr>
+                <th style="text-align:left;padding:8px;border-bottom:1px solid var(--line)">Quarto</th>
+                <th style="text-align:left;padding:8px;border-bottom:1px solid var(--line)">HVAC</th>
+                <th style="text-align:left;padding:8px;border-bottom:1px solid var(--line)">Alertas</th>
+              </tr>
+            </thead>
+            <tbody id="engListBody"></tbody>
+          </table>
+        </div>
+        <div id="engPager" style="display:flex;justify-content:space-between;align-items:center;margin-top:8px">
+          <div id="engPageInfo" class="sub">—</div>
+          <div style="display:flex;gap:6px">
+            <button class="btn" id="engPrev">Anterior</button>
+            <button class="btn" id="engNext">Próxima</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  </div>
+
+<!-- Housekeeping List Modal -->
+<div id="hkListModal" class="modal" aria-hidden="true">
+  <div class="modal-card">
+    <div class="modal-header">
+  <div class="brand"><img src="assets/Nexefii_logo_3d-official.png" style="height:32px"><div id="hkListTitle"></div></div>
+      <div><button class="btn ghost" onclick="closeHousekeepingListModal()" id="btn-close-hklist">Fechar</button></div>
+    </div>
+    <div class="modal-body" style="grid-template-columns:1fr">
+      <div class="modal-subtitle" id="hkListSubtitle"></div>
+      <div class="card" style="padding:12px">
+        <div style="display:flex;gap:8px;flex-wrap:wrap;align-items:center;justify-content:space-between;margin-bottom:8px">
+          <h3 id="hkListHeading" style="margin:0;font-size:16px">GOVERNANÇA · <span id="hkMetricLabel">DND</span></h3>
+          <div style="display:flex;gap:8px;align-items:center">
+            <label for="hkMetricSelect" style="font-size:12px;color:#64748b">Visualizar</label>
+            <select id="hkMetricSelect" class="select" style="width:160px"></select>
+            <select id="hkFloorSelect" class="select" style="width:140px">
+              <option value="all">Todos andares</option>
+              <option value="1">1º Andar</option>
+              <option value="2">2º Andar</option>
+              <option value="3">3º Andar</option>
+              <option value="4">4º Andar</option>
+              <option value="5">5º Andar</option>
+              <option value="6">6º Andar</option>
+              <option value="7">7º Andar</option>
+              <option value="8">8º Andar</option>
+              <option value="9">9º Andar</option>
+              <option value="10">10º Andar</option>
+              <option value="11">11º Andar</option>
+            </select>
+            <input id="hkSearch" class="input" style="width:160px" placeholder="Buscar quarto" />
+            <button class="btn" id="hkExportBtn">Exportar CSV</button>
+          </div>
+        </div>
+        <div class="sub" id="hkListInfo" style="margin-bottom:8px">—</div>
+        <div id="hkFloorCounters" class="legend" style="flex-wrap:wrap;gap:8px;margin-bottom:8px"></div>
+        <div id="hkListContainer" style="overflow:auto">
+          <table style="width:100%;border-collapse:collapse" id="hkListTable">
+            <thead>
+              <tr>
+                <th style="text-align:left;padding:8px;border-bottom:1px solid var(--line)">Quarto</th>
+                <th style="text-align:left;padding:8px;border-bottom:1px solid var(--line)">Status</th>
+                <th style="text-align:left;padding:8px;border-bottom:1px solid var(--line)">HVAC</th>
+              </tr>
+            </thead>
+            <tbody id="hkListBody"></tbody>
+          </table>
+        </div>
+        <div id="hkPager" style="display:flex;justify-content:space-between;align-items:center;margin-top:8px">
+          <div id="hkPageInfo" class="sub">—</div>
+          <div style="display:flex;gap:6px">
+            <button class="btn" id="hkPrev">Anterior</button>
+            <button class="btn" id="hkNext">Próxima</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Alerts List Modal -->
+<div id="alertListModal" class="modal" aria-hidden="true">
+  <div class="modal-card">
+    <div class="modal-header">
+  <div class="brand"><img src="assets/Nexefii_logo_3d-official.png" style="height:32px"><div id="alertListTitle"></div></div>
+      <div><button class="btn ghost" onclick="closeAlertsListModal()" id="btn-close-alertlist">Fechar</button></div>
+    </div>
+    <div class="modal-body" style="grid-template-columns:1fr">
+      <div class="modal-subtitle" id="alertListSubtitle"></div>
+      <div class="card" style="padding:12px">
+        <div style="display:flex;gap:8px;flex-wrap:wrap;align-items:center;justify-content:space-between;margin-bottom:8px">
+          <h3 id="alertListHeading" style="margin:0;font-size:16px">ALERTAS · <span id="alertMetricLabel">Todos</span></h3>
+          <div style="display:flex;gap:8px;align-items:center">
+            <label for="alertMetricSelect" style="font-size:12px;color:#64748b">Visualizar</label>
+            <select id="alertMetricSelect" class="select" style="width:200px"></select>
+            <select id="alertFloorSelect" class="select" style="width:140px">
+              <option value="all">Todos andares</option>
+              <option value="1">1º Andar</option>
+              <option value="2">2º Andar</option>
+              <option value="3">3º Andar</option>
+              <option value="4">4º Andar</option>
+              <option value="5">5º Andar</option>
+              <option value="6">6º Andar</option>
+              <option value="7">7º Andar</option>
+              <option value="8">8º Andar</option>
+              <option value="9">9º Andar</option>
+              <option value="10">10º Andar</option>
+              <option value="11">11º Andar</option>
+            </select>
+            <input id="alertSearch" class="input" style="width:160px" placeholder="Buscar quarto" />
+            <button class="btn" id="alertExportBtn">Exportar CSV</button>
+          </div>
+        </div>
+        <div class="sub" id="alertListInfo" style="margin-bottom:8px">—</div>
+        <div id="alertFloorCounters" class="legend" style="flex-wrap:wrap;gap:8px;margin-bottom:8px"></div>
+        <div id="alertListContainer" style="overflow:auto">
+          <table style="width:100%;border-collapse:collapse" id="alertListTable">
+            <thead>
+              <tr>
+                <th style="text-align:left;padding:8px;border-bottom:1px solid var(--line)">Quarto</th>
+                <th style="text-align:left;padding:8px;border-bottom:1px solid var(--line)">Alertas</th>
+                <th style="text-align:left;padding:8px;border-bottom:1px solid var(--line)">HVAC</th>
+              </tr>
+            </thead>
+            <tbody id="alertListBody"></tbody>
+          </table>
+        </div>
+        <div id="alertPager" style="display:flex;justify-content:space-between;align-items:center;margin-top:8px">
+          <div id="alertPageInfo" class="sub">—</div>
+          <div style="display:flex;gap:6px">
+            <button class="btn" id="alertPrev">Anterior</button>
+            <button class="btn" id="alertNext">Próxima</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script src="pwa-installer.js"></script>
+<script src="app.js" defer></script></body></html>

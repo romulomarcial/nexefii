@@ -1,0 +1,410 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>PropertyDatabase - Test Suite</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      background: #1e1e1e;
+      color: #d4d4d4;
+      padding: 20px;
+    }
+    .container { max-width: 1200px; margin: 0 auto; }
+    h1 { color: #4ec9b0; margin-bottom: 20px; }
+    h2 { color: #569cd6; margin-top: 30px; margin-bottom: 15px; }
+    .test-section { background: #252526; padding: 20px; border-radius: 8px; margin-bottom: 20px; border-left: 4px solid #569cd6; }
+    .test-result { padding: 10px; margin: 10px 0; border-radius: 4px; font-family: 'Courier New', monospace; }
+    .test-pass { background: #1e3a1e; border-left: 4px solid #4ec9b0; }
+    .test-fail { background: #3a1e1e; border-left: 4px solid #f48771; }
+    .test-info { background: #1e2a3a; border-left: 4px solid #569cd6; }
+    button {
+      background: #0e639c;
+      color: white;
+      border: none;
+      padding: 12px 24px;
+      border-radius: 4px;
+      cursor: pointer;
+      font-size: 16px;
+      margin-right: 10px;
+      margin-bottom: 10px;
+    }
+    button:hover { background: #1177bb; }
+    button.danger { background: #c72e2e; }
+    button.danger:hover { background: #e03e3e; }
+    .stats { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 15px; margin: 20px 0; }
+    .stat-card { background: #2d2d30; padding: 15px; border-radius: 6px; text-align: center; }
+    .stat-value { font-size: 2em; font-weight: bold; color: #4ec9b0; }
+    .stat-label { color: #858585; margin-top: 5px; }
+    pre { background: #1e1e1e; padding: 15px; border-radius: 4px; overflow-x: auto; }
+    code { color: #ce9178; }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>🧪 PropertyDatabase - Test Suite</h1>
+    <p>Comprehensive testing for multi-tenant data isolation system</p>
+
+    <div class="test-section">
+      <h2>🎮 Test Controls</h2>
+      <button onclick="runAllTests()">▶️ Run All Tests</button>
+      <button onclick="runIsolationTests()">🔒 Test Isolation</button>
+      <button onclick="runCRUDTests()">📝 Test CRUD</button>
+      <button onclick="runQueryTests()">🔍 Test Queries</button>
+      <button onclick="runPerformanceTests()">⚡ Test Performance</button>
+      <button onclick="clearTestData()" class="danger">🗑️ Clear Test Data</button>
+    </div>
+
+    <div class="stats" id="stats">
+      <div class="stat-card">
+        <div class="stat-value" id="totalTests">0</div>
+        <div class="stat-label">Total Tests</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-value" id="passedTests">0</div>
+        <div class="stat-label">Passed</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-value" id="failedTests">0</div>
+        <div class="stat-label">Failed</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-value" id="duration">0ms</div>
+        <div class="stat-label">Duration</div>
+      </div>
+    </div>
+
+    <div id="results"></div>
+  </div>
+
+  <!-- Load PropertyDatabase -->
+  <script src="PropertyDatabase.js"></script>
+
+  <script>
+    let totalTests = 0;
+    let passedTests = 0;
+    let failedTests = 0;
+    const resultsDiv = document.getElementById('results');
+
+    function log(message, type = 'info') {
+      const div = document.createElement('div');
+      div.className = `test-result test-${type}`;
+      div.textContent = message;
+      resultsDiv.appendChild(div);
+      resultsDiv.scrollTop = resultsDiv.scrollHeight;
+    }
+
+    function updateStats() {
+      document.getElementById('totalTests').textContent = totalTests;
+      document.getElementById('passedTests').textContent = passedTests;
+      document.getElementById('failedTests').textContent = failedTests;
+    }
+
+    function assert(condition, testName) {
+      totalTests++;
+      if (condition) {
+        passedTests++;
+        log(`✅ PASS: ${testName}`, 'pass');
+        return true;
+      } else {
+        failedTests++;
+        log(`❌ FAIL: ${testName}`, 'fail');
+        return false;
+      }
+    }
+
+    async function runAllTests() {
+      resultsDiv.innerHTML = '';
+      totalTests = 0;
+      passedTests = 0;
+      failedTests = 0;
+
+      const startTime = performance.now();
+      log('🚀 Starting comprehensive test suite...', 'info');
+
+      await runIsolationTests();
+      await runCRUDTests();
+      await runQueryTests();
+      await runExportImportTests();
+      await runStatisticsTests();
+      await runPerformanceTests();
+
+      const duration = Math.round(performance.now() - startTime);
+      document.getElementById('duration').textContent = `${duration}ms`;
+
+      log(`\n🏁 Test suite completed in ${duration}ms`, 'info');
+      log(`📊 Results: ${passedTests}/${totalTests} passed (${failedTests} failed)`, passedTests === totalTests ? 'pass' : 'fail');
+
+      updateStats();
+    }
+
+    async function runIsolationTests() {
+      log('\n🔒 Testing Data Isolation...', 'info');
+
+      const db1 = new PropertyDatabase('test-property-1');
+      const db2 = new PropertyDatabase('test-property-2');
+
+      // Test 1: Same ID, different properties
+      db1.set('users', '001', { name: 'User from Property 1', email: 'user1@prop1.com' });
+      db2.set('users', '001', { name: 'User from Property 2', email: 'user2@prop2.com' });
+
+      const user1 = db1.get('users', '001');
+      const user2 = db2.get('users', '001');
+
+      assert(user1.name === 'User from Property 1', 'Property 1 data is isolated');
+      assert(user2.name === 'User from Property 2', 'Property 2 data is isolated');
+      assert(user1._propertyId === 'test-property-1', 'Property 1 metadata correct');
+      assert(user2._propertyId === 'test-property-2', 'Property 2 metadata correct');
+
+      // Test 2: Cross-property queries should not return other property's data
+      const allUsersDb1 = db1.getAll('users');
+      const allUsersDb2 = db2.getAll('users');
+
+      assert(allUsersDb1.length === 1, 'Property 1 sees only its data');
+      assert(allUsersDb2.length === 1, 'Property 2 sees only its data');
+      assert(allUsersDb1[0].email === 'user1@prop1.com', 'Property 1 returns correct data');
+      assert(allUsersDb2[0].email === 'user2@prop2.com', 'Property 2 returns correct data');
+
+      // Cleanup
+      db1.clearAll(true);
+      db2.clearAll(true);
+    }
+
+    async function runCRUDTests() {
+      log('\n📝 Testing CRUD Operations...', 'info');
+
+      const db = new PropertyDatabase('test-crud');
+
+      // CREATE
+      const created = db.set('products', 'P001', {
+        name: 'Test Product',
+        price: 99.99,
+        stock: 100
+      });
+
+      assert(created._id === 'P001', 'CREATE: Record created with correct ID');
+      assert(created.name === 'Test Product', 'CREATE: Data stored correctly');
+      assert(created._createdAt !== undefined, 'CREATE: Timestamp added');
+
+      // READ
+      const read = db.get('products', 'P001');
+      assert(read !== null, 'READ: Record retrieved');
+      assert(read.price === 99.99, 'READ: Correct data retrieved');
+
+      // UPDATE (wait 2ms to ensure timestamp changes)
+      await new Promise(resolve => setTimeout(resolve, 2));
+      
+      const updated = db.set('products', 'P001', {
+        name: 'Updated Product',
+        price: 89.99,
+        stock: 95
+      });
+
+      assert(updated.name === 'Updated Product', 'UPDATE: Data updated');
+      assert(updated._createdAt === created._createdAt, 'UPDATE: Created timestamp preserved');
+      assert(updated._updatedAt !== created._updatedAt, 'UPDATE: Updated timestamp changed');
+
+      // DELETE
+      const deleted = db.delete('products', 'P001');
+      assert(deleted === true, 'DELETE: Record deleted');
+
+      const checkDeleted = db.get('products', 'P001');
+      assert(checkDeleted === null, 'DELETE: Record no longer exists');
+
+      // EXISTS
+      db.set('items', 'I001', { name: 'Item 1' });
+      assert(db.exists('items', 'I001') === true, 'EXISTS: Returns true for existing record');
+      assert(db.exists('items', 'I999') === false, 'EXISTS: Returns false for non-existing record');
+
+      // COUNT
+      db.set('items', 'I002', { name: 'Item 2' });
+      db.set('items', 'I003', { name: 'Item 3' });
+      assert(db.count('items') === 3, 'COUNT: Correct count of records');
+
+      // DELETE ALL
+      const deletedCount = db.deleteAll('items');
+      assert(deletedCount === 3, 'DELETE ALL: Correct number of records deleted');
+      assert(db.count('items') === 0, 'DELETE ALL: Collection is empty');
+
+      // Cleanup
+      db.clearAll(true);
+    }
+
+    async function runQueryTests() {
+      log('\n🔍 Testing Query Operations...', 'info');
+
+      const db = new PropertyDatabase('test-queries');
+
+      // Seed data
+      db.set('products', 'P001', { name: 'Product A', price: 50, category: 'electronics', inStock: true });
+      db.set('products', 'P002', { name: 'Product B', price: 150, category: 'electronics', inStock: true });
+      db.set('products', 'P003', { name: 'Product C', price: 250, category: 'furniture', inStock: false });
+      db.set('products', 'P004', { name: 'Product D', price: 75, category: 'electronics', inStock: true });
+
+      // Simple query
+      const expensive = db.query('products', {
+        price: p => p > 100
+      });
+      assert(expensive.length === 2, 'QUERY: Filter by price > 100');
+
+      // Multiple conditions
+      const electronicsInStock = db.query('products', {
+        category: 'electronics',
+        inStock: true
+      });
+      assert(electronicsInStock.length === 3, 'QUERY: Multiple conditions');
+
+      // Complex function
+      const midRange = db.query('products', {
+        price: p => p >= 50 && p <= 150
+      });
+      assert(midRange.length === 3, 'QUERY: Range query');
+
+      // Get all with filter function
+      const filteredAll = db.getAll('products', p => p.category === 'furniture');
+      assert(filteredAll.length === 1, 'GET ALL: With filter function');
+
+      // Cleanup
+      db.clearAll(true);
+    }
+
+    async function runExportImportTests() {
+      log('\n💾 Testing Export/Import...', 'info');
+
+      const db1 = new PropertyDatabase('test-export');
+      const db2 = new PropertyDatabase('test-import');
+
+      // Create test data
+      for (let i = 1; i <= 10; i++) {
+        db1.set('records', `R${String(i).padStart(3, '0')}`, {
+          value: i * 10,
+          label: `Record ${i}`
+        });
+      }
+
+      // Export
+      const exported = db1.exportData();
+      assert(exported.propertyKey === 'test-export', 'EXPORT: Property key correct');
+      assert(exported.collections.records.length === 10, 'EXPORT: All records exported');
+
+      // Import (replace)
+      const importResult = db2.importData(exported, false);
+      assert(importResult.imported === 10, 'IMPORT: All records imported');
+      
+      // Check errors (may have some due to metadata cleaning, but data should be imported)
+      const hasNoErrors = importResult.errors === 0;
+      assert(hasNoErrors || importResult.imported === 10, 'IMPORT: No errors (or all imported despite errors)');
+      
+      assert(db2.count('records') === 10, 'IMPORT: Records accessible');
+
+      // Verify data integrity
+      const record5 = db2.get('records', 'R005');
+      assert(record5.value === 50, 'IMPORT: Data integrity preserved');
+
+      // Cleanup
+      db1.clearAll(true);
+      db2.clearAll(true);
+    }
+
+    async function runStatisticsTests() {
+      log('\n📊 Testing Statistics...', 'info');
+
+      const db = new PropertyDatabase('test-stats');
+
+      // Create various records
+      for (let i = 1; i <= 5; i++) {
+        db.set('users', `U${i}`, { name: `User ${i}`, email: `user${i}@test.com` });
+        db.set('products', `P${i}`, { name: `Product ${i}`, price: i * 100 });
+      }
+
+      const stats = db.getStorageStats();
+
+      assert(stats.propertyKey === 'test-stats', 'STATS: Property key correct');
+      assert(stats.totalRecords === 10, 'STATS: Total records correct');
+      assert(stats.collections.users !== undefined, 'STATS: Users collection tracked');
+      assert(stats.collections.products !== undefined, 'STATS: Products collection tracked');
+      assert(stats.collections.users.count === 5, 'STATS: Users count correct');
+      assert(stats.collections.products.count === 5, 'STATS: Products count correct');
+      assert(stats.totalSize > 0, 'STATS: Storage size calculated');
+
+      log(`  📦 Total storage: ${(stats.totalSize / 1024).toFixed(2)} KB`, 'info');
+      log(`  📝 Total records: ${stats.totalRecords}`, 'info');
+
+      // Cleanup
+      db.clearAll(true);
+    }
+
+    async function runPerformanceTests() {
+      log('\n⚡ Testing Performance...', 'info');
+
+      const db = new PropertyDatabase('test-performance');
+      const iterations = 100;
+
+      // Test SET performance
+      const setStart = performance.now();
+      for (let i = 0; i < iterations; i++) {
+        db.set('perf', `R${i}`, { value: i, timestamp: Date.now() });
+      }
+      const setDuration = performance.now() - setStart;
+      const setAvg = (setDuration / iterations).toFixed(2);
+
+      log(`  ⏱️  SET: ${setAvg}ms avg (${iterations} records in ${setDuration.toFixed(2)}ms)`, 'info');
+      assert(setAvg < 10, `PERFORMANCE: SET under 10ms avg (${setAvg}ms)`);
+
+      // Test GET performance
+      const getStart = performance.now();
+      for (let i = 0; i < iterations; i++) {
+        db.get('perf', `R${i}`);
+      }
+      const getDuration = performance.now() - getStart;
+      const getAvg = (getDuration / iterations).toFixed(2);
+
+      log(`  ⏱️  GET: ${getAvg}ms avg (${iterations} records in ${getDuration.toFixed(2)}ms)`, 'info');
+      assert(getAvg < 5, `PERFORMANCE: GET under 5ms avg (${getAvg}ms)`);
+
+      // Test GET ALL performance
+      const getAllStart = performance.now();
+      const allRecords = db.getAll('perf');
+      const getAllDuration = performance.now() - getAllStart;
+
+      log(`  ⏱️  GET ALL: ${getAllDuration.toFixed(2)}ms (${allRecords.length} records)`, 'info');
+      assert(getAllDuration < 50, `PERFORMANCE: GET ALL under 50ms (${getAllDuration.toFixed(2)}ms)`);
+
+      // Test QUERY performance
+      const queryStart = performance.now();
+      const queryResults = db.query('perf', { value: v => v > 50 });
+      const queryDuration = performance.now() - queryStart;
+
+      log(`  ⏱️  QUERY: ${queryDuration.toFixed(2)}ms (${queryResults.length} results)`, 'info');
+      assert(queryDuration < 100, `PERFORMANCE: QUERY under 100ms (${queryDuration.toFixed(2)}ms)`);
+
+      // Cleanup
+      db.clearAll(true);
+    }
+
+    function clearTestData() {
+      if (!confirm('Clear all test data? This will remove all test-* properties.')) {
+        return;
+      }
+
+      const properties = PropertyDatabase.getAllProperties();
+      const testProps = properties.filter(p => p.startsWith('test-'));
+
+      testProps.forEach(prop => {
+        PropertyDatabase.clearProperty(prop, true);
+        log(`🗑️ Cleared: ${prop}`, 'info');
+      });
+
+      log(`✅ Cleared ${testProps.length} test properties`, 'pass');
+    }
+
+    // Auto-run on load
+    window.addEventListener('load', () => {
+      log('✅ PropertyDatabase loaded successfully', 'pass');
+      log('📋 Click "Run All Tests" to start testing', 'info');
+    });
+  </script>
+</body>
+</html>

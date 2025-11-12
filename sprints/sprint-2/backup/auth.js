@@ -1,0 +1,26 @@
+const NexefiiAuth = {
+  async login(email, password) {
+    const users = [
+      { email: "admin@nexefii.com", password: "admin123", name: "Admin NEXEFII", role: "admin", properties: [] },
+      { email: "demo@nexefii.com", password: "demo123", name: "Demo User", role: "user", properties: [] }
+    ];
+    await new Promise(resolve => setTimeout(resolve, 500));
+    const user = users.find(u => u.email === email && u.password === password);
+    if (!user) throw new Error("Email ou senha invalidos");
+    const session = { email: user.email, name: user.name, role: user.role, properties: user.properties, loginAt: new Date().toISOString() };
+    localStorage.setItem("nexefii_session", JSON.stringify(session));
+    return session;
+  },
+  logout() {
+    localStorage.removeItem("nexefii_session");
+    window.location.href = "/login.html";
+  },
+  getSession() {
+    const sessionData = localStorage.getItem("nexefii_session");
+    if (!sessionData) return null;
+    try { return JSON.parse(sessionData); } catch (e) { return null; }
+  },
+  isAuthenticated() {
+    return this.getSession() !== null;
+  }
+};

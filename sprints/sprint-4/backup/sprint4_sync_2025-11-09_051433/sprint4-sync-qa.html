@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>QA Sprint 4 - Sync Service</title>
+  <style>
+    body{font-family:system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;background:#0f172a;color:#e2e8f0;margin:0}
+    .wrap{max-width:1000px;margin:0 auto;padding:24px}
+    .card{background:#111827;border:1px solid #1f2937;border-radius:12px;padding:20px}
+    button{background:#22c55e;color:#fff;border:1px solid #334155;border-radius:8px;padding:8px 12px;cursor:pointer;margin-right:8px}
+    pre{background:#0b1220;color:#93c5fd;padding:12px;border-radius:8px;border:1px solid #1f2937;white-space:pre-wrap}
+    .muted{color:#94a3b8}
+    .pass{color:#22c55e}
+    .fail{color:#ef4444}
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <h1>🔬 QA – Sprint 4 (Sync Service)</h1>
+    <p class="muted">Teste automatizado de sincronização (manual, agendado, contínuo), conflitos e métricas de performance.</p>
+    <div class="card">
+      <div style="margin-bottom:12px">
+        <button id="runAll">▶️ Executar QA Completo</button>
+        <button id="export">📤 Exportar Relatório</button>
+        <a href="/index.html" style="color:#93c5fd">← Voltar</a>
+      </div>
+      <pre id="log">Aguardando…</pre>
+      <pre id="report">Relatório ainda não gerado…</pre>
+    </div>
+  </div>
+
+  <script type="module">
+    import SyncService from '../core/sync/SyncService.js';
+    import ConflictResolver from '../core/sync/ConflictResolver.js';
+    import SyncLogger from '../core/sync/SyncLogger.js';
+
+    const logEl = document.getElementById('log');
+    const reportEl = document.getElementById('report');
+
+    const logger = new SyncLogger();
+    const transport = {
+      // Simula envio com latência e eventuais conflitos
+      async send(path, payload){
+        const start = performance.now();
+        await new Promise(r => setTimeout(r, 120 + Math.random()*80));
+        // 1 a cada 5 lotes, injeta um conflito
+        const conflicts = (payload?.items?.length && Math.random() < 0.2)
+          ? [{ id: 'c-'+Date.now(), local: { updatedAt: Date.now()-2000 }, remote:{ updatedAt: Date.now()-1000 } }]
+          : [];
+        const res = { ok:true, applied: (payload?.items||[]).length, conflicts };
+        const end = performance.now();
+        logger.recordLatency(end-start);
+        return res;
+      }
+    };
+
+    const configStore = {
+      getSyncConfig(){ try { return JSON.parse(localStorage.getItem('nexefii_sync_config')||'null'); } catch { return null; }},
+      saveSyncConfig(cfg){ localStorage.setItem('nexefii_sync_config', JSON.stringify(cfg)); }
+    };
+
+    const conflictResolver = new ConflictResolver({ logger });
+    const service = new SyncService({ transport, logger, conflictResolver, configStore });
+    service.init();
+
+    function log(msg){ logEl.textContent += (logEl.textContent==='Aguardando…'?'':'\n') + msg; }
+
+    function enqueueSample(n=100){
+      for(let i=0;i<n;i++){
+        service.enqueue({
+          type: ['create','update','delete'][Math.floor(Math.random()*3)],
+          payload: { id: 'p-'+i, value: Math.random().toString(36).slice(2) },
+          priority: 1 + Math.floor(Math.random()*5)
+        });
+      }
+    }
+
+    async function testManual(){
+      log('> Teste Manual: enfileirando 60 eventos e sincronizando…');
+      enqueueSample(60);
+      await service.sync();
+      log('  ✓ Manual concluído.');
+    }
+
+    async function testScheduled(){
+      log('> Teste Agendado: modo scheduled (intervalo 500ms)');
+      service.configureMode('scheduled', 500);
+      enqueueSample(80);
+      await new Promise(r => setTimeout(r, 2200));
+      service.configureMode('manual');
+      log('  ✓ Agendado concluído.');
+    }
+
+    async function testContinuous(){
+      log('> Teste Contínuo: ativando por ~2s');
+      service.configureMode('continuous');
+      enqueueSample(80);
+      await new Promise(r => setTimeout(r, 2200));
+      service.configureMode('manual');
+      log('  ✓ Contínuo concluído.');
+    }
+
+    function evaluate(){
+      const m = service.exportMetrics();
+      const avgLatency = logger.export().metrics.avgLatency || 0;
+      const passLatency = avgLatency <= 2000; // <= 2s
+      const queueZero = m.queueSize === 0;
+
+      const out = {
+        when: new Date().toISOString(),
+        metrics: { ...m, avgLatency },
+        checks: {
+          latencyUnder2s: passLatency,
+          emptyQueueAtEnd: queueZero
+        },
+        status: (passLatency && queueZero) ? 'PASS' : 'FAIL'
+      };
+      localStorage.setItem('nexefii_sync_qa_report', JSON.stringify(out));
+      reportEl.textContent = JSON.stringify(out, null, 2);
+      return out;
+    }
+
+    async function runAll(){
+      logEl.textContent = '';
+      reportEl.textContent = '';
+      log('Iniciando QA Sprint 4…');
+      await testManual();
+      await testScheduled();
+      await testContinuous();
+      const res = evaluate();
+      log('Status: ' + (res.status==='PASS' ? '✅ PASS' : '❌ FAIL'));
+    }
+
+    document.getElementById('runAll').addEventListener('click', runAll);
+    document.getElementById('export').addEventListener('click', () => {
+      const data = localStorage.getItem('nexefii_sync_qa_report') || '{}';
+      const blob = new Blob([data], { type:'application/json' });
+      const a = document.createElement('a');
+      a.href = URL.createObjectURL(blob);
+      a.download = 'sprint4-sync-qa-report.json';
+      a.click();
+    });
+
+    // Execução automática em ambientes de QA headless se desejado
+    // runAll();
+  </script>
+</body>
+</html>

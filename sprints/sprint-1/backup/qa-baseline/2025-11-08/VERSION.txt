@@ -1,0 +1,216 @@
+QA Baseline - Pre-Refactor Snapshot
+====================================
+
+METADATA
+--------
+Date Created:       2025-11-08
+System:             IluxSys (Hospitality Management System)
+Version:            Current State (Pre-SaaS Transformation)
+Architecture:       Monolithic (Static HTML + LocalStorage)
+Purpose:            Golden Reference for Architectural Refactoring
+
+CURRENT STATE
+-------------
+Branch:             [To be filled - main/master/development]
+Git Commit:         [To be filled - git hash if applicable]
+Files Count:        ~50+ files (HTML, CSS, JS, JSON)
+Storage:            LocalStorage (~5MB limit)
+Multi-tenant:       NO (planned)
+Routing:            Static files (planned: SPA routing)
+Database:           LocalStorage single namespace (planned: isolated per property)
+
+SYSTEM COMPONENTS (CURRENT)
+---------------------------
+Master Control:     master-control.html + master-control.js (4141 lines)
+Enterprise Module:  master-control-enterprise.js
+Backup System:      enterprise-backup-system.js
+i18n System:        i18n.js + translations (pt/en/es)
+Properties:         Managed via IluxProps global
+Users:              Managed via iluxsys_users localStorage
+Test Generator:     property-local-test-generator.js
+
+KNOWN BUGS (FIXED)
+------------------
+✅ Property deletion async/await error - FIXED
+✅ Auto-admin user creation error - FIXED (getAllUsers/createUser)
+✅ Property "dados incompletos" - FIXED (repairIncompleteProperties)
+✅ User associated with all properties - FIXED (select multiple handling)
+✅ Modules not showing on test page - FIXED (modulesPurchased field)
+✅ Missing navigation button - FIXED (green button added)
+
+REFACTORING OBJECTIVES
+----------------------
+Transform from:     Monolithic → Multi-Tenant SaaS Hybrid
+Database:           Single namespace → Isolated per property (property_${key}_)
+Routing:            Static files → SPA routing (/property/{slug})
+Architecture:       Monolithic → Shell + Dynamic Loading
+Schema:             No versioning → Migrations (forward/reverse)
+Updates:            Manual → OTA with rollback
+Backups:            Manual → Automated per-property
+Sync:               None → Delta sync with cloud
+Dashboard:          Single → Multi-property consolidated KPIs
+
+IMPLEMENTATION PLAN
+-------------------
+Phase 1 (Sprint 1-2):  PropertyDatabase.js + Router.js + Shell
+Phase 2 (Sprint 3-4):  Implementation Wizard (property provisioning)
+Phase 3 (Sprint 5-6):  Multi-Property Dashboard (consolidated KPIs)
+Phase 4 (Sprint 7-8):  Sync Service (delta sync + conflict resolution)
+Phase 5 (Sprint 9-10): OTA Manager (updates + automatic rollback)
+Phase 6 (Sprint 11-12): Observability (logs, metrics, alerts)
+
+Timeline:           12 weeks (6 sprints × 2 weeks)
+Start Date:         [To be filled - after QA baseline complete]
+Expected Completion: [To be filled - ~3 months from start]
+
+ACCEPTANCE CRITERIA (CRITICAL)
+------------------------------
+✅ Visual:          100% identical to baseline screenshots
+✅ Functional:      All 80+ features working identically
+✅ Data:            Zero data loss, structure preserved
+✅ Performance:     Equal or better (measure with DevTools)
+✅ Errors:          Zero new console errors
+✅ Regressions:     Zero visual/functional regressions
+✅ New Features:    All planned features working
+✅ Tests:           100% QA validation pass rate
+
+BASELINE ARTIFACTS
+------------------
+Location:           r:\Development\Projects\iluxsys\qa-baseline\2025-11-08\
+
+Contents:
+  └── reports/
+      ├── qa-baseline-2025-11-08.json          (automated capture)
+      └── qa-baseline-report-2025-11-08.html   (visual report)
+  └── screenshots/
+      ├── 01-dashboard-initial.png             (35+ screenshots)
+      ├── 02-dashboard-backups-modal.png
+      └── ... (all manual captures)
+  └── computed-styles/
+      └── extracted-from-report.json           (CSS reference)
+  └── acceptance-criteria/
+      ├── checklist.md                         (validation checklist)
+      └── functional-tests.md                  (test scenarios)
+
+VALIDATION METHOD
+-----------------
+Post-Refactor Validation Process:
+
+1. Visual Comparison:
+   - Compare new screenshots with baseline
+   - Use eyedropper tool for exact RGB validation
+   - Measure spacing with DevTools ruler
+   - Validate computed styles match exactly
+
+2. Functional Testing:
+   - Execute all 80+ checklist items
+   - Compare behavior with baseline notes
+   - Test edge cases and error scenarios
+   - Validate data integrity
+
+3. Performance Testing:
+   - Lighthouse score (before/after)
+   - Page load time comparison
+   - LocalStorage read/write benchmarks
+   - Memory usage profiling
+
+4. Automated Testing:
+   - Run qa-baseline-capture.js again
+   - Compare JSON reports (diff tool)
+   - Validate computed styles programmatically
+   - Check localStorage structure
+
+ROLLBACK STRATEGY
+-----------------
+If validation fails:
+
+1. Immediate Actions:
+   - Stop deployment
+   - Document failing criteria
+   - Create incident report
+
+2. Analysis:
+   - Compare baseline vs current
+   - Identify root cause
+   - Assess impact (visual/functional/data)
+
+3. Decision:
+   - Fix forward (if minor)
+   - Rollback to baseline (if major)
+   - Hybrid approach (partial rollback)
+
+4. Recovery:
+   - Use General Structure Backup to rollback
+   - Restore from baseline Git commit
+   - Verify restoration successful
+   - Document lessons learned
+
+RISK ASSESSMENT
+---------------
+Risk Level:         HIGH (major architectural transformation)
+Mitigation:         Comprehensive QA baseline + incremental validation
+Blast Radius:       Entire system (if something goes wrong)
+Recovery Time:      < 1 hour (with proper backups)
+User Impact:        ZERO (if validation process followed)
+
+TEAM COMMUNICATION
+------------------
+QA Lead:            [To be filled]
+Developer:          [To be filled]
+Stakeholders:       [To be filled]
+Approval Required:  YES (before starting refactor)
+Status Updates:     [Weekly/Daily during implementation]
+
+DOCUMENTATION REFERENCES
+------------------------
+1. MASTER_CONTROL_README.md     (current system documentation)
+2. ARCHITECTURE_REFACTOR_PLAN.md (refactoring specification)
+3. QA_BASELINE_MANUAL.md        (capture instructions)
+4. qa-baseline-capture.js       (automated capture tool)
+
+EXTERNAL BACKUPS
+----------------
+Cloud Storage:      [To be filled - Dropbox/Google Drive/etc.]
+ZIP Archive:        [To be filled - path to compressed backup]
+Git Repository:     [To be filled - remote URL if applicable]
+Last Sync:          [To be filled - date of last backup sync]
+
+CONTACT INFORMATION
+-------------------
+Developer:          [Your Name]
+Email:              [your.email@domain.com]
+Phone:              [Your Phone]
+Timezone:           [Your Timezone]
+Availability:       [Your Hours]
+
+SIGN-OFF
+--------
+QA Baseline Complete:     [ ] YES  [ ] NO
+All Screenshots Captured: [ ] YES  [ ] NO
+Functional Tests Passed:  [ ] YES  [ ] NO
+Backups Secured:          [ ] YES  [ ] NO
+Ready for Refactor:       [ ] YES  [ ] NO
+
+Approved By:        _____________________
+Date:               _____________________
+Signature:          _____________________
+
+NOTES
+-----
+[Add any additional notes, concerns, or observations here]
+
+
+
+
+================================================================================
+CHANGE LOG
+================================================================================
+
+2025-11-08:
+  - Initial VERSION.txt created
+  - QA Baseline capture system created (qa-baseline-capture.js)
+  - Manual capture guide created (QA_BASELINE_MANUAL.md)
+  - Directory structure created
+  - Awaiting user to execute capture and sign-off
+
+[Future entries will be added here as refactoring progresses]

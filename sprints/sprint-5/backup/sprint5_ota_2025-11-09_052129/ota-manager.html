@@ -1,0 +1,237 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Nexefii | Gerenciamento de Atualizações OTA</title>
+  <style>
+    body{font-family:system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;margin:0;background:#0f172a;color:#e2e8f0}
+    .wrap{max-width:1000px;margin:0 auto;padding:24px}
+    h1{margin:0 0 8px;font-size:24px}
+    .muted{color:#94a3b8;margin-bottom:16px}
+    .card{background:#111827;border:1px solid #1f2937;border-radius:12px;padding:20px;margin-bottom:16px}
+    .status{display:flex;gap:16px;margin-bottom:16px}
+    .stat{flex:1;background:#0b1220;padding:12px;border-radius:8px;border:1px solid #1f2937}
+    .stat-label{font-size:12px;color:#94a3b8;margin-bottom:4px}
+    .stat-value{font-size:20px;font-weight:600}
+    button{background:#0ea5e9;color:#fff;border:1px solid #334155;border-radius:8px;padding:8px 16px;cursor:pointer;margin-right:8px}
+    button.danger{background:#ef4444}
+    button.success{background:#22c55e}
+    button:disabled{opacity:0.5;cursor:not-allowed}
+    pre{background:#0b1220;color:#93c5fd;padding:12px;border-radius:8px;border:1px solid #1f2937;white-space:pre-wrap;font-size:13px}
+    .snapshots{display:flex;flex-direction:column;gap:8px}
+    .snapshot{background:#0b1220;padding:12px;border-radius:6px;border:1px solid #1f2937;display:flex;justify-content:space-between;align-items:center}
+    .snap-info{flex:1}
+    .snap-id{font-size:12px;color:#94a3b8}
+    .snap-ver{font-weight:600;color:#22c55e}
+    a.back{display:inline-block;margin:12px 0 0;color:#93c5fd}
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <h1>🔄 Gerenciamento de Atualizações OTA</h1>
+    <p class="muted">Over-the-air updates com rollback automático</p>
+
+    <div class="card">
+      <h2 style="margin-top:0">Status do Sistema</h2>
+      <div class="status">
+        <div class="stat">
+          <div class="stat-label">Versão Atual</div>
+          <div class="stat-value" id="currentVer">—</div>
+        </div>
+        <div class="stat">
+          <div class="stat-label">Status</div>
+          <div class="stat-value" id="updateStatus">—</div>
+        </div>
+        <div class="stat">
+          <div class="stat-label">Última Atualização</div>
+          <div class="stat-value" id="lastUpdate">—</div>
+        </div>
+      </div>
+      
+      <div style="margin-bottom:12px">
+        <button id="checkBtn">🔍 Verificar Atualizações</button>
+        <button id="updateBtn" class="success" disabled>⬇️ Instalar Atualização</button>
+        <button id="forceBtn" style="background:#f59e0b" disabled>⚡ Forçar Aplicação</button>
+      </div>
+
+      <div id="updateInfo" style="display:none;margin-top:12px">
+        <h3>Atualização Disponível</h3>
+        <pre id="updateDetails"></pre>
+      </div>
+    </div>
+
+    <div class="card">
+      <h2 style="margin-top:0">Snapshots de Rollback</h2>
+      <div style="margin-bottom:12px">
+        <button id="createSnapBtn" class="success">📸 Criar Snapshot Manual</button>
+        <button id="clearSnapsBtn" class="danger">🗑️ Limpar Todos</button>
+      </div>
+      <div class="snapshots" id="snapshotList">
+        <p class="muted">Carregando...</p>
+      </div>
+    </div>
+
+    <div class="card">
+      <h2 style="margin-top:0">Histórico</h2>
+      <pre id="history">Carregando...</pre>
+    </div>
+
+    <a href="/index.html" class="back">← Voltar</a>
+  </div>
+
+  <script type="module">
+    import OTAManager from '../core/ota/OTAManager.js';
+    import CompatibilityChecker from '../core/ota/CompatibilityChecker.js';
+    import RollbackService from '../core/ota/RollbackService.js';
+    import SyncLogger from '../core/sync/SyncLogger.js';
+
+    const logger = new SyncLogger();
+    
+    const transport = {
+      async send(path, payload) {
+        await new Promise(r => setTimeout(r, 300));
+        
+        if (path === '/ota/check') {
+          // Simular disponibilidade de update (70% das vezes)
+          if (Math.random() > 0.3) {
+            return {
+              available: true,
+              version: '1.2.0',
+              size: 524288,
+              changelog: 'Bug fixes e melhorias de performance',
+              url: '/updates/v1.2.0.zip',
+              hash: 'abc123'
+            };
+          }
+          return { available: false };
+        }
+
+        if (path === '/ota/download') {
+          return { package: { version: payload.version, data: 'mock_package' }, hash: 'abc123' };
+        }
+
+        return { ok: true };
+      }
+    };
+
+    const schemaStore = {
+      getVersion() { return 2; }
+    };
+
+    const configStore = {
+      getSyncConfig() { return null; },
+      saveSyncConfig() {}
+    };
+
+    const compatChecker = new CompatibilityChecker({ logger, schemaStore });
+    const rollbackService = new RollbackService({ logger });
+    const otaManager = new OTAManager({ transport, logger, compatChecker, rollbackService, configStore });
+
+    let pendingUpdate = null;
+
+    function refreshUI() {
+      const status = otaManager.getStatus();
+      document.getElementById('currentVer').textContent = status.currentVersion;
+      document.getElementById('updateStatus').textContent = status.isUpdating ? 'Atualizando...' : 'OK';
+      
+      if (status.lastUpdate) {
+        const date = new Date(status.lastUpdate.timestamp).toLocaleString('pt-BR');
+        document.getElementById('lastUpdate').textContent = date;
+      }
+
+      const history = otaManager.getHistory();
+      document.getElementById('history').textContent = JSON.stringify(history, null, 2);
+
+      refreshSnapshots();
+    }
+
+    function refreshSnapshots() {
+      const list = rollbackService.listSnapshots();
+      const container = document.getElementById('snapshotList');
+      
+      if (list.length === 0) {
+        container.innerHTML = '<p class="muted">Nenhum snapshot disponível</p>';
+        return;
+      }
+
+      container.innerHTML = list.map(s => `
+        <div class="snapshot">
+          <div class="snap-info">
+            <div class="snap-ver">${s.version}</div>
+            <div class="snap-id">${s.id} • ${new Date(s.timestamp).toLocaleString('pt-BR')}</div>
+          </div>
+          <div>
+            <button onclick="rollbackTo('${s.id}')" style="background:#f59e0b">↩️ Restaurar</button>
+            <button onclick="deleteSnap('${s.id}')" class="danger">🗑️</button>
+          </div>
+        </div>
+      `).join('');
+    }
+
+    document.getElementById('checkBtn').addEventListener('click', async () => {
+      const check = await otaManager.checkForUpdates();
+      if (check.available) {
+        pendingUpdate = check;
+        document.getElementById('updateInfo').style.display = 'block';
+        document.getElementById('updateDetails').textContent = JSON.stringify(check, null, 2);
+        document.getElementById('updateBtn').disabled = false;
+        document.getElementById('forceBtn').disabled = false;
+      } else {
+        alert('Sistema atualizado!');
+        document.getElementById('updateInfo').style.display = 'none';
+        pendingUpdate = null;
+      }
+    });
+
+    document.getElementById('updateBtn').addEventListener('click', async () => {
+      if (!pendingUpdate) return;
+      const result = await otaManager.update();
+      alert(result.success ? 'Atualização aplicada!' : 'Falha: ' + result.error);
+      refreshUI();
+      pendingUpdate = null;
+      document.getElementById('updateBtn').disabled = true;
+    });
+
+    document.getElementById('forceBtn').addEventListener('click', async () => {
+      if (!pendingUpdate) return;
+      pendingUpdate.forceApply = true;
+      const result = await otaManager.update();
+      alert(result.success ? 'Atualização forçada aplicada!' : 'Falha: ' + result.error);
+      refreshUI();
+      pendingUpdate = null;
+      document.getElementById('forceBtn').disabled = true;
+    });
+
+    document.getElementById('createSnapBtn').addEventListener('click', async () => {
+      await rollbackService.createSnapshot({ manual: true });
+      refreshSnapshots();
+      alert('Snapshot criado!');
+    });
+
+    document.getElementById('clearSnapsBtn').addEventListener('click', () => {
+      if (confirm('Remover todos os snapshots?')) {
+        rollbackService.clearAllSnapshots();
+        refreshSnapshots();
+      }
+    });
+
+    window.rollbackTo = async (id) => {
+      if (confirm(`Restaurar snapshot ${id}?`)) {
+        const result = await rollbackService.rollback(id);
+        alert(result.success ? 'Rollback concluído!' : 'Falha: ' + result.error);
+        refreshUI();
+      }
+    };
+
+    window.deleteSnap = (id) => {
+      if (confirm('Remover snapshot?')) {
+        rollbackService.deleteSnapshot(id);
+        refreshSnapshots();
+      }
+    };
+
+    refreshUI();
+  </script>
+</body>
+</html>

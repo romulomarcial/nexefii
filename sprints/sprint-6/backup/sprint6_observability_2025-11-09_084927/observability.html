@@ -1,0 +1,235 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Nexefii | Observability Dashboard</title>
+  <style>
+    *{margin:0;padding:0;box-sizing:border-box}
+    body{font-family:system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;background:#0f172a;color:#e2e8f0}
+    .wrap{max-width:1400px;margin:0 auto;padding:20px}
+    h1{font-size:24px;margin-bottom:8px}
+    .muted{color:#94a3b8;margin-bottom:20px}
+    .grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(320px,1fr));gap:16px;margin-bottom:16px}
+    .card{background:#111827;border:1px solid #1f2937;border-radius:12px;padding:16px}
+    .card h2{font-size:16px;margin-bottom:12px;color:#93c5fd}
+    .stat{display:flex;justify-content:space-between;padding:8px 0;border-bottom:1px solid #1f2937}
+    .stat:last-child{border:0}
+    .stat-label{color:#94a3b8;font-size:14px}
+    .stat-value{font-weight:600}
+    button{background:#0ea5e9;color:#fff;border:1px solid #334155;border-radius:6px;padding:6px 12px;cursor:pointer;font-size:13px;margin-right:8px}
+    button.danger{background:#ef4444}
+    button.success{background:#22c55e}
+    pre{background:#0b1220;color:#93c5fd;padding:10px;border-radius:6px;border:1px solid #1f2937;font-size:12px;max-height:300px;overflow:auto}
+    .alert{padding:8px 12px;border-radius:6px;margin-bottom:8px;display:flex;justify-content:space-between;align-items:center}
+    .alert.info{background:#1e3a8a;border:1px solid #3b82f6}
+    .alert.warning{background:#78350f;border:1px solid #f59e0b}
+    .alert.critical{background:#7f1d1d;border:1px solid #ef4444}
+    .alert-time{font-size:11px;color:#94a3b8}
+    a{color:#93c5fd;text-decoration:none}
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <h1>📊 Observability Dashboard</h1>
+    <p class="muted">Monitoramento em tempo real de logs, métricas e alertas</p>
+
+    <div style="margin-bottom:16px">
+      <button id="startBtn" class="success">▶️ Iniciar Monitoramento</button>
+      <button id="stopBtn" disabled>⏸️ Pausar</button>
+      <button id="exportBtn">📤 Exportar</button>
+      <a href="/index.html">← Voltar</a>
+    </div>
+
+    <div class="grid">
+      <div class="card">
+        <h2>📈 Métricas Gerais</h2>
+        <div id="metricsStats">Aguardando dados...</div>
+      </div>
+
+      <div class="card">
+        <h2>📝 Logs (últimos 10)</h2>
+        <div id="logStats">Aguardando dados...</div>
+      </div>
+
+      <div class="card">
+        <h2>⚠️ Alertas Ativos</h2>
+        <div id="alertsCount">0 alertas</div>
+        <button id="clearAlertsBtn" class="danger" style="margin-top:8px">🗑️ Limpar</button>
+      </div>
+    </div>
+
+    <div class="grid">
+      <div class="card">
+        <h2>🔔 Histórico de Alertas</h2>
+        <div id="alertsList">Nenhum alerta disparado</div>
+      </div>
+
+      <div class="card">
+        <h2>📊 Performance</h2>
+        <pre id="perfData">Carregando...</pre>
+      </div>
+    </div>
+
+    <div class="card">
+      <h2>🔍 Logs Recentes</h2>
+      <pre id="logsData">Carregando...</pre>
+    </div>
+  </div>
+
+  <script type="module">
+    import Logger from '../core/observability/Logger.js';
+    import MetricsCollector from '../core/observability/MetricsCollector.js';
+    import AlertManager from '../core/observability/AlertManager.js';
+
+    const logger = new Logger({ level: 'DEBUG', maxEntries: 5000 });
+    const metrics = new MetricsCollector({ logger, interval: 3000 });
+    const alerts = new AlertManager({ logger, metricsCollector: metrics });
+
+    // Registrar regras padrão
+    alerts.addRule(AlertManager.DefaultRules.highMemoryUsage);
+    alerts.addRule(AlertManager.DefaultRules.slowPerformance);
+
+    // Handler de console para alertas
+    alerts.registerHandler('console', (alert) => {
+      console.warn(`[ALERT ${alert.severity.toUpperCase()}] ${alert.message}`);
+    });
+
+    // Handler de UI
+    alerts.registerHandler('ui', (alert) => {
+      updateAlertsUI();
+    });
+
+    // Stream de logs em tempo real
+    logger.subscribe((entry) => {
+      updateLogsUI();
+    });
+
+    function updateMetricsUI() {
+      const stats = metrics.getSnapshot();
+      const html = `
+        <div class="stat">
+          <span class="stat-label">Performance Avg</span>
+          <span class="stat-value">${stats.performance?.avg?.toFixed(2) || 'N/A'} ms</span>
+        </div>
+        <div class="stat">
+          <span class="stat-label">Performance P95</span>
+          <span class="stat-value">${stats.performance?.p95?.toFixed(2) || 'N/A'} ms</span>
+        </div>
+        <div class="stat">
+          <span class="stat-label">Memory Usage</span>
+          <span class="stat-value">${stats.resources?.percentUsed || 'N/A'}%</span>
+        </div>
+      `;
+      document.getElementById('metricsStats').innerHTML = html;
+      document.getElementById('perfData').textContent = JSON.stringify(stats, null, 2);
+    }
+
+    function updateLogsUI() {
+      const logStats = logger.getStats();
+      const statsHtml = `
+        <div class="stat">
+          <span class="stat-label">Total</span>
+          <span class="stat-value">${logStats.total}</span>
+        </div>
+        <div class="stat">
+          <span class="stat-label">Errors</span>
+          <span class="stat-value">${logStats.byLevel.ERROR + logStats.byLevel.FATAL}</span>
+        </div>
+        <div class="stat">
+          <span class="stat-label">Warnings</span>
+          <span class="stat-value">${logStats.byLevel.WARN}</span>
+        </div>
+      `;
+      document.getElementById('logStats').innerHTML = statsHtml;
+
+      const recent = logger.query({}).slice(-20);
+      document.getElementById('logsData').textContent = recent.map(e => 
+        `[${new Date(e.timestamp).toLocaleTimeString()}] [${e.level}] ${e.message}`
+      ).join('\n');
+    }
+
+    function updateAlertsUI() {
+      const alertsList = alerts.getAlerts();
+      document.getElementById('alertsCount').textContent = `${alertsList.length} alertas`;
+
+      if (alertsList.length === 0) {
+        document.getElementById('alertsList').innerHTML = 'Nenhum alerta disparado';
+        return;
+      }
+
+      const html = alertsList.slice(0, 10).map(a => `
+        <div class="alert ${a.severity}">
+          <div>
+            <strong>${a.ruleName}</strong><br>
+            ${a.message}
+            <div class="alert-time">${new Date(a.timestamp).toLocaleString()}</div>
+          </div>
+          <button onclick="ackAlert('${a.id}')" style="font-size:11px">✓ OK</button>
+        </div>
+      `).join('');
+      document.getElementById('alertsList').innerHTML = html;
+    }
+
+    window.ackAlert = (id) => {
+      alerts.acknowledge(id);
+      updateAlertsUI();
+    };
+
+    let started = false;
+
+    document.getElementById('startBtn').addEventListener('click', () => {
+      if (started) return;
+      metrics.start();
+      alerts.start();
+      started = true;
+      document.getElementById('startBtn').disabled = true;
+      document.getElementById('stopBtn').disabled = false;
+      logger.info('Observability iniciado');
+
+      // Simular atividade para demonstração
+      setInterval(() => {
+        logger.info('Heartbeat', { category: 'system' });
+        metrics.recordCustom('requests', Math.floor(Math.random() * 100));
+      }, 5000);
+
+      // Atualizar UI
+      setInterval(() => {
+        updateMetricsUI();
+        updateLogsUI();
+      }, 2000);
+    });
+
+    document.getElementById('stopBtn').addEventListener('click', () => {
+      metrics.stop();
+      alerts.stop();
+      started = false;
+      document.getElementById('startBtn').disabled = false;
+      document.getElementById('stopBtn').disabled = true;
+      logger.info('Observability pausado');
+    });
+
+    document.getElementById('clearAlertsBtn').addEventListener('click', () => {
+      alerts.clearAlerts();
+      updateAlertsUI();
+    });
+
+    document.getElementById('exportBtn').addEventListener('click', () => {
+      const data = {
+        logger: logger.export(),
+        metrics: metrics.export(),
+        alerts: alerts.export()
+      };
+      const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
+      const a = document.createElement('a');
+      a.href = URL.createObjectURL(blob);
+      a.download = 'observability-export.json';
+      a.click();
+    });
+
+    // Gerar alguns logs iniciais
+    logger.info('Sistema inicializado');
+    logger.debug('Debug mode ativo');
+  </script>
+</body>
+</html>
