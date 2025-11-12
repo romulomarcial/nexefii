@@ -1,0 +1,9 @@
+FROM python:3.11-slim
+WORKDIR /app
+
+COPY sprints/sprint-8/outputs/demo-property-service.py /app/demo_property_service.py
+
+RUN pip install --no-cache-dir flask
+
+EXPOSE 8082
+CMD ["python","demo_property_service.py"]

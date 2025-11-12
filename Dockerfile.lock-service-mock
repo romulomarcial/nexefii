@@ -1,0 +1,11 @@
+FROM python:3.11-slim
+WORKDIR /app
+
+# Minimal mock lock service: expose /health and a simple lock status route
+COPY lock_service_mock.py /app/lock_service_mock.py
+COPY sprints/sprint-8/outputs/lock-service-openapi.yaml /app/openapi.yaml
+
+RUN pip install --no-cache-dir flask
+
+EXPOSE 8081
+CMD ["python","lock_service_mock.py"]
