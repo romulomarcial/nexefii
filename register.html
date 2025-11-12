@@ -58,6 +58,12 @@
   </style>
 </head>
 <body>
+  <!-- Auth required banner (hidden by default) -->
+  <div id="authBanner" style="display:none;background:#fff3f2;border:1px solid #ffd7d2;padding:12px;border-radius:10px;margin:12px;max-width:580px;margin-left:auto;margin-right:auto;" role="alert">
+    <strong id="authBannerTitle" style="display:block;margin-bottom:6px;color:#b91c1c">Login requerido</strong>
+    <div id="authBannerMsg" style="color:#7f1d1d;margin-bottom:8px">Você precisa estar autenticado para acessar propriedades privadas.</div>
+    <div style="text-align:right"><button id="authBannerAction" class="btn primary" style="padding:8px 12px">Fazer login</button></div>
+  </div>
   <div class="wrap">
     <div class="card">
       <a href="login.html" class="back-link" id="backLink">
@@ -220,7 +226,13 @@
         successTitle: 'Solicitação Enviada!',
         successMessage: 'Sua solicitação de acesso foi enviada com sucesso. Um e-mail foi encaminhado para nossa equipe que irá analisar e autorizar seu acesso em breve.',
         backToLoginBtn: 'Voltar para Login',
-        errors: {
+  // auth / loading
+  loginRequiredTitle: 'Login requerido',
+  loginRequiredMsg: 'Você precisa estar autenticado para acessar propriedades privadas.',
+  loginAction: 'Fazer login',
+  propertyLoading: 'Carregando...',
+  noModules: 'Nenhum módulo disponível',
+    errors: {
           required: 'Este campo é obrigatório',
           invalidEmail: 'Email inválido',
           passwordTooShort: 'A senha deve ter no mínimo 8 caracteres',
@@ -262,7 +274,13 @@
         successTitle: 'Request Sent!',
         successMessage: 'Your access request has been sent successfully. An email has been forwarded to our team who will review and authorize your access soon.',
         backToLoginBtn: 'Back to Login',
-        errors: {
+  // auth / loading
+  loginRequiredTitle: 'Login required',
+  loginRequiredMsg: 'You need to be authenticated to access private properties.',
+  loginAction: 'Sign in',
+  propertyLoading: 'Loading...',
+  noModules: 'No modules available',
+    errors: {
           required: 'This field is required',
           invalidEmail: 'Invalid email',
           passwordTooShort: 'Password must be at least 8 characters',
@@ -304,7 +322,13 @@
         successTitle: '¡Solicitud Enviada!',
         successMessage: 'Su solicitud de acceso ha sido enviada con éxito. Se ha enviado un correo electrónico a nuestro equipo que revisará y autorizará su acceso pronto.',
         backToLoginBtn: 'Volver al Inicio de Sesión',
-        errors: {
+  // auth / loading
+  loginRequiredTitle: 'Login requerido',
+  loginRequiredMsg: 'Necesita autenticarse para acceder a propiedades privadas.',
+  loginAction: 'Iniciar sesión',
+  propertyLoading: 'Cargando...',
+  noModules: 'No hay módulos disponibles',
+    errors: {
           required: 'Este campo es obligatorio',
           invalidEmail: 'Correo electrónico inválido',
           passwordTooShort: 'La contraseña debe tener al menos 8 caracteres',
@@ -347,7 +371,7 @@
       const sel = document.getElementById('lang');
       const selVal = (sel && sel.value) ? sel.value : 'pt';
       const L = (I18N_REGISTER[selVal] || I18N_REGISTER.pt || DEFAULT_REGISTER_I18N.pt);
-      const MOD = (IluxAuth?.MODULE_NAMES && (IluxAuth.MODULE_NAMES[selVal] || IluxAuth.MODULE_NAMES.pt)) || IluxAuth?.MODULE_NAMES || {};
+  const MOD = (typeof MODULE_NAMES !== 'undefined' && (MODULE_NAMES[selVal] || MODULE_NAMES.pt)) || {};
       const HOTELS = (HOTELS_I18N?.[selVal] || HOTELS_I18N?.pt || DEFAULT_HOTELS.pt) || {};
 
       document.getElementById('backText').innerText = L.backToLogin;
@@ -384,30 +408,208 @@
     countrySelect.options[0].text = L.countrySelect || (DEFAULT_REGISTER_I18N[selVal] && DEFAULT_REGISTER_I18N[selVal].countrySelect) || DEFAULT_REGISTER_I18N.pt.countrySelect;
   }
 
-      // Render property options
-      const propSelect = document.getElementById('property');
-      if(propSelect){
-        const options = ['<option value="">' + (L.propertySelect || '-- Selecione a propriedade --') + '</option>'];
-        try{
-          Object.entries(HOTELS).forEach(([key, label]) => {
-            options.push(`<option value="${key}">${label}</option>`);
-          });
-        }catch(e){
-          // HOTELS might not be an object
-        }
-        propSelect.innerHTML = options.join('');
-      }
+      // Render property options (may come from NexefiiProps or remote API)
+      populatePropertySelect(selVal).catch(() => {
+        // swallow - populatePropertySelect will fallback to HOTELS if needed
+      });
 
-        // Render modules checkboxes
-        const modulesGrid = document.getElementById('modulesGrid');
-        modulesGrid.innerHTML = Object.values(IluxAuth.MODULES).map(module => `
+      // Render modules checkboxes (defensive: IluxAuth or MODULES may be undefined)
+      const modulesGrid = document.getElementById('modulesGrid');
+      try{
+  const rawModules = (typeof MODULES === 'object' && MODULES) ? MODULES : null;
+        let moduleKeys = [];
+        if(Array.isArray(rawModules)) moduleKeys = rawModules.slice();
+        else if(rawModules && typeof rawModules === 'object') moduleKeys = Object.values(rawModules);
+        // fallback static modules if none provided
+        if(!moduleKeys || moduleKeys.length === 0) moduleKeys = ['front_office','housekeeping','engineering','master_control'];
+        modulesGrid.innerHTML = moduleKeys.map(module => `
           <div class="module-item">
-            <input type="checkbox" id="mod_${module}" value="${module}">
-            <label for="mod_${module}">${MOD[module]}</label>
+            <input type="checkbox" name="modules" id="mod_${module}" value="${module}">
+            <label for="mod_${module}">${MOD[module] || module}</label>
           </div>
         `).join('');
+      }catch(e){
+        modulesGrid.innerHTML = '';
+      }
 
-      localStorage.setItem('ilux_lang', sel.value);
+      localStorage.setItem('ilux_lang', selVal);
+    }
+
+    // Populate property select with data from NexefiiProps (local store), or a /api/properties endpoint,
+    // falling back to HOTELS translation map. Returns a Promise.
+    // Configuration: API usage and auth
+    const CFG = (function(){
+      // Default: don't call API on localhost to avoid noisy 404 in dev
+      const defaultUse = !(location.hostname === 'localhost' || location.hostname === '127.0.0.1');
+      try{
+        const forced = localStorage.getItem('force_api_v2');
+        if(forced === '1') return { USE_API_V2: true };
+        if(forced === '0') return { USE_API_V2: false };
+      }catch(e){}
+      return { USE_API_V2: defaultUse };
+    })();
+
+    const AUTH_CFG = {
+      mode: 'bearer', // 'bearer' or 'x-api-key'
+      headerName: 'Authorization' // will be 'Authorization' for bearer, or 'X-API-KEY' for x-api-key
+    };
+
+    // Allow page-level override: set window.AUTH_CFG_OVERRIDE before this script runs to customize
+    try{
+      if(window.AUTH_CFG_OVERRIDE && typeof window.AUTH_CFG_OVERRIDE === 'object'){
+        Object.assign(AUTH_CFG, window.AUTH_CFG_OVERRIDE);
+      }
+    }catch(e){}
+
+    // Ensure headerName aligns with chosen mode if not explicitly provided
+    if(!AUTH_CFG.headerName){
+      AUTH_CFG.headerName = AUTH_CFG.mode === 'x-api-key' ? 'X-API-KEY' : 'Authorization';
+    }
+
+    // Resolve API absolute URL from localStorage.api_v2_origin (fallback = same origin)
+    (function(){
+      const impl = function(path) {
+        try {
+          const origin = (localStorage.getItem('api_v2_origin') || '').trim();
+          const base = origin ? origin.replace(/\/+$/,'') : '';
+          const p = String(path || '').replace(/^\/+/, '');
+          return base ? `${base}/${p}` : `/${p}`;
+        } catch (_){
+          const p = String(path || '').replace(/^\/+/, '');
+          return `/${p}`;
+        }
+      };
+      try{
+        // Prefer assigning the implementation to the name getApiUrl (overrides any previous)
+        getApiUrl = impl;
+      }catch(e){
+        // fallback to global
+        window.getApiUrl = impl;
+      }
+    })();
+
+    function getAuthToken(){
+      // centralize token lookup: localStorage keys then cookie
+      const keys = ['auth_token','ilux_token','token'];
+      for(const k of keys){
+        try{ const v = localStorage.getItem(k); if(v) return v; }catch(e){}
+      }
+      // cookie fallback (auth_token)
+      try{
+        const m = document.cookie.match(/(?:^|; )auth_token=([^;]+)/);
+        if(m) return decodeURIComponent(m[1]);
+      }catch(e){}
+      return null;
+    }
+
+    function setAuthHeader(headers, token){
+      if(!token) return headers;
+      if(AUTH_CFG.mode === 'x-api-key'){
+        headers[AUTH_CFG.headerName || 'X-API-KEY'] = token;
+      }else{
+        headers[AUTH_CFG.headerName || 'Authorization'] = 'Bearer ' + token;
+      }
+      return headers;
+    }
+
+    function showAuthBanner(){
+      try{
+        const lang = (localStorage.getItem('ilux_lang') || 'pt');
+        const L = (I18N_REGISTER && I18N_REGISTER[lang]) ? I18N_REGISTER[lang] : DEFAULT_REGISTER_I18N.pt;
+        document.getElementById('authBannerTitle').innerText = L.loginRequiredTitle || 'Login requerido';
+        document.getElementById('authBannerMsg').innerText = L.loginRequiredMsg || 'Login required';
+        const action = document.getElementById('authBannerAction');
+        action.innerText = L.loginAction || 'Login';
+        action.onclick = () => { window.location.href = 'login.html'; };
+        document.getElementById('authBanner').style.display = 'block';
+      }catch(e){}
+    }
+
+    function hideAuthBanner(){ try{ document.getElementById('authBanner').style.display = 'none'; }catch(e){} }
+
+    function pickLabel(p, lang){
+      if(!p) return '';
+      if(typeof p === 'string') return p;
+      if(p.name && typeof p.name === 'object'){
+        return p.name[lang] || p.name.pt || p.name.en || p.name.es || JSON.stringify(p.name);
+      }
+      if(p['name_' + lang]) return p['name_' + lang];
+      if(p.name) return p.name;
+      if(p.title) return p.title;
+      if(p.location && p.location.city) return p.location.city;
+      return p.key || p.id || '';
+    }
+
+    function normalizeProperties(json, lang){
+      const out = [];
+      try{
+        if(Array.isArray(json)){
+          json.forEach(p => { const key = p && (p.key || p.id || p.slug); if(key) out.push({key, label: pickLabel(p, lang)}); });
+        } else if(json && typeof json === 'object'){
+          Object.entries(json).forEach(([k,v]) => {
+            if(v && typeof v === 'object'){ out.push({ key: k, label: pickLabel(v, lang) }); }
+            else out.push({ key: k, label: (v || k) });
+          });
+        }
+      }catch(e){}
+      return out;
+    }
+
+    function fillSelectWithItems(sel, items, emptyLabel){
+      const opts = [`<option value="">${emptyLabel}</option>`];
+      items.forEach(i => { opts.push(`<option value="${i.key}">${i.label}</option>`); });
+      try{ sel.innerHTML = opts.join(''); sel.disabled = false; }catch(e){ }
+    }
+
+    async function populatePropertySelect(lang){
+      const propSelect = document.getElementById('property');
+      if(!propSelect) return;
+      const emptyLabel = (I18N_REGISTER && I18N_REGISTER[lang] && I18N_REGISTER[lang].propertySelect) || '-- Selecione a propriedade --';
+      const loadingLabel = (I18N_REGISTER && I18N_REGISTER[lang] && I18N_REGISTER[lang].propertyLoading) || 'Loading...';
+
+      // set loading state
+      try{ propSelect.innerHTML = `<option value="">${loadingLabel}</option>`; propSelect.disabled = true; }catch(e){}
+
+      // 1) If configured to try API v2, attempt it first
+      if(CFG.USE_API_V2){
+        try{
+          const token = getAuthToken();
+          let headers = { 'Accept': 'application/json' };
+          headers = setAuthHeader(headers, token) || headers;
+          const resp = await fetch(getApiUrl('/api/v2/properties'),{cache:'no-store', credentials:'include', headers});
+          if(resp && resp.status === 401){
+            // show auth banner then fallback
+            showAuthBanner();
+            // continue to fallback flow
+          } else if(resp && resp.ok){
+            const data = await resp.json();
+            const items = normalizeProperties(data, lang);
+            if(items.length){ fillSelectWithItems(propSelect, items, emptyLabel); return; }
+          }
+        }catch(e){ /* ignore */ }
+      }
+
+      // 2) NexefiiProps local store
+      try{
+        if(window.NexefiiProps && typeof window.NexefiiProps.listProperties === 'function'){
+          const list = window.NexefiiProps.listProperties();
+          const items = normalizeProperties(list, lang);
+          if(items.length){ fillSelectWithItems(propSelect, items, emptyLabel); return; }
+        }
+      }catch(e){}
+
+      // 3) HOTELS fallback
+      try{
+        const HOTELS = (HOTELS_I18N && HOTELS_I18N[lang]) ? HOTELS_I18N[lang] : (HOTELS_I18N && HOTELS_I18N.pt) ? HOTELS_I18N.pt : DEFAULT_HOTELS.pt;
+        const items = [];
+        if(HOTELS && typeof HOTELS === 'object'){
+          Object.entries(HOTELS).forEach(([key,label]) => items.push({key, label}));
+        }
+        fillSelectWithItems(propSelect, items, emptyLabel);
+      }catch(e){
+        // final fallback: empty select
+        try{ propSelect.innerHTML = `<option value="">${emptyLabel}</option>`; propSelect.disabled = false; }catch(e){}
+      }
     }
 
     function validateEmail(email) {
@@ -462,7 +664,9 @@
         showError('password', L.errors.required); 
         hasError = true; 
       } else {
-        const passwordValidation = IluxAuth.validatePassword(password);
+        const passwordValidation = (window.NexefiiAuth && typeof NexefiiAuth.validatePassword === 'function')
+          ? NexefiiAuth.validatePassword(password)
+          : (typeof validatePassword === 'function' ? validatePassword(password) : { valid: true });
         if(!passwordValidation.valid) {
           const errorKey = passwordValidation.error === 'password_too_short' ? 'passwordTooShort' : 'passwordWeak';
           showError('password', L.errors[errorKey]);
@@ -480,27 +684,33 @@
 
       if(hasError) return;
 
-        // Collect selected modules
-        const selectedModules = [];
-        Object.values(IluxAuth.MODULES).forEach(module => {
-          const checkbox = document.getElementById(`mod_${module}`);
-          if(checkbox && checkbox.checked) {
-            selectedModules.push(module);
-          }
-        });
+        // Collect selected modules by name attribute (works with fallback and dynamic modules)
+        const selectedModules = Array.from(document.querySelectorAll('input[name="modules"]:checked')).map(cb => cb.value);
 
       // Register user
-      const result = IluxAuth.registerUser({
-        fullName,
-        email,
-        phone,
-        country,
-        propertyKey,
-        position,
-        username,
-          password,
-          modules: selectedModules
-      });
+      const result = (window.NexefiiAuth && typeof NexefiiAuth.registerUser === 'function')
+        ? NexefiiAuth.registerUser({
+            fullName,
+            email,
+            phone,
+            country,
+            propertyKey,
+            position,
+            username,
+            password,
+            modules: selectedModules
+          })
+        : registerUser({
+            fullName,
+            email,
+            phone,
+            country,
+            propertyKey,
+            position,
+            username,
+            password,
+            modules: selectedModules
+          });
 
       if(!result.success) {
         if(result.error === 'username_exists') {

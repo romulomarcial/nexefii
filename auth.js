@@ -42,7 +42,7 @@ try {
 const AUTH_STORAGE_KEY = 'nexefii_users';
 const AUTH_SESSION_KEY = 'nexefii_session';
 
-const IluxAuth = {
+const NexefiiAuth = {
   // Validate user credentials
   async login(email, password) {
     // Demo users
@@ -118,7 +118,7 @@ const IluxAuth = {
       localStorage.setItem('nexefii_session', JSON.stringify(session));
       localStorage.setItem('nexefii_session', JSON.stringify(session));
     } catch (e) {
-      console.warn('IluxAuth.setSession failed', e);
+  console.warn('NexefiiAuth.setSession failed', e);
     }
   }
 }; // End IluxAuth object
@@ -576,7 +576,7 @@ if (typeof window !== 'undefined') {
 
 // Export functions for use in other scripts
 if (typeof window !== 'undefined') {
-  window.IluxAuth = {
+  window.NexefiiAuth = {
     registerUser,
     authenticateUser,
     isAuthenticated,
@@ -598,6 +598,8 @@ if (typeof window !== 'undefined') {
     MODULES,
     MODULE_NAMES
   };
+  // Backwards compatibility: provide legacy global until all callers are migrated
+  try { window.IluxAuth = window.NexefiiAuth; } catch(e) {}
 }
 
 
