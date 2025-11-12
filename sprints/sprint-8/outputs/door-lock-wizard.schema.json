@@ -1,0 +1,40 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "DoorLockWizard",
+  "type": "object",
+  "properties": {
+    "propertyId": { "type": "string" },
+    "lockId": { "type": "string" },
+    "lockName": { "type": "string" },
+    "timezone": { "type": "string" },
+    "network": {
+      "type": "object",
+      "properties": {
+        "ssid": { "type": "string" },
+        "psk": { "type": "string" },
+        "useDhcp": { "type": "boolean", "default": true },
+        "staticIp": { "type": "string" }
+      },
+      "required": ["ssid"]
+    },
+    "accessProfiles": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "id": { "type": "string" },
+          "name": { "type": "string" },
+          "start": { "type": "string", "format": "time" },
+          "end": { "type": "string", "format": "time" },
+          "recurrence": { "type": "string", "enum": ["daily","weekly","once"] }
+        },
+        "required": ["id","name"]
+      }
+    },
+    "users": {
+      "type": "array",
+      "items": { "type": "object", "properties": {"username":{"type":"string"},"profileId":{"type":"string"}} }
+    }
+  },
+  "required": ["propertyId","lockId","lockName"]
+}

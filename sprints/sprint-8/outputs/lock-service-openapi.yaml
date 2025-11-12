@@ -1,0 +1,90 @@
+openapi: 3.0.3
+info:
+  title: Nexefii Lock Service
+  version: 0.1.0
+  description: API for managing door locks (provisioning, status, key issuance). OAuth2 + mTLS security.
+
+servers:
+  - url: https://api.nexefii.example
+
+components:
+  securitySchemes:
+    OAuth2:
+      type: oauth2
+      flows:
+        clientCredentials:
+          tokenUrl: https://auth.nexefii.example/oauth/token
+          scopes: {}
+    MTLS:
+      type: mutualTLS
+
+  schemas:
+    Lock:
+      type: object
+      properties:
+        id:
+          type: string
+        name:
+          type: string
+        status:
+          type: string
+          enum: [online, offline, provisioned]
+        lastSeen:
+          type: string
+          format: date-time
+
+security:
+  - OAuth2: []
+
+paths:
+  /api/{tenant}/lock/provision:
+    post:
+      summary: Provision a new lock
+      parameters:
+        - name: tenant
+          in: path
+          required: true
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                lockId: { type: string }
+                lockName: { type: string }
+                network: { type: object }
+      responses:
+        '201':
+          description: Provisioned
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Lock'
+      security:
+        - OAuth2: []
+        - MTLS: []
+
+  /api/{tenant}/lock/{lockId}/status:
+    get:
+      summary: Lock status
+      parameters:
+        - name: tenant
+          in: path
+          required: true
+          schema: { type: string }
+        - name: lockId
+          in: path
+          required: true
+          schema: { type: string }
+      responses:
+        '200':
+          description: Lock status
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Lock'
+      security:
+        - OAuth2: []

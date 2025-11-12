@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="700" viewBox="0 0 1200 700">
+  <style>
+    .box { fill:#ffffff; stroke:#2f6bff; stroke-width:2px; rx:10; }
+    .title { font: bold 14px sans-serif; fill:#0f172a }
+    .text { font: 12px/1.2 sans-serif; fill:#0f172a }
+    .small { font: 11px sans-serif; fill:#64748b }
+    .arrow { stroke:#94a3b8; stroke-width:2; fill:none; marker-end:url(#arrowhead); }
+  </style>
+  <defs>
+    <marker id="arrowhead" markerWidth="10" markerHeight="7" refX="10" refY="3.5" orient="auto">
+      <polygon points="0 0, 10 3.5, 0 7" fill="#94a3b8" />
+    </marker>
+  </defs>
+
+  <!-- API Gateway -->
+  <rect x="40" y="40" width="320" height="80" class="box"/>
+  <text x="60" y="65" class="title">API Gateway</text>
+  <text x="60" y="85" class="small">/api/{tenant}/{module}/{endpoint}</text>
+
+  <!-- Core Layer -->
+  <rect x="40" y="140" width="520" height="220" class="box"/>
+  <text x="60" y="165" class="title">Core Layer</text>
+  <text x="60" y="188" class="text">• NexefiiAuth (OAuth2 + JWT)</text>
+  <text x="60" y="206" class="text">• Tenant isolation (schema-per-tenant)</text>
+  <text x="60" y="224" class="text">• Module registry & licensing</text>
+  <text x="60" y="242" class="text">• Audit / telemetry / analytics core</text>
+  <text x="60" y="260" class="text">• Event bus (HTTP/webhooks / optional message broker)</text>
+
+  <!-- Master Admin -->
+  <rect x="620" y="40" width="520" height="120" class="box"/>
+  <text x="640" y="65" class="title">Master Administration Portal</text>
+  <text x="640" y="88" class="text">Create tenants, assign modules, demo control, metrics</text>
+
+  <!-- Tenant Environments / Edge -->
+  <rect x="620" y="200" width="520" height="160" class="box"/>
+  <text x="640" y="225" class="title">Tenant Environments (per-property)</text>
+  <text x="640" y="248" class="text">• PMS / CMS / BMS / EMS modules (plug-in)</text>
+  <text x="640" y="266" class="text">• Local Edge Gateway (optional, Docker)</text>
+  <text x="640" y="284" class="text">• Data store: isolated DB/schema per tenant</text>
+
+  <!-- Demo / Fake data -->
+  <rect x="40" y="400" width="520" height="120" class="box"/>
+  <text x="60" y="425" class="title">Demo Property Service</text>
+  <text x="60" y="448" class="text">Spawn demo tenants, fake data engine, KPI generator</text>
+
+  <!-- arrows -->
+  <path d="M360 80 L620 80" class="arrow"/>
+  <path d="M300 200 L620 240" class="arrow"/>
+  <path d="M360 460 L620 260" class="arrow"/>
+  <path d="M840 360 L840 400" class="arrow"/>
+
+  <text x="40" y="550" class="small">Generated: Nexefii · Sprint 8 core architecture (v0.0)</text>
+</svg>

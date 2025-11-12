@@ -1,0 +1,37 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Door Lock Wizard - Nexefii (Wireframe)</title>
+  <style>
+    body{font-family:Inter,Arial,sans-serif;padding:20px;background:#f6f7fb}
+    .card{background:#fff;border-radius:12px;padding:18px;max-width:900px;margin:0 auto}
+    .row{display:flex;gap:12px}
+    .col{flex:1}
+    label{display:block;font-weight:600;margin-bottom:6px}
+    input,select{width:100%;padding:8px;border-radius:8px;border:1px solid #e7eaf0}
+  </style>
+</head>
+<body>
+  <div class="card">
+    <h2>Door Lock Setup Wizard (PMS)</h2>
+    <p>Follow the steps to onboard a door lock to a property.</p>
+
+    <h3>1. Select Property</h3>
+    <div class="row"><div class="col"><label>Property</label><select><option>Demo Hotel São Paulo</option></select></div><div class="col"><label>Timezone</label><select><option>America/Sao_Paulo</option></select></div></div>
+
+    <h3>2. Network & Device</h3>
+    <div class="row"><div class="col"><label>Lock ID</label><input placeholder="LOCK-12345"></div><div class="col"><label>Lock Name</label><input placeholder="Door - Main Entrance"></div></div>
+    <div class="row"><div class="col"><label>Wi‑Fi SSID</label><input></div><div class="col"><label>Password</label><input type="password"></div></div>
+
+    <h3>3. Access Profiles</h3>
+    <div class="row"><div class="col"><label>Profile Name</label><input placeholder="Housekeeping"></div><div class="col"><label>Recurrence</label><select><option>daily</option><option>weekly</option></select></div></div>
+
+    <h3>4. Users</h3>
+    <div><label>Username</label><input placeholder="j.silva"></div>
+
+    <p style="margin-top:16px"><button style="padding:10px 14px;border-radius:8px;background:#2f6bff;color:#fff;border:none">Finish & Provision</button></p>
+  </div>
+</body>
+</html>
