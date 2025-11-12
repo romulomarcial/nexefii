@@ -341,11 +341,14 @@
     }
 
     function applyRegisterLang(){
-      if(!I18N_REGISTER) return;
+      // Ensure we have a safe i18n/hotels object to use
+      if(!I18N_REGISTER) I18N_REGISTER = DEFAULT_REGISTER_I18N;
+      if(!HOTELS_I18N) HOTELS_I18N = DEFAULT_HOTELS;
       const sel = document.getElementById('lang');
-      const L = I18N_REGISTER[sel.value] || I18N_REGISTER.pt;
-      const MOD = IluxAuth.MODULE_NAMES[sel.value] || IluxAuth.MODULE_NAMES.pt;
-      const HOTELS = HOTELS_I18N?.[sel.value] || HOTELS_I18N?.pt || DEFAULT_HOTELS.pt;
+      const selVal = (sel && sel.value) ? sel.value : 'pt';
+      const L = (I18N_REGISTER[selVal] || I18N_REGISTER.pt || DEFAULT_REGISTER_I18N.pt);
+      const MOD = (IluxAuth?.MODULE_NAMES && (IluxAuth.MODULE_NAMES[selVal] || IluxAuth.MODULE_NAMES.pt)) || IluxAuth?.MODULE_NAMES || {};
+      const HOTELS = (HOTELS_I18N?.[selVal] || HOTELS_I18N?.pt || DEFAULT_HOTELS.pt) || {};
 
       document.getElementById('backText').innerText = L.backToLogin;
       document.getElementById('subtitle').innerText = L.subtitle;
@@ -377,15 +380,23 @@
       document.getElementById('backToLoginBtn').innerText = L.backToLoginBtn;
       
   const countrySelect = document.getElementById('country');
-  countrySelect.options[0].text = L.countrySelect || DEFAULT_REGISTER_I18N[sel.value].countrySelect;
+  if(countrySelect && countrySelect.options && countrySelect.options[0]) {
+    countrySelect.options[0].text = L.countrySelect || (DEFAULT_REGISTER_I18N[selVal] && DEFAULT_REGISTER_I18N[selVal].countrySelect) || DEFAULT_REGISTER_I18N.pt.countrySelect;
+  }
 
       // Render property options
       const propSelect = document.getElementById('property');
-      const options = ['<option value="">' + (L.propertySelect || '-- Selecione a propriedade --') + '</option>'];
-      Object.entries(HOTELS).forEach(([key, label]) => {
-        options.push(`<option value="${key}">${label}</option>`);
-      });
-      propSelect.innerHTML = options.join('');
+      if(propSelect){
+        const options = ['<option value="">' + (L.propertySelect || '-- Selecione a propriedade --') + '</option>'];
+        try{
+          Object.entries(HOTELS).forEach(([key, label]) => {
+            options.push(`<option value="${key}">${label}</option>`);
+          });
+        }catch(e){
+          // HOTELS might not be an object
+        }
+        propSelect.innerHTML = options.join('');
+      }
 
         // Render modules checkboxes
         const modulesGrid = document.getElementById('modulesGrid');
