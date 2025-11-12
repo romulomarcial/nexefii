@@ -1,31 +1,35 @@
 {
-  "startedAt": "2025-11-11T18:37:22.631Z",
-  "baseUrl": "http://127.0.0.1:8010 ",
+  "startedAt": "2025-11-11T19:44:25.185Z",
+  "baseUrl": "http://127.0.0.1:8004",
   "pages": [
     {
-      "url": "http://127.0.0.1:8010/",
-      "startedAt": "2025-11-11T18:37:25.609Z",
-      "status": null,
+      "url": "http://127.0.0.1:8004/",
+      "startedAt": "2025-11-11T19:44:28.989Z",
+      "status": 200,
       "metrics": {
         "console": {
           "error": 0,
           "warn": 0,
-          "log": 0
+          "log": 1
         },
         "pageErrors": 0,
         "http4xx5xx": 0
       },
-      "console": [],
+      "console": [
+        {
+          "type": "info",
+          "text": "âœ… Demo user created - Username: demo | Password: demo123 | Properties: SÃ£o Paulo, Miami"
+        }
+      ],
       "pageErrors": [],
       "httpErrors": [],
       "ok": true,
-      "gotoError": "Error: net::ERR_CONNECTION_REFUSED at http://127.0.0.1:8010/",
-      "finishedAt": "2025-11-11T18:37:28.476Z"
+      "finishedAt": "2025-11-11T19:44:30.789Z"
     },
     {
-      "url": "http://127.0.0.1:8010/index.html",
-      "startedAt": "2025-11-11T18:37:28.528Z",
-      "status": null,
+      "url": "http://127.0.0.1:8004/index.html",
+      "startedAt": "2025-11-11T19:44:30.859Z",
+      "status": 200,
       "metrics": {
         "console": {
           "error": 0,
@@ -39,33 +43,49 @@
       "pageErrors": [],
       "httpErrors": [],
       "ok": true,
-      "gotoError": "Error: net::ERR_CONNECTION_REFUSED at http://127.0.0.1:8010/index.html",
-      "finishedAt": "2025-11-11T18:37:31.392Z"
+      "finishedAt": "2025-11-11T19:44:32.661Z"
     },
     {
-      "url": "http://127.0.0.1:8010/master-control.html",
-      "startedAt": "2025-11-11T18:37:31.452Z",
+      "url": "http://127.0.0.1:8004/master-control.html",
+      "startedAt": "2025-11-11T19:44:32.737Z",
       "status": null,
       "metrics": {
         "console": {
           "error": 0,
           "warn": 0,
-          "log": 0
+          "log": 4
         },
         "pageErrors": 0,
         "http4xx5xx": 0
       },
-      "console": [],
+      "console": [
+        {
+          "type": "log",
+          "text": "[DemoData] ðŸŽ­ Demo Data Generator carregado"
+        },
+        {
+          "type": "log",
+          "text": "🚀 Iniciando Master Control System..."
+        },
+        {
+          "type": "log",
+          "text": "📦 window.IluxProps disponível? true"
+        },
+        {
+          "type": "log",
+          "text": "✅ IluxProps.listProperties() retornou 2 propriedades: JSHandle@array"
+        }
+      ],
       "pageErrors": [],
       "httpErrors": [],
       "ok": true,
-      "gotoError": "Error: net::ERR_CONNECTION_REFUSED at http://127.0.0.1:8010/master-control.html",
-      "finishedAt": "2025-11-11T18:37:34.295Z"
+      "gotoError": "TimeoutError: Navigation timeout of 120000 ms exceeded",
+      "finishedAt": "2025-11-11T19:46:33.560Z"
     },
     {
-      "url": "http://127.0.0.1:8010/alerts-control.html",
-      "startedAt": "2025-11-11T18:37:34.351Z",
-      "status": null,
+      "url": "http://127.0.0.1:8004/alerts-control.html",
+      "startedAt": "2025-11-11T19:46:33.636Z",
+      "status": 200,
       "metrics": {
         "console": {
           "error": 0,
@@ -79,33 +99,88 @@
       "pageErrors": [],
       "httpErrors": [],
       "ok": true,
-      "gotoError": "Error: net::ERR_CONNECTION_REFUSED at http://127.0.0.1:8010/alerts-control.html",
-      "finishedAt": "2025-11-11T18:37:37.214Z"
+      "finishedAt": "2025-11-11T19:46:35.429Z"
     },
     {
-      "url": "http://127.0.0.1:8010/housekeeping-control.html",
-      "startedAt": "2025-11-11T18:37:37.299Z",
-      "status": null,
+      "url": "http://127.0.0.1:8004/housekeeping-control.html",
+      "startedAt": "2025-11-11T19:46:35.504Z",
+      "status": 200,
       "metrics": {
         "console": {
           "error": 0,
           "warn": 0,
-          "log": 0
+          "log": 14
         },
         "pageErrors": 0,
         "http4xx5xx": 0
       },
-      "console": [],
+      "console": [
+        {
+          "type": "log",
+          "text": "[HK] DOMContentLoaded event fired"
+        },
+        {
+          "type": "log",
+          "text": "[HK] hkInitI18N called"
+        },
+        {
+          "type": "log",
+          "text": "[HK] Language determined: pt from storage: pt from URL: "
+        },
+        {
+          "type": "log",
+          "text": "[HK] Set langSelect to: pt"
+        },
+        {
+          "type": "log",
+          "text": "[HK] loadAppI18N function is available, calling it..."
+        },
+        {
+          "type": "log",
+          "text": "[HK] loadAppI18N completed successfully"
+        },
+        {
+          "type": "log",
+          "text": "[HK] Got S from cache, keys: 307"
+        },
+        {
+          "type": "log",
+          "text": "[HK] Using cached S pack"
+        },
+        {
+          "type": "log",
+          "text": "[HK] hkApplyTexts called with lang: pt S keys: 307"
+        },
+        {
+          "type": "log",
+          "text": "[HK] Set hkTitle to: Room Information - GOVERNANÇA"
+        },
+        {
+          "type": "log",
+          "text": "[HK] hkInitI18N completed"
+        },
+        {
+          "type": "log",
+          "text": "[HK] After hkInitI18N"
+        },
+        {
+          "type": "log",
+          "text": "[HK] After loadHKSuites"
+        },
+        {
+          "type": "log",
+          "text": "[HK] DOMContentLoaded completed"
+        }
+      ],
       "pageErrors": [],
       "httpErrors": [],
       "ok": true,
-      "gotoError": "Error: net::ERR_CONNECTION_REFUSED at http://127.0.0.1:8010/housekeeping-control.html",
-      "finishedAt": "2025-11-11T18:37:40.163Z"
+      "finishedAt": "2025-11-11T19:46:37.302Z"
     },
     {
-      "url": "http://127.0.0.1:8010/engineering-list.html",
-      "startedAt": "2025-11-11T18:37:40.220Z",
-      "status": null,
+      "url": "http://127.0.0.1:8004/engineering-list.html",
+      "startedAt": "2025-11-11T19:46:37.380Z",
+      "status": 200,
       "metrics": {
         "console": {
           "error": 0,
@@ -119,8 +194,7 @@
       "pageErrors": [],
       "httpErrors": [],
       "ok": true,
-      "gotoError": "Error: net::ERR_CONNECTION_REFUSED at http://127.0.0.1:8010/engineering-list.html",
-      "finishedAt": "2025-11-11T18:37:43.050Z"
+      "finishedAt": "2025-11-11T19:46:39.169Z"
     }
   ],
   "summary": {
@@ -129,5 +203,5 @@
     "consoleErrors": 0,
     "httpErrors": 0
   },
-  "finishedAt": "2025-11-11T18:37:43.363Z"
+  "finishedAt": "2025-11-11T19:46:39.480Z"
 }

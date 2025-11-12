@@ -15,10 +15,10 @@ Write-Host "Working directory: $ScriptDir`n" -ForegroundColor Gray
 # Kill existing processes on port
 Write-Host "Checking port $Port..." -ForegroundColor Yellow
 try {
-  $pid = (Get-NetTCPConnection -State Listen -LocalPort $Port -ErrorAction SilentlyContinue | Select-Object -First 1 -ExpandProperty OwningProcess)
-  if ($pid) {
-    Write-Host "Killing process on port $Port (PID $pid)" -ForegroundColor DarkYellow
-    Stop-Process -Id $pid -Force -ErrorAction SilentlyContinue
+  $existingPid = (Get-NetTCPConnection -State Listen -LocalPort $Port -ErrorAction SilentlyContinue | Select-Object -First 1 -ExpandProperty OwningProcess)
+  if ($existingPid) {
+    Write-Host "Killing process on port $Port (PID $existingPid)" -ForegroundColor DarkYellow
+    Stop-Process -Id $existingPid -Force -ErrorAction SilentlyContinue
     Start-Sleep -Milliseconds 500
   }
 } catch { }

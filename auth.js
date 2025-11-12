@@ -68,7 +68,7 @@ const IluxAuth = {
 
     const user = users.find(u => u.email === email && u.password === password);
     if (!user) {
-      throw new Error('Email ou senha invÃ¡lidos');
+      throw new Error('Email ou senha inválidos');
     }
 
 
@@ -145,11 +145,11 @@ const MODULES = {
 const MODULE_NAMES = {
   pt: {
     engineering: 'Engenharia',
-    housekeeping: 'GovernanÃ§a',
+  housekeeping: 'Governança',
     alerts: 'Alertas',
     commercial: 'Comercial',
     marketing: 'Marketing',
-    reports: 'RelatÃ³rios',
+  reports: 'Relatórios',
     management: 'Gerencial'
   },
   en: {
@@ -162,7 +162,7 @@ const MODULE_NAMES = {
     management: 'Management'
   },
   es: {
-    engineering: 'IngenierÃ­a',
+  engineering: 'Ingeniería',
     housekeeping: 'Gobernanza',
     alerts: 'Alertas',
     commercial: 'Comercial',
@@ -218,7 +218,7 @@ function initializeAuth() {
       approvedAt: new Date().toISOString()
     });
     saveUsers(users);
-    console.info('âœ… Demo user created - Username: demo | Password: demo123 | Properties: SÃ£o Paulo, Miami');
+  console.info('✓ Demo user created - Username: demo | Password: demo123 | Properties: São Paulo, Miami');
   }
 }
 

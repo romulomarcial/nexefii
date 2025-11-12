@@ -24,8 +24,9 @@
     .card{width:100%;max-width:520px;background:var(--card);border:1px solid var(--line);
       border-radius:var(--radius);box-shadow:var(--shadow);padding:28px 28px 24px}
   .brand{display:flex;align-items:center;gap:10px;margin-bottom:18px}
-  .brand img{height:40px}
-  @media(min-width:1200px){ .brand img{height:48px} }
+  .brand{justify-content:center;}
+  .brand img{height:72px;max-width:220px;display:block;margin:0 auto;}
+  @media(min-width:1200px){ .brand img{height:88px;max-width:260px;} }
     .title{font-weight:700;font-size:15px;letter-spacing:.2px}
     label{display:block;font-size:12px;color:var(--muted);margin:12px 0 6px}
     select,input{width:100%;padding:12px 14px;border:1px solid var(--line);border-radius:12px;
@@ -44,7 +45,7 @@
   <div class="wrap">
     <div class="card">
       <div class="brand">
-        <img src="assets/Nexefii_logo_3d-official.png" alt="NEXEFII" style="height:48px">
+  <img src="assets/Nexefii_logo_3d-official.png" alt="NEXEFII" style="height:72px;max-width:220px;display:block;margin:0 auto;">
       </div>
 
       <label id="labLang">Idioma</label>
