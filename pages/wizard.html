@@ -1,65 +1,9 @@
-﻿<div class="wizard-page">
-  <style>
-    .wizard-page {
-      max-width: 900px;
-      margin: 0 auto;
-    }
-
-    @media (max-width: 768px) {
-      .wizard-page {
-        max-width: 100%;
-        padding: 0 1rem;
-      }
-    }
-
-    @media (max-width: 480px) {
-      .wizard-page {
-        padding: 0 0.5rem;
-      }
-    }
-
-    .wizard-header {
-      text-align: center;
-      margin-bottom: 2rem;
-    }
-
-    @media (max-width: 768px) {
-      .wizard-header {
-        margin-bottom: 1.5rem;
-      }
-    }
-
-    .wizard-title {
-      font-size: 2rem;
-      font-weight: 700;
-      color: #1A1A1A;
-      margin-bottom: 0.5rem;
-    }
-
-    @media (max-width: 768px) {
-      .wizard-title {
-        font-size: 1.5rem;
-      }
-    }
-
-    @media (max-width: 480px) {
-      .wizard-title {
-        font-size: 1.25rem;
-      }
-    }
-
-    .wizard-subtitle {
-      color: #666;
-      font-size: 1rem;
-    }
-
-    @media (max-width: 480px) {
-      .wizard-subtitle {
-        font-size: 0.875rem;
-      }
-    }
-
-    /* Progress Bar */
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+    <style>
     .progress-container {
       margin-bottom: 3rem;
     }
@@ -434,19 +378,24 @@
 
     .gallery-overlay {
       position: absolute;
-      top: 0;
-      right: 0;
+      /* place the badge slightly inset from the corner so it doesn't clip */
+      top: 8px;
+      right: 8px;
       background: #E42121;
       color: white;
-      padding: 0.25rem 0.5rem;
-      border-radius: 0 0 0 8px;
-      font-weight: bold;
+      padding: 0.2rem 0.5rem;
+      border-radius: 6px;
+      font-weight: 700;
+      font-size: 0.9rem;
+      line-height: 1;
+      z-index: 10;
       opacity: 0;
-      transition: opacity 0.2s;
+      transition: opacity 0.18s, transform 0.18s;
     }
 
     .gallery-image.selected .gallery-overlay {
       opacity: 1;
+      transform: scale(1);
     }
 
     .upload-area {
@@ -841,11 +790,13 @@
       }
     }
   </style>
+</head>
+<body>
 
   <!-- Wizard Header -->
   <div class="wizard-header">
-    <h1 class="wizard-title" data-i18n="wizard.title">ðŸª„ Assistente de CriaÃ§Ã£o de Propriedade</h1>
-    <p class="wizard-subtitle" data-i18n="wizard.subtitle">Configure sua nova propriedade em 6 passos simples</p>
+    <h1 class="wizard-title" data-i18n="wizard.title"></h1>
+    <p class="wizard-subtitle" data-i18n="wizard.subtitle"></p>
   </div>
 
   <!-- Progress Bar -->
@@ -853,7 +804,7 @@
     <div class="progress-steps" id="progress-steps">
       <div class="progress-step">
         <div class="step-circle active">1</div>
-        <div class="step-label active">BÃ¡sico</div>
+        <div class="step-label active" data-i18n="wizard.labels.basic"></div>
       </div>
       <div class="progress-step">
         <div class="step-circle">2</div>
@@ -861,7 +812,7 @@
       </div>
       <div class="progress-step">
         <div class="step-circle">3</div>
-  <div class="step-label" data-i18n="wizard.labels.modules">MÃ³dulos</div>
+  <div class="step-label" data-i18n="wizard.labels.modules">Módulos</div>
       </div>
       <div class="progress-step">
         <div class="step-circle">4</div>
@@ -877,7 +828,7 @@
       </div>
       <div class="progress-step">
         <div class="step-circle">7</div>
-  <div class="step-label" data-i18n="wizard.labels.review">RevisÃ£o</div>
+  <div class="step-label" data-i18n="wizard.labels.review">Revisão</div>
       </div>
     </div>
   </div>
@@ -886,13 +837,13 @@
   <div class="wizard-content">
     <!-- Step 1: Basic Info -->
     <div class="step-content active" id="step-1">
-  <h2 class="step-title" data-i18n="wizard.step1.title">InformaÃ§Ãµes BÃ¡sicas</h2>
+  <h2 class="step-title" data-i18n="wizard.step1.title">Informações Básicas</h2>
       
       <div class="form-group">
   <label class="form-label required" data-i18n="wizard.step1.name">Nome da Propriedade</label>
-  <input type="text" class="form-input" id="name" data-i18n="wizard.step1.namePlaceholder" placeholder="Ex: Hotel ParaÃ­so">
+  <input type="text" class="form-input" id="name" data-i18n="wizard.step1.namePlaceholder" placeholder="Ex: Hotel Paraíso">
         <div class="form-error" id="error-name"></div>
-  <div class="form-hint" data-i18n="wizard.step1.nameHint">O nome que aparecerÃ¡ no sistema</div>
+  <div class="form-hint" data-i18n="wizard.step1.nameHint">O nome que aparecerá no sistema</div>
       </div>
 
       <div class="form-group">
@@ -903,30 +854,30 @@
       </div>
 
       <div class="form-group">
-  <label class="form-label" data-i18n="wizard.step1.description">DescriÃ§Ã£o</label>
-  <textarea class="form-textarea" id="description" rows="3" data-i18n="wizard.step1.descriptionPlaceholder" placeholder="DescriÃ§Ã£o breve da propriedade"></textarea>
+  <label class="form-label" data-i18n="wizard.step1.description">Descrição</label>
+  <textarea class="form-textarea" id="description" rows="3" data-i18n="wizard.step1.descriptionPlaceholder" placeholder="Descrição breve da propriedade"></textarea>
       </div>
 
       <div class="form-group">
-  <label class="form-label required" data-i18n="wizard.step1.iconLabel">Ãcone</label>
+  <label class="form-label required" data-i18n="wizard.step1.iconLabel">Ícone</label>
         <div class="icon-selector">
           <!-- Icon list rendered once; duplicates removed -->
-          <div class="icon-option" data-icon="ðŸ¨">ðŸ¨</div>
-          <div class="icon-option" data-icon="ðŸ©">ðŸ©</div>
-          <div class="icon-option" data-icon="ðŸ¢">ðŸ¢</div>
-          <div class="icon-option" data-icon="ðŸ›ï¸">ðŸ›ï¸</div>
-          <div class="icon-option" data-icon="ðŸï¸">ðŸï¸</div>
-          <div class="icon-option" data-icon="ðŸ°">ðŸ°</div>
-          <div class="icon-option" data-icon="ðŸ”ï¸">ðŸ”ï¸</div>
-          <div class="icon-option" data-icon="ðŸŒ´">ðŸŒ´</div>
-          <div class="icon-option" data-icon="â›±ï¸">â›±ï¸</div>
-          <div class="icon-option" data-icon="ðŸ–ï¸">ðŸ–ï¸</div>
-          <div class="icon-option" data-icon="ðŸŒŠ">ðŸŒŠ</div>
-          <div class="icon-option" data-icon="ðŸŒ…">ðŸŒ…</div>
-          <div class="icon-option" data-icon="ðŸŽ¯">ðŸŽ¯</div>
-          <div class="icon-option" data-icon="â­">â­</div>
-          <div class="icon-option" data-icon="ðŸ’Ž">ðŸ’Ž</div>
-          <div class="icon-option" data-icon="ðŸŽª">ðŸŽª</div>
+          <div class="icon-option" data-icon="🏨">🏨</div>
+          <div class="icon-option" data-icon="🏩">🏩</div>
+          <div class="icon-option" data-icon="🏢">🏢</div>
+          <div class="icon-option" data-icon="🛎️">🛎️</div>
+          <div class="icon-option" data-icon="🛏️">🛏️</div>
+          <div class="icon-option" data-icon="🏝️">🏝️</div>
+          <div class="icon-option" data-icon="🏖️">🏖️</div>
+          <div class="icon-option" data-icon="🏡">🏡</div>
+          <div class="icon-option" data-icon="🏠">🏠</div>
+          <div class="icon-option" data-icon="🏕️">🏕️</div>
+          <div class="icon-option" data-icon="🏯">🏯</div>
+          <div class="icon-option" data-icon="🖼️">🖼️</div>
+          <div class="icon-option" data-icon="🌐">🌐</div>
+          <div class="icon-option" data-icon="🧭">🧭</div>
+          <div class="icon-option" data-icon="🗺️">🗺️</div>
+          <div class="icon-option" data-icon="📶">📶</div>
         </div>
         <div class="form-error" id="error-icon"></div>
       </div>
@@ -945,39 +896,39 @@
             <div class="image-gallery">
               <div class="gallery-image selected" data-image="/assets/images/default-hotel-1.jpg">
                 <img loading="lazy" decoding="async" src="/assets/images/default-hotel-1.jpg" alt="Hotel Moderno" onerror="this.onerror=null;this.src='/assets/Nexefii_logo_3d-official.png'">
-                <div class="gallery-overlay">âœ“</div>
+                <div class="gallery-overlay">✓</div>
               </div>
               <div class="gallery-image" data-image="/assets/images/default-hotel-2.jpg">
                 <img loading="lazy" decoding="async" src="/assets/images/default-hotel-2.jpg" alt="Resort Praia" onerror="this.onerror=null;this.src='/assets/Nexefii_logo_3d-official.png'">
-                <div class="gallery-overlay">âœ“</div>
+                <div class="gallery-overlay">✓</div>
               </div>
               <div class="gallery-image" data-image="/assets/images/default-hotel-3.jpg">
                 <img loading="lazy" decoding="async" src="/assets/images/default-hotel-3.jpg" alt="Hotel Urbano" onerror="this.onerror=null;this.src='/assets/Nexefii_logo_3d-official.png'">
-                <div class="gallery-overlay">âœ“</div>
+                <div class="gallery-overlay">✓</div>
               </div>
               <div class="gallery-image" data-image="/assets/images/default-hotel-4.jpg">
                 <img loading="lazy" decoding="async" src="/assets/images/default-hotel-4.jpg" alt="Pousada" onerror="this.onerror=null;this.src='/assets/Nexefii_logo_3d-official.png'">
-                <div class="gallery-overlay">âœ“</div>
+                <div class="gallery-overlay">✓</div>
               </div>
               <div class="gallery-image" data-image="/assets/images/default-hotel-5.jpg">
                 <img loading="lazy" decoding="async" src="/assets/images/default-hotel-5.jpg" alt="Hotel Boutique" onerror="this.onerror=null;this.src='/assets/Nexefii_logo_3d-official.png'">
-                <div class="gallery-overlay">âœ“</div>
+                <div class="gallery-overlay">✓</div>
               </div>
               <div class="gallery-image" data-image="/assets/images/default-hotel-6.jpg">
                 <img loading="lazy" decoding="async" src="/assets/images/default-hotel-6.jpg" alt="Resort Montanha" onerror="this.onerror=null;this.src='/assets/Nexefii_logo_3d-official.png'">
-                <div class="gallery-overlay">âœ“</div>
+                <div class="gallery-overlay">✓</div>
               </div>
             </div>
           </div>
 
           <!-- Upload Tab -->
           <div class="image-tab-content" id="upload-tab">
-            <div class="upload-area">
+              <div class="upload-area">
               <input type="file" id="image-file" accept="image/*" style="display: none;">
               <label for="image-file" class="upload-label">
-                <div class="upload-icon">ðŸ“</div>
+                <div class="upload-icon">📁</div>
                 <div class="upload-text" data-i18n="wizard.image.upload.text">Clique para selecionar ou arraste uma imagem</div>
-                <div class="upload-hint" data-i18n="wizard.image.upload.hint">JPG, PNG ou WEBP atÃ© 5MB</div>
+                <div class="upload-hint" data-i18n="wizard.image.upload.hint">JPG, PNG ou WEBP até 5MB</div>
               </label>
               <div id="upload-preview" class="upload-preview"></div>
               <div id="upload-loading" class="upload-loading">
@@ -991,7 +942,7 @@
           <div class="image-tab-content" id="url-tab">
             <input type="url" class="form-input" id="image-url" data-i18n="wizard.image.url.placeholder" placeholder="https://exemplo.com/imagem.jpg">
             <div id="url-preview" class="upload-preview"></div>
-            <button type="button" class="btn-preview" id="btn-preview-url" data-i18n="wizard.image.url.previewButton">PrÃ©-visualizar</button>
+            <button type="button" class="btn-preview" id="btn-preview-url" data-i18n="wizard.image.url.previewButton">Pré-visualizar</button>
           </div>
 
           <!-- Hidden field stores selected image path (always absolute from root) -->
@@ -1016,7 +967,7 @@
       </div>
 
       <div class="form-group">
-  <label class="form-label required" data-i18n="wizard.details.totalRoomsLabel">NÃºmero Total de Quartos</label>
+  <label class="form-label required" data-i18n="wizard.details.totalRoomsLabel">Número Total de Quartos</label>
   <input type="number" class="form-input" id="roomsCount" data-i18n="wizard.step4.roomsPlaceholder" placeholder="Ex: 50" min="1" max="1000">
         <div class="form-error" id="error-roomsCount"></div>
       </div>
@@ -1024,7 +975,7 @@
       <div class="form-grid">
         <div class="form-group">
           <label class="form-label" data-i18n="wizard.details.cityLabel">Cidade</label>
-          <input type="text" class="form-input" id="city" data-i18n="wizard.step2.cityPlaceholder" placeholder="SÃ£o Paulo">
+          <input type="text" class="form-input" id="city" data-i18n="wizard.step2.cityPlaceholder" placeholder="São Paulo">
         </div>
 
         <div class="form-group">
@@ -1034,8 +985,8 @@
       </div>
 
       <div class="form-group">
-  <label class="form-label" data-i18n="wizard.details.addressLabel">EndereÃ§o</label>
-  <input type="text" class="form-input" id="street" data-i18n="wizard.step2.addressPlaceholder" placeholder="Rua, nÃºmero">
+  <label class="form-label" data-i18n="wizard.details.addressLabel">Endereço</label>
+  <input type="text" class="form-input" id="street" data-i18n="wizard.step2.addressPlaceholder" placeholder="Rua, número">
       </div>
 
       <div class="form-grid">
@@ -1045,7 +996,7 @@
         </div>
 
         <div class="form-group">
-          <label class="form-label" data-i18n="wizard.details.countryLabel">PaÃ­s</label>
+          <label class="form-label" data-i18n="wizard.details.countryLabel">País</label>
           <input type="text" class="form-input" id="country" value="Brasil">
         </div>
       </div>
@@ -1053,12 +1004,12 @@
 
     <!-- Step 2.5: Module Selection -->
     <div class="step-content" id="step-modules">
-  <h2 class="step-title" data-i18n="wizard.modules.title">MÃ³dulos da Propriedade</h2>
-      <p style="color: #666; margin-bottom: 1.5rem;" data-i18n="wizard.modules.subtitle">Selecione os mÃ³dulos que deseja ativar/vender para esta propriedade:</p>
+  <h2 class="step-title" data-i18n="wizard.modules.title">Módulos da Propriedade</h2>
+    <p style="color: #666; margin-bottom: 1.5rem;" data-i18n="wizard.modules.subtitle">Selecione os módulos que deseja ativar/vender para esta propriedade:</p>
       <div class="modules-checkboxes">
         <label class="module-checkbox"><input type="checkbox" id="module-ems" value="EMS"> <span data-i18n="wizard.modules.ems">EMS (Energy Management)</span></label><br>
         <label class="module-checkbox"><input type="checkbox" id="module-bms" value="BMS"> <span data-i18n="wizard.modules.bms">BMS (Building Management)</span></label><br>
-        <label class="module-checkbox"><input type="checkbox" id="module-automation" value="Automation"> <span data-i18n="wizard.modules.automation">AutomaÃ§Ã£o</span></label><br>
+  <label class="module-checkbox"><input type="checkbox" id="module-automation" value="Automation"> <span data-i18n="wizard.modules.automation">Automação</span></label><br>
         <label class="module-checkbox"><input type="checkbox" id="module-analytics" value="Analytics"> <span data-i18n="wizard.modules.analytics">Analytics</span></label><br>
         <label class="module-checkbox"><input type="checkbox" id="module-pms" value="PMS"> <span data-i18n="wizard.modules.pms">PMS (Property Management)</span></label><br>
         <label class="module-checkbox"><input type="checkbox" id="module-iot" value="IoT"> <span data-i18n="wizard.modules.iot">IoT Devices</span></label><br>
@@ -1069,7 +1020,7 @@
 
     <!-- Step 3: Room Configuration -->
     <div class="step-content" id="step-3">
-  <h2 class="step-title" data-i18n="wizard.rooms.title">ConfiguraÃ§Ã£o de Quartos</h2>
+  <h2 class="step-title" data-i18n="wizard.rooms.title">Configuração de Quartos</h2>
 
       <p style="color: #666; margin-bottom: 1.5rem;">
         <span data-i18n="wizard.rooms.subtitle">Configure as categorias de quartos. O total deve ser igual a</span> <strong id="total-rooms-needed">0</strong> <span data-i18n="wizard.rooms.roomsLabel">quartos</span>.
@@ -1077,22 +1028,22 @@
 
       <div class="template-grid">
         <div class="template-card" onclick="applyTemplate('small-hotel')">
-          <div class="template-icon">ðŸ¨</div>
+          <div class="template-icon">🏨</div>
           <div class="template-name" data-i18n="wizard.rooms.templates.smallHotel.name">Hotel Pequeno</div>
           <div class="template-desc" data-i18n="wizard.rooms.templates.smallHotel.desc">20 quartos (3 categorias)</div>
         </div>
         <div class="template-card" onclick="applyTemplate('medium-hotel')">
-          <div class="template-icon">ðŸ©</div>
-          <div class="template-name" data-i18n="wizard.rooms.templates.mediumHotel.name">Hotel MÃ©dio</div>
+          <div class="template-icon">🏩</div>
+          <div class="template-name" data-i18n="wizard.rooms.templates.mediumHotel.name">Hotel Médio</div>
           <div class="template-desc" data-i18n="wizard.rooms.templates.mediumHotel.desc">50 quartos (3 categorias)</div>
         </div>
         <div class="template-card" onclick="applyTemplate('resort')">
-          <div class="template-icon">ðŸï¸</div>
+          <div class="template-icon">🏝️</div>
           <div class="template-name" data-i18n="wizard.rooms.templates.resort.name">Resort</div>
           <div class="template-desc" data-i18n="wizard.rooms.templates.resort.desc">100 quartos (4 categorias)</div>
         </div>
         <div class="template-card" onclick="applyTemplate('hostel')">
-          <div class="template-icon">ðŸ›ï¸</div>
+          <div class="template-icon">🛌</div>
           <div class="template-name" data-i18n="wizard.rooms.templates.hostel.name">Hostel</div>
           <div class="template-desc" data-i18n="wizard.rooms.templates.hostel.desc">30 quartos (3 categorias)</div>
         </div>
@@ -1110,18 +1061,18 @@
 
     <!-- Step 4: Settings -->
     <div class="step-content" id="step-4">
-  <h2 class="step-title" data-i18n="wizard.config.title">ConfiguraÃ§Ãµes</h2>
+  <h2 class="step-title" data-i18n="wizard.config.title">Configurações</h2>
 
       <div class="form-grid">
         <div class="form-group">
           <label class="form-label required" data-i18n="wizard.config.currencyLabel">Moeda</label>
           <select class="form-select" id="currency">
             <option value="BRL">BRL - Real Brasileiro (R$)</option>
-            <option value="USD">USD - DÃ³lar Americano ($)</option>
-            <option value="EUR">EUR - Euro (â‚¬)</option>
-            <option value="GBP">GBP - Libra Esterlina (Â£)</option>
-            <option value="CAD">CAD - DÃ³lar Canadense (C$)</option>
-            <option value="AUD">AUD - DÃ³lar Australiano (A$)</option>
+            <option value="USD">USD - Dólar Americano ($)</option>
+            <option value="EUR">EUR - Euro (€)</option>
+            <option value="GBP">GBP - Libra Esterlina (£)</option>
+            <option value="CAD">CAD - Dólar Canadense (C$)</option>
+            <option value="AUD">AUD - Dólar Australiano (A$)</option>
             <option value="MXN">MXN - Peso Mexicano (MX$)</option>
             <option value="ARS">ARS - Peso Argentino (AR$)</option>
             <option value="COP">COP - Peso Colombiano (COL$)</option>
@@ -1130,42 +1081,42 @@
         </div>
 
         <div class="form-group">
-          <label class="form-label required" data-i18n="wizard.config.timezoneLabel">Fuso HorÃ¡rio</label>
+          <label class="form-label required" data-i18n="wizard.config.timezoneLabel">Fuso Horário</label>
           <select class="form-select" id="timezone">
             <!-- Americas -->
-            <optgroup label="ðŸŒŽ AmÃ©ricas" data-i18n="wizard.config.timezoneGroups.americas">
-              <option value="America/New_York">Nova York (UTC-5/-4)</option>
-              <option value="America/Los_Angeles">Los Angeles (UTC-8/-7)</option>
-              <option value="America/Chicago">Chicago (UTC-6/-5)</option>
-              <option value="America/Denver">Denver (UTC-7/-6)</option>
-              <option value="America/Toronto">Toronto (UTC-5/-4)</option>
-              <option value="America/Sao_Paulo" selected>SÃ£o Paulo (UTC-3)</option>
+            <optgroup label="🌎 Américas" data-i18n="wizard.config.timezoneGroups.americas">
+              <option value="America/New_York">Nova York (UTC-5)</option>
+              <option value="America/Los_Angeles">Los Angeles (UTC-8)</option>
+              <option value="America/Chicago">Chicago (UTC-6)</option>
+              <option value="America/Denver">Denver (UTC-7)</option>
+              <option value="America/Toronto">Toronto (UTC-5)</option>
+              <option value="America/Sao_Paulo" selected>São Paulo (UTC-3)</option>
               <option value="America/Manaus">Manaus (UTC-4)</option>
               <option value="America/Rio_Branco">Rio Branco (UTC-5)</option>
               <option value="America/Fortaleza">Fortaleza (UTC-3)</option>
               <option value="America/Buenos_Aires">Buenos Aires (UTC-3)</option>
-              <option value="America/Santiago">Santiago (UTC-3/-4)</option>
+              <option value="America/Santiago">Santiago (UTC-3)</option>
               <option value="America/Lima">Lima (UTC-5)</option>
-              <option value="America/Bogota">BogotÃ¡ (UTC-5)</option>
-              <option value="America/Mexico_City">Cidade do MÃ©xico (UTC-6)</option>
+              <option value="America/Bogota">Bogotá (UTC-5)</option>
+              <option value="America/Mexico_City">Cidade do México (UTC-6)</option>
               <option value="America/Caracas">Caracas (UTC-4)</option>
             </optgroup>
             <!-- Europe -->
-            <optgroup label="ðŸŒ Europa" data-i18n="wizard.config.timezoneGroups.europe">
-              <option value="Europe/London">Londres (UTC+0/+1)</option>
-              <option value="Europe/Paris">Paris (UTC+1/+2)</option>
-              <option value="Europe/Berlin">Berlim (UTC+1/+2)</option>
-              <option value="Europe/Madrid">Madri (UTC+1/+2)</option>
-              <option value="Europe/Rome">Roma (UTC+1/+2)</option>
-              <option value="Europe/Amsterdam">AmsterdÃ£ (UTC+1/+2)</option>
-              <option value="Europe/Brussels">Bruxelas (UTC+1/+2)</option>
-              <option value="Europe/Zurich">Zurique (UTC+1/+2)</option>
-              <option value="Europe/Lisbon">Lisboa (UTC+0/+1)</option>
+            <optgroup label="🌍 Europa" data-i18n="wizard.config.timezoneGroups.europe">
+              <option value="Europe/London">Londres (UTC+0)</option>
+              <option value="Europe/Paris">Paris (UTC+1)</option>
+              <option value="Europe/Berlin">Berlim (UTC+1)</option>
+              <option value="Europe/Madrid">Madri (UTC+1)</option>
+              <option value="Europe/Rome">Roma (UTC+1)</option>
+              <option value="Europe/Amsterdam">Amsterdã (UTC+1)</option>
+              <option value="Europe/Brussels">Bruxelas (UTC+1)</option>
+              <option value="Europe/Zurich">Zurique (UTC+1)</option>
+              <option value="Europe/Lisbon">Lisboa (UTC+0)</option>
               <option value="Europe/Moscow">Moscou (UTC+3)</option>
             </optgroup>
             <!-- Asia & Pacific -->
-            <optgroup label="ðŸŒ Ãsia & PacÃ­fico" data-i18n="wizard.config.timezoneGroups.asiaPacific">
-              <option value="Asia/Tokyo">TÃ³quio (UTC+9)</option>
+            <optgroup label="🌏 Ásia & Pacífico" data-i18n="wizard.config.timezoneGroups.asiaPacific">
+              <option value="Asia/Tokyo">Tóquio (UTC+9)</option>
               <option value="Asia/Shanghai">Xangai (UTC+8)</option>
               <option value="Asia/Hong_Kong">Hong Kong (UTC+8)</option>
               <option value="Asia/Singapore">Singapura (UTC+8)</option>
@@ -1173,28 +1124,28 @@
               <option value="Asia/Dubai">Dubai (UTC+4)</option>
               <option value="Asia/Bangkok">Bangkok (UTC+7)</option>
               <option value="Asia/Kolkata">Mumbai (UTC+5:30)</option>
-              <option value="Australia/Sydney">Sydney (UTC+10/+11)</option>
-              <option value="Australia/Melbourne">Melbourne (UTC+10/+11)</option>
-              <option value="Pacific/Auckland">Auckland (UTC+12/+13)</option>
+              <option value="Australia/Sydney">Sydney (UTC+10)</option>
+              <option value="Australia/Melbourne">Melbourne (UTC+10)</option>
+              <option value="Pacific/Auckland">Auckland (UTC+12)</option>
             </optgroup>
             <!-- Africa & Middle East -->
-            <optgroup label="ðŸŒ Ãfrica & Oriente MÃ©dio" data-i18n="wizard.config.timezoneGroups.africaMiddleEast">
+            <optgroup label="🌍 África & Oriente Médio" data-i18n="wizard.config.timezoneGroups.africaMiddleEast">
               <option value="Africa/Cairo">Cairo (UTC+2)</option>
               <option value="Africa/Johannesburg">Joanesburgo (UTC+2)</option>
               <option value="Africa/Lagos">Lagos (UTC+1)</option>
-              <option value="Asia/Jerusalem">JerusalÃ©m (UTC+2/+3)</option>
+              <option value="Asia/Jerusalem">Jerusalém (UTC+2)</option>
               <option value="Asia/Istanbul">Istambul (UTC+3)</option>
             </optgroup>
           </select>
         </div>
 
         <div class="form-group">
-          <label class="form-label required" data-i18n="wizard.config.checkInLabel">HorÃ¡rio Check-in</label>
+          <label class="form-label required" data-i18n="wizard.config.checkInLabel">Horário Check-in</label>
           <input type="time" class="form-input" id="checkInTime" value="14:00">
         </div>
 
         <div class="form-group">
-          <label class="form-label required" data-i18n="wizard.config.checkOutLabel">HorÃ¡rio Check-out</label>
+          <label class="form-label required" data-i18n="wizard.config.checkOutLabel">Horário Check-out</label>
           <input type="time" class="form-input" id="checkOutTime" value="12:00">
         </div>
       </div>
@@ -1202,9 +1153,9 @@
       <div class="form-group">
   <label class="form-label" data-i18n="wizard.config.languageLabel">Idioma</label>
         <select class="form-select" id="language">
-          <option value="pt-BR">PortuguÃªs (Brasil)</option>
+          <option value="pt-BR">Português (Brasil)</option>
           <option value="en-US">English (US)</option>
-          <option value="es-ES">EspaÃ±ol</option>
+          <option value="es-ES">Español</option>
         </select>
       </div>
     </div>
@@ -1214,7 +1165,7 @@
   <h2 class="step-title" data-i18n="wizard.seed.title">Dados Iniciais</h2>
 
       <p style="color: #666; margin-bottom: 2rem;">
-        Escolha quais dados de exemplo vocÃª quer que sejam criados automaticamente:
+        Escolha quais dados de exemplo você quer que sejam criados automaticamente:
       </p>
 
       <div class="checkbox-group">
@@ -1230,9 +1181,9 @@
       <div class="checkbox-group">
         <input type="checkbox" class="checkbox" id="createSampleGuests" checked>
         <label for="createSampleGuests">
-          <strong data-i18n="wizard.seed.guestsExampleTitle">Criar hÃ³spedes de exemplo</strong><br>
+          <strong data-i18n="wizard.seed.guestsExampleTitle">Criar hóspedes de exemplo</strong><br>
           <span style="font-size: 0.875rem; color: #666;">
-            <span data-i18n="wizard.seed.guestsExampleDesc">Adiciona 3 hÃ³spedes fictÃ­cios para testes</span>
+            <span data-i18n="wizard.seed.guestsExampleDesc">Adiciona 3 hóspedes fictícios para testes</span>
           </span>
         </label>
       </div>
@@ -1242,7 +1193,7 @@
         <label for="createSampleReservations">
           <strong data-i18n="wizard.seed.reservationExampleTitle">Criar reserva de exemplo</strong><br>
           <span style="font-size: 0.875rem; color: #666;">
-            <span data-i18n="wizard.seed.reservationExampleDesc">Cria 1 reserva confirmada para demonstraÃ§Ã£o</span>
+            <span data-i18n="wizard.seed.reservationExampleDesc">Cria 1 reserva confirmada para demonstração</span>
           </span>
         </label>
       </div>
@@ -1250,16 +1201,16 @@
 
     <!-- Step 6: Review -->
     <div class="step-content" id="step-6">
-  <h2 class="step-title" data-i18n="wizard.review.title">RevisÃ£o Final</h2>
+  <h2 class="step-title" data-i18n="wizard.review.title" data-i18n-default="Revisão Final">Revisão Final</h2>
 
-      <p style="color: #666; margin-bottom: 2rem;">
-  <span data-i18n="wizard.review.subtitle">Revise as informaÃ§Ãµes antes de criar a propriedade:</span>
-      </p>
+    <p style="color: #666; margin-bottom: 2rem;">
+  <span data-i18n="wizard.review.subtitle" data-i18n-default="Revise as informações antes de criar a propriedade:">Revise as informações antes de criar a propriedade:</span>
+    </p>
 
       <div class="review-section">
-  <div class="review-section-title" data-i18n="wizard.step6.basicInfo">InformaÃ§Ãµes BÃ¡sicas</div>
+  <div class="review-section-title" data-i18n="wizard.review.basicInfo" data-i18n-default="Informações Básicas">Informações Básicas</div>
         <div class="review-item">
-          <span class="review-label" data-i18n="wizard.review.imageLabel">Imagem da Propriedade</span>
+          <span class="review-label" data-i18n="wizard.review.imageLabel" data-i18n-default="Imagem da Propriedade">Imagem da Propriedade</span>
         </div>
         <div class="review-image-preview">
           <img id="review-image" src="/assets/images/default-hotel-1.jpg" alt="Imagem da propriedade" loading="lazy" decoding="async" onerror="this.onerror=null;this.src='/assets/Nexefii_logo_3d-official.png'">
@@ -1290,7 +1241,7 @@
       </div>
 
       <div class="review-section">
-  <div class="review-section-title" data-i18n="wizard.review.configTitle">ConfiguraÃ§Ãµes</div>
+      <div class="review-section-title" data-i18n="wizard.review.configTitle">Configurações</div>
         <div class="review-item">
           <span class="review-label" data-i18n="wizard.config.currencyLabel">Moeda</span>
           <span class="review-value" id="review-currency">-</span>
@@ -1302,7 +1253,7 @@
       </div>
 
       <div class="review-section">
-  <div class="review-section-title" data-i18n="wizard.review.modulesTitle">MÃ³dulos Selecionados</div>
+      <div class="review-section-title" data-i18n="wizard.review.modulesTitle">Módulos Selecionados</div>
         <div id="review-modules">
           <!-- Modules rendered here -->
         </div>
@@ -1310,7 +1261,7 @@
 
       <div style="text-align: center; margin-top: 3rem;">
         <button class="btn btn-success" onclick="createProperty()" id="btn-create">
-          <span data-i18n="wizard.buttons.create">âœ¨ Criar Propriedade</span>
+          <span data-i18n="wizard.buttons.create">✨ Criar Propriedade</span>
         </button>
       </div>
     </div>
@@ -1319,11 +1270,11 @@
   <!-- Wizard Actions -->
   <div class="wizard-actions">
     <button class="btn btn-secondary" id="btn-prev" onclick="prevStep()" style="display: none;">
-      â† <span data-i18n="wizard.buttons.back">Voltar</span>
+      ← <span data-i18n="wizard.buttons.back">Voltar</span>
     </button>
     <div style="flex: 1;"></div>
     <button class="btn btn-primary" id="btn-next" onclick="nextStep()">
-      <span data-i18n="wizard.buttons.next">PrÃ³ximo</span> â†’
+      <span data-i18n="wizard.buttons.next">Próximo</span> →
     </button>
   </div>
 </div>
@@ -1355,7 +1306,7 @@
       if (stepNum < wizard.currentStep) {
         circle.classList.add('completed');
         circle.classList.remove('active');
-        circle.textContent = 'âœ“';
+        circle.textContent = '✓';
       } else if (stepNum === wizard.currentStep) {
         circle.classList.add('active');
         circle.classList.remove('completed');
@@ -1397,7 +1348,7 @@
       const span = btnNext.querySelector('[data-i18n]');
       if (span) span.textContent = label;
     } else {
-      btnNext.textContent = wizard.isLastStep() ? 'Concluir â†’' : 'PrÃ³ximo â†’';
+      btnNext.textContent = wizard.isLastStep() ? 'Concluir →' : 'Próximo →';
     }
     btnNext.style.display = wizard.isLastStep() ? 'none' : 'block';
 
@@ -1582,13 +1533,13 @@
   function processImageFile(file) {
     // Validate file size (5MB max)
     if (file.size > 5 * 1024 * 1024) {
-      alert('âŒ Arquivo muito grande! MÃ¡ximo 5MB.');
+      alert('✖ Arquivo muito grande! Máximo 5MB.');
       return;
     }
     
     // Validate file type
     if (!file.type.startsWith('image/')) {
-      alert('âŒ Por favor, selecione uma imagem vÃ¡lida.');
+      alert('✖ Por favor, selecione uma imagem válida.');
       return;
     }
     
@@ -1615,7 +1566,7 @@
     };
     reader.onerror = function() {
       if (uploadLoading) uploadLoading.classList.remove('show');
-      alert('âŒ Erro ao processar imagem.');
+      alert('✖ Erro ao processar imagem.');
     };
     reader.readAsDataURL(file);
   }
@@ -1660,7 +1611,7 @@
   btnPreviewUrl.addEventListener('click', function() {
     const url = urlInput.value.trim();
     if (!url) {
-      alert('âŒ Digite uma URL vÃ¡lida.');
+      alert('✖ Digite uma URL válida.');
       return;
     }
     
@@ -1675,7 +1626,7 @@
       wizard.updateData('image', url);
     };
     img.onerror = function() {
-      alert('âŒ NÃ£o foi possÃ­vel carregar a imagem. Verifique a URL.');
+      alert('✖ Não foi possível carregar a imagem. Verifique a URL.');
     };
     img.src = url;
   });
@@ -1712,8 +1663,8 @@
     }
 
     // Get translations
-    let removeLabel = 'Remover';
-    let priceLabel = 'PreÃ§o:';
+  let removeLabel = 'Remover';
+  let priceLabel = 'Preço:';
     let quantityLabel = 'Quantidade:';
     let roomsLabel = 'quartos';
     
@@ -1731,9 +1682,9 @@
     // Get currency symbol based on current language
     const currentLang = window.NEXEFII?.i18n?.getLanguage() || 'pt';
     const langToCurrencyMap = {
-      'pt': 'R$',   // Portuguese â†’ Brazilian Real
-      'en': '$',    // English â†’ US Dollar
-      'es': 'â‚¬'     // Spanish â†’ Euro (or use '$' for Latin America)
+      'pt': 'R$',   // Portuguese → Brazilian Real
+      'en': '$',    // English → US Dollar
+      'es': '€'     // Spanish → Euro (or use '$' for Latin America)
     };
     const currencySymbol = langToCurrencyMap[currentLang] || 'R$';
 
@@ -1759,7 +1710,7 @@
     const name = prompt('Nome da categoria:');
     if (!name) return;
 
-    const price = parseInt(prompt('PreÃ§o por noite (R$):')) || 0;
+  const price = parseInt(prompt('Preço por noite (R$):')) || 0;
     const count = parseInt(prompt('Quantidade de quartos:')) || 0;
 
     wizard.addRoomCategory({ name, price, count, capacity: 2 });
@@ -1796,7 +1747,7 @@
     const categoriesHTML = data.roomCategories.map(cat => `
       <div class="review-item">
         <span class="review-label">${cat.name}</span>
-        <span class="review-value">${cat.count} quartos Ã— R$ ${cat.price}</span>
+        <span class="review-value">${cat.count} quartos × R$ ${cat.price}</span>
       </div>
     `).join('');
     document.getElementById('review-categories').innerHTML = categoriesHTML;
@@ -1807,7 +1758,7 @@
       if (data.modules && data.modules.length > 0) {
         modulesContainer.innerHTML = data.modules.map(m => `<span class="review-value">${m}</span>`).join(', ');
       } else {
-        modulesContainer.innerHTML = '<span style="color:#999;">Nenhum mÃ³dulo selecionado</span>';
+  modulesContainer.innerHTML = '<span style="color:#999;">Nenhum módulo selecionado</span>';
       }
     }
   }
@@ -1847,8 +1798,8 @@
       color: white;
     `;
 
-    modal.innerHTML = `
-      <div style="font-size: 48px; margin-bottom: 20px;">ðŸ¨</div>
+      modal.innerHTML = `
+      <div style="font-size: 48px; margin-bottom: 20px;">🏨</div>
       <h2 style="margin: 0 0 10px; font-size: 24px; font-weight: 600;">Criando sua propriedade</h2>
       <p id="progress-status" style="margin: 0 0 30px; font-size: 16px; opacity: 0.9;">Preparando...</p>
       
@@ -1857,11 +1808,11 @@
       </div>
       
       <div id="progress-steps" style="font-size: 14px; opacity: 0.8; line-height: 1.6;">
-        <div id="step-1">â³ Criando estrutura...</div>
-        <div id="step-2">â³ Gerando quartos...</div>
-        <div id="step-3">â³ Criando hÃ³spedes...</div>
-        <div id="step-4">â³ Gerando reservas...</div>
-        <div id="step-5">â³ Salvando dados...</div>
+        <div id="step-1">• Criando estrutura...</div>
+        <div id="step-2">• Gerando quartos...</div>
+        <div id="step-3">• Criando hóspedes...</div>
+        <div id="step-4">• Gerando reservas...</div>
+        <div id="step-5">• Salvando dados...</div>
       </div>
     `;
 
@@ -1876,14 +1827,14 @@
       completeStep: (stepNum) => {
         const stepEl = document.getElementById(`step-${stepNum}`);
         if (stepEl) {
-          stepEl.innerHTML = stepEl.innerHTML.replace('â³', 'âœ…');
+          stepEl.innerHTML = stepEl.innerHTML.replace('•', '✓');
           stepEl.style.opacity = '1';
           stepEl.style.fontWeight = '600';
         }
       },
       showSuccess: (propertyName) => {
         modal.innerHTML = `
-          <div style="font-size: 64px; margin-bottom: 20px; animation: bounce 0.6s;">ðŸŽ‰</div>
+          <div style="font-size: 64px; margin-bottom: 20px; animation: bounce 0.6s;">🎉</div>
           <h2 style="margin: 0 0 10px; font-size: 28px; font-weight: 600;">Pronto!</h2>
           <p style="margin: 0 0 20px; font-size: 18px; opacity: 0.95;">
             "${propertyName}" foi criada com sucesso!
@@ -1926,10 +1877,10 @@
       progress.updateProgress(40, 'Quartos criados!');
       
       // Step 3: Create guests (60%)
-      progress.updateProgress(50, 'Criando hÃ³spedes de exemplo...');
+  progress.updateProgress(50, 'Criando hóspedes de exemplo...');
       await new Promise(resolve => setTimeout(resolve, 300));
-      progress.completeStep(3);
-      progress.updateProgress(60, 'HÃ³spedes criados!');
+  progress.completeStep(3);
+  progress.updateProgress(60, 'Hóspedes criados!');
       
       // Step 4: Generate reservations (80%)
       progress.updateProgress(70, 'Gerando reservas...');
@@ -1942,7 +1893,7 @@
       const property = await wizard.createProperty();
       property.modules = wizard.data.modules || [];
       progress.completeStep(5);
-      progress.updateProgress(100, 'ConcluÃ­do!');
+  progress.updateProgress(100, 'Concluído!');
       
       // Show success message
       await new Promise(resolve => setTimeout(resolve, 300));
@@ -1993,12 +1944,12 @@
     } catch (error) {
       console.error('[Wizard] Error creating property:', error);
       progress.close();
-      alert(`âŒ Erro ao criar propriedade:\n\n${error.message}`);
+  alert(`✖ Erro ao criar propriedade:\n\n${error.message}`);
       btnCreate.disabled = false;
       try {
-        const text = window.NEXEFII?.i18n ? window.NEXEFII.i18n.t('wizard.buttons.create') : 'âœ¨ Criar Propriedade';
+        const text = window.NEXEFII?.i18n ? window.NEXEFII.i18n.t('wizard.buttons.create') : '✨ Criar Propriedade';
         btnCreate.textContent = text;
-      } catch(_) { btnCreate.textContent = 'âœ¨ Criar Propriedade'; }
+      } catch(_) { btnCreate.textContent = '✨ Criar Propriedade'; }
     }
   }
   // Registrar globalmente para acesso externo (shell.html)
@@ -2010,6 +1961,40 @@
 
   async function initWizardPage() {
     console.log('[Wizard] Initializing wizard page');
+    // Ensure every translatable element has a stable default text attribute so
+    // we can restore it if translations are missing or incorrect. This helps
+    // avoid showing raw i18n keys (e.g., 'wizard.step6.basicInfo') in the UI.
+    try {
+      const scopeAll = document.querySelector('.wizard-page');
+      if (scopeAll) {
+        scopeAll.querySelectorAll('[data-i18n]').forEach(el => {
+          try {
+            if (!el.hasAttribute('data-i18n-default')) {
+              el.setAttribute('data-i18n-default', (el.textContent || '').trim());
+            }
+          } catch (_) {}
+        });
+      }
+    } catch (e) { /* non-critical */ }
+
+    // Wait for the global i18n helper to be available (race with shell/router load).
+    // If it's already present this resolves immediately. Timeout after 1500ms and continue.
+    function waitForI18n(timeoutMs = 1500) {
+      return new Promise((resolve) => {
+        if (window.NEXEFII && window.NEXEFII.i18n) return resolve(window.NEXEFII.i18n);
+        const start = Date.now();
+        const iv = setInterval(() => {
+          if (window.NEXEFII && window.NEXEFII.i18n) {
+            clearInterval(iv);
+            return resolve(window.NEXEFII.i18n);
+          }
+          if (Date.now() - start > timeoutMs) {
+            clearInterval(iv);
+            return resolve(null);
+          }
+        }, 50);
+      });
+    }
     
     // Prepare timezone rendering function (used both on init and when language changes)
     function renderTimezoneSelect() {
@@ -2020,42 +2005,42 @@
         {
           key: 'americas',
           options: [
-            { value: 'America/New_York', label: 'Nova York (UTC-5/-4)' },
-            { value: 'America/Los_Angeles', label: 'Los Angeles (UTC-8/-7)' },
-            { value: 'America/Chicago', label: 'Chicago (UTC-6/-5)' },
-            { value: 'America/Denver', label: 'Denver (UTC-7/-6)' },
-            { value: 'America/Toronto', label: 'Toronto (UTC-5/-4)' },
-            { value: 'America/Sao_Paulo', label: 'SÃ£o Paulo (UTC-3)' },
+            { value: 'America/New_York', label: 'Nova York (UTC-5)' },
+            { value: 'America/Los_Angeles', label: 'Los Angeles (UTC-8)' },
+            { value: 'America/Chicago', label: 'Chicago (UTC-6)' },
+            { value: 'America/Denver', label: 'Denver (UTC-7)' },
+            { value: 'America/Toronto', label: 'Toronto (UTC-5)' },
+            { value: 'America/Sao_Paulo', label: 'São Paulo (UTC-3)' },
             { value: 'America/Manaus', label: 'Manaus (UTC-4)' },
             { value: 'America/Rio_Branco', label: 'Rio Branco (UTC-5)' },
             { value: 'America/Fortaleza', label: 'Fortaleza (UTC-3)' },
             { value: 'America/Buenos_Aires', label: 'Buenos Aires (UTC-3)' },
-            { value: 'America/Santiago', label: 'Santiago (UTC-3/-4)' },
+            { value: 'America/Santiago', label: 'Santiago (UTC-3)' },
             { value: 'America/Lima', label: 'Lima (UTC-5)' },
-            { value: 'America/Bogota', label: 'BogotÃ¡ (UTC-5)' },
-            { value: 'America/Mexico_City', label: 'Cidade do MÃ©xico (UTC-6)' },
+            { value: 'America/Bogota', label: 'Bogotá (UTC-5)' },
+            { value: 'America/Mexico_City', label: 'Cidade do México (UTC-6)' },
             { value: 'America/Caracas', label: 'Caracas (UTC-4)' }
           ]
         },
         {
           key: 'europe',
           options: [
-            { value: 'Europe/London', label: 'Londres (UTC+0/+1)' },
-            { value: 'Europe/Paris', label: 'Paris (UTC+1/+2)' },
-            { value: 'Europe/Berlin', label: 'Berlim (UTC+1/+2)' },
-            { value: 'Europe/Madrid', label: 'Madri (UTC+1/+2)' },
-            { value: 'Europe/Rome', label: 'Roma (UTC+1/+2)' },
-            { value: 'Europe/Amsterdam', label: 'AmsterdÃ£ (UTC+1/+2)' },
-            { value: 'Europe/Brussels', label: 'Bruxelas (UTC+1/+2)' },
-            { value: 'Europe/Zurich', label: 'Zurique (UTC+1/+2)' },
-            { value: 'Europe/Lisbon', label: 'Lisboa (UTC+0/+1)' },
+            { value: 'Europe/London', label: 'Londres (UTC+0)' },
+            { value: 'Europe/Paris', label: 'Paris (UTC+1)' },
+            { value: 'Europe/Berlin', label: 'Berlim (UTC+1)' },
+            { value: 'Europe/Madrid', label: 'Madri (UTC+1)' },
+            { value: 'Europe/Rome', label: 'Roma (UTC+1)' },
+            { value: 'Europe/Amsterdam', label: 'Amsterdã (UTC+1)' },
+            { value: 'Europe/Brussels', label: 'Bruxelas (UTC+1)' },
+            { value: 'Europe/Zurich', label: 'Zurique (UTC+1)' },
+            { value: 'Europe/Lisbon', label: 'Lisboa (UTC+0)' },
             { value: 'Europe/Moscow', label: 'Moscou (UTC+3)' }
           ]
         },
         {
           key: 'asiaPacific',
           options: [
-            { value: 'Asia/Tokyo', label: 'TÃ³quio (UTC+9)' },
+            { value: 'Asia/Tokyo', label: 'Tóquio (UTC+9)' },
             { value: 'Asia/Shanghai', label: 'Xangai (UTC+8)' },
             { value: 'Asia/Hong_Kong', label: 'Hong Kong (UTC+8)' },
             { value: 'Asia/Singapore', label: 'Singapura (UTC+8)' },
@@ -2063,9 +2048,9 @@
             { value: 'Asia/Dubai', label: 'Dubai (UTC+4)' },
             { value: 'Asia/Bangkok', label: 'Bangkok (UTC+7)' },
             { value: 'Asia/Kolkata', label: 'Mumbai (UTC+5:30)' },
-            { value: 'Australia/Sydney', label: 'Sydney (UTC+10/+11)' },
-            { value: 'Australia/Melbourne', label: 'Melbourne (UTC+10/+11)' },
-            { value: 'Pacific/Auckland', label: 'Auckland (UTC+12/+13)' }
+            { value: 'Australia/Sydney', label: 'Sydney (UTC+10)' },
+            { value: 'Australia/Melbourne', label: 'Melbourne (UTC+10)' },
+            { value: 'Pacific/Auckland', label: 'Auckland (UTC+12)' }
           ]
         },
         {
@@ -2074,14 +2059,14 @@
             { value: 'Africa/Cairo', label: 'Cairo (UTC+2)' },
             { value: 'Africa/Johannesburg', label: 'Joanesburgo (UTC+2)' },
             { value: 'Africa/Lagos', label: 'Lagos (UTC+1)' },
-            { value: 'Asia/Jerusalem', label: 'JerusalÃ©m (UTC+2/+3)' },
+            { value: 'Asia/Jerusalem', label: 'Jerusalém (UTC+2)' },
             { value: 'Asia/Istanbul', label: 'Istambul (UTC+3)' }
           ]
         }
       ];
       // Limpar select
       tzSelect.innerHTML = '';
-      // Renderizar grupos e opÃ§Ãµes
+  // Renderizar grupos e opções
       tzData.forEach(group => {
         const label = window.NEXEFII?.i18n?.t('wizard.config.timezoneGroups.' + group.key) || group.key;
         const optgroup = document.createElement('optgroup');
@@ -2090,38 +2075,152 @@
           const option = document.createElement('option');
           option.value = opt.value;
           // Busca nome traduzido da cidade/fuso
-          option.textContent = window.NEXEFII?.i18n?.t('wizard.config.timezoneCities.' + opt.value) || opt.label;
+          // Prefer translated city name, fallback to hardcoded label. Then
+          // normalize UTC signs — in some cases a missing '+' was observed
+          // (e.g. "UTC 7/-5"), so ensure offsets have explicit signs.
+          let label = window.NEXEFII?.i18n?.t('wizard.config.timezoneCities.' + opt.value) || opt.label;
+          try {
+            // Replace 'UTC ' followed by digits with 'UTC+' (missing plus)
+            label = label.replace(/UTC\s+(?=\d)/g, 'UTC+');
+            // Ensure each UTC offset has an explicit sign before the number
+            label = label.replace(/UTC([+-]?)(\d+)/g, (m, s, n) => `UTC${s || '+'}${n}`);
+          } catch (e) { /* ignore normalization errors */ }
+          option.textContent = label;
           optgroup.appendChild(option);
         });
         tzSelect.appendChild(optgroup);
       });
     }
 
-    // Subscribe to language changes if i18n is available so we re-render the select with translations
-    if (window.NEXEFII?.i18n) {
-      window.NEXEFII.i18n.onChange((lang) => {
-        console.log('[Wizard] Language changed to:', lang);
-        // Step 4: Rooms
-        const step4 = document.getElementById('step-3');
-        if (step4 && step4.classList.contains('active')) {
-          renderCategories();
+    // Try to wait briefly for i18n to be ready so the page is translated on first render.
+    const i18n = await waitForI18n();
+    if (i18n) {
+      try {
+        // Capture default/fallback text for elements with data-i18n so we can
+        // restore them if the translation is missing (some bundles return the
+        // key itself when a translation is absent).
+        const scope = document.querySelector('.wizard-page');
+        const defaults = new Map();
+        if (scope) {
+          scope.querySelectorAll('[data-i18n]').forEach(el => {
+            try {
+              const key = el.getAttribute('data-i18n');
+              const attrDefault = el.getAttribute('data-i18n-default');
+              const textDefault = (el.textContent || '').trim();
+              defaults.set(key, attrDefault || textDefault);
+            } catch(_) {}
+          });
         }
-        // Re-render timezone select using current translations
-        renderTimezoneSelect();
-        // Re-apply translations to DOM
-        try { window.NEXEFII.i18n.applyToDOM(); } catch(e) { /* ignore */ }
-      });
+
+        // Apply translations to the wizard immediately (best-effort)
+        i18n.applyToDOM(scope);
+
+        // Restore fallback texts for keys that were not translated (t() returned the key)
+        if (scope) {
+          scope.querySelectorAll('[data-i18n]').forEach(el => {
+            const key = el.getAttribute('data-i18n');
+            const txt = (el.textContent || '').trim();
+            if (txt === key && defaults.has(key)) {
+              el.textContent = defaults.get(key);
+            }
+          });
+        }
+      } catch(e) { console.warn('[Wizard] i18n apply error at init', e); }
+
+      // Subscribe to language changes so we re-render the select and re-apply translations
+      try {
+        i18n.onChange((lang) => {
+          console.log('[Wizard] Language changed to:', lang);
+          // Step 4: Rooms
+          const step4 = document.getElementById('step-3');
+          if (step4 && step4.classList.contains('active')) {
+            renderCategories();
+          }
+          // Re-render timezone select using current translations
+          renderTimezoneSelect();
+          // Re-apply translations to DOM, preserving defaults for missing keys
+          try {
+            const scope = document.querySelector('.wizard-page');
+            const defaults = new Map();
+            if (scope) {
+              scope.querySelectorAll('[data-i18n]').forEach(el => {
+                try {
+                  const key = el.getAttribute('data-i18n');
+                  const attrDefault = el.getAttribute('data-i18n-default');
+                  const textDefault = (el.textContent || '').trim();
+                  defaults.set(key, attrDefault || textDefault);
+                } catch(_) {}
+              });
+            }
+            i18n.applyToDOM(scope);
+            if (scope) {
+              scope.querySelectorAll('[data-i18n]').forEach(el => {
+                const key = el.getAttribute('data-i18n');
+                const txt = (el.textContent || '').trim();
+                if (txt === key && defaults.has(key)) {
+                  el.textContent = defaults.get(key);
+                }
+              });
+            }
+          } catch(e) { /* ignore */ }
+        });
+      } catch(e) { console.warn('[Wizard] failed to subscribe to i18n changes', e); }
     } else {
-      console.warn('[Wizard] I18n not available');
+      console.warn('[Wizard] I18n not available (timed out)');
     }
 
     // Ensure timezone select is populated on initial load as well
     try { renderTimezoneSelect(); } catch(e) { console.warn('[Wizard] renderTimezoneSelect failed', e); }
     
     updateUI();
+
+    // After UI update, sanitize any elements that still contain raw i18n keys
+    // (defensive) — replace with the data-i18n-default attribute or a
+    // humanized version of the key.
+    function humanizeKey(key) {
+      if (!key) return '';
+      // prefer last token after dot
+      const last = key.split('.').pop();
+      // split camelCase and underscores/dashes
+      const spaced = last.replace(/([a-z])([A-Z])/g, '$1 $2')
+                        .replace(/[_-]+/g, ' ')
+                        .replace(/\b([a-z])/g, s => s.toUpperCase());
+      return spaced;
+    }
+
+    function sanitizeTranslatedKeys(scope) {
+      try {
+        const root = scope || document.querySelector('.wizard-page');
+        if (!root) return;
+        root.querySelectorAll('[data-i18n]').forEach(el => {
+          try {
+            const txt = (el.textContent || '').trim();
+            const key = el.getAttribute('data-i18n');
+            const def = el.getAttribute('data-i18n-default');
+            // If the element text looks like an untranslated key (contains a dot
+            // or starts with the key), replace it with the default or a human
+            // friendly label.
+            if (!txt) return;
+            if (txt === key || /\b[a-z]+\.[a-z0-9_.-]+/i.test(txt) || txt.includes('.') ) {
+              if (def && def.length) {
+                el.textContent = def;
+              } else {
+                el.textContent = humanizeKey(key);
+              }
+            }
+          } catch (_) {}
+        });
+      } catch (_) {}
+    }
+
+    // run once now
+    sanitizeTranslatedKeys();
   }
 
   // Initialize wizard page when loaded
   initWizardPage();
 </script>
+ 
+</body>
+</html>
 
