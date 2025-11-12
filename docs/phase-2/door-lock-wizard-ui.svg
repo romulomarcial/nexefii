@@ -1,0 +1,47 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="800" height="1000" viewBox="0 0 800 1000">
+  <style>
+    .panel { fill:#ffffff; stroke:#0b5b8a; stroke-width:2; rx:8 }
+    .title { font: bold 18px sans-serif; fill:#0b3a57 }
+    .label { font: 13px sans-serif; fill:#1b3b4e }
+    .input { fill:#f1f5f9; stroke:#cbd5e1; }
+    .btn { fill:#0b74c3; stroke:#075a9a; cursor:pointer }
+    .hint { font: 12px sans-serif; fill:#6b7280 }
+  </style>
+
+  <rect x="20" y="20" width="760" height="960" fill="#f8fafc" rx="10"/>
+  <text x="40" y="56" class="title">Door Lock Wizard</text>
+
+  <rect x="40" y="80" width="720" height="140" class="panel"/>
+  <text x="60" y="110" class="label">Operation</text>
+  <rect x="60" y="120" width="300" height="30" class="input"/>
+  <text x="380" y="140" class="hint">(create_key, revoke_key, extend_key)</text>
+
+  <rect x="40" y="240" width="720" height="160" class="panel"/>
+  <text x="60" y="270" class="label">Target</text>
+  <text x="60" y="294" class="label">Lock ID</text>
+  <rect x="60" y="304" width="300" height="30" class="input"/>
+  <text x="60" y="344" class="label">Property ID</text>
+  <rect x="60" y="354" width="300" height="30" class="input"/>
+
+  <rect x="40" y="420" width="720" height="260" class="panel"/>
+  <text x="60" y="450" class="label">Payload</text>
+  <text x="60" y="474" class="label">User Name</text>
+  <rect x="60" y="484" width="300" height="30" class="input"/>
+  <text x="380" y="474" class="label">User ID</text>
+  <rect x="380" y="484" width="300" height="30" class="input"/>
+  <text x="60" y="524" class="label">Valid From</text>
+  <rect x="60" y="534" width="300" height="30" class="input"/>
+  <text x="380" y="524" class="label">Valid To</text>
+  <rect x="380" y="534" width="300" height="30" class="input"/>
+
+  <rect x="40" y="700" width="720" height="120" class="panel"/>
+  <text x="60" y="730" class="label">Requester</text>
+  <text x="60" y="754" class="label">Actor ID</text>
+  <rect x="60" y="764" width="300" height="30" class="input"/>
+  <text x="380" y="754" class="label">Actor Type</text>
+  <rect x="380" y="764" width="300" height="30" class="input"/>
+
+  <rect x="520" y="840" width="240" height="40" class="btn"/>
+  <text x="560" y="868" fill="#fff" font="bold 14px sans-serif">Execute</text>
+
+</svg>

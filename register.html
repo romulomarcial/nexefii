@@ -176,23 +176,23 @@
     let I18N_REGISTER = null;
     let HOTELS_I18N = null;
 
-    const DEFAULT_HOTELS = {
-      pt: {
-        iluxSaoPaulo: 'iLux Hotel São Paulo',
-        iluxMiami: 'iLux Hotel Miami',
-        iluxRioDeJaneiro: 'iLux Hotel Rio de Janeiro'
-      },
-      en: {
-        iluxSaoPaulo: 'iLux Hotel São Paulo',
-        iluxMiami: 'iLux Hotel Miami',
-        iluxRioDeJaneiro: 'iLux Hotel Rio de Janeiro'
-      },
-      es: {
-        iluxSaoPaulo: 'iLux Hotel São Paulo',
-        iluxMiami: 'iLux Hotel Miami',
-        iluxRioDeJaneiro: 'iLux Hotel Rio de Janeiro'
-      }
-    };
+  const DEFAULT_HOTELS = {
+    pt: {
+  nexefiiSaoPaulo: 'Nexefii Hotel São Paulo',
+  nexefiiMiami: 'Nexefii Hotel Miami',
+  nexefiiRioDeJaneiro: 'Nexefii Hotel Rio de Janeiro'
+    },
+    en: {
+  nexefiiSaoPaulo: 'Nexefii Hotel São Paulo',
+  nexefiiMiami: 'Nexefii Hotel Miami',
+  nexefiiRioDeJaneiro: 'Nexefii Hotel Rio de Janeiro'
+    },
+    es: {
+  nexefiiSaoPaulo: 'Nexefii Hotel São Paulo',
+  nexefiiMiami: 'Nexefii Hotel Miami',
+  nexefiiRioDeJaneiro: 'Nexefii Hotel Rio de Janeiro'
+    }
+  };
 
     const DEFAULT_REGISTER_I18N = {
       pt: {
@@ -413,7 +413,7 @@
         // swallow - populatePropertySelect will fallback to HOTELS if needed
       });
 
-      // Render modules checkboxes (defensive: IluxAuth or MODULES may be undefined)
+  // Render modules checkboxes (defensive: NexefiiAuth or MODULES may be undefined)
       const modulesGrid = document.getElementById('modulesGrid');
       try{
   const rawModules = (typeof MODULES === 'object' && MODULES) ? MODULES : null;
@@ -432,7 +432,8 @@
         modulesGrid.innerHTML = '';
       }
 
-      localStorage.setItem('ilux_lang', selVal);
+  // Persist language selection (nexefii key)
+  try { localStorage.setItem('nexefii_lang', selVal); } catch(e){}
     }
 
     // Populate property select with data from NexefiiProps (local store), or a /api/properties endpoint,
@@ -488,9 +489,9 @@
       }
     })();
 
-    function getAuthToken(){
+  function getAuthToken(){
       // centralize token lookup: localStorage keys then cookie
-      const keys = ['auth_token','ilux_token','token'];
+  const keys = ['auth_token','nexefii_token','token'];
       for(const k of keys){
         try{ const v = localStorage.getItem(k); if(v) return v; }catch(e){}
       }
@@ -514,7 +515,7 @@
 
     function showAuthBanner(){
       try{
-        const lang = (localStorage.getItem('ilux_lang') || 'pt');
+          const lang = (localStorage.getItem('nexefii_lang') || 'pt');
         const L = (I18N_REGISTER && I18N_REGISTER[lang]) ? I18N_REGISTER[lang] : DEFAULT_REGISTER_I18N.pt;
         document.getElementById('authBannerTitle').innerText = L.loginRequiredTitle || 'Login requerido';
         document.getElementById('authBannerMsg').innerText = L.loginRequiredMsg || 'Login required';
@@ -664,9 +665,18 @@
         showError('password', L.errors.required); 
         hasError = true; 
       } else {
-        const passwordValidation = (window.NexefiiAuth && typeof NexefiiAuth.validatePassword === 'function')
-          ? NexefiiAuth.validatePassword(password)
-          : (typeof validatePassword === 'function' ? validatePassword(password) : { valid: true });
+        // Try NexefiiAuth first, then legacy-compatible NexefiiAuth, then global validatePassword
+        let passwordValidation = { valid: true };
+        try {
+          if (window.NexefiiAuth && typeof window.NexefiiAuth.validatePassword === 'function') {
+            passwordValidation = window.NexefiiAuth.validatePassword(password);
+          } else if (window.NexefiiAuth && typeof window.NexefiiAuth.validatePassword === 'function') {
+            passwordValidation = window.NexefiiAuth.validatePassword(password);
+          } else if (typeof validatePassword === 'function') {
+            passwordValidation = validatePassword(password);
+          }
+        } catch (e) { passwordValidation = { valid: true }; }
+
         if(!passwordValidation.valid) {
           const errorKey = passwordValidation.error === 'password_too_short' ? 'passwordTooShort' : 'passwordWeak';
           showError('password', L.errors[errorKey]);
@@ -730,8 +740,9 @@
 
     // Initialize
     window.addEventListener('DOMContentLoaded', async () => {
-      await loadRegisterI18N();
-      const saved = localStorage.getItem('ilux_lang') || 'pt';
+  await loadRegisterI18N();
+  // Use nexefii language key
+  const saved = localStorage.getItem('nexefii_lang') || 'pt';
       const sel = document.getElementById('lang');
       sel.value = saved;
       applyRegisterLang();

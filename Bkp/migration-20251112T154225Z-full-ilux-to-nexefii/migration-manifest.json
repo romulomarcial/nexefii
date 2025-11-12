@@ -1,0 +1,30 @@
+{
+  "timestamp": "20251112T154225Z",
+  "backups": [
+    "r:\\Development\\Projects\\nexefii\\Bkp\\migration-20251112T154225Z-full-ilux-to-nexefii\\DEV_BACKUP_README.md",
+    "r:\\Development\\Projects\\nexefii\\Bkp\\migration-20251112T154225Z-full-ilux-to-nexefii\\rebranding.py",
+    "r:\\Development\\Projects\\nexefii\\Bkp\\migration-20251112T154225Z-full-ilux-to-nexefii\\run_rebrand_nexefii.py",
+    "r:\\Development\\Projects\\nexefii\\Bkp\\migration-20251112T154225Z-full-ilux-to-nexefii\\scripts\\find_remaining_ilux.py",
+    "r:\\Development\\Projects\\nexefii\\Bkp\\migration-20251112T154225Z-full-ilux-to-nexefii\\scripts\\run_rebrand_phase2.py"
+  ],
+  "changes": {
+    "r:\\Development\\Projects\\nexefii\\scripts\\run_rebrand_phase2.py": {
+      "NexefiiProps": 2,
+      "NexefiiAuth": 2,
+      "nexefii_users": 2,
+      "nexefii_session": 2,
+      "nexefii_properties": 2,
+      "nexefii_email_log": 2,
+      "nexefii_lang": 35,
+      "nexefii_user": 4,
+      "nexefii_token": 2,
+      "nexefiiSaoPaulo": 2,
+      "nexefiiMiami": 2,
+      "nexefiiRioDeJaneiro": 2,
+      "Nexefii Hotel": 2
+    }
+  },
+  "files_changed": [
+    "r:\\Development\\Projects\\nexefii\\scripts\\run_rebrand_phase2.py"
+  ]
+}

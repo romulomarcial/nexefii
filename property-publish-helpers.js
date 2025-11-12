@@ -24,7 +24,7 @@
     window.masterCtrl.testPropertyLocally = function(propertyKey) {
   console.log('[testPropertyLocally] Iniciando teste para:', propertyKey);
   
-  const property = window.IluxProps.getProperty(propertyKey);
+  const property = window.NexefiiProps.getProperty(propertyKey);
   if (!property) {
     console.error('[testPropertyLocally] Propriedade nÃ£o encontrada:', propertyKey);
     this.showToast('Propriedade nÃ£o encontrada!', 'error');
@@ -73,7 +73,7 @@
 window.masterCtrl.confirmPublishProperty = function(propertyKey) {
   console.log('[confirmPublishProperty] Iniciando publicaÃ§Ã£o para:', propertyKey);
   
-  const property = window.IluxProps.getProperty(propertyKey);
+  const property = window.NexefiiProps.getProperty(propertyKey);
   if (!property) {
     console.error('[confirmPublishProperty] Propriedade nÃ£o encontrada:', propertyKey);
     this.showToast('Propriedade nÃ£o encontrada!', 'error');
@@ -182,7 +182,7 @@ window.masterCtrl.confirmPublishProperty = function(propertyKey) {
 window.masterCtrl.insertDemoData = function(propertyKey) {
   console.log('[insertDemoData] Iniciando inserÃ§Ã£o para:', propertyKey);
   
-  const property = window.IluxProps.getProperty(propertyKey);
+  const property = window.NexefiiProps.getProperty(propertyKey);
   if (!property) {
     console.error('[insertDemoData] Propriedade nÃ£o encontrada:', propertyKey);
     this.showToast('Propriedade nÃ£o encontrada!', 'error');

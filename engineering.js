@@ -390,7 +390,7 @@ function searchRoom() {
         selectRoom(roomNumber);
     } else {
         // localized not-found message as non-blocking toast
-        const msg = (typeof STR !== 'undefined' && STR.searchNotFound) ? STR.searchNotFound : (function(){ try{ const c=localStorage.getItem('i18n_cache'); if(!c) return 'Search not found'; const parsed=JSON.parse(c); const lang=localStorage.getItem('ilux_lang')||'pt'; return (parsed[lang] && parsed[lang].app && parsed[lang].app.searchNotFound) ? parsed[lang].app.searchNotFound : 'Search not found'; } catch(e){return 'Search not found';}})();
+        const msg = (typeof STR !== 'undefined' && STR.searchNotFound) ? STR.searchNotFound : (function(){ try{ const c=localStorage.getItem('i18n_cache'); if(!c) return 'Search not found'; const parsed=JSON.parse(c); const lang=(localStorage.getItem('nexefii_lang') || localStorage.getItem('nexefii_lang'))||'pt'; return (parsed[lang] && parsed[lang].app && parsed[lang].app.searchNotFound) ? parsed[lang].app.searchNotFound : 'Search not found'; } catch(e){return 'Search not found';}})();
         showToast(msg, 3600);
     }
 }
@@ -539,7 +539,7 @@ window.updateRoomSetPoint = updateRoomSetPoint;
 window.updateRoomHvacMode = updateRoomHvacMode;
 // Language selector handler - syncs with main app when possible
 async function onLangChange(newLang) {
-    try { localStorage.setItem('ilux_lang', newLang); } catch (e) { console.warn('Could not write language to localStorage', e); }
+    try { try{ localStorage.setItem('nexefii_lang',newLang); }catch(e){} try{ localStorage.setItem('nexefii_lang',newLang); }catch(e){}; } catch (e) { console.warn('Could not write language to localStorage', e); }
 
     // Force clear i18n cache and reload
     try {
@@ -586,7 +586,7 @@ function applyEngineeringTextsFromSTR(){
             const cache = localStorage.getItem('i18n_cache');
             if (cache) {
                 const parsed = JSON.parse(cache);
-                const lang = localStorage.getItem('ilux_lang') || 'pt';
+                const lang = (localStorage.getItem('nexefii_lang') || localStorage.getItem('nexefii_lang')) || 'pt';
                 s = (parsed[lang] && parsed[lang].app) ? parsed[lang].app : null;
             }
         } catch(e) {
@@ -668,7 +668,7 @@ function applyEngineeringTextsFromSTR(){
         t('col-alert', safe('colAlert','ALERT'));
         t('col-lastupdate', safe('colLastUpdate','LAST UPDATE'));
     // New UI elements
-    const lang = localStorage.getItem('ilux_lang') || 'pt';
+    const lang = (localStorage.getItem('nexefii_lang') || localStorage.getItem('nexefii_lang')) || 'pt';
     const optAll = document.getElementById('opt-all-floors'); if(optAll) optAll.innerText = (s && s.allFloors) ? s.allFloors : (lang==='en'?'All floors':(lang==='es'?'Todos los pisos':'Todos os andares'));
     const btnPrev = document.getElementById('btn-prev'); if(btnPrev) btnPrev.innerText = (s && s.previous) ? s.previous : (lang==='en'?'Previous':(lang==='es'?'Anterior':'Anterior'));
     const btnNext = document.getElementById('btn-next'); if(btnNext) btnNext.innerText = (s && s.next) ? s.next : (lang==='en'?'Next':(lang==='es'?'Siguiente':'PrÃ³ximo'));
@@ -715,7 +715,7 @@ async function loadAndApplyI18N(requestedLang) {
         try { localStorage.setItem(keyCache, JSON.stringify(data)); } catch(e){/*ignore*/}
     }
 
-    const lang = requestedLang || (localStorage.getItem('ilux_lang') || 'pt');
+    const lang = requestedLang || ((localStorage.getItem('nexefii_lang') || localStorage.getItem('nexefii_lang')) || 'pt');
     const pack = (data && data[lang] && data[lang].app) ? data[lang].app : (data && data.pt && data.pt.app) ? data.pt.app : {};
     applyEngineeringTexts(pack);
 }
@@ -771,7 +771,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     const urlParams = new URLSearchParams(window.location.search);
     const langParam = urlParams.get('lang');
     if (langParam) {
-        localStorage.setItem('ilux_lang', langParam);
+        try{ localStorage.setItem('nexefii_lang',langParam); }catch(e){} try{ localStorage.setItem('nexefii_lang',langParam); }catch(e){};
     }
     
     // cache some DOM refs
@@ -817,7 +817,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     // Initialize language selector to stored value (if present)
     try {
         const sel = document.getElementById('langSelect');
-        const stored = localStorage.getItem('ilux_lang') || 'pt';
+        const stored = (localStorage.getItem('nexefii_lang') || localStorage.getItem('nexefii_lang')) || 'pt';
         if (sel) sel.value = stored;
 
         // Prefer to reuse app.js i18n helpers if available
@@ -826,7 +826,7 @@ document.addEventListener('DOMContentLoaded', async () => {
                 await loadAppI18N();
                 // ensure STR from app.js is current
                 if (typeof getStrings === 'function') {
-                    STR = getStrings(localStorage.getItem('ilux_lang') || 'pt');
+                    STR = getStrings((localStorage.getItem('nexefii_lang') || localStorage.getItem('nexefii_lang')) || 'pt');
                 }
                 // apply engineering-specific labels using app STR
                 applyEngineeringTextsFromSTR();
@@ -869,8 +869,8 @@ window.addEventListener('storage', function(e){
     try{
         if(!e) return;
         // React when language or the i18n cache is updated in another window
-        if(e.key === 'ilux_lang' || e.key === 'i18n_cache' || e.key === 'i18n_cache_timestamp'){
-            const newLang = localStorage.getItem('ilux_lang') || e.newValue || 'pt';
+        if(e.key === 'nexefii_lang' || e.key === 'i18n_cache' || e.key === 'i18n_cache_timestamp'){
+            const newLang = (localStorage.getItem('nexefii_lang') || localStorage.getItem('nexefii_lang')) || e.newValue || 'pt';
             
             // Update language selector
             const sel = document.getElementById('langSelect');
@@ -1045,7 +1045,7 @@ function updateRoomData(newData) {
 // Return localized alert text for a given alert type key
 function getAlertText(alertType){
     try{
-        const s = (typeof STR !== 'undefined') ? STR : (function(){ try{ const c=localStorage.getItem('i18n_cache'); if(!c) return {}; const parsed=JSON.parse(c); const lang=localStorage.getItem('ilux_lang')||'pt'; return (parsed[lang] && parsed[lang].app)? parsed[lang].app : {}; } catch(e){return {};}})();
+        const s = (typeof STR !== 'undefined') ? STR : (function(){ try{ const c=localStorage.getItem('i18n_cache'); if(!c) return {}; const parsed=JSON.parse(c); const lang=(localStorage.getItem('nexefii_lang') || localStorage.getItem('nexefii_lang'))||'pt'; return (parsed[lang] && parsed[lang].app)? parsed[lang].app : {}; } catch(e){return {};}})();
         if(!alertType) return (s.alertOther || 'Alert');
         switch(alertType){
             case 'highHumidity': return s.alertHighHumidity || 'High Humidity';
@@ -1059,7 +1059,7 @@ function getAlertText(alertType){
 // CSV export for current filtered rows (all pages)
 function exportEngineeringCSV(){
     try{
-        const lang = localStorage.getItem('ilux_lang')||'pt';
+        const lang = (localStorage.getItem('nexefii_lang') || localStorage.getItem('nexefii_lang'))||'pt';
         const headers = [
             (typeof STR!== 'undefined' && STR.colRoom) ? STR.colRoom : (lang==='en'?'ROOM':(lang==='es'?'HABITACIÃ“N':'QUARTO')),
             (typeof STR!== 'undefined' && STR.colOccupied) ? STR.colOccupied : (lang==='en'?'OCCUPIED':(lang==='es'?'OCUPADO':'OCUPADO')),

@@ -1,0 +1,29 @@
+{
+  "timestamp": "20251112T141213Z",
+  "backups": [
+    "r:\\Development\\Projects\\nexefii\\Bkp\\migration-20251112T141213Z-full-ilux-to-nexefii\\DEV_BACKUP_README.md",
+    "r:\\Development\\Projects\\nexefii\\Bkp\\migration-20251112T141213Z-full-ilux-to-nexefii\\rebranding.py",
+    "r:\\Development\\Projects\\nexefii\\Bkp\\migration-20251112T141213Z-full-ilux-to-nexefii\\run_rebrand_nexefii.py",
+    "r:\\Development\\Projects\\nexefii\\Bkp\\migration-20251112T141213Z-full-ilux-to-nexefii\\scripts\\run_rebrand_phase2.py"
+  ],
+  "changes": {
+    "r:\\Development\\Projects\\nexefii\\scripts\\run_rebrand_phase2.py": {
+      "IluxProps": 1,
+      "IluxAuth": 1,
+      "iluxsys_users": 1,
+      "iluxsys_session": 1,
+      "iluxsys_properties": 1,
+      "iluxsys_email_log": 1,
+      "ilux_lang": 9,
+      "ilux_user": 1,
+      "ilux_token": 1,
+      "iluxSaoPaulo": 1,
+      "iluxMiami": 1,
+      "iluxRioDeJaneiro": 1,
+      "iLux Hotel": 1
+    }
+  },
+  "files_changed": [
+    "r:\\Development\\Projects\\nexefii\\scripts\\run_rebrand_phase2.py"
+  ]
+}

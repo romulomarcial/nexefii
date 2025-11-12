@@ -144,11 +144,11 @@ Object.assign(MasterControlSystem.prototype, {
     const allProps = [];
     const seen = new Set();
     
-    // 1) Tentar IluxProps PRIMEIRO (fonte primÃ¡ria de propriedades)
+    // 1) Tentar NexefiiProps PRIMEIRO (fonte primÃ¡ria de propriedades)
     try {
-      if (window.IluxProps && typeof window.IluxProps.listProperties === 'function') {
-        const list = window.IluxProps.listProperties() || [];
-        console.log('Enterprise getAllProperties(): IluxProps retornou', list.length, 'propriedades:', list);
+      if (window.NexefiiProps && typeof window.NexefiiProps.listProperties === 'function') {
+        const list = window.NexefiiProps.listProperties() || [];
+        console.log('Enterprise getAllProperties(): NexefiiProps retornou', list.length, 'propriedades:', list);
         list.forEach(p => {
           if (p && p.key && !seen.has(p.key)) {
             seen.add(p.key);
@@ -157,14 +157,14 @@ Object.assign(MasterControlSystem.prototype, {
         });
       }
     } catch (e) { 
-      console.error('Erro ao obter propriedades via IluxProps:', e);
+      console.error('Erro ao obter propriedades via NexefiiProps:', e);
     }
 
     // 2) Fallback: Tentar via master control getPropertiesList
     if (allProps.length === 0) {
       try {
         if (typeof this.getPropertiesList === 'function') {
-          const ids = this.getPropertiesList(); // ex.: ['iluxSaoPaulo', 'iluxMiami']
+          const ids = this.getPropertiesList(); // ex.: ['nexefiiSaoPaulo', 'nexefiiMiami']
           console.log('Enterprise getAllProperties(): getPropertiesList retornou', ids.length, 'propriedades:', ids);
           if (Array.isArray(ids) && ids.length) {
             ids.forEach(id => {

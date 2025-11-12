@@ -1,0 +1,256 @@
+{
+  "timestamp": "20251112T140949Z",
+  "backups": [
+    "r:\\Development\\Projects\\nexefii\\Bkp\\migration-20251112T140949Z-full-ilux-to-nexefii\\admin.html",
+    "r:\\Development\\Projects\\nexefii\\Bkp\\migration-20251112T140949Z-full-ilux-to-nexefii\\alerts-control.html",
+    "r:\\Development\\Projects\\nexefii\\Bkp\\migration-20251112T140949Z-full-ilux-to-nexefii\\alerts.js",
+    "r:\\Development\\Projects\\nexefii\\Bkp\\migration-20251112T140949Z-full-ilux-to-nexefii\\app.js",
+    "r:\\Development\\Projects\\nexefii\\Bkp\\migration-20251112T140949Z-full-ilux-to-nexefii\\ARCHITECTURE_REFACTOR_PLAN.md",
+    "r:\\Development\\Projects\\nexefii\\Bkp\\migration-20251112T140949Z-full-ilux-to-nexefii\\auth.js",
+    "r:\\Development\\Projects\\nexefii\\Bkp\\migration-20251112T140949Z-full-ilux-to-nexefii\\clear-cache.html",
+    "r:\\Development\\Projects\\nexefii\\Bkp\\migration-20251112T140949Z-full-ilux-to-nexefii\\demo-data-generator.js",
+    "r:\\Development\\Projects\\nexefii\\Bkp\\migration-20251112T140949Z-full-ilux-to-nexefii\\DEMO_DATA_SYSTEM_README.md",
+    "r:\\Development\\Projects\\nexefii\\Bkp\\migration-20251112T140949Z-full-ilux-to-nexefii\\DEV_BACKUP_README.md",
+    "r:\\Development\\Projects\\nexefii\\Bkp\\migration-20251112T140949Z-full-ilux-to-nexefii\\engineering-list.html",
+    "r:\\Development\\Projects\\nexefii\\Bkp\\migration-20251112T140949Z-full-ilux-to-nexefii\\engineering-list.js",
+    "r:\\Development\\Projects\\nexefii\\Bkp\\migration-20251112T140949Z-full-ilux-to-nexefii\\engineering.js",
+    "r:\\Development\\Projects\\nexefii\\Bkp\\migration-20251112T140949Z-full-ilux-to-nexefii\\ENTERPRISE_BACKUP_SYSTEM_README.md",
+    "r:\\Development\\Projects\\nexefii\\Bkp\\migration-20251112T140949Z-full-ilux-to-nexefii\\FINAL_REPORT.md",
+    "r:\\Development\\Projects\\nexefii\\Bkp\\migration-20251112T140949Z-full-ilux-to-nexefii\\housekeeping-control.html",
+    "r:\\Development\\Projects\\nexefii\\Bkp\\migration-20251112T140949Z-full-ilux-to-nexefii\\housekeeping.js",
+    "r:\\Development\\Projects\\nexefii\\Bkp\\migration-20251112T140949Z-full-ilux-to-nexefii\\index.html",
+    "r:\\Development\\Projects\\nexefii\\Bkp\\migration-20251112T140949Z-full-ilux-to-nexefii\\master-control-enterprise.js",
+    "r:\\Development\\Projects\\nexefii\\Bkp\\migration-20251112T140949Z-full-ilux-to-nexefii\\master-control.html",
+    "r:\\Development\\Projects\\nexefii\\Bkp\\migration-20251112T140949Z-full-ilux-to-nexefii\\master-control.js",
+    "r:\\Development\\Projects\\nexefii\\Bkp\\migration-20251112T140949Z-full-ilux-to-nexefii\\master-init.js",
+    "r:\\Development\\Projects\\nexefii\\Bkp\\migration-20251112T140949Z-full-ilux-to-nexefii\\migrate-storage.html",
+    "r:\\Development\\Projects\\nexefii\\Bkp\\migration-20251112T140949Z-full-ilux-to-nexefii\\MIGRATION_NEXEFII.md",
+    "r:\\Development\\Projects\\nexefii\\Bkp\\migration-20251112T140949Z-full-ilux-to-nexefii\\nexefii-auth.js",
+    "r:\\Development\\Projects\\nexefii\\Bkp\\migration-20251112T140949Z-full-ilux-to-nexefii\\pms-frontdesk.js",
+    "r:\\Development\\Projects\\nexefii\\Bkp\\migration-20251112T140949Z-full-ilux-to-nexefii\\pms-production-setup.js",
+    "r:\\Development\\Projects\\nexefii\\Bkp\\migration-20251112T140949Z-full-ilux-to-nexefii\\pms-reservations-diagnostics.html",
+    "r:\\Development\\Projects\\nexefii\\Bkp\\migration-20251112T140949Z-full-ilux-to-nexefii\\pms-reservations-ui.js",
+    "r:\\Development\\Projects\\nexefii\\Bkp\\migration-20251112T140949Z-full-ilux-to-nexefii\\pms-rooms.js",
+    "r:\\Development\\Projects\\nexefii\\Bkp\\migration-20251112T140949Z-full-ilux-to-nexefii\\property-publish-helpers.js",
+    "r:\\Development\\Projects\\nexefii\\Bkp\\migration-20251112T140949Z-full-ilux-to-nexefii\\PROPERTY_DASHBOARD_README.md",
+    "r:\\Development\\Projects\\nexefii\\Bkp\\migration-20251112T140949Z-full-ilux-to-nexefii\\PR_INSTRUCTIONS.md",
+    "r:\\Development\\Projects\\nexefii\\Bkp\\migration-20251112T140949Z-full-ilux-to-nexefii\\qa-baseline-capture.js",
+    "r:\\Development\\Projects\\nexefii\\Bkp\\migration-20251112T140949Z-full-ilux-to-nexefii\\README_PWA.md",
+    "r:\\Development\\Projects\\nexefii\\Bkp\\migration-20251112T140949Z-full-ilux-to-nexefii\\rebranding.py",
+    "r:\\Development\\Projects\\nexefii\\Bkp\\migration-20251112T140949Z-full-ilux-to-nexefii\\run_rebrand_nexefii.py",
+    "r:\\Development\\Projects\\nexefii\\Bkp\\migration-20251112T140949Z-full-ilux-to-nexefii\\test-properties.html",
+    "r:\\Development\\Projects\\nexefii\\Bkp\\migration-20251112T140949Z-full-ilux-to-nexefii\\qa\\headless-check.js",
+    "r:\\Development\\Projects\\nexefii\\Bkp\\migration-20251112T140949Z-full-ilux-to-nexefii\\qa\\headless-report.json",
+    "r:\\Development\\Projects\\nexefii\\Bkp\\migration-20251112T140949Z-full-ilux-to-nexefii\\scripts\\run_rebrand_phase2.py"
+  ],
+  "changes": {
+    "r:\\Development\\Projects\\nexefii\\admin.html": {
+      "IluxProps": 8,
+      "IluxAuth": 30,
+      "ilux_lang": 2,
+      "iluxSaoPaulo": 3,
+      "iluxMiami": 3,
+      "iluxRioDeJaneiro": 3,
+      "iLux Hotel": 9
+    },
+    "r:\\Development\\Projects\\nexefii\\alerts-control.html": {
+      "IluxAuth": 3
+    },
+    "r:\\Development\\Projects\\nexefii\\alerts.js": {
+      "ilux_lang": 9
+    },
+    "r:\\Development\\Projects\\nexefii\\app.js": {
+      "IluxAuth": 42,
+      "ilux_lang": 21,
+      "ilux_user": 2,
+      "iluxSaoPaulo": 8,
+      "iluxMiami": 8,
+      "iluxRioDeJaneiro": 8,
+      "iLux Hotel": 6
+    },
+    "r:\\Development\\Projects\\nexefii\\ARCHITECTURE_REFACTOR_PLAN.md": {
+      "IluxProps": 1
+    },
+    "r:\\Development\\Projects\\nexefii\\auth.js": {
+      "IluxAuth": 41
+    },
+    "r:\\Development\\Projects\\nexefii\\clear-cache.html": {
+      "ilux_lang": 1,
+      "ilux_user": 1
+    },
+    "r:\\Development\\Projects\\nexefii\\demo-data-generator.js": {
+      "IluxProps": 3
+    },
+    "r:\\Development\\Projects\\nexefii\\DEMO_DATA_SYSTEM_README.md": {
+      "iluxSaoPaulo": 1,
+      "iluxMiami": 14,
+      "iluxRioDeJaneiro": 2,
+      "\\bilux\\b": 2
+    },
+    "r:\\Development\\Projects\\nexefii\\engineering-list.html": {
+      "IluxAuth": 3
+    },
+    "r:\\Development\\Projects\\nexefii\\engineering-list.js": {
+      "ilux_lang": 2
+    },
+    "r:\\Development\\Projects\\nexefii\\engineering.js": {
+      "ilux_lang": 12
+    },
+    "r:\\Development\\Projects\\nexefii\\ENTERPRISE_BACKUP_SYSTEM_README.md": {
+      "iluxSaoPaulo": 2
+    },
+    "r:\\Development\\Projects\\nexefii\\FINAL_REPORT.md": {
+      "\\bilux\\b": 1
+    },
+    "r:\\Development\\Projects\\nexefii\\housekeeping-control.html": {
+      "IluxAuth": 3
+    },
+    "r:\\Development\\Projects\\nexefii\\housekeeping.js": {
+      "ilux_lang": 8
+    },
+    "r:\\Development\\Projects\\nexefii\\index.html": {
+      "IluxAuth": 22
+    },
+    "r:\\Development\\Projects\\nexefii\\master-control-enterprise.js": {
+      "IluxProps": 6,
+      "iluxSaoPaulo": 1,
+      "iluxMiami": 1
+    },
+    "r:\\Development\\Projects\\nexefii\\master-control.html": {
+      "IluxProps": 3,
+      "iluxSaoPaulo": 1,
+      "\\bilux\\b": 1
+    },
+    "r:\\Development\\Projects\\nexefii\\master-control.js": {
+      "IluxProps": 49,
+      "ilux_lang": 2,
+      "ilux_user": 1
+    },
+    "r:\\Development\\Projects\\nexefii\\master-init.js": {
+      "IluxAuth": 6
+    },
+    "r:\\Development\\Projects\\nexefii\\migrate-storage.html": {
+      "\\bilux\\b": 4
+    },
+    "r:\\Development\\Projects\\nexefii\\MIGRATION_NEXEFII.md": {
+      "IluxProps": 5,
+      "IluxAuth": 8,
+      "ilux_lang": 6,
+      "ilux_user": 2,
+      "iluxSaoPaulo": 6,
+      "iluxMiami": 2,
+      "iluxRioDeJaneiro": 1,
+      "iLux Hotel": 4,
+      "\\bilux\\b": 8
+    },
+    "r:\\Development\\Projects\\nexefii\\nexefii-auth.js": {
+      "IluxAuth": 3
+    },
+    "r:\\Development\\Projects\\nexefii\\pms-frontdesk.js": {
+      "IluxAuth": 8,
+      "ilux_lang": 1
+    },
+    "r:\\Development\\Projects\\nexefii\\pms-production-setup.js": {
+      "ilux_lang": 1
+    },
+    "r:\\Development\\Projects\\nexefii\\pms-reservations-diagnostics.html": {
+      "ilux_lang": 1
+    },
+    "r:\\Development\\Projects\\nexefii\\pms-reservations-ui.js": {
+      "IluxAuth": 8,
+      "ilux_lang": 1
+    },
+    "r:\\Development\\Projects\\nexefii\\pms-rooms.js": {
+      "IluxAuth": 8,
+      "ilux_lang": 1
+    },
+    "r:\\Development\\Projects\\nexefii\\property-publish-helpers.js": {
+      "IluxProps": 3
+    },
+    "r:\\Development\\Projects\\nexefii\\PROPERTY_DASHBOARD_README.md": {
+      "iluxSaoPaulo": 4,
+      "iluxMiami": 3,
+      "iluxRioDeJaneiro": 1,
+      "\\bilux\\b": 1
+    },
+    "r:\\Development\\Projects\\nexefii\\PR_INSTRUCTIONS.md": {
+      "IluxAuth": 1
+    },
+    "r:\\Development\\Projects\\nexefii\\qa-baseline-capture.js": {
+      "IluxProps": 4
+    },
+    "r:\\Development\\Projects\\nexefii\\README_PWA.md": {
+      "\\bilux\\b": 1
+    },
+    "r:\\Development\\Projects\\nexefii\\test-properties.html": {
+      "IluxProps": 12,
+      "iluxSaoPaulo": 1,
+      "iluxMiami": 2,
+      "iluxRioDeJaneiro": 2,
+      "\\bilux\\b": 2
+    },
+    "r:\\Development\\Projects\\nexefii\\qa\\headless-check.js": {
+      "iluxSaoPaulo": 3,
+      "iluxMiami": 3
+    },
+    "r:\\Development\\Projects\\nexefii\\qa\\headless-report.json": {
+      "IluxProps": 2
+    },
+    "r:\\Development\\Projects\\nexefii\\scripts\\run_rebrand_phase2.py": {
+      "IluxProps": 1,
+      "IluxAuth": 1,
+      "iluxsys_users": 1,
+      "iluxsys_session": 1,
+      "iluxsys_properties": 1,
+      "iluxsys_email_log": 1,
+      "ilux_lang": 9,
+      "ilux_user": 1,
+      "ilux_token": 1,
+      "iluxSaoPaulo": 1,
+      "iluxMiami": 1,
+      "iluxRioDeJaneiro": 1,
+      "iLux Hotel": 1,
+      "\\bilux\\b": 8
+    }
+  },
+  "files_changed": [
+    "r:\\Development\\Projects\\nexefii\\admin.html",
+    "r:\\Development\\Projects\\nexefii\\alerts-control.html",
+    "r:\\Development\\Projects\\nexefii\\alerts.js",
+    "r:\\Development\\Projects\\nexefii\\app.js",
+    "r:\\Development\\Projects\\nexefii\\ARCHITECTURE_REFACTOR_PLAN.md",
+    "r:\\Development\\Projects\\nexefii\\auth.js",
+    "r:\\Development\\Projects\\nexefii\\clear-cache.html",
+    "r:\\Development\\Projects\\nexefii\\demo-data-generator.js",
+    "r:\\Development\\Projects\\nexefii\\DEMO_DATA_SYSTEM_README.md",
+    "r:\\Development\\Projects\\nexefii\\engineering-list.html",
+    "r:\\Development\\Projects\\nexefii\\engineering-list.js",
+    "r:\\Development\\Projects\\nexefii\\engineering.js",
+    "r:\\Development\\Projects\\nexefii\\ENTERPRISE_BACKUP_SYSTEM_README.md",
+    "r:\\Development\\Projects\\nexefii\\FINAL_REPORT.md",
+    "r:\\Development\\Projects\\nexefii\\housekeeping-control.html",
+    "r:\\Development\\Projects\\nexefii\\housekeeping.js",
+    "r:\\Development\\Projects\\nexefii\\index.html",
+    "r:\\Development\\Projects\\nexefii\\master-control-enterprise.js",
+    "r:\\Development\\Projects\\nexefii\\master-control.html",
+    "r:\\Development\\Projects\\nexefii\\master-control.js",
+    "r:\\Development\\Projects\\nexefii\\master-init.js",
+    "r:\\Development\\Projects\\nexefii\\migrate-storage.html",
+    "r:\\Development\\Projects\\nexefii\\MIGRATION_NEXEFII.md",
+    "r:\\Development\\Projects\\nexefii\\nexefii-auth.js",
+    "r:\\Development\\Projects\\nexefii\\pms-frontdesk.js",
+    "r:\\Development\\Projects\\nexefii\\pms-production-setup.js",
+    "r:\\Development\\Projects\\nexefii\\pms-reservations-diagnostics.html",
+    "r:\\Development\\Projects\\nexefii\\pms-reservations-ui.js",
+    "r:\\Development\\Projects\\nexefii\\pms-rooms.js",
+    "r:\\Development\\Projects\\nexefii\\property-publish-helpers.js",
+    "r:\\Development\\Projects\\nexefii\\PROPERTY_DASHBOARD_README.md",
+    "r:\\Development\\Projects\\nexefii\\PR_INSTRUCTIONS.md",
+    "r:\\Development\\Projects\\nexefii\\qa-baseline-capture.js",
+    "r:\\Development\\Projects\\nexefii\\README_PWA.md",
+    "r:\\Development\\Projects\\nexefii\\test-properties.html",
+    "r:\\Development\\Projects\\nexefii\\qa\\headless-check.js",
+    "r:\\Development\\Projects\\nexefii\\qa\\headless-report.json",
+    "r:\\Development\\Projects\\nexefii\\scripts\\run_rebrand_phase2.py"
+  ]
+}

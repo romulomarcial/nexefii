@@ -111,7 +111,7 @@
     <p class="subtitle">Sistema de migração de nexefii para NEXEFII</p>
 
     <div class="section">
-      <h2>Chaves Antigas (ilux*) <span class="count" id="oldCount">0</span></h2>
+      <h2>Chaves Antigas (nexefii*) <span class="count" id="oldCount">0</span></h2>
       <div class="keys-list" id="oldKeys">Nenhuma chave antiga encontrada</div>
     </div>
 
@@ -135,7 +135,7 @@
       for (let i = 0; i < localStorage.length; i++) {
         const key = localStorage.key(i);
         if (key) {
-          if (key.includes('ilux') || key.includes('Ilux') || key.includes('ILUX')) {
+          if (key.includes('nexefii') || key.includes('nexefii') || key.includes('nexefii')) {
             oldKeys.push(key);
           } else if (key.includes('nexefii') || key.includes('Nexefii') || key.includes('NEXEFII')) {
             newKeys.push(key);

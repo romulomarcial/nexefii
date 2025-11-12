@@ -115,7 +115,7 @@ Cria backup de uma propriedade especÃ­fica.
 {
   success: true,
   id: 'tenant_1730000000000',
-  tenantId: 'iluxSaoPaulo',
+  tenantId: 'nexefiiSaoPaulo',
   manifest: {
     size_bytes: 156789,
     duration_ms: 234,
@@ -463,7 +463,7 @@ _encryptData(dataString)
 {
   id: 'tenant_1730000000000',
   type: 'full' | 'incremental',
-  tenantId: 'iluxSaoPaulo',
+  tenantId: 'nexefiiSaoPaulo',
   timestamp: '2025-11-07T18:30:00.000Z',
   createdBy: 'master',
   created_by: 'master',

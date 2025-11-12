@@ -8,37 +8,37 @@ const CACHE_DURATION = 3600000; // 1 hora em milissegundos
 
 // ---- Property-based access helpers ----
 // Canonical hotel keys as used in i18n.json
-const ALL_HOTEL_KEYS = ['iluxSaoPaulo','iluxMiami','iluxRioDeJaneiro'];
+const ALL_HOTEL_KEYS = ['nexefiiSaoPaulo','nexefiiMiami','nexefiiRioDeJaneiro'];
 const HOTEL_KEY_BY_NAME = {
-  'SÃ£o Paulo':'iluxSaoPaulo',
-  'Miami':'iluxMiami',
-  'Rio de Janeiro':'iluxRioDeJaneiro'
+  'SÃ£o Paulo':'nexefiiSaoPaulo',
+  'Miami':'nexefiiMiami',
+  'Rio de Janeiro':'nexefiiRioDeJaneiro'
 };
 const HOTEL_DOM_CODE_BY_KEY = {
-  iluxSaoPaulo: 'sp',
-  iluxMiami: 'mi',
-  iluxRioDeJaneiro: 'rio'
+  nexefiiSaoPaulo: 'sp',
+  nexefiiMiami: 'mi',
+  nexefiiRioDeJaneiro: 'rio'
 };
 const HOTEL_CITY_NAME_BY_KEY = {
-  iluxSaoPaulo: 'SÃ£o Paulo',
-  iluxMiami: 'Miami',
-  iluxRioDeJaneiro: 'Rio de Janeiro'
+  nexefiiSaoPaulo: 'SÃ£o Paulo',
+  nexefiiMiami: 'Miami',
+  nexefiiRioDeJaneiro: 'Rio de Janeiro'
 };
 const HOTEL_DISPLAY_NAME_BY_KEY = {
-  iluxSaoPaulo: 'iLux Hotel SÃ£o Paulo',
-  iluxMiami: 'iLux Hotel Miami',
-  iluxRioDeJaneiro: 'iLux Hotel Rio de Janeiro'
+  nexefiiSaoPaulo: 'Nexefii Hotel SÃ£o Paulo',
+  nexefiiMiami: 'Nexefii Hotel Miami',
+  nexefiiRioDeJaneiro: 'Nexefii Hotel Rio de Janeiro'
 };
 
 function getAllowedHotelKeys(){
   try{
-    const session = (window.IluxAuth && IluxAuth.getCurrentSession) ? ((window.IluxAuth && IluxAuth.getCurrentSession) ? IluxAuth.getCurrentSession() : (window.NexefiiAuth && NexefiiAuth.getCurrentSession ? ((window.NexefiiAuth && NexefiiAuth.getCurrentSession) ? NexefiiAuth.getCurrentSession() : (window.IluxAuth && IluxAuth.getCurrentSession ? IluxAuth.getCurrentSession() : null)) : null)) : null;
+    const session = (window.NexefiiAuth && NexefiiAuth.getCurrentSession) ? ((window.NexefiiAuth && NexefiiAuth.getCurrentSession) ? NexefiiAuth.getCurrentSession() : (window.NexefiiAuth && NexefiiAuth.getCurrentSession ? ((window.NexefiiAuth && NexefiiAuth.getCurrentSession) ? NexefiiAuth.getCurrentSession() : (window.NexefiiAuth && NexefiiAuth.getCurrentSession ? NexefiiAuth.getCurrentSession() : null)) : null)) : null;
     if(!session) return [];
     // Master and Admin see all
     if(session.role === 'master' || session.role === 'admin') return [...ALL_HOTEL_KEYS];
     // Try to get approvedProperties from user record if available
-    if(window.IluxAuth && IluxAuth.getAllUsers){
-      const users = IluxAuth.getAllUsers();
+    if(window.NexefiiAuth && NexefiiAuth.getAllUsers){
+      const users = NexefiiAuth.getAllUsers();
       const user = users.find(u=>u.id===session.userId);
       if(user){
         if(Array.isArray(user.approvedProperties) && user.approvedProperties.length){
@@ -68,12 +68,12 @@ function isHotelAllowedByName(name){
 function applyPropertyFilter(){
   const allowed = getAllowedHotelKeys();
   // If admin, nothing to filter
-  const session = (window.IluxAuth && IluxAuth.getCurrentSession) ? ((window.IluxAuth && IluxAuth.getCurrentSession) ? IluxAuth.getCurrentSession() : (window.NexefiiAuth && NexefiiAuth.getCurrentSession ? ((window.NexefiiAuth && NexefiiAuth.getCurrentSession) ? NexefiiAuth.getCurrentSession() : (window.IluxAuth && IluxAuth.getCurrentSession ? IluxAuth.getCurrentSession() : null)) : null)) : null;
+  const session = (window.NexefiiAuth && NexefiiAuth.getCurrentSession) ? ((window.NexefiiAuth && NexefiiAuth.getCurrentSession) ? NexefiiAuth.getCurrentSession() : (window.NexefiiAuth && NexefiiAuth.getCurrentSession ? ((window.NexefiiAuth && NexefiiAuth.getCurrentSession) ? NexefiiAuth.getCurrentSession() : (window.NexefiiAuth && NexefiiAuth.getCurrentSession ? NexefiiAuth.getCurrentSession() : null)) : null)) : null;
     const isAdmin = !!(session && (session.role==='admin' || session.role==='master'));
   // Summary tiles (order: SP, Miami, Rio)
   const tiles = document.querySelectorAll('.summary-grid .tile');
   if(tiles && tiles.length){
-    const tileKeys = ['iluxSaoPaulo','iluxMiami','iluxRioDeJaneiro'];
+    const tileKeys = ['nexefiiSaoPaulo','nexefiiMiami','nexefiiRioDeJaneiro'];
     tiles.forEach((tile, idx)=>{
       const k = tileKeys[idx];
       if(!isAdmin && !allowed.includes(k)){
@@ -92,14 +92,14 @@ function applyPropertyFilter(){
       if(titleEl){
         // Detect by id suffix if present (hotel-name-sp/mi/rio) or by text
         const id = titleEl.id || '';
-        if(id.endsWith('-sp')) k='iluxSaoPaulo';
-        else if(id.endsWith('-mi')) k='iluxMiami';
-        else if(id.endsWith('-rio')) k='iluxRioDeJaneiro';
+        if(id.endsWith('-sp')) k='nexefiiSaoPaulo';
+        else if(id.endsWith('-mi')) k='nexefiiMiami';
+        else if(id.endsWith('-rio')) k='nexefiiRioDeJaneiro';
         else {
           const txt = (titleEl.textContent||'').trim();
-          k = HOTEL_KEY_BY_NAME['SÃ£o Paulo'] && txt.includes('SÃ£o Paulo') ? 'iluxSaoPaulo'
-            : (txt.includes('Miami') ? 'iluxMiami'
-            : (txt.includes('Rio') ? 'iluxRioDeJaneiro' : null));
+          k = HOTEL_KEY_BY_NAME['SÃ£o Paulo'] && txt.includes('SÃ£o Paulo') ? 'nexefiiSaoPaulo'
+            : (txt.includes('Miami') ? 'nexefiiMiami'
+            : (txt.includes('Rio') ? 'nexefiiRioDeJaneiro' : null));
         }
       }
       const show = isAdmin || (k && allowed.includes(k));
@@ -119,7 +119,7 @@ function applyPropertyFilter(){
         emptyHint.style.margin = '8px 0 12px 0';
         container.parentElement.insertBefore(emptyHint, container);
       }
-      const L = getStrings(localStorage.getItem('ilux_lang')||'pt');
+      const L = getStrings((localStorage.getItem('nexefii_lang') || localStorage.getItem('nexefii_lang'))||'pt');
       emptyHint.innerText = (L && L.noHotelsAccess) || 'Nenhum hotel autorizado para o seu usuÃ¡rio.';
     }else if(emptyHint){
       emptyHint.remove();
@@ -169,7 +169,7 @@ function renderHotelComparisons(){
 // Function to open engineering control window
 function openEngineeringControl() {
     // Pass the current language as a URL parameter
-    const currentLang = localStorage.getItem('ilux_lang') || 'pt';
+    const currentLang = (localStorage.getItem('nexefii_lang') || localStorage.getItem('nexefii_lang')) || 'pt';
     const url = `engineering-control.html?lang=${currentLang}`;
     window.open(url, 'EngineeringControl', 
         'width=1200,height=800,menubar=no,toolbar=no,location=no,status=no');
@@ -183,7 +183,7 @@ function openHousekeepingControl() {
       localStorage.setItem('sim_suites_snapshot', JSON.stringify(SIM_SUITES));
     }
   }catch(e){ /* ignore quota issues */ }
-  const currentLang = localStorage.getItem('ilux_lang') || 'pt';
+  const currentLang = (localStorage.getItem('nexefii_lang') || localStorage.getItem('nexefii_lang')) || 'pt';
   const url = `housekeeping-control.html?lang=${currentLang}`;
   window.open(url, 'HousekeepingControl',
     'width=1200,height=800,menubar=no,toolbar=no,location=no,status=no');
@@ -197,7 +197,7 @@ function openAlertsControl() {
       localStorage.setItem('sim_suites_snapshot', JSON.stringify(SIM_SUITES));
     }
   }catch(e){ /* ignore quota issues */ }
-  const currentLang = localStorage.getItem('ilux_lang') || 'pt';
+  const currentLang = (localStorage.getItem('nexefii_lang') || localStorage.getItem('nexefii_lang')) || 'pt';
   const url = `alerts-control.html?lang=${currentLang}`;
   window.open(url, 'AlertsControl',
     'width=1200,height=800,menubar=no,toolbar=no,location=no,status=no');
@@ -211,7 +211,7 @@ function openEngineeringList(metric){
       localStorage.setItem('sim_suites_snapshot', JSON.stringify(SIM_SUITES));
     }
   }catch(e){ /* ignore quota issues */ }
-  const currentLang = localStorage.getItem('ilux_lang') || 'pt';
+  const currentLang = (localStorage.getItem('nexefii_lang') || localStorage.getItem('nexefii_lang')) || 'pt';
   const url = `engineering-list.html?metric=${encodeURIComponent(metric||'On')}&lang=${encodeURIComponent(currentLang)}`;
   window.open(url, 'EngineeringList', 'width=980,height=720,menubar=no,toolbar=no,location=no,status=no');
 }
@@ -415,7 +415,7 @@ function getStrings(lang){
   }
   return base;
 }
-let lang=localStorage.getItem('ilux_lang')||'pt';
+let lang=(localStorage.getItem('nexefii_lang') || localStorage.getItem('nexefii_lang'))||'pt';
 let STR=getStrings(lang);
 function t(id,text){
   const el=document.getElementById(id); 
@@ -444,7 +444,7 @@ async function changeLanguage(newLang) {
   await new Promise(resolve => setTimeout(resolve, 300));
   
   lang = newLang;
-  localStorage.setItem('ilux_lang', lang);
+  try{ localStorage.setItem('nexefii_lang',lang); }catch(e){} try{ localStorage.setItem('nexefii_lang',lang); }catch(e){};
   await loadAppI18N();
   STR = getStrings(lang);
   
@@ -489,7 +489,7 @@ async function initTexts(){
   // Header logout
   const lo=document.getElementById('btnLogout'); if(lo) lo.innerText=STR.logout;
 
-  const user=localStorage.getItem('ilux_user')||'demo@nexefii.com';
+  const user=localStorage.getItem('nexefii_user')||'demo@nexefii.com';
   t('userBox', user);
   t('t-summary', STR.summary);
   t('t-legend-title', STR.legend);
@@ -522,9 +522,9 @@ async function initTexts(){
   
   // Hotel names (opcional - pode manter como estÃ£o se forem marcas)
   const hotelNames = {
-    'sp': 'iLux Hotel SÃ£o Paulo',
-    'mi': 'iLux Hotel Miami',
-    'rio': 'iLux Hotel Rio de Janeiro'
+    'sp': 'Nexefii Hotel SÃ£o Paulo',
+    'mi': 'Nexefii Hotel Miami',
+    'rio': 'Nexefii Hotel Rio de Janeiro'
   };
   Object.entries(hotelNames).forEach(([code, name]) => {
     t('hotel-name-'+code, name);
@@ -562,7 +562,7 @@ let calState={year:new Date().getFullYear(),month:new Date().getMonth(),hotel:'S
 function openControl(h){
   // Property-based access guard
   if(!isHotelAllowedByName(h)){
-    const L = getStrings(localStorage.getItem('ilux_lang')||'pt');
+    const L = getStrings((localStorage.getItem('nexefii_lang') || localStorage.getItem('nexefii_lang'))||'pt');
     alert((L && L.accessDeniedHotel) || 'Acesso negado para este hotel.');
     return;
   }
@@ -598,7 +598,7 @@ function closeControl(){
 function openRTI(h){
   // Property-based access guard
   if(!isHotelAllowedByName(h)){
-    const L = getStrings(localStorage.getItem('ilux_lang')||'pt');
+    const L = getStrings((localStorage.getItem('nexefii_lang') || localStorage.getItem('nexefii_lang'))||'pt');
     alert((L && L.accessDeniedHotel) || 'Acesso negado para este hotel.');
     return;
   }
@@ -680,7 +680,7 @@ window.addEventListener('DOMContentLoaded', ()=>{
 window.addEventListener('DOMContentLoaded', ()=>{
   if(document.getElementById('t-summary')){
     // Show admin button if user is admin
-    const session = ((window.IluxAuth && IluxAuth.getCurrentSession) ? IluxAuth.getCurrentSession() : (window.NexefiiAuth && NexefiiAuth.getCurrentSession ? ((window.NexefiiAuth && NexefiiAuth.getCurrentSession) ? NexefiiAuth.getCurrentSession() : (window.IluxAuth && IluxAuth.getCurrentSession ? IluxAuth.getCurrentSession() : null)) : null));
+    const session = ((window.NexefiiAuth && NexefiiAuth.getCurrentSession) ? NexefiiAuth.getCurrentSession() : (window.NexefiiAuth && NexefiiAuth.getCurrentSession ? ((window.NexefiiAuth && NexefiiAuth.getCurrentSession) ? NexefiiAuth.getCurrentSession() : (window.NexefiiAuth && NexefiiAuth.getCurrentSession ? NexefiiAuth.getCurrentSession() : null)) : null));
       if(session && (session.role === 'admin' || session.role === 'master')) {
       const adminBtn = document.getElementById('btnAdmin');
       if(adminBtn) adminBtn.style.display = 'inline-flex';
@@ -688,7 +688,7 @@ window.addEventListener('DOMContentLoaded', ()=>{
     
     const langSelect = document.getElementById('langSelect');
     if(langSelect) {
-      langSelect.value = localStorage.getItem('ilux_lang') || 'pt';
+      langSelect.value = (localStorage.getItem('nexefii_lang') || localStorage.getItem('nexefii_lang')) || 'pt';
     }
     // Load i18n once, then init texts and KPIs
     loadAppI18N().then(()=>{
@@ -705,10 +705,10 @@ window.addEventListener('DOMContentLoaded', ()=>{
 });
 
 function logout(){ 
-  if(window.IluxAuth) {
-    IluxAuth.logout();
+  if(window.NexefiiAuth) {
+    NexefiiAuth.logout();
   }
-  localStorage.removeItem('ilux_user'); 
+  localStorage.removeItem('nexefii_user'); 
   window.location.href='login.html'; 
 }
 
@@ -728,7 +728,7 @@ function applyModulePermissions() {
 
     Object.entries(moduleButtons).forEach(([buttonId, module]) => {
       const btn = document.getElementById(buttonId);
-      if(btn && !((window.IluxAuth && IluxAuth.hasModuleAccess) ? IluxAuth.hasModuleAccess(module) : true)) {
+      if(btn && !((window.NexefiiAuth && NexefiiAuth.hasModuleAccess) ? NexefiiAuth.hasModuleAccess(module) : true)) {
         btn.style.display = 'none';
       // Also hide parent card if it exists
       const card = btn.closest('.control-card');
@@ -1069,7 +1069,7 @@ function openEngineeringListModal(metric){
   if(metric) ENG_LIST_STATE.metric = metric;
   ENG_LIST_STATE.page = 1;
   // Fill selects with localized labels
-  const L = getStrings(localStorage.getItem('ilux_lang')||'pt');
+  const L = getStrings((localStorage.getItem('nexefii_lang') || localStorage.getItem('nexefii_lang'))||'pt');
   const sel = document.getElementById('engMetricSelect');
   if(sel && sel.options.length===0){
     sel.innerHTML = `
@@ -1126,7 +1126,7 @@ function computeEngFloorCounts(){
 }
 
 function renderEngListModal(){
-  const L = getStrings(localStorage.getItem('ilux_lang')||'pt');
+  const L = getStrings((localStorage.getItem('nexefii_lang') || localStorage.getItem('nexefii_lang'))||'pt');
   const sel = document.getElementById('engMetricSelect');
   if(sel) sel.value = ENG_LIST_STATE.metric;
   const lbl = document.getElementById('engMetricLabel');
@@ -1262,7 +1262,7 @@ function openHousekeepingListModal(metric){
   HK_LIST_STATE.open = true;
   if(metric) HK_LIST_STATE.metric = metric;
   HK_LIST_STATE.page = 1;
-  const L = getStrings(localStorage.getItem('ilux_lang')||'pt');
+  const L = getStrings((localStorage.getItem('nexefii_lang') || localStorage.getItem('nexefii_lang'))||'pt');
   const sel = document.getElementById('hkMetricSelect');
   if(sel && sel.options.length===0){
     sel.innerHTML = `
@@ -1318,7 +1318,7 @@ function computeHkFloorCounts(){
 }
 
 function renderHkListModal(){
-  const L = getStrings(localStorage.getItem('ilux_lang')||'pt');
+  const L = getStrings((localStorage.getItem('nexefii_lang') || localStorage.getItem('nexefii_lang'))||'pt');
   const sel = document.getElementById('hkMetricSelect');
   if(sel) sel.value = HK_LIST_STATE.metric;
   const lbl = document.getElementById('hkMetricLabel');
@@ -1447,7 +1447,7 @@ function openAlertsListModal(metric){
   ALERT_LIST_STATE.open = true;
   if(metric) ALERT_LIST_STATE.metric = metric;
   ALERT_LIST_STATE.page = 1;
-  const L = getStrings(localStorage.getItem('ilux_lang')||'pt');
+  const L = getStrings((localStorage.getItem('nexefii_lang') || localStorage.getItem('nexefii_lang'))||'pt');
   const sel = document.getElementById('alertMetricSelect');
   if(sel && sel.options.length===0){
     sel.innerHTML = `
@@ -1502,7 +1502,7 @@ function computeAlertFloorCounts(){
 }
 
 function renderAlertListModal(){
-  const L = getStrings(localStorage.getItem('ilux_lang')||'pt');
+  const L = getStrings((localStorage.getItem('nexefii_lang') || localStorage.getItem('nexefii_lang'))||'pt');
   const sel = document.getElementById('alertMetricSelect');
   if(sel) sel.value = ALERT_LIST_STATE.metric;
   const lbl = document.getElementById('alertMetricLabel');
@@ -1654,15 +1654,15 @@ const CARD_VIEW_STATE = {
 function renderDashboardCards(){
   const container = document.getElementById('dashboardCards');
   if(!container) return;
-  const curLang = localStorage.getItem('ilux_lang') || 'pt';
+  const curLang = (localStorage.getItem('nexefii_lang') || localStorage.getItem('nexefii_lang')) || 'pt';
   const L = getStrings(curLang);
   const counts = computeCounts();
   const eng = counts.eng; const hk = counts.hk; const al = counts.alerts;
 
   // Check permissions for each module
-  const hasEngineering = (window.IluxAuth && IluxAuth.hasModuleAccess) ? IluxAuth.hasModuleAccess('engineering') : true;
-  const hasHousekeeping = (window.IluxAuth && IluxAuth.hasModuleAccess) ? IluxAuth.hasModuleAccess('housekeeping') : true;
-  const hasAlerts = (window.IluxAuth && IluxAuth.hasModuleAccess) ? IluxAuth.hasModuleAccess('alerts') : true;
+  const hasEngineering = (window.NexefiiAuth && NexefiiAuth.hasModuleAccess) ? NexefiiAuth.hasModuleAccess('engineering') : true;
+  const hasHousekeeping = (window.NexefiiAuth && NexefiiAuth.hasModuleAccess) ? NexefiiAuth.hasModuleAccess('housekeeping') : true;
+  const hasAlerts = (window.NexefiiAuth && NexefiiAuth.hasModuleAccess) ? NexefiiAuth.hasModuleAccess('alerts') : true;
 
   let html = '';
 
@@ -1745,7 +1745,7 @@ function renderDashboardCards(){
   }
 
   // PMS Card - Property Management System
-  const hasPMS = (window.IluxAuth && IluxAuth.hasModuleAccess) ? IluxAuth.hasModuleAccess('pms') : true;
+  const hasPMS = (window.NexefiiAuth && NexefiiAuth.hasModuleAccess) ? NexefiiAuth.hasModuleAccess('pms') : true;
   if(hasPMS){
     html += `
       <div class="dashboard-card pms-card">
@@ -1992,7 +1992,7 @@ function stopDashboardSimulation(){
 // -------- PMS Module Functions --------
 function openPMSModule(moduleId) {
   console.log('[PMS] Opening module:', moduleId);
-  const curLang = localStorage.getItem('ilux_lang') || 'pt';
+  const curLang = (localStorage.getItem('nexefii_lang') || localStorage.getItem('nexefii_lang')) || 'pt';
   const L = getStrings(curLang);
   
   // Get module info
@@ -2013,12 +2013,12 @@ function openPMSModule(moduleId) {
   // Open module in new window
   if(moduleId === 'reservations') {
     // Ensure language is set before opening
-    localStorage.setItem('ilux_lang', curLang);
+    try{ localStorage.setItem('nexefii_lang',curLang); }catch(e){} try{ localStorage.setItem('nexefii_lang',curLang); }catch(e){};
     // Open reservations module
     window.open('pms-reservations.html', '_blank', 'width=1400,height=900');
   } else if (moduleId === 'checkInOut') {
     // Ensure language is set before opening
-    localStorage.setItem('ilux_lang', curLang);
+    try{ localStorage.setItem('nexefii_lang',curLang); }catch(e){} try{ localStorage.setItem('nexefii_lang',curLang); }catch(e){};
     // Open front desk (check-in/out)
     window.open('pms-frontdesk.html', '_blank', 'width=1400,height=900');
   } else {
@@ -2032,7 +2032,7 @@ function openPMSModule(moduleId) {
 
 function openPMSConfig() {
   console.log('[PMS] Opening PMS configuration');
-  const curLang = localStorage.getItem('ilux_lang') || 'pt';
+  const curLang = (localStorage.getItem('nexefii_lang') || localStorage.getItem('nexefii_lang')) || 'pt';
   const L = getStrings(curLang);
   
   alert(`âš™ï¸ ${L.pmsModulesConfig || 'ConfiguraÃ§Ã£o de MÃ³dulos PMS'}\n\nInterface de configuraÃ§Ã£o em desenvolvimento.\nAcesse o painel administrativo para configurar propriedades e mÃ³dulos.`);

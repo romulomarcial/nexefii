@@ -1,0 +1,52 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Door Lock Wizard Schema",
+  "description": "Schema for the Door Lock Wizard actions and configuration",
+  "type": "object",
+  "properties": {
+    "operation": {
+      "type": "string",
+      "enum": ["create_key", "revoke_key", "extend_key", "query_status", "set_schedule"]
+    },
+    "target": {
+      "type": "object",
+      "properties": {
+        "lockId": { "type": "string" },
+        "propertyId": { "type": "string" }
+      },
+      "required": ["lockId"]
+    },
+    "payload": {
+      "type": "object",
+      "properties": {
+        "keyId": { "type": "string" },
+        "userId": { "type": "string" },
+        "userName": { "type": "string" },
+        "validFrom": { "type": "string", "format": "date-time" },
+        "validTo": { "type": "string", "format": "date-time" },
+        "schedule": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "days": { "type": "array", "items": { "type": "string" } },
+              "start": { "type": "string" },
+              "end": { "type": "string" }
+            },
+            "required": ["days", "start", "end"]
+          }
+        },
+        "metadata": { "type": "object" }
+      }
+    },
+    "requester": {
+      "type": "object",
+      "properties": {
+        "actorId": { "type": "string" },
+        "actorType": { "type": "string", "enum": ["staff", "guest", "system"] }
+      },
+      "required": ["actorId"]
+    }
+  },
+  "required": ["operation", "target", "requester"]
+}

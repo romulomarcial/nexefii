@@ -11,7 +11,7 @@ class MasterControlSystem {
     this.versions = [];
     this.logs = [];
     this.propertySchedules = {};
-  this.lang = (localStorage.getItem('ilux_lang') || 'pt').toLowerCase();
+  this.lang = ((localStorage.getItem('nexefii_lang') || localStorage.getItem('nexefii_lang')) || 'pt').toLowerCase();
     this.i18n = null;
     this.initSystem();
   }
@@ -1149,15 +1149,15 @@ class MasterControlSystem {
     try {
       var props = [];
       
-      // Verificar se IluxProps está disponível
-      console.log('populateBackupPropertySelect(): window.IluxProps disponível?', !!window.IluxProps);
+      // Verificar se NexefiiProps está disponível
+      console.log('populateBackupPropertySelect(): window.NexefiiProps disponível?', !!window.NexefiiProps);
       
-      if (window.IluxProps && typeof window.IluxProps.listProperties === 'function') {
-        var list = window.IluxProps.listProperties() || [];
-        console.log('populateBackupPropertySelect(): IluxProps retornou', list.length, 'propriedades:', list);
+      if (window.NexefiiProps && typeof window.NexefiiProps.listProperties === 'function') {
+        var list = window.NexefiiProps.listProperties() || [];
+        console.log('populateBackupPropertySelect(): NexefiiProps retornou', list.length, 'propriedades:', list);
         props = list.filter(function(p) { return p && p.key; });
       } else {
-        console.warn('populateBackupPropertySelect(): IluxProps não disponível, tentando localStorage direto');
+        console.warn('populateBackupPropertySelect(): NexefiiProps não disponível, tentando localStorage direto');
         
         // Fallback: Tentar localStorage direto
         try {
@@ -1211,17 +1211,17 @@ class MasterControlSystem {
   getPropertiesList() {
     var props = [];
     try {
-      // 1) Tentar IluxProps primeiro
-      if (window.IluxProps && typeof window.IluxProps.listProperties === 'function') {
-        var list = window.IluxProps.listProperties() || [];
-        console.log('getPropertiesList(): IluxProps retornou', list.length, 'propriedades');
+      // 1) Tentar NexefiiProps primeiro
+      if (window.NexefiiProps && typeof window.NexefiiProps.listProperties === 'function') {
+        var list = window.NexefiiProps.listProperties() || [];
+        console.log('getPropertiesList(): NexefiiProps retornou', list.length, 'propriedades');
         for (var i=0;i<list.length;i++) {
           if (list[i] && list[i].key) {
             props.push(list[i].key);
           }
         }
       } else {
-        console.warn('getPropertiesList(): IluxProps não disponível, tentando localStorage');
+        console.warn('getPropertiesList(): NexefiiProps não disponível, tentando localStorage');
         
         // 2) Fallback: Tentar localStorage direto
         try {
@@ -1321,12 +1321,12 @@ class MasterControlSystem {
   
   repairIncompleteProperties() {
     try {
-      if (!window.IluxProps) {
-        console.warn('[repairIncompleteProperties] IluxProps não disponível');
+      if (!window.NexefiiProps) {
+        console.warn('[repairIncompleteProperties] NexefiiProps não disponível');
         return;
       }
 
-      const properties = window.IluxProps.listProperties();
+      const properties = window.NexefiiProps.listProperties();
       let repaired = 0;
 
       properties.forEach(prop => {
@@ -1385,7 +1385,7 @@ class MasterControlSystem {
         // Se precisa de reparo, atualizar propriedade
         if (needsRepair) {
           const repairedProp = Object.assign({}, prop, updates);
-          const result = window.IluxProps.upsertProperty(repairedProp);
+          const result = window.NexefiiProps.upsertProperty(repairedProp);
           
           if (result.success) {
             repaired++;
@@ -2499,17 +2499,17 @@ class MasterControlSystem {
     try {
       var props = [];
       
-      // Verificar se IluxProps está disponível
-      console.log('populatePropertySelects(): window.IluxProps disponível?', !!window.IluxProps);
-      console.log('populatePropertySelects(): window.IluxProps.listProperties disponível?', 
-        !!(window.IluxProps && typeof window.IluxProps.listProperties === 'function'));
+      // Verificar se NexefiiProps está disponível
+      console.log('populatePropertySelects(): window.NexefiiProps disponível?', !!window.NexefiiProps);
+      console.log('populatePropertySelects(): window.NexefiiProps.listProperties disponível?', 
+        !!(window.NexefiiProps && typeof window.NexefiiProps.listProperties === 'function'));
       
-      if (window.IluxProps && typeof window.IluxProps.listProperties === 'function') {
-        var list = window.IluxProps.listProperties() || [];
-        console.log('populatePropertySelects(): IluxProps retornou', list.length, 'propriedades:', list);
+      if (window.NexefiiProps && typeof window.NexefiiProps.listProperties === 'function') {
+        var list = window.NexefiiProps.listProperties() || [];
+        console.log('populatePropertySelects(): NexefiiProps retornou', list.length, 'propriedades:', list);
         props = list.filter(function(p) { return p && p.key; });
       } else {
-        console.warn('populatePropertySelects(): IluxProps não disponível, tentando localStorage direto');
+        console.warn('populatePropertySelects(): NexefiiProps não disponível, tentando localStorage direto');
         
         // Fallback 1: Tentar localStorage direto
         try {
@@ -3405,8 +3405,8 @@ class MasterControlSystem {
         'i18n_enterprise_pt',
         'i18n_enterprise_en',
         'i18n_enterprise_es',
-        'ilux_user',
-        'ilux_lang'
+        'nexefii_user',
+        'nexefii_lang'
       ];
       
       let removed = 0;
@@ -3490,7 +3490,7 @@ class MasterControlSystem {
     const tbody = document.getElementById('propertiesTableBody');
     if (!tbody) return;
 
-    const properties = window.IluxProps ? window.IluxProps.listProperties() : [];
+    const properties = window.NexefiiProps ? window.NexefiiProps.listProperties() : [];
     const filtered = filter ? properties.filter(p => 
       p && p.key && (
         p.key.toLowerCase().includes(filter.toLowerCase()) ||
@@ -3580,7 +3580,7 @@ class MasterControlSystem {
       document.getElementById('propertyActive').checked = true;
     } else {
       title.textContent = 'Editar Propriedade';
-      const property = window.IluxProps.getProperty(propertyKey);
+      const property = window.NexefiiProps.getProperty(propertyKey);
       if (!property) return;
 
       document.getElementById('propertyId').value = property.key;
@@ -3647,7 +3647,7 @@ class MasterControlSystem {
       }
     };
 
-    const result = window.IluxProps.upsertProperty(propertyData);
+    const result = window.NexefiiProps.upsertProperty(propertyData);
 
     if (result.success) {
       // Se está CRIANDO (não editando), criar usuário admin automático
@@ -3752,7 +3752,7 @@ class MasterControlSystem {
 
   // Nova função: Abrir propriedade local para validação
   openPropertyLocal(propertyKey) {
-    const property = window.IluxProps.getProperty(propertyKey);
+    const property = window.NexefiiProps.getProperty(propertyKey);
     if (!property) {
       this.showToast('Propriedade não encontrada!', 'error');
       return;
@@ -3772,7 +3772,7 @@ class MasterControlSystem {
 
   // Modal de validação de propriedade local
   showPropertyValidationModal(propertyKey) {
-    const property = window.IluxProps.getProperty(propertyKey);
+    const property = window.NexefiiProps.getProperty(propertyKey);
     
     const modal = document.createElement('div');
     modal.className = 'modal-overlay';
@@ -3898,7 +3898,7 @@ class MasterControlSystem {
     }
 
     console.log('[deleteProperty] Deletando propriedade...');
-    const result = window.IluxProps.deleteProperty(propertyKey);
+    const result = window.NexefiiProps.deleteProperty(propertyKey);
     console.log('[deleteProperty] Resultado:', result);
 
     if (result.success) {
@@ -3924,7 +3924,7 @@ class MasterControlSystem {
   }
 
   deployProperty(propertyKey) {
-    const property = window.IluxProps.getProperty(propertyKey);
+    const property = window.NexefiiProps.getProperty(propertyKey);
     if (!property) {
       this.showToast('Propriedade não encontrada!', 'error');
       return;
@@ -3994,7 +3994,7 @@ class MasterControlSystem {
 
     // Populate summary on step 3
     if (step === 3 && this.currentDeployProperty) {
-      const property = window.IluxProps.getProperty(this.currentDeployProperty);
+      const property = window.NexefiiProps.getProperty(this.currentDeployProperty);
       if (property) {
         document.getElementById('deploySummaryProperty').textContent = property.name || property.key;
         document.getElementById('deploySummaryEnv').textContent = 
@@ -4006,7 +4006,7 @@ class MasterControlSystem {
   }
 
   async executeDeployment() {
-    const property = window.IluxProps.getProperty(this.currentDeployProperty);
+    const property = window.NexefiiProps.getProperty(this.currentDeployProperty);
     if (!property) return;
 
     const btnExecute = document.getElementById('btnDeployExecute');
@@ -4082,8 +4082,8 @@ class MasterControlSystem {
       addLog('=================================');
 
       // Marcar propriedade como implantada
-      if (window.IluxProps && window.IluxProps.markAsDeployed) {
-        window.IluxProps.markAsDeployed(property.key);
+      if (window.NexefiiProps && window.NexefiiProps.markAsDeployed) {
+        window.NexefiiProps.markAsDeployed(property.key);
         addLog(`Propriedade ${property.key} marcada como IMPLANTADA`);
       }
 
@@ -4119,12 +4119,12 @@ class MasterControlSystem {
 
 // Initialize
 console.log('🚀 Iniciando Master Control System...');
-console.log('📦 window.IluxProps disponível?', !!window.IluxProps);
-if (window.IluxProps && typeof window.IluxProps.listProperties === 'function') {
-  const propsList = window.IluxProps.listProperties();
-  console.log('✅ IluxProps.listProperties() retornou', propsList.length, 'propriedades:', propsList);
+console.log('📦 window.NexefiiProps disponível?', !!window.NexefiiProps);
+if (window.NexefiiProps && typeof window.NexefiiProps.listProperties === 'function') {
+  const propsList = window.NexefiiProps.listProperties();
+  console.log('✅ NexefiiProps.listProperties() retornou', propsList.length, 'propriedades:', propsList);
 } else {
-  console.error('❌ PROBLEMA: IluxProps não está disponível no momento da inicialização!');
+  console.error('❌ PROBLEMA: NexefiiProps não está disponível no momento da inicialização!');
   console.log('   Tentando fallback via localStorage...');
   try {
   const map = JSON.parse(localStorage.getItem('nexefii_properties') || localStorage.getItem('nexefii_properties') || '{}');

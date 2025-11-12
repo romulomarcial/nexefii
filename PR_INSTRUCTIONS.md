@@ -70,7 +70,7 @@ Template sugerido para o corpo do PR (arquivo `qa\pr-body.txt` pode ser criado l
 
 --- PR Body Start ---
 Resumo
-- Aplica guardas e adaptaÃ§Ãµes para chamadas de autenticaÃ§Ã£o (`NexefiiAuth`, `IluxAuth`) para evitar ReferenceErrors quando adaptadores nÃ£o estÃ£o carregados.
+- Aplica guardas e adaptaÃ§Ãµes para chamadas de autenticaÃ§Ã£o (`NexefiiAuth`, `NexefiiAuth`) para evitar ReferenceErrors quando adaptadores nÃ£o estÃ£o carregados.
 - Corrige um erro de sintaxe causado por substituiÃ§Ãµes automÃ¡ticas (parenthesis/ternary mismatched) no `index.html` e em outros arquivos.
 
 Arquivos principais alterados

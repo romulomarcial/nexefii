@@ -10,7 +10,7 @@ class PMSDataManager {
       reservations: 'pms_reservations_property_default',
       inventory: 'pms_inventory_property_default',
       ratePlans: 'pms_rate_plans',
-      language: 'ilux_lang'
+      language: 'nexefii_lang'
     };
   }
 

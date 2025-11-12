@@ -9,17 +9,17 @@
   console.log('ðŸ” Master System Initialization Script');
   console.log('=====================================\n');
 
-  // Check if IluxAuth is loaded
-  if (typeof window.IluxAuth === 'undefined') {
-    console.error('âŒ IluxAuth not loaded! Make sure auth.js is included.');
+  // Check if NexefiiAuth is loaded
+  if (typeof window.NexefiiAuth === 'undefined') {
+    console.error('âŒ NexefiiAuth not loaded! Make sure auth.js is included.');
     return;
   }
 
   // Initialize authentication system
-  IluxAuth.init();
+  NexefiiAuth.init();
 
   // Verify master user exists
-  const users = IluxAuth.getAllUsers();
+  const users = NexefiiAuth.getAllUsers();
   const masterUser = users.find(u => u.username === 'master');
   
   if (masterUser) {
@@ -43,7 +43,7 @@
       approvedProperties: [],
       position: 'Super Administrator',
       username: 'master',
-      password: IluxAuth.hashPassword('Master2025!@#$'),
+      password: NexefiiAuth.hashPassword('Master2025!@#$'),
       status: 'approved',
       role: 'master',
       modules: ['engineering', 'housekeeping', 'alerts', 'commercial', 'marketing', 'reports', 'management'],

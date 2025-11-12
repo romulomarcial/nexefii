@@ -163,7 +163,7 @@
       // Test 3: Check localStorage
       log('✓ Teste 3: Verificando localStorage...', 'success');
       
-      const lang = localStorage.getItem('ilux_lang');
+      const lang = (localStorage.getItem('nexefii_lang') || localStorage.getItem('nexefii_lang'));
       if (lang) {
         log(`  ✓ Idioma: ${lang}`, 'success');
       } else {

@@ -98,16 +98,16 @@ DemoDataGenerator.getDemoStatus(propertyKey)
 
 **AlteraÃ§Ãµes**:
 - Adicionado campo `isDemo: boolean` em todas as propriedades
-- iluxSaoPaulo: `isDemo: false` (produÃ§Ã£o)
-- iluxMiami: `isDemo: true` (demo)
-- iluxRioDeJaneiro: `isDemo: true` (demo)
+- nexefiiSaoPaulo: `isDemo: false` (produÃ§Ã£o)
+- nexefiiMiami: `isDemo: true` (demo)
+- nexefiiRioDeJaneiro: `isDemo: true` (demo)
 
 **FunÃ§Ã£o `upsertProperty()` estendida** para suportar campo `isDemo`
 
 ```javascript
 {
-  key: 'iluxMiami',
-  name: 'iLux Miami',
+  key: 'nexefiiMiami',
+  name: 'nexefii Miami',
   isDemo: true, // <-- NOVO CAMPO
   deployed: true,
   roomCount: 72,
@@ -222,7 +222,7 @@ window.addEventListener('demoDataUpdated', function(event) {
 
 1. Abra `master-control.html`
 2. Login como `master` / `Master2025!@#$`
-3. Clique em uma propriedade demo (iluxMiami ou iluxRioDeJaneiro)
+3. Clique em uma propriedade demo (nexefiiMiami ou nexefiiRioDeJaneiro)
 4. No modal, verÃ¡ botÃ£o **"ðŸŽ­ Inserir Dados"** ao lado de "Testar Localmente"
 5. Clique no botÃ£o
 6. Confirme e escolha se quer auto-refresh
@@ -233,20 +233,20 @@ window.addEventListener('demoDataUpdated', function(event) {
 
 ```javascript
 // Inserir dados com auto-refresh
-DemoDataGenerator.insertDemoData('iluxMiami', true);
+DemoDataGenerator.insertDemoData('nexefiiMiami', true);
 
 // Inserir dados sem auto-refresh
-DemoDataGenerator.insertDemoData('iluxMiami', false);
+DemoDataGenerator.insertDemoData('nexefiiMiami', false);
 
 // Limpar dados
-DemoDataGenerator.clearDemoData('iluxMiami');
+DemoDataGenerator.clearDemoData('nexefiiMiami');
 
 // Verificar status
-DemoDataGenerator.getDemoStatus('iluxMiami');
+DemoDataGenerator.getDemoStatus('nexefiiMiami');
 // Retorna: { hasData, lastUpdate, isAutoRefreshActive, updateInterval }
 
 // Parar auto-refresh
-DemoDataGenerator.stopAutoRefresh('iluxMiami');
+DemoDataGenerator.stopAutoRefresh('nexefiiMiami');
 
 // Parar todos os auto-refreshes
 DemoDataGenerator.stopAllAutoRefresh();
@@ -434,7 +434,7 @@ const title = i18n.t('dashboard.demo.title');
 ### Teste BÃ¡sico:
 
 1. **F5** em `master-control.html`
-2. Clique em "iLux Miami" (propriedade demo)
+2. Clique em "nexefii Miami" (propriedade demo)
 3. Veja botÃ£o "ðŸŽ­ Inserir Dados"
 4. Clique e confirme
 5. Aguarde toast "âœ… Dados inseridos com sucesso!"
@@ -443,28 +443,28 @@ const title = i18n.t('dashboard.demo.title');
 
 1. Insira dados com checkbox marcado
 2. Abra Console: `F12 â†’ Console`
-3. Digite: `DemoDataGenerator.getDemoStatus('iluxMiami')`
+3. Digite: `DemoDataGenerator.getDemoStatus('nexefiiMiami')`
 4. Veja: `isAutoRefreshActive: true`
 5. Aguarde 5 minutos
-6. Veja no console: `[DemoData] Auto-refresh para iluxMiami...`
+6. Veja no console: `[DemoData] Auto-refresh para nexefiiMiami...`
 
 ### Teste de Dashboard:
 
-1. Insira dados em iluxMiami
+1. Insira dados em nexefiiMiami
 2. Abra `index.html`
 3. Login: `master` / `Master2025!@#$`
 4. Veja KPIs atualizados com dados demo
-5. Verifique card de iluxMiami com mÃ©tricas realistas
+5. Verifique card de nexefiiMiami com mÃ©tricas realistas
 6. Dados agora vÃªm do localStorage, nÃ£o da simulaÃ§Ã£o
 
 ### Teste de Limpeza:
 
 ```javascript
 // Limpar dados
-DemoDataGenerator.clearDemoData('iluxMiami');
+DemoDataGenerator.clearDemoData('nexefiiMiami');
 
 // Verificar
-DemoDataGenerator.getDemoStatus('iluxMiami');
+DemoDataGenerator.getDemoStatus('nexefiiMiami');
 // hasData: false
 
 // Refresh dashboard

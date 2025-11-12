@@ -93,7 +93,7 @@ class QABaselineCapture {
       totalKeys: localStorage.length,
       usersCount: state.nexefii_users ? state.nexefii_users.length : 0,
       backupsCount: state.master_backups ? state.master_backups.length : 0,
-      propertiesCount: window.IluxProps ? window.IluxProps.listProperties().length : 0
+      propertiesCount: window.NexefiiProps ? window.NexefiiProps.listProperties().length : 0
     };
     
     this.baseline.localStorage = state;
@@ -315,8 +315,8 @@ class QABaselineCapture {
     }
     
     // Property management
-    if (typeof window.IluxProps !== 'undefined') {
-      const props = window.IluxProps.listProperties();
+    if (typeof window.NexefiiProps !== 'undefined') {
+      const props = window.NexefiiProps.listProperties();
       interactions.push({
         feature: 'Property Management',
         available: true,

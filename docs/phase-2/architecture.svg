@@ -1,0 +1,56 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="700" viewBox="0 0 1200 700">
+  <style>
+    .box { fill:#f5f7fb; stroke:#2b6cb0; stroke-width:2; rx:8; }
+    .title { font: bold 16px sans-serif; fill:#0a2540 }
+    .label { font: 12px sans-serif; fill:#08314a }
+    .connector { stroke:#94a3b8; stroke-width:2; }
+  </style>
+
+  <!-- Cloud services -->
+  <rect x="700" y="40" width="420" height="220" class="box"/>
+  <text x="720" y="64" class="title">Cloud Platform (Nexefii Cloud)</text>
+  <text x="720" y="92" class="label">API Gateway (Auth, Rate limit)</text>
+  <text x="720" y="112" class="label">Lock Service (REST / Webhooks)</text>
+  <text x="720" y="132" class="label">Device Manager / Messaging (MQTT/AMQP)</text>
+  <text x="720" y="152" class="label">Data Store (Multi-tenant DB)</text>
+  <text x="720" y="172" class="label">Analytics & Monitoring</text>
+
+  <!-- Edge Gateway -->
+  <rect x="360" y="320" width="420" height="220" class="box"/>
+  <text x="380" y="344" class="title">Edge Gateway (Connector)</text>
+  <text x="380" y="372" class="label">Local API Proxy</text>
+  <text x="380" y="392" class="label">Protocol Adapters (Zigbee, BLE, TCP)</text>
+  <text x="380" y="412" class="label">Local Queue (MQTT broker)</text>
+  <text x="380" y="432" class="label">Secure Tunnel to Cloud</text>
+
+  <!-- Property Network -->
+  <rect x="40" y="480" width="420" height="160" class="box"/>
+  <text x="60" y="504" class="title">Property Edge / Devices</text>
+  <text x="60" y="532" class="label">Door Locks (BLE/WiFi/Zigbee)</text>
+  <text x="60" y="552" class="label">Access Panels / Kiosks</text>
+  <text x="60" y="572" class="label">Local Controller / Router</text>
+
+  <!-- User & Mobile -->
+  <rect x="40" y="40" width="260" height="120" class="box"/>
+  <text x="60" y="64" class="title">Guest / Staff Mobile App</text>
+  <text x="60" y="92" class="label">OAuth2 Login</text>
+  <text x="60" y="112" class="label">Receive unlock commands & notifications</text>
+
+  <!-- Connectors -->
+  <line x1="300" y1="100" x2="360" y2="360" class="connector"/>
+  <line x1="700" y1="160" x2="780" y2="160" class="connector"/>
+  <line x1="580" y1="380" x2="700" y2="200" class="connector"/>
+  <line x1="260" y1="520" x2="360" y2="420" class="connector"/>
+
+  <!-- Labels on connectors -->
+  <text x="420" y="220" class="label">Secure MQTT/TLS / AMQP</text>
+  <text x="530" y="240" class="label">REST / Webhooks</text>
+
+  <!-- Notes -->
+  <rect x="700" y="280" width="420" height="120" fill="#fff8dc" stroke="#b08900" rx="8" />
+  <text x="720" y="304" class="title">Security & Resilience</text>
+  <text x="720" y="326" class="label">mTLS between Edge & Cloud</text>
+  <text x="720" y="346" class="label">Local operations if cloud unavailable</text>
+  <text x="720" y="366" class="label">Audit logs + Replay queues</text>
+
+</svg>

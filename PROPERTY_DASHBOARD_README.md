@@ -47,7 +47,7 @@ Sistema completamente reestruturado de exibiÃ§Ã£o de propriedades no `index.
 {
   username: 'demo',
   role: 'manager',
-  properties: ['iluxSaoPaulo', 'iluxMiami']
+  properties: ['nexefiiSaoPaulo', 'nexefiiMiami']
 }
 ```
 
@@ -70,8 +70,8 @@ Quando usuÃ¡rio tem acesso a **2 ou mais propriedades**, exibe automaticamente
 **Campos ObrigatÃ³rios**:
 ```javascript
 {
-  key: 'iluxSaoPaulo',                    // âœ… ObrigatÃ³rio
-  name: 'iLux SÃ£o Paulo',                 // âœ… ObrigatÃ³rio
+  key: 'nexefiiSaoPaulo',                    // âœ… ObrigatÃ³rio
+  name: 'nexefii SÃ£o Paulo',                 // âœ… ObrigatÃ³rio
   modulesPurchased: [...],                // âœ… ObrigatÃ³rio (array nÃ£o vazio)
   userCapacity: '50to100',                // âœ… ObrigatÃ³rio
   deployed: true,                         // âœ… ObrigatÃ³rio (boolean)
@@ -160,14 +160,14 @@ SecurityManager.validateUserPermissions(user, propertyKey)
 
 **5. `properties.js`**
 - Adicionados campos: `roomCount`, `location`, `deployedAt`, `deployedUrl`
-- iluxSaoPaulo: `deployed = true` (para teste)
-- iluxMiami: `deployed = true` (para teste)
-- iluxRioDeJaneiro: `deployed = false` (nÃ£o aparece)
+- nexefiiSaoPaulo: `deployed = true` (para teste)
+- nexefiiMiami: `deployed = true` (para teste)
+- nexefiiRioDeJaneiro: `deployed = false` (nÃ£o aparece)
 
 **6. `auth.js`**
 - Adicionado campo `properties` array aos usuÃ¡rios
 - Master/Admin: `properties = []` (acesso total)
-- Criado usuÃ¡rio demo: `properties = ['iluxSaoPaulo', 'iluxMiami']`
+- Criado usuÃ¡rio demo: `properties = ['nexefiiSaoPaulo', 'nexefiiMiami']`
 
 ---
 

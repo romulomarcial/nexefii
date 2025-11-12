@@ -42,7 +42,7 @@
         const keys = Object.keys(localStorage);
         showResult(`Total de chaves: ${keys.length}`, 'success');
         
-        const importantKeys = keys.filter(k => k.includes('ilux') || k.includes('properties'));
+        const importantKeys = keys.filter(k => k.includes('nexefii') || k.includes('properties'));
         if (importantKeys.length > 0) {
           showResult(`Chaves NEXEFII encontradas: ${importantKeys.join(', ')}`, 'success');
         } else {
@@ -56,14 +56,14 @@
     function testProperties() {
       document.getElementById('results').innerHTML = '';
       try {
-        // Verificar se IluxProps existe
-        if (typeof window.IluxProps === 'undefined') {
-          showResult('IluxProps não está carregado! Carregando...', 'error');
-          loadIluxProps();
+        // Verificar se NexefiiProps existe
+        if (typeof window.NexefiiProps === 'undefined') {
+          showResult('NexefiiProps não está carregado! Carregando...', 'error');
+          loadNexefiiProps();
           return;
         }
 
-        const properties = window.IluxProps.getAllProperties();
+        const properties = window.NexefiiProps.getAllProperties();
         showResult(`Total de propriedades: ${properties.length}`, properties.length > 0 ? 'success' : 'error');
         
         properties.forEach(prop => {
@@ -79,9 +79,9 @@
       }
     }
 
-    function loadIluxProps() {
-      // Definir IluxProps básico
-      window.IluxProps = {
+    function loadNexefiiProps() {
+      // Definir NexefiiProps básico
+      window.NexefiiProps = {
         getAllProperties: function() {
           const stored = localStorage.getItem('nexefii_properties');
           return stored ? JSON.parse(stored) : [];
@@ -101,21 +101,21 @@
           return this.getAllProperties().find(p => p.key === key);
         }
       };
-      showResult('IluxProps carregado!', 'success');
+      showResult('NexefiiProps carregado!', 'success');
       testProperties();
     }
 
     function fixProperties() {
       document.getElementById('results').innerHTML = '';
       
-      if (typeof window.IluxProps === 'undefined') {
-        loadIluxProps();
+      if (typeof window.NexefiiProps === 'undefined') {
+        loadNexefiiProps();
       }
 
       const defaultProperties = [
         {
-          key: 'iluxSaoPaulo',
-          name: 'iLux São Paulo',
+          key: 'nexefiiSaoPaulo',
+          name: 'nexefii São Paulo',
           modules: ['engineering', 'housekeeping', 'alerts'],
           capacity: '50-100 usuários',
           image: 'assets/images/hotel_sp.jpg',
@@ -123,8 +123,8 @@
           deployed: true
         },
         {
-          key: 'iluxMiami',
-          name: 'iluxMiami',
+          key: 'nexefiiMiami',
+          name: 'nexefiiMiami',
           modules: ['engineering', 'housekeeping', 'alerts'],
           capacity: '30-50 usuários',
           image: 'assets/images/hotel_miami.jpg',
@@ -132,8 +132,8 @@
           deployed: true
         },
         {
-          key: 'iluxRioDeJaneiro',
-          name: 'iluxRioDeJaneiro',
+          key: 'nexefiiRioDeJaneiro',
+          name: 'nexefiiRioDeJaneiro',
           modules: ['engineering', 'housekeeping', 'alerts'],
           capacity: '50-100 usuários',
           image: 'assets/images/hotel_rio.jpg',
@@ -143,7 +143,7 @@
       ];
 
       defaultProperties.forEach(prop => {
-        window.IluxProps.saveProperty(prop);
+        window.NexefiiProps.saveProperty(prop);
         const status = prop.deployed ? '✅ Implantado' : '⏳ Pendente';
         showResult(`Propriedade criada: ${prop.key} [${status}]`, 'success');
       });

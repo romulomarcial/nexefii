@@ -791,7 +791,7 @@
     }
   </style>
 </head>
-<body>
+<body class="wizard-page">
 
   <!-- Wizard Header -->
   <div class="wizard-header">
@@ -1279,23 +1279,96 @@
   </div>
 </div>
 
+  <!-- Core runtime dependencies (ensure page works standalone) -->
+  <script src="../core/database/PropertyDatabase.js"></script>
+  <script src="../core/i18n/I18nManager.js"></script>
+  <script src="../core/wizard/WizardManager.js"></script>
+
 <script>
-  // Initialize Wizard Manager (idempotent / safe re-entry)
-  // Ensure global WizardManager is available (loaded by shell)
-  if (typeof WizardManager === 'undefined') {
-    console.error('[Wizard] WizardManager not loaded');
+  // Load i18n file (if available) and apply translations to elements with data-i18n
+  async function loadPageI18n() {
+    try {
+      const res = await fetch('/i18n.json', { cache: 'no-store' });
+      if (!res.ok) return;
+      window.__PAGE_I18N = await res.json();
+    } catch (e) {
+      // ignore — page will keep embedded texts
+      window.__PAGE_I18N = window.__PAGE_I18N || {};
+    }
   }
-  // Reuse existing instance if present to avoid redeclaration errors on re-navigation
-  window.wizard = (window.wizard && window.wizard instanceof WizardManager)
-    ? window.wizard
-    : new WizardManager();
-  var wizard = window.wizard;
+
+  function resolveI18nKey(path, lang) {
+    try {
+      if (!window.__PAGE_I18N) return null;
+      const langObj = window.__PAGE_I18N[lang] || window.__PAGE_I18N[lang.split('-')[0]] || window.__PAGE_I18N['en'] || {};
+      const parts = path.split('.');
+      let cur = langObj;
+      for (const p of parts) {
+        if (cur && Object.prototype.hasOwnProperty.call(cur, p)) cur = cur[p];
+        else return null;
+      }
+      return (typeof cur === 'string') ? cur : null;
+    } catch (e) {
+      return null;
+    }
+  }
+
+  function applyI18nToPage(lang) {
+    try {
+      document.querySelectorAll('[data-i18n]').forEach(el => {
+        const key = el.getAttribute('data-i18n');
+        const txt = resolveI18nKey(key, lang);
+        if (txt) {
+          // If element has placeholder attribute, set it instead of innerText for inputs
+          if (el.tagName === 'INPUT' || el.tagName === 'TEXTAREA' || el.tagName === 'SELECT') {
+            el.placeholder = txt;
+          } else {
+            el.innerText = txt;
+          }
+        }
+      });
+    } catch (e) {
+      // ignore
+    }
+  }
+
+  (async function initWizardPage(){
+    // Prefer the core I18nManager when available (recommended). If not present, fall back to legacy monolithic loader.
+    try {
+      if (window.NEXEFII && window.NEXEFII.i18n && typeof window.NEXEFII.i18n.loadTranslations === 'function') {
+        await window.NEXEFII.i18n.loadTranslations();
+        window.NEXEFII.i18n.applyToDOM(document);
+      } else {
+        await loadPageI18n();
+        const savedLang = (localStorage.getItem('nexefii_lang') || navigator.language || 'pt').split('-')[0];
+        applyI18nToPage(savedLang);
+      }
+    } catch (e) {
+      // continue even if i18n failed
+      console.warn('[Wizard] i18n initialization issue', e?.message || e);
+    }
+
+    // Initialize Wizard Manager (idempotent / safe re-entry)
+    if (typeof WizardManager === 'undefined') {
+      console.error('[Wizard] WizardManager not loaded');
+    }
+    // Reuse existing instance if present to avoid redeclaration errors on re-navigation
+    window.wizard = (window.wizard && window.wizard instanceof WizardManager)
+      ? window.wizard
+      : new WizardManager();
+    wizard = window.wizard; // create global binding
+  })();
 
   // ============================================================================
   // Step Navigation
   // ============================================================================
 
   function updateUI() {
+    // Guard: ensure wizard is ready before updating the UI. Some inline handlers
+    // or early DOM events may invoke updateUI before the async initializer finishes.
+    if (typeof window.wizard === 'undefined' || window.wizard == null) return;
+    const wizard = window.wizard;
+
     // Update progress steps
     const steps = document.querySelectorAll('.progress-step');
     steps.forEach((step, index) => {
@@ -1679,14 +1752,14 @@
       console.warn('[Wizard] Error getting category translations:', e);
     }
 
-    // Get currency symbol based on current language
-    const currentLang = window.NEXEFII?.i18n?.getLanguage() || 'pt';
-    const langToCurrencyMap = {
-      'pt': 'R$',   // Portuguese → Brazilian Real
-      'en': '$',    // English → US Dollar
-      'es': '€'     // Spanish → Euro (or use '$' for Latin America)
-    };
-    const currencySymbol = langToCurrencyMap[currentLang] || 'R$';
+    // Get currency symbol based on current language (handle locales like 'pt-BR', 'en-US')
+    const currentLang = (window.NEXEFII?.i18n?.getLanguage && window.NEXEFII.i18n.getLanguage()) || (navigator.language || 'pt');
+    let currencySymbol = 'R$';
+    try {
+      if (/^pt/i.test(currentLang)) currencySymbol = 'R$';
+      else if (/^en/i.test(currentLang)) currencySymbol = '$';
+      else if (/^es/i.test(currentLang)) currencySymbol = '€';
+    } catch (e) { /* keep default */ }
 
     container.innerHTML = categories.map((cat, index) => `
       <div class="category-card">
@@ -1903,11 +1976,11 @@
       await new Promise(resolve => setTimeout(resolve, 2000));
       progress.close();
 
-      // Persist created property to IluxProps (compat shim) and to user session
+      // Persist created property to NexefiiProps (compat shim) and to user session
       try {
         const propRecord = Object.assign({}, property, { key: property.key || property.slug });
-        if (window.IluxProps && typeof window.IluxProps.upsertProperty === 'function') {
-          window.IluxProps.upsertProperty(propRecord);
+        if (window.NexefiiProps && typeof window.NexefiiProps.upsertProperty === 'function') {
+          window.NexefiiProps.upsertProperty(propRecord);
         } else {
           // Fallback: write directly to localStorage under nexefii_properties
           try {

@@ -69,11 +69,11 @@
         },
         {
           "type": "log",
-          "text": "📦 window.IluxProps disponível? true"
+          "text": "📦 window.NexefiiProps disponível? true"
         },
         {
           "type": "log",
-          "text": "✅ IluxProps.listProperties() retornou 2 propriedades: JSHandle@array"
+          "text": "✅ NexefiiProps.listProperties() retornou 2 propriedades: JSHandle@array"
         }
       ],
       "pageErrors": [],

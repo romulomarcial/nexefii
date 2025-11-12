@@ -332,7 +332,7 @@ const CACHE_VERSION = 'nexefii-v1.0.1'; // ← Incrementar aqui
 
 **v2.0 (Futuro)**
 - App shortcuts (atalhos contextuais)
-- File handling (abrir arquivos .ilux)
+- File handling (abrir arquivos .nexefii)
 - Badging API (contador de notificações)
 
 ---

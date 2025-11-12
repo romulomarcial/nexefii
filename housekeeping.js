@@ -37,7 +37,7 @@ function mapSuiteToHKRow(s){
 function hkPopulateGrid(rooms){
   const container = document.getElementById('hkRoomRows');
   if(!container) return;
-  const lang = localStorage.getItem('ilux_lang')||'pt';
+  const lang = (localStorage.getItem('nexefii_lang') || localStorage.getItem('nexefii_lang'))||'pt';
   const L = (typeof getStrings === 'function') ? getStrings(lang) : {};
   
   // Translation maps
@@ -176,7 +176,7 @@ async function hkLoadAndApplyI18N(requestedLang) {
         }
     }
 
-    const lang = requestedLang || (localStorage.getItem('ilux_lang') || 'pt');
+    const lang = requestedLang || ((localStorage.getItem('nexefii_lang') || localStorage.getItem('nexefii_lang')) || 'pt');
     console.log('[HK] Using language:', lang);
     const S = (data && data[lang] && data[lang].app) ? data[lang].app : (data && data.pt && data.pt.app) ? data.pt.app : {};
     console.log('[HK] Strings pack has keys:', S ? Object.keys(S).length : 0);
@@ -224,12 +224,12 @@ async function hkInitI18N(){
   try{
     // IMPORTANT: Prefer localStorage over URL parameter after initial load
     // URL parameter is only used on first load, then localStorage takes precedence
-    const storedLang = localStorage.getItem('ilux_lang');
+    const storedLang = (localStorage.getItem('nexefii_lang') || localStorage.getItem('nexefii_lang'));
     const urlLang = new URLSearchParams(location.search).get('lang');
     const langParam = storedLang || urlLang || 'pt';
     
     console.log('[HK] Language determined:', langParam, 'from storage:', storedLang, 'from URL:', urlLang);
-    localStorage.setItem('ilux_lang', langParam);
+    try{ localStorage.setItem('nexefii_lang',langParam); }catch(e){} try{ localStorage.setItem('nexefii_lang',langParam); }catch(e){};
     const select = document.getElementById('langSelect'); 
     if(select) {
         select.value = langParam;
@@ -277,7 +277,7 @@ async function hkInitI18N(){
 async function changeLanguage(newLang){
   console.log('[HK] changeLanguage called with:', newLang);
   // CRITICAL: Set the language FIRST before any cache operations
-  localStorage.setItem('ilux_lang', newLang);
+  try{ localStorage.setItem('nexefii_lang',newLang); }catch(e){} try{ localStorage.setItem('nexefii_lang',newLang); }catch(e){};
   const select = document.getElementById('langSelect'); 
   if(select) select.value = newLang;
   console.log('[HK] Language stored in localStorage:', newLang);
@@ -325,8 +325,8 @@ window.addEventListener('storage', async function(e){
   try{
     if(!e) return;
     console.log('[HK] Storage event:', e.key, 'newValue:', e.newValue);
-    if(e.key === 'ilux_lang' || e.key === 'i18n_cache' || e.key === 'i18n_cache_timestamp'){
-      const newLang = localStorage.getItem('ilux_lang') || 'pt';
+    if(e.key === 'nexefii_lang' || e.key === 'i18n_cache' || e.key === 'i18n_cache_timestamp'){
+      const newLang = (localStorage.getItem('nexefii_lang') || localStorage.getItem('nexefii_lang')) || 'pt';
       console.log('[HK] Language change detected, new lang:', newLang);
       const sel = document.getElementById('langSelect'); if(sel) sel.value = newLang;
       // Use hkLoadAndApplyI18N directly instead of hkInitI18N to avoid URL override
@@ -340,7 +340,7 @@ window.addEventListener('storage', async function(e){
 // CSV Export for current filtered rows
 function hkExportCSV(){
   try{
-    const lang = localStorage.getItem('ilux_lang')||'pt';
+    const lang = (localStorage.getItem('nexefii_lang') || localStorage.getItem('nexefii_lang'))||'pt';
     let S = null; try{ const c=localStorage.getItem('i18n_cache'); if(c){ const p=JSON.parse(c); S = (p[lang] && p[lang].app) ? p[lang].app : null; } }catch(_){ S=null; }
     const headers = [
       (S && S.colRoom) ? S.colRoom : (lang==='en'?'ROOM':(lang==='es'?'HABITACIÃ“N':'QUARTO')),

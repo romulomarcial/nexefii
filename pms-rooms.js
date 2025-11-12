@@ -22,7 +22,7 @@ class RoomManagementController {
     this.propertyKey = 'property_default';
     this.inventory = window.getHotelInventory(this.propertyKey);
     this.engine = window.getReservationEngine(this.propertyKey);
-    this.lang = localStorage.getItem('ilux_lang') || 'pt';
+    this.lang = (localStorage.getItem('nexefii_lang') || localStorage.getItem('nexefii_lang')) || 'pt';
     this.i18n = {};
     
     this.currentView = 'grid';
@@ -47,7 +47,7 @@ class RoomManagementController {
       { value: 'pms-rooms.html', i18nKey: 'rmPageTitle', emoji: '🛏️', fallback: 'Gestão de Quartos' }
     ];
     try {
-      const session = window.IluxAuth && IluxAuth.getCurrentSession ? ((window.IluxAuth && IluxAuth.getCurrentSession) ? IluxAuth.getCurrentSession() : (window.NexefiiAuth && NexefiiAuth.getCurrentSession ? ((window.NexefiiAuth && NexefiiAuth.getCurrentSession) ? NexefiiAuth.getCurrentSession() : (window.IluxAuth && IluxAuth.getCurrentSession ? IluxAuth.getCurrentSession() : null)) : null)) : null;
+      const session = window.NexefiiAuth && NexefiiAuth.getCurrentSession ? ((window.NexefiiAuth && NexefiiAuth.getCurrentSession) ? NexefiiAuth.getCurrentSession() : (window.NexefiiAuth && NexefiiAuth.getCurrentSession ? ((window.NexefiiAuth && NexefiiAuth.getCurrentSession) ? NexefiiAuth.getCurrentSession() : (window.NexefiiAuth && NexefiiAuth.getCurrentSession ? NexefiiAuth.getCurrentSession() : null)) : null)) : null;
       if (session && session.role === 'master') {
         mods.unshift({ value: 'master-control.html', i18nKey: 'masterControl', emoji: '🔐', fallback: 'Master Control' });
       }

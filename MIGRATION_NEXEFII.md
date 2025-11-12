@@ -1,45 +1,45 @@
-﻿# ðŸ”„ MigraÃ§Ã£o iLux â†’ NEXEFII - Resumo Completo
+﻿# ðŸ”„ MigraÃ§Ã£o nexefii â†’ NEXEFII - Resumo Completo
 
 ## âœ… AlteraÃ§Ãµes Realizadas
 
 ### 1. **Arquivos de AutenticaÃ§Ã£o**
 
 #### `nexefii-auth.js` âœ…
-- âŒ **Antes:** `const IluxAuth = { ... }`
+- âŒ **Antes:** `const NexefiiAuth = { ... }`
 - âœ… **Depois:** `const NexefiiAuth = { ... }`
 - localStorage key: `nexefii_session` (antes: `nexefii_session` - jÃ¡ estava correto)
 
 #### `auth.js` âœ…
-- âŒ **Antes:** `const IluxAuth = { ... }`
+- âŒ **Antes:** `const NexefiiAuth = { ... }`
 - âœ… **Depois:** `const NexefiiAuth = { ... }`
 - localStorage keys:
   - `nexefii_users` â†’ `nexefii_users`
   - `nexefii_session` â†’ `nexefii_session`
-  - `ilux_user` â†’ `nexefii_user`
+  - `nexefii_user` â†’ `nexefii_user`
 - Emails:
   - `admin@nexefii.com` â†’ `admin@nexefii.com`
   - `demo@nexefii.com` â†’ `demo@nexefii.com`
   - `master@nexefii.com` â†’ `master@nexefii.com`
 - Propriedades:
-  - `iluxSaoPaulo` â†’ `nexefiiSaoPaulo`
-  - `iluxMiami` â†’ `nexefiiMiami`
+  - `nexefiiSaoPaulo` â†’ `nexefiiSaoPaulo`
+  - `nexefiiMiami` â†’ `nexefiiMiami`
 
 ---
 
 ### 2. **Sistema de Propriedades**
 
 #### `properties.js` âœ…
-- âŒ **Antes:** `window.IluxProps = { ... }`
+- âŒ **Antes:** `window.NexefiiProps = { ... }`
 - âœ… **Depois:** `window.NexefiiProps = { ... }`
 - localStorage key: `nexefii_properties` â†’ `nexefii_properties`
 
 **Propriedades renomeadas:**
 ```javascript
 // ANTES
-iluxSaoPaulo: {
-  key: 'iluxSaoPaulo',
-  name: 'iLux SÃ£o Paulo',
-  deployedUrl: 'https://iluxSaoPaulo.nexefii.com'
+nexefiiSaoPaulo: {
+  key: 'nexefiiSaoPaulo',
+  name: 'nexefii SÃ£o Paulo',
+  deployedUrl: 'https://nexefiiSaoPaulo.nexefii.com'
 }
 
 // DEPOIS
@@ -55,33 +55,33 @@ nexefiiSaoPaulo: {
 ### 3. **PÃ¡ginas HTML**
 
 #### `login.html` âœ…
-- `IluxAuth.login()` â†’ `NexefiiAuth.login()`
-- `localStorage.setItem('ilux_lang', ...)` â†’ `localStorage.setItem('nexefii_lang', ...)`
-- `localStorage.getItem('ilux_lang')` â†’ `localStorage.getItem('nexefii_lang')`
+- `NexefiiAuth.login()` â†’ `NexefiiAuth.login()`
+- `try{ localStorage.setItem('nexefii_lang',...); }catch(e){} try{ localStorage.setItem('nexefii_lang',...); }catch(e){}` â†’ `localStorage.setItem('nexefii_lang', ...)`
+- `(localStorage.getItem('nexefii_lang') || localStorage.getItem('nexefii_lang'))` â†’ `localStorage.getItem('nexefii_lang')`
 
 #### `index.html` âœ…
-- `IluxAuth.isAuthenticated()` â†’ `NexefiiAuth.isAuthenticated()`
-- `iLux Hotel SÃ£o Paulo` â†’ `Nexefii Hotel SÃ£o Paulo`
-- `iLux Hotel Miami` â†’ `Nexefii Hotel Miami`
-- `iLux Hotel Rio de Janeiro` â†’ `Nexefii Hotel Rio de Janeiro`
+- `NexefiiAuth.isAuthenticated()` â†’ `NexefiiAuth.isAuthenticated()`
+- `Nexefii Hotel SÃ£o Paulo` â†’ `Nexefii Hotel SÃ£o Paulo`
+- `Nexefii Hotel Miami` â†’ `Nexefii Hotel Miami`
+- `Nexefii Hotel Rio de Janeiro` â†’ `Nexefii Hotel Rio de Janeiro`
 
 #### `shell.html` âœ…
-- `IluxAuth` â†’ `NexefiiAuth`
-- `IluxProps` â†’ `NexefiiProps`
-- `ilux_lang` â†’ `nexefii_lang`
+- `NexefiiAuth` â†’ `NexefiiAuth`
+- `NexefiiProps` â†’ `NexefiiProps`
+- `nexefii_lang` â†’ `nexefii_lang`
 
 ---
 
 ### 4. **Arquivos JavaScript**
 
 #### `master-control.js` âœ…
-- `IluxProps` â†’ `NexefiiProps` (todas as ocorrÃªncias)
-- `ilux_lang` â†’ `nexefii_lang`
-- `ilux_user` â†’ `nexefii_user`
+- `NexefiiProps` â†’ `NexefiiProps` (todas as ocorrÃªncias)
+- `nexefii_lang` â†’ `nexefii_lang`
+- `nexefii_user` â†’ `nexefii_user`
 - `nexefii_properties` â†’ `nexefii_properties`
 
 #### `qa-baseline-capture.js` âœ…
-- `IluxProps` â†’ `NexefiiProps`
+- `NexefiiProps` â†’ `NexefiiProps`
 - `nexefii_users` â†’ `nexefii_users`
 - `nexefii_session` â†’ `nexefii_session`
 
@@ -97,11 +97,11 @@ nexefiiSaoPaulo: {
 ### 5. **Arquivos de InternacionalizaÃ§Ã£o**
 
 #### `i18n.json` âœ…
-- `iluxSaoPaulo` â†’ `nexefiiSaoPaulo`
-- `iluxMiami` â†’ `nexefiiMiami`
-- `iluxRioDeJaneiro` â†’ `nexefiiRioDeJaneiro`
-- `iLux Hotel` â†’ `Nexefii Hotel`
-- `iLux SÃ£o Paulo` â†’ `Nexefii SÃ£o Paulo`
+- `nexefiiSaoPaulo` â†’ `nexefiiSaoPaulo`
+- `nexefiiMiami` â†’ `nexefiiMiami`
+- `nexefiiRioDeJaneiro` â†’ `nexefiiRioDeJaneiro`
+- `Nexefii Hotel` â†’ `Nexefii Hotel`
+- `nexefii SÃ£o Paulo` â†’ `Nexefii SÃ£o Paulo`
 
 ---
 
@@ -109,7 +109,7 @@ nexefiiSaoPaulo: {
 
 #### `README.md` âœ…
 - TÃ­tulo: `nexefii` â†’ `NEXEFII`
-- `localStorage.ilux_lang` â†’ `localStorage.nexefii_lang`
+- `localStorage.nexefii_lang` â†’ `localStorage.nexefii_lang`
 
 ---
 
@@ -117,7 +117,7 @@ nexefiiSaoPaulo: {
 
 ### `migrate-storage.html` âœ¨
 Ferramenta de migraÃ§Ã£o de localStorage com interface visual:
-- âœ… Escaneia chaves antigas (`ilux*`, `nexefii_*`)
+- âœ… Escaneia chaves antigas (`nexefii*`, `nexefii_*`)
 - âœ… Escaneia chaves novas (`nexefii*`)
 - âœ… BotÃ£o para limpar chaves antigas
 - âœ… BotÃ£o para inicializar sistema NEXEFII
@@ -159,14 +159,14 @@ Ferramenta de migraÃ§Ã£o de localStorage com interface visual:
 ### Comandos de VerificaÃ§Ã£o
 
 ```powershell
-# Buscar referÃªncias restantes a "ilux" em JS
-Get-ChildItem "r:\Development\Projects\nexefii" -Include *.js -Recurse | Select-String "IluxAuth" -List
+# Buscar referÃªncias restantes a "nexefii" em JS
+Get-ChildItem "r:\Development\Projects\nexefii" -Include *.js -Recurse | Select-String "NexefiiAuth" -List
 
-# Buscar referÃªncias restantes a "ilux" em HTML
-Get-ChildItem "r:\Development\Projects\nexefii" -Include *.html -Recurse | Select-String "IluxAuth" -List
+# Buscar referÃªncias restantes a "nexefii" em HTML
+Get-ChildItem "r:\Development\Projects\nexefii" -Include *.html -Recurse | Select-String "NexefiiAuth" -List
 
 # Verificar propriedades antigas
-Get-ChildItem "r:\Development\Projects\nexefii" -Include *.js,*.json -Recurse | Select-String "iluxSaoPaulo" -List
+Get-ChildItem "r:\Development\Projects\nexefii" -Include *.js,*.json -Recurse | Select-String "nexefiiSaoPaulo" -List
 ```
 
 ### âœ… Resultado Esperado
@@ -176,11 +176,11 @@ Get-ChildItem "r:\Development\Projects\nexefii" -Include *.js,*.json -Recurse | 
 
 ## ðŸŽ¯ Objetos Globais
 
-### Antes (iLux)
+### Antes (nexefii)
 ```javascript
-window.IluxAuth      // âŒ Removido
-window.IluxProps     // âŒ Removido
-localStorage.ilux_lang              // âŒ Removido
+window.NexefiiAuth      // âŒ Removido
+window.NexefiiProps     // âŒ Removido
+localStorage.nexefii_lang              // âŒ Removido
 localStorage.nexefii_users          // âŒ Removido
 localStorage.nexefii_session        // âŒ Removido
 localStorage.nexefii_properties     // âŒ Removido
@@ -264,7 +264,7 @@ localStorage.nexefii_properties     // âœ… Novo
 
 ## ðŸ“ Notas Finais
 
-âœ… **MigraÃ§Ã£o completa:** Todos os objetos, mÃ©todos, localStorage keys e nomes de propriedades foram atualizados de iLux para NEXEFII
+âœ… **MigraÃ§Ã£o completa:** Todos os objetos, mÃ©todos, localStorage keys e nomes de propriedades foram atualizados de nexefii para NEXEFII
 
 âœ… **Retrocompatibilidade:** A ferramenta `migrate-storage.html` permite limpeza segura de dados antigos
 

@@ -1,0 +1,134 @@
+openapi: 3.0.3
+info:
+  title: Nexefii Lock Service API
+  version: '1.0.0'
+  description: API for managing door locks, keys, schedules and status.
+servers:
+  - url: https://api.nexefii.com/v1
+components:
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+  schemas:
+    Lock:
+      type: object
+      properties:
+        id:
+          type: string
+        propertyId:
+          type: string
+        status:
+          type: string
+          enum: [online, offline, unknown]
+    Key:
+      type: object
+      properties:
+        id:
+          type: string
+        lockId:
+          type: string
+        userId:
+          type: string
+        validFrom:
+          type: string
+          format: date-time
+        validTo:
+          type: string
+          format: date-time
+paths:
+  /locks/{lockId}:
+    get:
+      summary: Get lock status
+      parameters:
+        - name: lockId
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Lock details
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Lock'
+  /locks/{lockId}/keys:
+    post:
+      summary: Create a key for a lock
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: lockId
+          in: path
+          required: true
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                userId:
+                  type: string
+                validFrom:
+                  type: string
+                  format: date-time
+                validTo:
+                  type: string
+                  format: date-time
+      responses:
+        '201':
+          description: Key created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Key'
+  /locks/{lockId}/keys/{keyId}:
+    delete:
+      summary: Revoke a key
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: lockId
+          in: path
+          required: true
+          schema:
+            type: string
+        - name: keyId
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '204':
+          description: Key revoked
+  /locks/{lockId}/commands:
+    post:
+      summary: Send a command to the lock (unlock, lock, update)
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: lockId
+          in: path
+          required: true
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                command:
+                  type: string
+                  enum: [unlock, lock, refresh]
+                parameters:
+                  type: object
+      responses:
+        '202':
+          description: Command accepted

@@ -42,8 +42,8 @@ try {
         if (window.NexefiiAuth && typeof window.NexefiiAuth.isAuthenticated === 'function') {
           return window.NexefiiAuth.isAuthenticated();
         }
-        if (window.IluxAuth && typeof window.IluxAuth.isAuthenticated === 'function') {
-          return window.IluxAuth.isAuthenticated();
+        if (window.NexefiiAuth && typeof window.NexefiiAuth.isAuthenticated === 'function') {
+          return window.NexefiiAuth.isAuthenticated();
         }
       } catch (e) {
         // swallow and return false

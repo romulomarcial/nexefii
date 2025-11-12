@@ -72,12 +72,12 @@ async function run() {
         await p.evaluate(() => {
           try {
             const demoProps = {
-              "iluxSaoPaulo": { key: "iluxSaoPaulo", name: "São Paulo", active: true },
-              "iluxMiami": { key: "iluxMiami", name: "Miami", active: true }
+              "nexefiiSaoPaulo": { key: "nexefiiSaoPaulo", name: "São Paulo", active: true },
+              "nexefiiMiami": { key: "nexefiiMiami", name: "Miami", active: true }
             };
             localStorage.setItem('nexefii_properties', JSON.stringify(demoProps));
             // Populate currentUser and nexefii_session for compatibility
-            const demoSession = { username: 'demo', email: 'demo@nexefii.com', properties: ['iluxSaoPaulo','iluxMiami'] };
+            const demoSession = { username: 'demo', email: 'demo@nexefii.com', properties: ['nexefiiSaoPaulo','nexefiiMiami'] };
             localStorage.setItem('currentUser', JSON.stringify(demoSession));
             localStorage.setItem('nexefii_session', JSON.stringify(demoSession));
             localStorage.setItem('nexefii_session', JSON.stringify(demoSession));

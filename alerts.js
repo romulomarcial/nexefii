@@ -32,7 +32,7 @@ function loadAlertsSuites(){
 // Transform SIM_SUITES item to alerts row
 function mapSuiteToAlertsRow(s){
   const room = (s.floor*100 + s.suite).toString();
-  const lang = ALERTS_LANG || localStorage.getItem('ilux_lang') || 'pt';
+  const lang = ALERTS_LANG || (localStorage.getItem('nexefii_lang') || localStorage.getItem('nexefii_lang')) || 'pt';
   
   // Translate alert types
   const translateAlert = (alertType) => {
@@ -68,7 +68,7 @@ function alertsPopulateGrid(rooms){
   if(!container) return;
   if(ALERTS_DEBUG) console.log('[ALERTS] Populating grid with', rooms.length, 'rooms');
   if(!rooms.length){
-    const lang = ALERTS_LANG || localStorage.getItem('ilux_lang') || 'pt';
+    const lang = ALERTS_LANG || (localStorage.getItem('nexefii_lang') || localStorage.getItem('nexefii_lang')) || 'pt';
     const emptyMsg = (lang==='en'?'No alerts at the moment':(lang==='es'?'Sin alertas en este momento':'Nenhum alerta no momento'));
     container.innerHTML = `<div class="muted" style="padding:12px">${emptyMsg}</div>`;
     return;
@@ -258,7 +258,7 @@ async function alertsLoadAndApplyI18N(requestedLang) {
         }
     }
 
-    const lang = requestedLang || (localStorage.getItem('ilux_lang') || 'pt');
+    const lang = requestedLang || ((localStorage.getItem('nexefii_lang') || localStorage.getItem('nexefii_lang')) || 'pt');
     ALERTS_LANG = lang;
     const S = (data && data[lang] && data[lang].app) ? data[lang].app : (data && data.pt && data.pt.app) ? data.pt.app : {};
     ALERTS_I18N_S = S;
@@ -299,11 +299,11 @@ function alertsApplyTexts(S, langParam) {
 async function alertsInitI18N(){
   if(ALERTS_DEBUG) console.log('[ALERTS] alertsInitI18N called');
   try{
-    const storedLang = localStorage.getItem('ilux_lang');
+    const storedLang = (localStorage.getItem('nexefii_lang') || localStorage.getItem('nexefii_lang'));
     const urlLang = new URLSearchParams(location.search).get('lang');
     const langParam = storedLang || urlLang || 'pt';
     
-    localStorage.setItem('ilux_lang', langParam);
+    try{ localStorage.setItem('nexefii_lang',langParam); }catch(e){} try{ localStorage.setItem('nexefii_lang',langParam); }catch(e){};
     const select = document.getElementById('langSelect'); 
     if(select) select.value = langParam;
     
@@ -337,7 +337,7 @@ async function alertsInitI18N(){
 
 async function changeLanguage(newLang){
   if(ALERTS_DEBUG) console.log('[ALERTS] changeLanguage called with:', newLang);
-  localStorage.setItem('ilux_lang', newLang);
+  try{ localStorage.setItem('nexefii_lang',newLang); }catch(e){} try{ localStorage.setItem('nexefii_lang',newLang); }catch(e){};
   const select = document.getElementById('langSelect'); 
   if(select) select.value = newLang;
   
@@ -373,8 +373,8 @@ window.addEventListener('DOMContentLoaded', async ()=>{
 window.addEventListener('storage', async function(e){
   try{
     if(!e) return;
-    if(e.key === 'ilux_lang' || e.key === 'i18n_cache' || e.key === 'i18n_cache_timestamp'){
-      const newLang = localStorage.getItem('ilux_lang') || 'pt';
+    if(e.key === 'nexefii_lang' || e.key === 'i18n_cache' || e.key === 'i18n_cache_timestamp'){
+      const newLang = (localStorage.getItem('nexefii_lang') || localStorage.getItem('nexefii_lang')) || 'pt';
       const sel = document.getElementById('langSelect'); if(sel) sel.value = newLang;
       await alertsLoadAndApplyI18N(newLang);
       alertsRender();
@@ -384,7 +384,7 @@ window.addEventListener('storage', async function(e){
 
 function alertsExportCSV(){
   try{
-    const lang = ALERTS_LANG || (localStorage.getItem('ilux_lang')||'pt');
+    const lang = ALERTS_LANG || ((localStorage.getItem('nexefii_lang') || localStorage.getItem('nexefii_lang'))||'pt');
     let S = ALERTS_I18N_S;
     if(!S){
       try{ const c=localStorage.getItem('i18n_cache'); if(c){ const p=JSON.parse(c); S = (p[lang] && p[lang].app) ? p[lang].app : null; } }catch(_){ S=null; }

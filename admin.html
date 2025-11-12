@@ -9,7 +9,7 @@
   <script src="properties.js"></script>
   <script>
     // Admin-only guard
-    const session = ((window.IluxAuth && IluxAuth.getCurrentSession) ? IluxAuth.getCurrentSession() : (window.NexefiiAuth && NexefiiAuth.getCurrentSession ? ((window.NexefiiAuth && NexefiiAuth.getCurrentSession) ? NexefiiAuth.getCurrentSession() : (window.IluxAuth && IluxAuth.getCurrentSession ? IluxAuth.getCurrentSession() : null)) : null));
+    const session = ((window.NexefiiAuth && NexefiiAuth.getCurrentSession) ? NexefiiAuth.getCurrentSession() : (window.NexefiiAuth && NexefiiAuth.getCurrentSession ? ((window.NexefiiAuth && NexefiiAuth.getCurrentSession) ? NexefiiAuth.getCurrentSession() : (window.NexefiiAuth && NexefiiAuth.getCurrentSession ? NexefiiAuth.getCurrentSession() : null)) : null));
     if(!session || session.role !== 'admin') {
       alert('Acesso negado. Apenas administradores podem acessar esta pÃ¡gina.');
       window.location.href = 'index.html';
@@ -216,19 +216,19 @@
     let HOTELS_I18N = null;
     const DEFAULT_HOTELS = {
       pt: {
-        iluxSaoPaulo: 'iLux Hotel SÃ£o Paulo',
-        iluxMiami: 'iLux Hotel Miami',
-        iluxRioDeJaneiro: 'iLux Hotel Rio de Janeiro'
+        nexefiiSaoPaulo: 'Nexefii Hotel SÃ£o Paulo',
+        nexefiiMiami: 'Nexefii Hotel Miami',
+        nexefiiRioDeJaneiro: 'Nexefii Hotel Rio de Janeiro'
       },
       en: {
-        iluxSaoPaulo: 'iLux Hotel SÃ£o Paulo',
-        iluxMiami: 'iLux Hotel Miami',
-        iluxRioDeJaneiro: 'iLux Hotel Rio de Janeiro'
+        nexefiiSaoPaulo: 'Nexefii Hotel SÃ£o Paulo',
+        nexefiiMiami: 'Nexefii Hotel Miami',
+        nexefiiRioDeJaneiro: 'Nexefii Hotel Rio de Janeiro'
       },
       es: {
-        iluxSaoPaulo: 'iLux Hotel SÃ£o Paulo',
-        iluxMiami: 'iLux Hotel Miami',
-        iluxRioDeJaneiro: 'iLux Hotel Rio de Janeiro'
+        nexefiiSaoPaulo: 'Nexefii Hotel SÃ£o Paulo',
+        nexefiiMiami: 'Nexefii Hotel Miami',
+        nexefiiRioDeJaneiro: 'Nexefii Hotel Rio de Janeiro'
       }
     };
     const DEFAULT_ADMIN_I18N = {
@@ -424,7 +424,7 @@
       if(!I18N_ADMIN) return;
       const lang = document.getElementById('langSelect').value;
   const L = I18N_ADMIN[lang] || I18N_ADMIN.pt;
-  const MOD = IluxAuth.MODULE_NAMES[lang] || IluxAuth.MODULE_NAMES.pt;
+  const MOD = NexefiiAuth.MODULE_NAMES[lang] || NexefiiAuth.MODULE_NAMES.pt;
   const HOTELS = HOTELS_I18N?.[lang] || HOTELS_I18N?.pt || DEFAULT_HOTELS.pt;
 
       document.getElementById('pageTitle').innerText = L.pageTitle;
@@ -463,7 +463,7 @@
       document.getElementById('btnPropCancel').innerText = L.btnCancel;
       document.getElementById('btnPropSave').innerText = L.btnSave;
 
-      localStorage.setItem('ilux_lang', lang);
+      try{ localStorage.setItem('nexefii_lang',lang); }catch(e){} try{ localStorage.setItem('nexefii_lang',lang); }catch(e){};
       renderUsers();
       renderProperties();
     }
@@ -489,10 +489,10 @@
       try{
         const lang = document.getElementById('langSelect').value;
         const L = I18N_ADMIN[lang] || I18N_ADMIN.pt;
-        const MOD = IluxAuth.MODULE_NAMES[lang] || IluxAuth.MODULE_NAMES.pt;
+        const MOD = NexefiiAuth.MODULE_NAMES[lang] || NexefiiAuth.MODULE_NAMES.pt;
         const HOTELS = HOTELS_I18N?.[lang] || HOTELS_I18N?.pt || DEFAULT_HOTELS.pt;
 
-        const allUsers = (IluxAuth.getAllUsers()||[]).filter(u => u.role !== 'admin');
+        const allUsers = (NexefiiAuth.getAllUsers()||[]).filter(u => u.role !== 'admin');
         const tbody = document.getElementById('usersTableBody');
         if(!tbody) { console.error('[admin] usersTableBody not found'); return; }
 
@@ -577,7 +577,7 @@
         return;
       }
       if(!confirm(L.confirmApprove)) return;
-      const result = IluxAuth.approveUser(userId);
+      const result = NexefiiAuth.approveUser(userId);
       if(result.success){ alert(L.successApprove); renderUsers(); }
     }
 
@@ -587,7 +587,7 @@
       
       if(!confirm(L.confirmDeny)) return;
       
-      const result = IluxAuth.denyUser(userId);
+      const result = NexefiiAuth.denyUser(userId);
       if(result.success) {
         alert(L.successDeny);
         renderUsers();
@@ -600,7 +600,7 @@
       
       if(!confirm(L.confirmDelete)) return;
       
-      const result = IluxAuth.deleteUser(userId);
+      const result = NexefiiAuth.deleteUser(userId);
       if(result.success) {
         alert(L.successDelete);
         renderUsers();
@@ -611,10 +611,10 @@
       CURRENT_EDITING_USER = userId;
       APPROVAL_MODE = !!approval;
       const lang = document.getElementById('langSelect').value;
-      const MOD = IluxAuth.MODULE_NAMES[lang] || IluxAuth.MODULE_NAMES.pt;
+      const MOD = NexefiiAuth.MODULE_NAMES[lang] || NexefiiAuth.MODULE_NAMES.pt;
       const HOTELS = HOTELS_I18N?.[lang] || HOTELS_I18N?.pt || DEFAULT_HOTELS.pt;
       
-      const users = IluxAuth.getAllUsers();
+      const users = NexefiiAuth.getAllUsers();
       const user = users.find(u => u.id === userId);
       
       if(!user) return;
@@ -631,7 +631,7 @@
       propSel.innerHTML = propOpts.join('');
       
       const userModules = APPROVAL_MODE ? (user.requestedModules || []) : (user.modules || []);
-      const checkboxesHtml = Object.values(IluxAuth.MODULES).map(module => {
+      const checkboxesHtml = Object.values(NexefiiAuth.MODULES).map(module => {
         const checked = userModules.includes(module) ? 'checked' : '';
         return `
           <div class="module-checkbox">
@@ -645,9 +645,9 @@
       // Enforce property entitlements
       const entitleByProperty = ()=>{
         const key = document.getElementById('modalProperty').value || '';
-        const prop = key ? (window.IluxProps && IluxProps.getProperty(key)) : null;
+        const prop = key ? (window.NexefiiProps && NexefiiProps.getProperty(key)) : null;
         const purchased = prop && Array.isArray(prop.modulesPurchased) ? prop.modulesPurchased : null;
-        Object.values(IluxAuth.MODULES).forEach(module => {
+        Object.values(NexefiiAuth.MODULES).forEach(module => {
           const cb = document.getElementById(`mod_${module}`);
           if(!cb) return;
           if(purchased && !purchased.includes(module)){
@@ -690,7 +690,7 @@
       const L = I18N_ADMIN[lang] || I18N_ADMIN.pt;
       
       const selectedModules = [];
-      Object.values(IluxAuth.MODULES).forEach(module => {
+      Object.values(NexefiiAuth.MODULES).forEach(module => {
         const checkbox = document.getElementById(`mod_${module}`);
         if(checkbox && checkbox.checked) {
           selectedModules.push(module);
@@ -699,11 +699,11 @@
       // Update property too
       const newProperty = document.getElementById('modalProperty').value || null;
       if(APPROVAL_MODE){
-        const r = IluxAuth.approveUserWithModules(CURRENT_EDITING_USER, selectedModules, newProperty);
+        const r = NexefiiAuth.approveUserWithModules(CURRENT_EDITING_USER, selectedModules, newProperty);
         if(r.success){ alert(L.successApprove); closeModuleModal(); renderUsers(); }
       }else{
-        const r1 = IluxAuth.updateUserModules(CURRENT_EDITING_USER, selectedModules);
-        const r2 = IluxAuth.updateUserProperty(CURRENT_EDITING_USER, newProperty);
+        const r1 = NexefiiAuth.updateUserModules(CURRENT_EDITING_USER, selectedModules);
+        const r2 = NexefiiAuth.updateUserProperty(CURRENT_EDITING_USER, newProperty);
         if(r1.success && r2.success) {
           alert(L.successModules);
           closeModuleModal();
@@ -713,7 +713,7 @@
     }
 
     function logout() {
-      IluxAuth.logout();
+      NexefiiAuth.logout();
       window.location.href = 'login.html';
     }
 
@@ -723,12 +723,12 @@
       if(!grid) return;
       const lang = document.getElementById('langSelect').value;
       const HOTELS = HOTELS_I18N?.[lang] || HOTELS_I18N?.pt || DEFAULT_HOTELS.pt;
-      const props = (window.IluxProps && IluxProps.listProperties ? IluxProps.listProperties() : []).sort((a,b)=>{
+      const props = (window.NexefiiProps && NexefiiProps.listProperties ? NexefiiProps.listProperties() : []).sort((a,b)=>{
         const an = HOTELS[a.key] || a.key; const bn = HOTELS[b.key] || b.key; return an.localeCompare(bn);
       });
       grid.innerHTML = props.map(p=>{
         const name = HOTELS[p.key] || p.key;
-        const mods = (p.modulesPurchased||[]).map(m=> (IluxAuth.MODULE_NAMES[lang]||IluxAuth.MODULE_NAMES.pt)[m] || m).join(', ') || '-';
+        const mods = (p.modulesPurchased||[]).map(m=> (NexefiiAuth.MODULE_NAMES[lang]||NexefiiAuth.MODULE_NAMES.pt)[m] || m).join(', ') || '-';
         const capLabel = p.userCapacity==='to30'?'â‰¤30': p.userCapacity==='30to50'?'30â€“50': p.userCapacity==='50to100'?'50â€“100': '100+';
         return `
           <div class="prop-card">
@@ -754,7 +754,7 @@
       const lang = document.getElementById('langSelect').value;
       const L = I18N_ADMIN[lang] || I18N_ADMIN.pt;
       const HOTELS = HOTELS_I18N?.[lang] || HOTELS_I18N?.pt || DEFAULT_HOTELS.pt;
-      const prop = key ? (IluxProps.getProperty(key)||{}) : {};
+      const prop = key ? (NexefiiProps.getProperty(key)||{}) : {};
       document.getElementById('propModalTitle').innerText = key ? (L.propModalTitleEdit||'Editar Propriedade') : (L.propModalTitleNew||'Nova Propriedade');
       // Build property key select
       const sel = document.getElementById('propKey');
@@ -764,9 +764,9 @@
       document.getElementById('propImageUrl').value = prop.imageUrl || '';
       document.getElementById('propCapacity').value = prop.userCapacity || 'to30';
       document.getElementById('propActive').checked = prop.active!==false;
-      const MOD = IluxAuth.MODULE_NAMES[lang] || IluxAuth.MODULE_NAMES.pt;
+      const MOD = NexefiiAuth.MODULE_NAMES[lang] || NexefiiAuth.MODULE_NAMES.pt;
       const purchased = prop.modulesPurchased || [];
-      document.getElementById('propModules').innerHTML = Object.values(IluxAuth.MODULES).map(m=>{
+      document.getElementById('propModules').innerHTML = Object.values(NexefiiAuth.MODULES).map(m=>{
         const checked = purchased.includes(m) ? 'checked' : '';
         return `<div class="module-checkbox"><input type="checkbox" id="pm_${m}" value="${m}" ${checked}><label for="pm_${m}">${MOD[m]||m}</label></div>`;
       }).join('');
@@ -789,8 +789,8 @@
       const userCapacity = document.getElementById('propCapacity').value;
       const active = !!document.getElementById('propActive').checked;
       const modulesPurchased = [];
-      Object.values(IluxAuth.MODULES).forEach(m=>{ const cb=document.getElementById(`pm_${m}`); if(cb && cb.checked) modulesPurchased.push(m); });
-      const r = IluxProps.upsertProperty({key, imageUrl, userCapacity, active, modulesPurchased});
+      Object.values(NexefiiAuth.MODULES).forEach(m=>{ const cb=document.getElementById(`pm_${m}`); if(cb && cb.checked) modulesPurchased.push(m); });
+      const r = NexefiiProps.upsertProperty({key, imageUrl, userCapacity, active, modulesPurchased});
       if(r.success){ alert(L.successProperty||'Propriedade salva com sucesso!'); closePropertyModal(); renderProperties(); }
     }
 
@@ -798,14 +798,14 @@
       const lang = document.getElementById('langSelect').value;
       const L = I18N_ADMIN[lang] || I18N_ADMIN.pt;
       if(!confirm(L.confirmDeleteProperty||'Excluir esta propriedade?')) return;
-      const r = IluxProps.deleteProperty(key);
+      const r = NexefiiProps.deleteProperty(key);
       if(r.success){ alert(L.successPropertyDelete||'Propriedade excluÃ­da.'); renderProperties(); }
     }
 
     // Initialize
     window.addEventListener('DOMContentLoaded', async () => {
       await loadAdminI18N();
-      const saved = localStorage.getItem('ilux_lang') || 'pt';
+      const saved = (localStorage.getItem('nexefii_lang') || localStorage.getItem('nexefii_lang')) || 'pt';
       document.getElementById('langSelect').value = saved;
       applyAdminLang();
       renderUsers();

@@ -12,7 +12,7 @@
       window.location.href = 'login.html';
     }
     // Module permission check
-    if (!((window.IluxAuth && IluxAuth.hasModuleAccess) ? IluxAuth.hasModuleAccess('housekeeping') : true)) {
+    if (!((window.NexefiiAuth && NexefiiAuth.hasModuleAccess) ? NexefiiAuth.hasModuleAccess('housekeeping') : true)) {
       alert('VocÃª nÃ£o tem permissÃ£o para acessar o mÃ³dulo de GovernanÃ§a.');
       window.location.href = 'index.html';
     }

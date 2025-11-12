@@ -86,7 +86,7 @@ nexefii/
 - âœ… **Dashboard Consolidado:** KPIs (vendidos, ocupaÃ§Ã£o, ADR) para todas as propriedades
 - âœ… **Image Upload System:** 3 mÃ©todos (galeria, arquivo, URL)
 - âœ… **UX Enhancements:** Drag-drop, preview, spinner, animaÃ§Ãµes
-- âœ… **Rebranding Completo:** 100% iLux â†’ Nexefii (0 referÃªncias nÃ£o intencionais)
+- âœ… **Rebranding Completo:** 100% nexefii â†’ Nexefii (0 referÃªncias nÃ£o intencionais)
 
 ### Sprint 4: Sync Service
 - âœ… **SyncService:** Fila de eventos com prioridade + timestamp

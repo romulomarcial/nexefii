@@ -437,7 +437,7 @@ class PropertyProvisioner {
       status: 'provisioning'
     };
 
-    await window.IluxProps.upsertProperty(property);
+    await window.NexefiiProps.upsertProperty(property);
   }
 
   async provisionDatabase(propertyKey) {

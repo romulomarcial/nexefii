@@ -1,9 +1,9 @@
 (function(){
   const qs = new URLSearchParams(location.search);
   const metricParam = qs.get('metric') || 'On';
-  const langParam = qs.get('lang') || (localStorage.getItem('ilux_lang')||'pt');
+  const langParam = qs.get('lang') || ((localStorage.getItem('nexefii_lang') || localStorage.getItem('nexefii_lang'))||'pt');
   // keep language consistent with the rest of the app
-  try{ localStorage.setItem('ilux_lang', langParam); }catch(e){}
+  try{ try{ localStorage.setItem('nexefii_lang',langParam); }catch(e){} try{ localStorage.setItem('nexefii_lang',langParam); }catch(e){}; }catch(e){}
 
   const STR = (typeof getStrings === 'function') ? getStrings(langParam) : {
     engineeringTitle:'ENGENHARIA', hvacOn:'HVAC On', hvacCool:'Cool', hvacHeat:'Heat', hvacAuto:'Auto', hvacOff:'HVAC Off'

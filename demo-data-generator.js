@@ -495,8 +495,8 @@
     // ==================== MÃ‰TODOS AUXILIARES ====================
 
     getProperty(propertyKey) {
-      if (window.IluxProps && typeof window.IluxProps.getProperty === 'function') {
-        return window.IluxProps.getProperty(propertyKey);
+      if (window.NexefiiProps && typeof window.NexefiiProps.getProperty === 'function') {
+        return window.NexefiiProps.getProperty(propertyKey);
       }
       return null;
     }

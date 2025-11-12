@@ -9,11 +9,11 @@
   <link rel="stylesheet" href="style.css">
   <link rel="stylesheet" href="master-control-v3.css">
   <script>
-    // Lightweight IluxProps shim so headless checks and migration pages can read properties
+    // Lightweight NexefiiProps shim so headless checks and migration pages can read properties
     (function(){
       try {
-        if (!window.IluxProps) {
-          window.IluxProps = {
+        if (!window.NexefiiProps) {
+          window.NexefiiProps = {
             listProperties: function(){ try { const m = JSON.parse(localStorage.getItem('nexefii_properties')||'{}'); return Object.keys(m).map(k=>m[k]); } catch(e){ return []; } },
             getProperty: function(k){ try{ const m = JSON.parse(localStorage.getItem('nexefii_properties')||'{}'); return m[k] || null;}catch(e){return null}},
             upsertProperty: function(p){ try{ const m = JSON.parse(localStorage.getItem('nexefii_properties')||'{}'); m[p.key]=p; localStorage.setItem('nexefii_properties', JSON.stringify(m)); return p;}catch(e){return null}},
@@ -2115,13 +2115,13 @@
         <form id="propertyForm" class="modal-form">
           <div class="form-group">
             <label><span class="icon">🔑</span> <span data-i18n="properties.modal.id">Property ID</span> <span class="required">*</span></label>
-            <input type="text" id="propertyId" class="input" placeholder="ex: iluxSaoPaulo" required data-i18n-placeholder="properties.modal.idPlaceholder">
+            <input type="text" id="propertyId" class="input" placeholder="ex: nexefiiSaoPaulo" required data-i18n-placeholder="properties.modal.idPlaceholder">
             <small data-i18n="properties.modal.idHelp">Identificador único (sem espaços, primary key no banco)</small>
           </div>
 
           <div class="form-group">
             <label><span class="icon">🏨</span> <span data-i18n="properties.modal.name">Nome da Propriedade</span></label>
-            <input type="text" id="propertyName" class="input" placeholder="ex: iLux São Paulo" data-i18n-placeholder="properties.modal.namePlaceholder">
+            <input type="text" id="propertyName" class="input" placeholder="ex: nexefii São Paulo" data-i18n-placeholder="properties.modal.namePlaceholder">
           </div>
 
           <div class="form-group">
