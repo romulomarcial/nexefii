@@ -1,9 +1,9 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="pt-br">
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>nexefii Â· Solicitar Acesso</title>
+  <title>nexefii · Solicitar Acesso</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
@@ -61,24 +61,24 @@
   <div class="wrap">
     <div class="card">
       <a href="login.html" class="back-link" id="backLink">
-        â† <span id="backText">Voltar para login</span>
+        ← <span id="backText">Voltar para login</span>
       </a>
       
       <div class="brand">
         <img src="assets/Nexefii_logo_3d-official.png" alt="Nexefii">
       </div>
-      <div class="subtitle" id="subtitle">Solicite acesso Ã  plataforma. ApÃ³s o envio, sua solicitaÃ§Ã£o serÃ¡ analisada pela equipe.</div>
+  <div class="subtitle" id="subtitle">Solicite acesso à plataforma. Após o envio, sua solicitação será analisada pela equipe.</div>
 
       <div id="registerForm">
         <label id="labLang">Idioma</label>
         <select id="lang">
-          <option value="pt">PortuguÃªs (Brasil)</option>
+          <option value="pt">Português (Brasil)</option>
           <option value="en">English</option>
-          <option value="es">EspaÃ±ol</option>
+          <option value="es">Español</option>
         </select>
 
         <label id="labFullName" class="required">Nome Completo</label>
-        <input id="fullName" type="text" placeholder="JoÃ£o Silva" autocomplete="name">
+  <input id="fullName" type="text" placeholder="João Silva" autocomplete="name">
         <div class="error-msg" id="errFullName"></div>
 
         <div class="form-row">
@@ -94,7 +94,7 @@
           </div>
         </div>
 
-        <label id="labCountry" class="required">PaÃ­s</label>
+  <label id="labCountry" class="required">País</label>
         <select id="country">
           <option value="">-- Selecione --</option>
           <option value="BR">Brasil</option>
@@ -102,10 +102,10 @@
           <option value="AR">Argentina</option>
           <option value="CL">Chile</option>
           <option value="CO">Colombia</option>
-          <option value="MX">MÃ©xico</option>
-          <option value="PE">PerÃº</option>
+          <option value="MX">México</option>
+          <option value="PE">Perú</option>
           <option value="UY">Uruguay</option>
-          <option value="ES">EspaÃ±a</option>
+          <option value="ES">España</option>
           <option value="PT">Portugal</option>
           <option value="OTHER">Outro / Other / Otro</option>
         </select>
@@ -115,18 +115,18 @@
         <select id="property"></select>
         <div class="error-msg" id="errProperty"></div>
 
-        <label id="labPosition" class="required">Cargo / PosiÃ§Ã£o</label>
+  <label id="labPosition" class="required">Cargo / Posição</label>
         <input id="position" type="text" placeholder="Gerente Geral" autocomplete="organization-title">
         <div class="error-msg" id="errPosition"></div>
 
-        <label id="labUsername" class="required">UsuÃ¡rio</label>
+  <label id="labUsername" class="required">Usuário</label>
         <input id="username" type="text" placeholder="joao.silva" autocomplete="username">
         <div class="error-msg" id="errUsername"></div>
 
           <div class="modules-section">
-            <label id="labModules" style="margin:0 0 8px 0">MÃ³dulos Solicitados</label>
+            <label id="labModules" style="margin:0 0 8px 0">Módulos Solicitados</label>
             <p id="modulesHint" style="font-size:12px;color:var(--muted);margin:0 0 12px 0">
-              Selecione os mÃ³dulos aos quais deseja ter acesso:
+              Selecione os módulos aos quais deseja ter acesso:
             </p>
             <div class="modules-grid" id="modulesGrid"></div>
           </div>
@@ -134,12 +134,12 @@
         <div class="form-row">
           <div>
             <label id="labPassword" class="required">Senha</label>
-            <input id="password" type="password" placeholder="â€¢â€¢â€¢â€¢â€¢â€¢â€¢â€¢" autocomplete="new-password">
+            <input id="password" type="password" placeholder="••••••••" autocomplete="new-password">
             <div class="error-msg" id="errPassword"></div>
           </div>
           <div>
             <label id="labConfirmPassword" class="required">Confirmar Senha</label>
-            <input id="confirmPassword" type="password" placeholder="â€¢â€¢â€¢â€¢â€¢â€¢â€¢â€¢" autocomplete="new-password">
+            <input id="confirmPassword" type="password" placeholder="••••••••" autocomplete="new-password">
             <div class="error-msg" id="errConfirmPassword"></div>
           </div>
         </div>
@@ -149,16 +149,16 @@
         </button>
 
         <div style="text-align:center;margin-top:16px;font-size:13px;color:var(--muted)">
-          <span id="haveAccountText">JÃ¡ tem uma conta?</span>
+          <span id="haveAccountText">Já tem uma conta?</span>
           <a href="login.html" style="color:var(--primary);font-weight:600;text-decoration:none" id="loginLink">Fazer login</a>
         </div>
       </div>
 
       <div id="successCard" class="success-card">
-        <div class="success-icon">âœ“</div>
-        <h2 id="successTitle" style="margin:0 0 12px 0;font-size:20px">SolicitaÃ§Ã£o Enviada!</h2>
+        <div class="success-icon">✓</div>
+        <h2 id="successTitle" style="margin:0 0 12px 0;font-size:20px">Solicitação Enviada!</h2>
         <p id="successMessage" style="color:var(--muted);font-size:14px;line-height:1.6;margin-bottom:24px">
-          Sua solicitaÃ§Ã£o de acesso foi enviada com sucesso. Um email foi encaminhado para nossa equipe que irÃ¡ analisar e autorizar seu acesso em breve.
+          Sua solicitação de acesso foi enviada com sucesso. Um e-mail foi encaminhado para nossa equipe, que irá analisar e autorizar seu acesso em breve.
         </p>
         <a href="login.html" class="btn primary" id="backToLoginBtn">Voltar para Login</a>
       </div>
@@ -172,17 +172,17 @@
 
     const DEFAULT_HOTELS = {
       pt: {
-        iluxSaoPaulo: 'iLux Hotel SÃ£o Paulo',
+        iluxSaoPaulo: 'iLux Hotel São Paulo',
         iluxMiami: 'iLux Hotel Miami',
         iluxRioDeJaneiro: 'iLux Hotel Rio de Janeiro'
       },
       en: {
-        iluxSaoPaulo: 'iLux Hotel SÃ£o Paulo',
+        iluxSaoPaulo: 'iLux Hotel São Paulo',
         iluxMiami: 'iLux Hotel Miami',
         iluxRioDeJaneiro: 'iLux Hotel Rio de Janeiro'
       },
       es: {
-        iluxSaoPaulo: 'iLux Hotel SÃ£o Paulo',
+        iluxSaoPaulo: 'iLux Hotel São Paulo',
         iluxMiami: 'iLux Hotel Miami',
         iluxRioDeJaneiro: 'iLux Hotel Rio de Janeiro'
       }
@@ -192,43 +192,43 @@
       pt: {
         backToLogin: 'Voltar para login',
         title: 'Solicitar Acesso',
-        subtitle: 'Solicite acesso Ã  plataforma. ApÃ³s o envio, sua solicitaÃ§Ã£o serÃ¡ analisada pela equipe.',
+        subtitle: 'Solicite acesso à plataforma. Após o envio, sua solicitação será analisada pela equipe.',
         lang: 'Idioma',
         fullName: 'Nome Completo',
-        phFullName: 'JoÃ£o Silva',
+        phFullName: 'João Silva',
         email: 'Email',
         phEmail: 'joao@empresa.com',
         phone: 'Telefone',
         phPhone: '+55 11 98765-4321',
-        country: 'PaÃ­s',
+        country: 'País',
         countrySelect: '-- Selecione --',
         property: 'Propriedade',
         propertySelect: '-- Selecione a propriedade --',
-        position: 'Cargo / PosiÃ§Ã£o',
+        position: 'Cargo / Posição',
         phPosition: 'Gerente Geral',
-        username: 'UsuÃ¡rio',
+        username: 'Usuário',
         phUsername: 'joao.silva',
         password: 'Senha',
-        phPassword: 'â€¢â€¢â€¢â€¢â€¢â€¢â€¢â€¢',
+        phPassword: '••••••••',
         confirmPassword: 'Confirmar Senha',
-        phConfirmPassword: 'â€¢â€¢â€¢â€¢â€¢â€¢â€¢â€¢',
-        modules: 'MÃ³dulos Solicitados',
-        modulesHint: 'Selecione os mÃ³dulos aos quais deseja ter acesso:',
+        phConfirmPassword: '••••••••',
+        modules: 'Módulos Solicitados',
+        modulesHint: 'Selecione os módulos aos quais deseja ter acesso:',
         btnRegister: 'Solicitar Acesso',
-        haveAccount: 'JÃ¡ tem uma conta?',
+        haveAccount: 'Já tem uma conta?',
         doLogin: 'Fazer login',
-        successTitle: 'SolicitaÃ§Ã£o Enviada!',
-        successMessage: 'Sua solicitaÃ§Ã£o de acesso foi enviada com sucesso. Um email foi encaminhado para nossa equipe que irÃ¡ analisar e autorizar seu acesso em breve.',
+        successTitle: 'Solicitação Enviada!',
+        successMessage: 'Sua solicitação de acesso foi enviada com sucesso. Um e-mail foi encaminhado para nossa equipe que irá analisar e autorizar seu acesso em breve.',
         backToLoginBtn: 'Voltar para Login',
         errors: {
-          required: 'Este campo Ã© obrigatÃ³rio',
-          invalidEmail: 'Email invÃ¡lido',
-          passwordTooShort: 'A senha deve ter no mÃ­nimo 8 caracteres',
-          passwordWeak: 'A senha deve conter nÃºmeros e caracteres especiais',
-          passwordMismatch: 'As senhas nÃ£o coincidem',
-          usernameExists: 'Este nome de usuÃ¡rio jÃ¡ estÃ¡ em uso',
-          emailExists: 'Este email jÃ¡ estÃ¡ cadastrado',
-          genericError: 'Erro ao processar solicitaÃ§Ã£o. Tente novamente.'
+          required: 'Este campo é obrigatório',
+          invalidEmail: 'Email inválido',
+          passwordTooShort: 'A senha deve ter no mínimo 8 caracteres',
+          passwordWeak: 'A senha deve conter números e caracteres especiais',
+          passwordMismatch: 'As senhas não coincidem',
+          usernameExists: 'Este nome de usuário já está em uso',
+          emailExists: 'Este email já está cadastrado',
+          genericError: 'Erro ao processar solicitação. Tente novamente.'
         }
       },
       en: {
@@ -251,9 +251,9 @@
         username: 'Username',
         phUsername: 'john.smith',
         password: 'Password',
-        phPassword: 'â€¢â€¢â€¢â€¢â€¢â€¢â€¢â€¢',
-        confirmPassword: 'Confirm Password',
-        phConfirmPassword: 'â€¢â€¢â€¢â€¢â€¢â€¢â€¢â€¢',
+  phPassword: '••••••••',
+  confirmPassword: 'Confirm Password',
+  phConfirmPassword: '••••••••',
         modules: 'Requested Modules',
         modulesHint: 'Select the modules you want to access:',
         btnRegister: 'Request Access',
@@ -274,45 +274,45 @@
         }
       },
       es: {
-        backToLogin: 'Volver al inicio de sesiÃ³n',
+        backToLogin: 'Volver al inicio de sesión',
         title: 'Solicitar Acceso',
-        subtitle: 'Solicite acceso a la plataforma. DespuÃ©s del envÃ­o, su solicitud serÃ¡ revisada por nuestro equipo.',
+        subtitle: 'Solicite acceso a la plataforma. Después del envío, su solicitud será revisada por nuestro equipo.',
         lang: 'Idioma',
         fullName: 'Nombre Completo',
-        phFullName: 'Juan PÃ©rez',
-        email: 'Correo ElectrÃ³nico',
+        phFullName: 'Juan Pérez',
+        email: 'Correo Electrónico',
         phEmail: 'juan@empresa.com',
-        phone: 'TelÃ©fono',
+        phone: 'Teléfono',
         phPhone: '+54 11 1234-5678',
-        country: 'PaÃ­s',
+        country: 'País',
         countrySelect: '-- Seleccione --',
         property: 'Propiedad',
         propertySelect: '-- Seleccione la propiedad --',
-        position: 'Cargo / PosiciÃ³n',
+        position: 'Cargo / Posición',
         phPosition: 'Gerente General',
         username: 'Usuario',
         phUsername: 'juan.perez',
-        password: 'ContraseÃ±a',
-        phPassword: 'â€¢â€¢â€¢â€¢â€¢â€¢â€¢â€¢',
-        confirmPassword: 'Confirmar ContraseÃ±a',
-        phConfirmPassword: 'â€¢â€¢â€¢â€¢â€¢â€¢â€¢â€¢',
-        modules: 'MÃ³dulos Solicitados',
-        modulesHint: 'Seleccione los mÃ³dulos a los que desea acceder:',
+        password: 'Contraseña',
+        phPassword: '••••••••',
+        confirmPassword: 'Confirmar Contraseña',
+        phConfirmPassword: '••••••••',
+        modules: 'Módulos Solicitados',
+        modulesHint: 'Seleccione los módulos a los que desea acceder:',
         btnRegister: 'Solicitar Acceso',
-        haveAccount: 'Â¿Ya tienes una cuenta?',
-        doLogin: 'Iniciar sesiÃ³n',
-        successTitle: 'Â¡Solicitud Enviada!',
-        successMessage: 'Su solicitud de acceso ha sido enviada con Ã©xito. Se ha enviado un correo electrÃ³nico a nuestro equipo que revisarÃ¡ y autorizarÃ¡ su acceso pronto.',
-        backToLoginBtn: 'Volver al Inicio de SesiÃ³n',
+        haveAccount: '¿Ya tienes una cuenta?',
+        doLogin: 'Iniciar sesión',
+        successTitle: '¡Solicitud Enviada!',
+        successMessage: 'Su solicitud de acceso ha sido enviada con éxito. Se ha enviado un correo electrónico a nuestro equipo que revisará y autorizará su acceso pronto.',
+        backToLoginBtn: 'Volver al Inicio de Sesión',
         errors: {
           required: 'Este campo es obligatorio',
-          invalidEmail: 'Correo electrÃ³nico invÃ¡lido',
-          passwordTooShort: 'La contraseÃ±a debe tener al menos 8 caracteres',
-          passwordWeak: 'La contraseÃ±a debe contener nÃºmeros y caracteres especiales',
-          passwordMismatch: 'Las contraseÃ±as no coinciden',
-          usernameExists: 'Este nombre de usuario ya estÃ¡ en uso',
-          emailExists: 'Este correo electrÃ³nico ya estÃ¡ registrado',
-          genericError: 'Error al procesar la solicitud. IntÃ©ntelo de nuevo.'
+          invalidEmail: 'Correo electrónico inválido',
+          passwordTooShort: 'La contraseña debe tener al menos 8 caracteres',
+          passwordWeak: 'La contraseña debe contener números y caracteres especiales',
+          passwordMismatch: 'Las contraseñas no coinciden',
+          usernameExists: 'Este nombre de usuario ya está en uso',
+          emailExists: 'Este correo electrónico ya está registrado',
+          genericError: 'Error al procesar la solicitud. Inténtelo de nuevo.'
         }
       }
     };
@@ -365,7 +365,7 @@
   document.getElementById('confirmPassword').placeholder = L.phConfirmPassword || document.getElementById('confirmPassword').placeholder;
       document.getElementById('labProperty').childNodes[0].textContent = L.property || 'Propriedade';
         document.getElementById('labModules').childNodes[0].textContent = L.modules;
-      document.getElementById('labPosition').childNodes[0].textContent = L.position || 'Cargo / PosiÃ§Ã£o';
+  document.getElementById('labPosition').childNodes[0].textContent = L.position || 'Cargo / Posição';
         document.getElementById('modulesHint').innerText = L.modulesHint;
       document.getElementById('labPassword').childNodes[0].textContent = L.password;
       document.getElementById('labConfirmPassword').childNodes[0].textContent = L.confirmPassword;
