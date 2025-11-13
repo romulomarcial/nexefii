@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+  <meta charset="UTF-8">
+  <title data-i18n="title">Wizard de Integrações</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="style.css">
+  <script src="translations/i18n.js"></script>
+</head>
+<body onload="i18n.init('hk-config')">
+  <h1 data-i18n="title">Wizard de Integrações</h1>
+  <form id="hk-config-form">
+    <fieldset>
+      <legend>Conectores</legend>
+      <label data-i18n="fields.connector">Tipo:
+        <select name="connector">
+          <option>EMS/DND</option>
+          <option>PMS</option>
+          <option>OTA</option>
+          <option>POS</option>
+          <option>PBX</option>
+        </select>
+      </label>
+      <label data-i18n="fields.url">URL: <input name="url" type="url" required></label>
+      <label data-i18n="fields.api_key">API Key: <input name="api_key" type="text"></label>
+      <label data-i18n="fields.secret">Secret: <input name="secret" type="password"></label>
+      <label data-i18n="fields.scope">Escopo: <input name="scope" type="text"></label>
+      <label data-i18n="fields.mapping">Mapeamentos: <textarea name="mapping"></textarea></label>
+      <button type="button" onclick="testConnection()" data-i18n="actions.test">Testar Conexão</button>
+      <button type="submit" data-i18n="actions.save">Salvar</button>
+    </fieldset>
+  </form>
+  <script>
+    function testConnection() {
+      alert('Mock: Test Connection');
+    }
+    document.getElementById('hk-config-form').onsubmit = function(e) {
+      e.preventDefault();
+      alert('Mock: Configuração salva!');
+    };
+  </script>
+</body>
+</html>

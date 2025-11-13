@@ -1,0 +1,10 @@
+{
+  "pt": {
+    "title": "Alertas",
+    "badges": {"low": "Baixo", "medium": "Médio", "high": "Alto"}
+  },
+  "en": {
+    "title": "Alerts",
+    "badges": {"low": "Low", "medium": "Medium", "high": "High"}
+  }
+}

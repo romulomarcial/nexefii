@@ -1,0 +1,12 @@
+{
+  "pt": {
+    "title": "Wizard de Integrações",
+    "fields": {"connector": "Tipo", "url": "URL", "api_key": "API Key", "secret": "Secret", "scope": "Escopo", "mapping": "Mapeamentos"},
+    "actions": {"test": "Testar Conexão", "save": "Salvar"}
+  },
+  "en": {
+    "title": "Integration Wizard",
+    "fields": {"connector": "Type", "url": "URL", "api_key": "API Key", "secret": "Secret", "scope": "Scope", "mapping": "Mappings"},
+    "actions": {"test": "Test Connection", "save": "Save"}
+  }
+}

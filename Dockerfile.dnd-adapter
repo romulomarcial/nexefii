@@ -1,0 +1,7 @@
+﻿FROM python:3.11-slim
+WORKDIR /app
+RUN pip install --no-cache-dir flask requests
+ENV HK_URL=http://housekeeping:8083
+COPY sprints/sprint-10/outputs/services/dnd_adapter_mock.py /app/dnd_adapter_mock.py
+EXPOSE 8085
+CMD ["python", "dnd_adapter_mock.py"]

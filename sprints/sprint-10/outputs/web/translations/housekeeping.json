@@ -1,0 +1,14 @@
+{
+  "pt": {
+    "title": "Housekeeping",
+    "filters": {"floor": "Andar", "wing": "Asa", "dnd": "DND"},
+    "statuses": {"vacant": "Vago", "occupied": "Ocupado", "dnd": "DND", "maintenance": "Manutenção", "cleaning": "Limpeza"},
+    "actions": {"clean": "Limpo", "inspect": "Em Inspeção", "maintenance": "Manutenção"}
+  },
+  "en": {
+    "title": "Housekeeping",
+    "filters": {"floor": "Floor", "wing": "Wing", "dnd": "DND"},
+    "statuses": {"vacant": "Vacant", "occupied": "Occupied", "dnd": "DND", "maintenance": "Maintenance", "cleaning": "Cleaning"},
+    "actions": {"clean": "Clean", "inspect": "Inspect", "maintenance": "Maintenance"}
+  }
+}

@@ -1,0 +1,12 @@
+{
+  "pt": {
+    "title": "Dashboard Nexefii",
+    "welcome": "Bem-vindo ao Nexefii!",
+    "menu": {"housekeeping": "Housekeeping", "alerts": "Alertas", "config": "Configurações"}
+  },
+  "en": {
+    "title": "Nexefii Dashboard",
+    "welcome": "Welcome to Nexefii!",
+    "menu": {"housekeeping": "Housekeeping", "alerts": "Alerts", "config": "Settings"}
+  }
+}
