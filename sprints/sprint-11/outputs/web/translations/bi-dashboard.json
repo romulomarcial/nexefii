@@ -1,0 +1,20 @@
+{
+  "pt": {
+    "bi": {
+      "title": "Painel BI",
+      "dashboard": { "title": "Painel Comercial / BI", "subtitle": "KPIs e visões rápidas" },
+      "kpis": { "occupancy": "Ocupação", "revpar": "RevPAR", "kwh": "Consumo (kWh)", "tickets": "Chamados Abertos" },
+      "charts": { "revenue": { "title": "Receita (últimos 7 dias)" }, "energy": { "title": "Energia (kWh)" } },
+      "actions": { "reports": "Relatórios", "exports": "Exportar" }
+    }
+  },
+  "en": {
+    "bi": {
+      "title": "BI Dashboard",
+      "dashboard": { "title": "Commercial / BI Dashboard", "subtitle": "KPIs & quick insights" },
+      "kpis": { "occupancy": "Occupancy", "revpar": "RevPAR", "kwh": "Consumption (kWh)", "tickets": "Open Tickets" },
+      "charts": { "revenue": { "title": "Revenue (last 7 days)" }, "energy": { "title": "Energy (kWh)" } },
+      "actions": { "reports": "Reports", "exports": "Export" }
+    }
+  }
+}

@@ -1,0 +1,68 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title data-i18n="bi.title">BI Dashboard</title>
+  <link rel="stylesheet" href="style-bi.css">
+  <script src="translations/i18n.js"></script>
+</head>
+<body class="bi-dashboard">
+  <header class="bi-header">
+    <h1 data-i18n="bi.dashboard.title">Painel Comercial / BI</h1>
+    <p data-i18n="bi.dashboard.subtitle">KPIs e visões rápidas</p>
+  </header>
+
+  <main class="container">
+    <section class="kpi-grid" id="kpi-grid">
+      <article class="kpi-card" id="kpi-occupancy">
+        <div class="kpi-value" id="occupancy">--%</div>
+        <div class="kpi-label" data-i18n="bi.kpis.occupancy">Ocupação</div>
+      </article>
+      <article class="kpi-card" id="kpi-revpar">
+        <div class="kpi-value" id="revpar">--</div>
+        <div class="kpi-label" data-i18n="bi.kpis.revpar">RevPAR</div>
+      </article>
+      <article class="kpi-card" id="kpi-kwh">
+        <div class="kpi-value" id="kwh">-- kWh</div>
+        <div class="kpi-label" data-i18n="bi.kpis.kwh">Consumo (kWh)</div>
+      </article>
+      <article class="kpi-card" id="kpi-tickets">
+        <div class="kpi-value" id="tickets">--</div>
+        <div class="kpi-label" data-i18n="bi.kpis.tickets">Chamados Abertos</div>
+      </article>
+    </section>
+
+    <section class="charts">
+      <div class="chart-card">
+        <h2 data-i18n="bi.charts.revenue.title">Receita (últimos 7 dias)</h2>
+        <div class="chart" id="chart-revenue">[gráfico dummy]</div>
+      </div>
+      <div class="chart-card">
+        <h2 data-i18n="bi.charts.energy.title">Energia (kWh)</h2>
+        <div class="chart" id="chart-energy">[gráfico dummy]</div>
+      </div>
+    </section>
+
+    <section class="actions">
+      <a class="btn" href="bi-reports.html" data-i18n="bi.actions.reports">Relatórios</a>
+      <a class="btn" href="exports.html" data-i18n="bi.actions.exports">Exportar</a>
+    </section>
+  </main>
+
+  <script>
+    async function loadKpis(){
+      try{
+        const res = await fetch('http://localhost:8086/bi/kpis');
+        if(!res.ok) return;
+        const data = await res.json();
+        document.getElementById('occupancy').textContent = (data.occupancy_pct*100).toFixed(1)+"%";
+        document.getElementById('revpar').textContent = data.revpar.toFixed(2);
+        document.getElementById('kwh').textContent = data.kwh + ' kWh';
+        document.getElementById('tickets').textContent = data.open_tickets;
+      }catch(e){ console.warn('BI kpis fetch failed', e); }
+    }
+    loadKpis();
+  </script>
+</body>
+</html>

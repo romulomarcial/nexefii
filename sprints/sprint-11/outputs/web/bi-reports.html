@@ -1,0 +1,68 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title data-i18n="bi.reports.title">Relatórios BI</title>
+  <link rel="stylesheet" href="style-bi.css">
+  <script src="translations/i18n.js"></script>
+</head>
+<body class="bi-reports">
+  <header>
+    <h1 data-i18n="bi.reports.header">Relatórios</h1>
+    <p data-i18n="bi.reports.subtitle">Lista de relatórios disponíveis e filtros</p>
+  </header>
+
+  <main class="container">
+    <section class="filters">
+      <label data-i18n="bi.reports.filter.period">Período:</label>
+      <select id="period">
+        <option value="7">7 dias</option>
+        <option value="30">30 dias</option>
+        <option value="90">90 dias</option>
+      </select>
+      <button class="btn" id="btn-filter" data-i18n="bi.reports.filter.apply">Aplicar</button>
+    </section>
+
+    <section id="reports-list" class="reports-list">
+      <!-- reports loaded here -->
+    </section>
+
+    <nav class="pagination" id="pagination">
+    </nav>
+  </main>
+
+  <script>
+    async function loadReports(page=1,size=10){
+      try{
+        const res = await fetch(`http://localhost:8086/bi/reports?page=${page}&size=${size}`);
+        if(!res.ok) return;
+        const data = await res.json();
+        const list = document.getElementById('reports-list');
+        list.innerHTML = data.items.map(r=>`<article class="report-card"><h3>${r.name}</h3><p>${r.description}</p><small>${r.updated_at}</small><div><a class="btn" href="#" onclick="exportReport('${r.id}','csv')">Export CSV</a></div></article>`).join('');
+        // simple pagination
+        const pag = document.getElementById('pagination');
+        pag.innerHTML = `Página ${data.page} / ${Math.ceil(data.total / data.size)}`;
+      }catch(e){ console.warn('loadReports', e); }
+    }
+
+    async function exportReport(reportId, format){
+      try{
+        const res = await fetch('http://localhost:8086/bi/export',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({reportId,format,params:{}})});
+        if(!res.ok) return alert('Export failed');
+        const blob = await res.blob();
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = `report_${reportId}.${format==='xlsx'?'xlsx':format==='json'?'json':'csv'}`;
+        document.body.appendChild(a);
+        a.click();
+        a.remove();
+      }catch(e){ console.warn('exportReport', e); }
+    }
+
+    document.getElementById('btn-filter').addEventListener('click', ()=>{ loadReports(1,10); });
+    loadReports();
+  </script>
+</body>
+</html>

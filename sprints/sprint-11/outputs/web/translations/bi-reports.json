@@ -1,0 +1,12 @@
+{
+  "pt": {
+    "bi": {
+      "reports": { "title": "Relatórios BI", "header": "Relatórios", "subtitle": "Lista de relatórios disponíveis e filtros", "filter": { "period": "Período", "apply": "Aplicar" } }
+    }
+  },
+  "en": {
+    "bi": {
+      "reports": { "title": "BI Reports", "header": "Reports", "subtitle": "Available reports and filters", "filter": { "period": "Period", "apply": "Apply" } }
+    }
+  }
+}

@@ -1,0 +1,61 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title data-i18n="bi.exports.title">Exportações</title>
+  <link rel="stylesheet" href="style-bi.css">
+  <script src="translations/i18n.js"></script>
+</head>
+<body class="bi-exports">
+  <header>
+    <h1 data-i18n="bi.exports.header">Exportar Dados</h1>
+    <p data-i18n="bi.exports.subtitle">Escolha formato e parâmetros</p>
+  </header>
+
+  <main class="container">
+    <form id="export-form">
+      <label data-i18n="bi.exports.select.report">Relatório</label>
+      <select id="reportId"></select>
+
+      <label data-i18n="bi.exports.select.format">Formato</label>
+      <select id="format">
+        <option value="csv">CSV</option>
+        <option value="xlsx">XLSX</option>
+        <option value="json">JSON</option>
+      </select>
+
+      <button class="btn" type="submit" data-i18n="bi.exports.button.export">Exportar</button>
+    </form>
+
+    <div id="result" style="margin-top:1rem;color:#333"></div>
+  </main>
+
+  <script>
+    async function loadReports(){
+      try{
+        const res = await fetch('http://localhost:8086/bi/reports?page=1&size=50');
+        if(!res.ok) return;
+        const data = await res.json();
+        const sel = document.getElementById('reportId');
+        sel.innerHTML = data.items.map(r=>`<option value="${r.id}">${r.name}</option>`).join('');
+      }catch(e){ console.warn(e); }
+    }
+
+    document.getElementById('export-form').addEventListener('submit', async function(e){
+      e.preventDefault();
+      const reportId = document.getElementById('reportId').value;
+      const format = document.getElementById('format').value;
+      try{
+        const res = await fetch('http://localhost:8086/bi/export',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({reportId,format,params:{}})});
+        if(!res.ok) return document.getElementById('result').textContent = 'Erro ao exportar';
+        const blob = await res.blob();
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement('a'); a.href = url; a.download = `export_${reportId}.${format==='xlsx'?'xlsx':format}`; document.body.appendChild(a); a.click(); a.remove();
+      }catch(e){ console.warn(e); }
+    });
+
+    loadReports();
+  </script>
+</body>
+</html>

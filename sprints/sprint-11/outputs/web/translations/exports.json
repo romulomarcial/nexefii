@@ -1,0 +1,12 @@
+{
+  "pt": {
+    "bi": {
+      "exports": { "title": "Exportações", "header": "Exportar Dados", "subtitle": "Escolha formato e parâmetros", "select": { "report": "Relatório", "format": "Formato" }, "button": { "export": "Exportar" } }
+    }
+  },
+  "en": {
+    "bi": {
+      "exports": { "title": "Exports", "header": "Export Data", "subtitle": "Choose format and parameters", "select": { "report": "Report", "format": "Format" }, "button": { "export": "Export" } }
+    }
+  }
+}

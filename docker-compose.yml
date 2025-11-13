@@ -123,6 +123,23 @@ services:
       retries: 5
       start_period: 5s
 
+  bi:
+    build:
+      context: .
+      dockerfile: Dockerfile.bi
+    ports:
+      - "8086:8086"
+    networks:
+      - nexefii_net
+    depends_on:
+      - postgres
+    healthcheck:
+      test: ["CMD-SHELL", "curl -fsS http://localhost:8086/bi/health || exit 1"]
+      interval: 10s
+      timeout: 3s
+      retries: 5
+      start_period: 5s
+
 volumes:
   postgres_data:
   alert_data:
