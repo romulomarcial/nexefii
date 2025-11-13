@@ -140,6 +140,52 @@ services:
       retries: 5
       start_period: 5s
 
+  ai:
+    build:
+      context: .
+      dockerfile: Dockerfile.ai
+    ports:
+      - "8087:8087"
+    networks:
+      - nexefii_net
+    environment:
+      - AI_LOG_LEVEL=${AI_LOG_LEVEL:-INFO}
+      - AI_FAKE_PROVIDER=1
+    depends_on:
+      - bi
+      - postgres
+    healthcheck:
+      test: ["CMD-SHELL", "curl -fsS http://localhost:8087/ai/health || exit 1"]
+      interval: 10s
+      timeout: 3s
+      retries: 5
+      start_period: 5s
+
+  gateway:
+    build:
+      context: .
+      dockerfile: Dockerfile.gateway
+    ports:
+      - "8088:8088"
+    networks:
+      - nexefii_net
+    environment:
+      - GATEWAY_API_KEY=${GATEWAY_API_KEY:-devkey}
+    depends_on:
+      - web
+      - bi
+      - housekeeping
+      - alerts
+      - demo-property-service
+      - ai
+      - postgres
+    healthcheck:
+      test: ["CMD-SHELL", "curl -fsS http://localhost:8088/health || exit 1"]
+      interval: 10s
+      timeout: 3s
+      retries: 5
+      start_period: 5s
+
 volumes:
   postgres_data:
   alert_data:

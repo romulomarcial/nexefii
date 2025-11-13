@@ -1,0 +1,70 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title data-i18n="ai.title">AI Insights Console</title>
+  <link rel="stylesheet" href="style-bi.css">
+  <script src="translations/i18n.js"></script>
+  <style>
+    .ai-console{max-width:900px;margin:24px auto;padding:16px}
+    .insights-summary{background:#fff;padding:12px;border-radius:8px;margin-bottom:12px}
+    .recommendation{background:#fff;padding:10px;border-radius:8px;margin-bottom:8px}
+  </style>
+</head>
+<body class="ai-console">
+  <header>
+    <h1 data-i18n="ai.console.title">AI Insights</h1>
+    <p data-i18n="ai.console.subtitle">Solicite insights gerados pela camada de AI</p>
+  </header>
+  <main class="ai-console container">
+    <div>
+      <label data-i18n="ai.console.select.property">Property ID</label>
+      <select id="propertyId"><option value="demo_001">demo_001</option></select>
+      <label data-i18n="ai.console.select.horizon">Horizon</label>
+      <select id="horizon"><option value="24h">24h</option><option value="7d">7d</option></select>
+      <button id="btn-insights" class="btn" data-i18n="ai.console.button.get">Get Insights</button>
+    </div>
+
+    <section id="kpis" style="margin-top:12px;">
+      <h3 data-i18n="ai.console.kpis.title">KPIs</h3>
+      <div id="kpi-block">loading...</div>
+    </section>
+
+    <section id="insights" style="margin-top:12px;">
+      <h3 data-i18n="ai.console.insights.title">Insights</h3>
+      <div id="insights-block">-</div>
+    </section>
+  </main>
+
+  <script>
+    const GATEWAY = 'http://localhost:8088';
+    const API_KEY = 'devkey';
+
+    async function loadKpis(){
+      try{
+        const res = await fetch(`${GATEWAY}/api/bi/kpis`, { headers: { 'X-Api-Key': API_KEY } });
+        if(!res.ok) { document.getElementById('kpi-block').textContent = 'BI unavailable'; return; }
+        const data = await res.json();
+        document.getElementById('kpi-block').innerHTML = `<pre>${JSON.stringify(data,null,2)}</pre>`;
+      }catch(e){ document.getElementById('kpi-block').textContent = 'Error fetching KPIs'; }
+    }
+
+    async function getInsights(){
+      const propertyId = document.getElementById('propertyId').value;
+      const horizon = document.getElementById('horizon').value;
+      const body = { scope:'property', propertyId, horizon, metrics:['energy','occupancy','alerts'] };
+      try{
+        const res = await fetch(`${GATEWAY}/api/ai/insights`, { method:'POST', headers:{ 'Content-Type':'application/json','X-Api-Key': API_KEY }, body: JSON.stringify(body) });
+        if(!res.ok) { document.getElementById('insights-block').textContent = 'AI unavailable or error'; return; }
+        const data = await res.json();
+        document.getElementById('insights-block').innerHTML = `<div class="insights-summary"><strong>${data.summary}</strong></div>` + (data.highlights.map(h=>`<div class="recommendation"><strong>${h.type}</strong>: ${h.message} (priority: ${h.priority})</div>`).join('')) + `<pre style="margin-top:10px">${JSON.stringify(data.raw,null,2)}</pre>`;
+      }catch(e){ document.getElementById('insights-block').textContent = 'Error'; }
+    }
+
+    document.getElementById('btn-insights').addEventListener('click', ()=>{ getInsights(); });
+    // initial load
+    loadKpis();
+  </script>
+</body>
+</html>
