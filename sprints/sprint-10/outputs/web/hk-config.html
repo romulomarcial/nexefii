@@ -8,8 +8,13 @@
   <script src="translations/i18n.js"></script>
 </head>
 <body onload="i18n.init('hk-config')">
-  <h1 data-i18n="title">Wizard de Integrações</h1>
-  <form id="hk-config-form">
+  <div style="display:flex; flex-direction:column; align-items:center; margin-top:32px;">
+    <h1 id="wizard-title" style="font-size:2rem; font-weight:700; margin-bottom:0.5em; text-align:center;">🪄 Assistente de Criação de Propriedade</h1>
+    <div id="wizard-subtitle" style="font-size:1.1rem; color:#444; margin-bottom:2em; text-align:center;">Configure sua nova propriedade em 6 passos simples</div>
+    <div style="height:24px;"></div>
+    <div id="wizard-steps" style="display:flex; justify-content:center; gap:32px; margin-bottom:32px;"></div>
+  </div>
+  <form id="hk-config-form" style="max-width:500px; margin:0 auto;">
     <fieldset>
       <legend>Conectores</legend>
       <label data-i18n="fields.connector">Tipo:
@@ -31,6 +36,49 @@
     </fieldset>
   </form>
   <script>
+    // Wizard i18n data
+    const wizardI18n = {
+      pt: {
+        title: '🪄 Assistente de Criação de Propriedade',
+        subtitle: 'Configure sua nova propriedade em 6 passos simples',
+        steps: ['Básico', 'Detalhes', 'Módulos', 'Quartos', 'Config', 'Dados', 'Revisão']
+      },
+      en: {
+        title: '🪄 Property Creation Wizard',
+        subtitle: 'Set up your new property in 6 easy steps',
+        steps: ['Basic', 'Details', 'Modules', 'Rooms', 'Config', 'Data', 'Review']
+      },
+      es: {
+        title: '🪄 Asistente de Creación de Propiedad',
+        subtitle: 'Configure su nueva propiedad en 6 pasos sencillos',
+        steps: ['Básico', 'Detalles', 'Módulos', 'Habitaciones', 'Config', 'Datos', 'Revisión']
+      }
+    };
+
+    function renderWizardUI() {
+      const lang = window.NEXEFII?.i18n?.currentLang || 'pt';
+      const i18n = wizardI18n[lang] || wizardI18n.pt;
+      document.getElementById('wizard-title').textContent = i18n.title;
+      document.getElementById('wizard-subtitle').textContent = i18n.subtitle;
+      const steps = document.getElementById('wizard-steps');
+      steps.innerHTML = '';
+      for (let i = 0; i < i18n.steps.length; i++) {
+        const step = document.createElement('div');
+        step.style.display = 'flex';
+        step.style.flexDirection = 'column';
+        step.style.alignItems = 'center';
+        step.innerHTML = `<div style="width:32px;height:32px;border-radius:50%;background:#eee;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:1.1rem;color:${i===0?'#fff':'#222'};background:${i===0?'#e53935':'#eee'};border:${i===0?'2px solid #43a047':'none'};">${i+1}</div><div style="margin-top:8px;font-size:0.95rem;color:${i===0?'#e53935':'#222'};font-weight:${i===0?'700':'400'};text-align:center;">${i18n.steps[i]}</div>`;
+        steps.appendChild(step);
+      }
+    }
+
+    // Initial render
+    renderWizardUI();
+
+    // Listen for language change via I18nManager observer API
+    if (window.NEXEFII?.i18n && typeof window.NEXEFII.i18n.addObserver === 'function') {
+      window.NEXEFII.i18n.addObserver(renderWizardUI);
+    }
     function testConnection() {
       alert('Mock: Test Connection');
     }

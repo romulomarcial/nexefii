@@ -2,7 +2,7 @@
  * Nexefii I18n Manager
  * Global internationalization system for shell and pages
  */
-
+if (typeof I18nManager === 'undefined') {
 class I18nManager {
   constructor() {
     this.translations = null;
@@ -184,6 +184,44 @@ class I18nManager {
     return value || keyPath;
   }
 
+    /**
+     * Register an observer callback that will be called when language changes
+     * @param {function} cb
+     */
+    addObserver(cb) {
+      if (!this.observers) this.observers = [];
+      if (typeof cb === 'function' && this.observers.indexOf(cb) === -1) this.observers.push(cb);
+    }
+
+    removeObserver(cb) {
+      if (!this.observers) return;
+      const i = this.observers.indexOf(cb);
+      if (i !== -1) this.observers.splice(i, 1);
+    }
+
+    notifyObservers() {
+      if (!this.observers) return;
+      this.observers.forEach(cb => {
+        try { cb(); } catch (e) { console.warn('[I18n] observer error', e); }
+      });
+    }
+
+    /**
+     * Change current language and re-apply translations
+     */
+    async setLanguage(lang) {
+      if (!lang || !['pt','en','es'].includes(lang)) return false;
+      this.currentLang = lang;
+      this.saveLanguage(lang);
+      // Try to lazy-load segments for new lang if not loaded
+      if (!this.translations || !this.translations[lang]) {
+        await this.loadTranslations();
+      }
+      try { this.applyToDOM(); } catch(e) { console.warn('[I18n] applyToDOM failed on setLanguage', e); }
+      this.notifyObservers();
+      return true;
+    }
+
   /**
    * Get current language
    */
@@ -208,6 +246,10 @@ class I18nManager {
     
     console.log('[I18n] Language changed to:', lang);
     return true;
+  }
+
+  getLanguage() {
+    return this.currentLang;
   }
 
   /**
@@ -243,19 +285,22 @@ class I18nManager {
    * Usage: <span data-i18n="wizard.step1.title"></span>
    */
   applyToDOM(container = document) {
+    // If caller passed null/undefined (common when element not present), silently skip
+    if (container == null) return;
+    if (typeof container.querySelectorAll !== 'function') {
+      console.debug('[I18n] applyToDOM: invalid container or missing querySelectorAll — skipping');
+      return;
+    }
     const elements = container.querySelectorAll('[data-i18n]');
-    
     elements.forEach(el => {
       const key = el.getAttribute('data-i18n');
       const translated = this.t(key);
-      
       if (el.tagName === 'INPUT' || el.tagName === 'TEXTAREA') {
         el.placeholder = translated;
       } else {
         el.textContent = translated;
       }
     });
-
     console.log(`[I18n] Applied translations to ${elements.length} elements`);
   }
 
@@ -342,5 +387,8 @@ class I18nManager {
 // Initialize global instance
 if (typeof window !== 'undefined') {
   window.NEXEFII = window.NEXEFII || {};
-  window.NEXEFII.i18n = new I18nManager();
+  if (!window.NEXEFII.i18n) {
+    window.NEXEFII.i18n = new I18nManager();
+  }
+}
 }

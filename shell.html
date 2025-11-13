@@ -1002,11 +1002,11 @@
       for (const oldScript of scripts) {
         // Create unique identifier for this script
         const scriptId = oldScript.src || oldScript.textContent.substring(0, 100);
-        
+
         // Skip if already executed (for external scripts mainly)
         if (oldScript.src && window.NEXEFII.executedScripts.has(scriptId)) {
           console.log('[Shell] Skipping already loaded external script:', oldScript.src);
-          oldScript.remove();
+          if (oldScript.parentNode) oldScript.remove();
           continue;
         }
 
@@ -1024,7 +1024,7 @@
             console.log('[Shell] Executing inline script:', oldScript.textContent);
             // Wrap in IIFE to create new scope and avoid global collisions
             newScript.textContent = `(function() { try { ${oldScript.textContent} } catch(e) { if(e.message && e.message.includes('already been declared')) { console.warn('[Shell] Variable already declared, skipping'); } else { throw e; } } })();`;
-            oldScript.parentNode.replaceChild(newScript, oldScript);
+            if (oldScript.parentNode) oldScript.parentNode.replaceChild(newScript, oldScript);
           } catch (e) {
             console.warn('[Shell] Script execution warning:', e);
           }
@@ -1036,7 +1036,7 @@
               resolve();
             };
             newScript.onerror = () => reject(new Error('Failed to load script: ' + oldScript.src));
-            oldScript.parentNode.replaceChild(newScript, oldScript);
+            if (oldScript.parentNode) oldScript.parentNode.replaceChild(newScript, oldScript);
           });
         }
       }

@@ -11,7 +11,7 @@
  * 
  * @version 1.0.0
  */
-
+if (typeof WizardManager === 'undefined') {
 class WizardManager {
   constructor() {
     this.currentStep = 1;
@@ -601,6 +601,7 @@ class WizardManager {
 }
 
 // Export for use in browser
-if (typeof window !== 'undefined') {
+if (typeof window !== 'undefined' && !window.WizardManager) {
   window.WizardManager = WizardManager;
+}
 }

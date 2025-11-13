@@ -12,7 +12,7 @@
  * @date 2025-11-08
  * @author NEXEFII Development Team
  */
-
+if (typeof PropertyDatabase === 'undefined') {
 class PropertyDatabase {
   /**
    * Creates a database instance for a specific property
@@ -463,8 +463,8 @@ class PropertyDatabase {
 if (typeof module !== 'undefined' && module.exports) {
   module.exports = PropertyDatabase;
 }
-
-// Make available globally
-window.PropertyDatabase = PropertyDatabase;
-
-console.log('✅ PropertyDatabase loaded successfully');
+if (typeof window !== 'undefined' && !window.PropertyDatabase) {
+  window.PropertyDatabase = PropertyDatabase;
+  console.log('✅ PropertyDatabase loaded successfully');
+}
+}

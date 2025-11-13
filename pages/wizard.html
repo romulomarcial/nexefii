@@ -181,6 +181,12 @@
       margin-bottom: 1.5rem;
     }
 
+    .wizard-header {
+      text-align: center;
+      margin-top: 16px;
+      margin-bottom: 8px;
+    }
+
     /* Form Elements */
     .form-group {
       margin-bottom: 1.5rem;
@@ -1436,7 +1442,10 @@
     }
 
     // Apply translations after DOM updates
-    try { if (window.NEXEFII?.i18n) window.NEXEFII.i18n.applyToDOM(document.querySelector('.wizard-content')); } catch(e) { console.warn('[Wizard] i18n apply error', e); }
+    try {
+      const wc = document.querySelector('.wizard-content');
+      if (wc && window.NEXEFII?.i18n) window.NEXEFII.i18n.applyToDOM(wc);
+    } catch(e) { console.warn('[Wizard] i18n apply error', e); }
   }
 
   function nextStep() {
@@ -1522,6 +1531,25 @@
       });
     }
   });
+
+  // When the language select changes, notify the global i18n manager so
+  // the entire page (including wizard headers/step labels) is re-rendered.
+  const langSelect = document.getElementById('language');
+  if (langSelect) {
+    langSelect.addEventListener('change', (e) => {
+      const val = (e.target.value || '').split('-')[0];
+      try {
+        if (window.NEXEFII && window.NEXEFII.i18n && typeof window.NEXEFII.i18n.setLanguage === 'function') {
+          window.NEXEFII.i18n.setLanguage(val);
+        } else {
+          // Fallback for legacy pages: apply translations locally
+          applyI18nToPage(val);
+        }
+      } catch (err) {
+        console.warn('[Wizard] language change handler error', err);
+      }
+    });
+  }
 
   // Icon selector
   document.querySelectorAll('.icon-option').forEach(option => {
