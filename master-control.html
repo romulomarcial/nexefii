@@ -6,9 +6,33 @@
   <title id="pageTitle">Master Control Panel - NEXEFII</title>
   <link rel="icon" type="image/svg+xml" href="favicon.svg">
   <link rel="alternate icon" href="favicon.ico">
-  <link rel="stylesheet" href="style.css">
-  <link rel="stylesheet" href="master-control-v3.css">
+  <link rel="stylesheet" href="sprints/sprint-13/outputs/web/css/style.css">
   <script>
+    // Client-side auth guard (redirect to login when not authenticated)
+    (function(){
+      try {
+        var _isAuth = false;
+        if (typeof window !== 'undefined') {
+          if (window.NexefiiAuth && typeof window.NexefiiAuth.isAuthenticated === 'function') {
+            _isAuth = window.NexefiiAuth.isAuthenticated();
+          } else if (typeof window.safeIsAuthenticated === 'function') {
+            _isAuth = window.safeIsAuthenticated();
+          } else {
+            // fallback: check localStorage session key
+            try { _isAuth = !!localStorage.getItem('nexefii_session'); } catch(e) { _isAuth = false; }
+          }
+        }
+        // Redirect to login if not authenticated and not already on login page
+        if (!_isAuth) {
+          var p = (location.pathname || location.href).toLowerCase();
+          if (!p.endsWith('/login.html') && !p.includes('/login')) {
+            // preserve hash/query if needed, use replace to avoid back-button loop
+            location.replace('/login.html');
+          }
+        }
+      } catch (e) { /* swallow errors to avoid blocking page render */ }
+    })();
+
     // Lightweight NexefiiProps shim so headless checks and migration pages can read properties
     (function(){
       try {

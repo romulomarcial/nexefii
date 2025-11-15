@@ -248,7 +248,7 @@ async function alertsLoadAndApplyI18N(requestedLang) {
     if (!data) {
         if(ALERTS_DEBUG) console.log('[ALERTS] Fetching i18n.json...');
         try {
-            const res = await fetch('i18n.json?t=' + now, {cache:'no-store'});
+            const res = await fetch('i18n/i18n.json?t=' + now, {cache:'no-store'});
             if (res.ok) {
                 data = await res.json();
                 try { localStorage.setItem(keyCache, JSON.stringify(data)); } catch(e){}

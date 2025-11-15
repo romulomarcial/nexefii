@@ -709,7 +709,7 @@ async function loadAndApplyI18N(requestedLang) {
 
     if (!data) {
         // fetch fresh
-        const res = await fetch('i18n.json?t=' + now, {cache:'no-store'});
+        const res = await fetch('i18n/i18n.json?t=' + now, {cache:'no-store'});
         if (!res.ok) throw new Error('i18n fetch failed');
         data = await res.json();
         try { localStorage.setItem(keyCache, JSON.stringify(data)); } catch(e){/*ignore*/}

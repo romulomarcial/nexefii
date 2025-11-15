@@ -1,0 +1,12 @@
+{
+  "register.title": "Solicitar Acesso",
+  "register.subtitle": "Solicite acesso à plataforma. Após o envio, sua solicitação será analisada.",
+  "register.fullName": "Nome completo",
+  "register.email": "Email",
+  "register.submit": "Solicitar"
+}
+{
+  "title":"Solicitar Acesso",
+  "subtitle":"Solicite acesso à plataforma.",
+  "nav": {"master":"Master Control","pms":"PMS","engineering":"Engineering","housekeeping":"Housekeeping","bi":"BI"}
+}

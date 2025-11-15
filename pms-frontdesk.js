@@ -58,7 +58,7 @@ class FrontDeskController {
 
   async loadI18n() {
     try {
-      const res = await fetch('i18n.json');
+      const res = await fetch('i18n/i18n.json');
       const data = await res.json();
       this.i18n = (data[this.lang] && data[this.lang].app) || {};
     } catch (e) { console.warn('i18n load failed', e); }

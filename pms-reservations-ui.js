@@ -109,7 +109,7 @@ class ReservationsUIController {
     }
     // Legacy fallback (monolithic) if segment not available
     try {
-      const response = await fetch('i18n.json', { cache: 'no-store' });
+      const response = await fetch('i18n/i18n.json', { cache: 'no-store' });
       if (response.ok) {
         const data = await response.json();
         const legacy = data[this.currentLang]?.app || {};

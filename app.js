@@ -234,7 +234,7 @@ async function loadAppI18N(){
 
     // Se nÃ£o tem cache ou expirou, carrega do servidor
     // Adiciona timestamp para evitar cache do navegador
-    const res = await fetch(`i18n.json?t=${now}`, {cache:'no-store'});
+    const res = await fetch(`i18n/i18n.json?t=${now}`, {cache:'no-store'});
     if(!res.ok) throw new Error('http');
     const data = await res.json();
     

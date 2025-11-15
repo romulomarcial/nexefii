@@ -1,8 +1,11 @@
 const NexefiiAuth = {
   async login(email, password) {
+    // DEV ONLY: local development users (do not use in production)
     const users = [
       { email: "admin@nexefii.com", password: "admin123", name: "Admin NEXEFII", role: "admin", properties: [] },
-      { email: "demo@nexefii.com", password: "demo123", name: "Demo User", role: "user", properties: [] }
+      { email: "demo@nexefii.com", password: "demo123", name: "Demo User", role: "user", properties: [] },
+      // DEV: convenience developer account
+      { email: "master@nexefii.local", password: "demo123", name: "Master Dev", role: "admin", properties: [] }
     ];
     await new Promise(resolve => setTimeout(resolve, 500));
     const user = users.find(u => u.email === email && u.password === password);

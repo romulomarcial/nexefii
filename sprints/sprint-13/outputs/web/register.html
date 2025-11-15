@@ -1,0 +1,37 @@
+<!doctype html>
+<html lang="pt-br">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title data-i18n="register.title">Solicitar Acesso</title>
+  <link rel="stylesheet" href="../css/style.css">
+  <meta name="robots" content="noindex">
+</head>
+<body data-page="register">
+  <div id="navbar-placeholder"></div>
+
+  <main class="container">
+    <section class="card">
+      <h1 data-i18n="register.title">Solicitar Acesso</h1>
+      <p data-i18n="register.subtitle">Preencha o formulário para solicitar acesso.</p>
+
+      <form id="registerForm">
+        <label data-i18n="register.fullName">Nome completo</label>
+        <input name="fullName" />
+
+        <label data-i18n="register.email">Email</label>
+        <input name="email" type="email" />
+
+        <button class="btn primary" type="button" id="btnSubmit" data-i18n="register.submit">Solicitar</button>
+      </form>
+    </section>
+  </main>
+
+  <script>
+    // simple navbar include
+    fetch('./_navbar.html').then(r=>r.text()).then(t=>document.getElementById('navbar-placeholder').innerHTML=t).catch(()=>{});
+  </script>
+  <script src="./js/i18n-loader.js"></script>
+  <script src="./js/thermostat-adapter.js"></script>
+</body>
+</html>

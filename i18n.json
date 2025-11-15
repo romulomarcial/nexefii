@@ -1,4 +1,115 @@
 ﻿{
+  "pt": { "common": {}, "wizard": {} },
+  "en": { "common": {}, "wizard": {} },
+  "es": { "common": {}, "wizard": {} }
+}
+{
+  "pt": {
+    "languages": {"pt":"Português","en":"English","es":"Español"},
+    "home": {
+      "title": "Bem-vindo ao NEXEFII",
+      "subtitle": "Sistema avançado de gestão hoteleira. Selecione uma propriedade para começar.",
+      "newPropertyBtn": "Nova Propriedade",
+      "empty": {"title": "Nenhuma Propriedade Encontrada", "message": "Você ainda não tem propriedades registradas.", "cta": "Adicionar Primeira Propriedade"},
+      "card": {"noModules": "Sem módulos", "defaultDescription": "Clique para abrir o painel de controlo", "stats": {"rooms": "Quartos", "occupancy": "Ocupação", "reservations": "Reservas"}}
+    },
+    "footer": {"copy": "© 2025 NEXEFII. Todos os direitos reservados.", "help": "Ajuda", "privacy": "Privacidade", "terms": "Termos"},
+    "dashboard": {
+      "loading": "Carregando propriedades...",
+      "noProperties": "Nenhuma propriedade disponível",
+      "noPropertiesDesc": "Crie ou obtenha acesso a uma propriedade para ver métricas.",
+      "openControl": "Abrir Controlo",
+      "openAutomation": "Centro de Automação Virtual",
+      "forecast": "Previsão 7 dias",
+      "comparative": {"title": "📊 KPIs Consolidados - Todas as Propriedades","avgOccupancy": "Ocupação Média","totalRevenue": "Receita Total Hoje","operations": "Operações Hoje","stayovers": "Permanências","forecast": "Previsão 7 dias","totalAlerts": "Alertas Ativos","requiresAttention": "Requer atenção","bestPerformance": "Melhor Performance"},
+      "kpi": {"revenue": "Receita Hoje","rooms": "Quartos","operations": "Operações Hoje","alerts": "Alertas Ativos"},
+      "title": "Dashboard",
+      "subtitle": "Visão Geral da Propriedade"
+    },
+    "frontdesk": {"fdTitle": "Check-in / Check-out","fdArrivals": "Chegadas de Hoje","fdInHouse": "Hóspedes Em Casa","fdDepartures": "Saídas de Hoje"},
+    "reservations": {"resPageTitle": "Reservas","resFilters":"Filtros","resDateFrom":"Data Check-in","resDateTo":"Data Check-out","resStatus":"Status","resAllStatuses":"Todos","resConfirmed":"Confirmada","resPending":"Pendente","resCheckedIn":"Check-in","resCheckedOut":"Check-out","resCancelled":"Cancelada","resRoomType":"Tipo de Quarto","resAllRooms":"Todos","resStandard":"Standard","resDeluxe":"Deluxe","resSuite":"Suite","resSource":"Canal","resAllChannels":"Todos","resDirect":"Direto","resOTA":"OTA","resPhone":"Telefone","resWalkIn":"Walk-in","resNewReservation":"Nova Reserva","resExport":"Exportar","resNoResults":"Nenhuma reserva encontrada","resNoResultsDesc":"Tente ajustar filtros ou crie uma nova reserva."},
+    "rooms": {"rmPageTitle":"🛏️ Gestão de Quartos","rmRefresh":"Atualizar","rmExport":"Exportar","rmVacant":"Vazio","rmOccupied":"Ocupado","rmDirty":"Sujo","rmOutOfOrder":"Fora de Serviço"},
+    "wizard": {
+      "title": "🪄 Assistente de Criação de Propriedade",
+      "subtitle": "Configure sua nova propriedade em 6 passos simples",
+      "labels": {"basic":"Básico","details":"Detalhes","modules":"Módulos","rooms":"Quartos","config":"Config","data":"Dados","review":"Revisão"},
+      "image": {"tabs":{"gallery":"Galeria","upload":"Upload","url":"URL"},"upload":{"text":"Clique para selecionar ou arraste uma imagem","hint":"JPG, PNG ou WEBP até 5MB","processing":"Processando imagem..."},"url":{"previewButton":"Pré-visualizar","placeholder":"https://exemplo.com/imagem.jpg"}},
+      "details": {"title":"Detalhes da Propriedade","typeLabel":"Tipo","types":{"hotel":"Hotel","resort":"Resort","hostel":"Hostel","pousada":"Pousada"},"totalRoomsLabel":"Número Total de Quartos","cityLabel":"Cidade","stateLabel":"Estado","addressLabel":"Endereço","zipLabel":"CEP","countryLabel":"País"},
+      "modules": {"title":"Módulos da Propriedade","subtitle":"Selecione os módulos que deseja ativar/vender para esta propriedade:","ems":"EMS (Gestão de Energia)","bms":"BMS (Gestão Predial)","automation":"Automação","analytics":"Analytics","pms":"PMS (Gestão de Propriedade)","iot":"Dispositivos IoT","access":"Controle de Acesso","other":"Outros"},
+      "rooms": {"title":"Configuração de Quartos","subtitle":"Configure as categorias de quartos. O total deve ser igual a","roomsLabel":"quartos","emptyMessage":"Nenhuma categoria adicionada. Use um template ou adicione manualmente.","removeButton":"Remover","priceLabel":"Preço:","quantityLabel":"Quantidade:","addCategory":"+ Adicionar Categoria"},
+      "config": {"title":"Configurações","currencyLabel":"Moeda","timezoneLabel":"Fuso Horário","checkInLabel":"Horário Check-in","checkOutLabel":"Horário Check-out","languageLabel":"Idioma"},
+      "seed": {"title":"Dados Iniciais","roomsExampleTitle":"Criar quartos de exemplo","roomsExampleDesc":"Cria automaticamente todos os quartos conforme as categorias configuradas","guestsExampleTitle":"Criar hóspedes de exemplo","guestsExampleDesc":"Adiciona 3 hóspedes fictícios para testes"},
+      "review": {"title":"Revisão Final","subtitle":"Revise as informações antes de criar a propriedade:","imageLabel":"Imagem da Propriedade","nameLabel":"Nome","slugLabel":"Slug","typeLabel":"Tipo","totalRoomsLabel":"Total de Quartos"},
+      "buttons": {"next":"Próximo","back":"Voltar","create":"✨ Criar Propriedade"}
+    }
+  },
+  "en": {
+    "languages": {"pt":"Português","en":"English","es":"Español"},
+    "home": {
+      "title": "Welcome to NEXEFII",
+      "subtitle": "Advanced hotel management system. Select a property to get started.",
+      "newPropertyBtn": "New Property",
+      "empty": {"title": "No Properties Found", "message": "You don't have any properties registered yet.", "cta": "Add First Property"},
+      "card": {"noModules": "No modules", "defaultDescription": "Click to open the control panel", "stats": {"rooms": "Rooms", "occupancy": "Occupancy", "reservations": "Reservations"}}
+    },
+    "footer": {"copy": "© 2025 NEXEFII. All rights reserved.", "help": "Help", "privacy": "Privacy", "terms": "Terms"},
+    "dashboard": {
+      "loading": "Loading properties...",
+      "noProperties": "No properties available",
+      "noPropertiesDesc": "Create or gain access to a property to view metrics.",
+      "openControl": "Open Control",
+      "openAutomation": "Virtual Automation Center",
+      "forecast": "7-day Forecast",
+      "comparative": {"title": "📊 Consolidated KPIs - All Properties","avgOccupancy": "Avg Occupancy","totalRevenue": "Total Revenue Today"},
+      "kpi": {"revenue": "Revenue Today","rooms": "Rooms","operations": "Operations Today","alerts": "Active Alerts"},
+      "title": "Dashboard",
+      "subtitle": "Property Overview"
+    },
+    "frontdesk": {"fdTitle": "Check-in / Check-out","fdArrivals": "Today's Arrivals","fdInHouse": "In-House Guests","fdDepartures": "Today's Departures"},
+    "reservations": {"resPageTitle": "Reservations","resFilters": "Filters","resDateFrom": "Check-in Date","resDateTo": "Check-out Date","resStatus": "Status"},
+    "rooms": {"rmPageTitle": "🛏️ Room Management","rmRefresh": "Refresh","rmExport": "Export","rmVacant": "Vacant","rmOccupied": "Occupied"},
+    "wizard": {
+      "title": "🪄 Property Creation Assistant",
+      "subtitle": "Set up your new property in 6 easy steps",
+      "labels": {"details": "Details", "modules": "Modules", "rooms": "Rooms", "config": "Config", "data": "Data", "review": "Review"},
+      "image": {"tabs": {"gallery": "Gallery", "upload": "Upload", "url": "URL"}, "upload": {"text": "Click to select or drag an image", "hint": "JPG, PNG or WEBP up to 5MB", "processing": "Processing image..."}, "url": {"previewButton": "Preview", "placeholder": "https://example.com/image.jpg"}},
+      "details": {"title": "Property Details", "typeLabel": "Type", "types": {"hotel": "Hotel", "resort": "Resort", "hostel": "Hostel", "pousada": "Inn"}, "totalRoomsLabel": "Total Rooms"},
+      "modules": {"title": "Property Modules", "subtitle": "Select the modules you want to activate/sell for this property:", "ems": "EMS (Energy Management)", "bms": "BMS (Building Management)", "automation": "Automation", "analytics": "Analytics", "pms": "PMS (Property Management)", "iot": "IoT Devices", "access": "Access Control", "other": "Other"},
+      "rooms": {"title": "Room Configuration", "subtitle": "Configure the room categories. The total must equal", "roomsLabel": "rooms", "addCategory": "+ Add Category"},
+      "config": {"title": "Configuration", "currencyLabel": "Currency", "timezoneLabel": "Timezone", "checkInLabel": "Check-in Time", "checkOutLabel": "Check-out Time", "languageLabel": "Language"},
+      "seed": {"title": "Sample Data", "roomsExampleTitle": "Create sample rooms", "roomsExampleDesc": "Automatically creates all rooms based on configured categories"},
+      "review": {"title": "Final Review", "subtitle": "Review the information before creating the property:", "imageLabel": "Property Image", "nameLabel": "Name", "slugLabel": "Slug"},
+      "buttons": {"next": "Next", "back": "Back", "create": "✨ Create Property"}
+    }
+  },
+  "es": {
+    "languages": {"pt":"Português","en":"English","es":"Español"},
+    "home": {
+      "title": "Bienvenido a NEXEFII",
+      "subtitle": "Sistema avanzado de gestión hotelera. Seleccione una propiedad para comenzar.",
+      "newPropertyBtn": "Nueva Propiedad"
+    },
+    "footer": {"copy": "© 2025 NEXEFII. Todos los derechos reservados.", "help": "Ayuda", "privacy": "Privacidad", "terms": "Términos"},
+    "dashboard": {"title": "Dashboard", "subtitle": "Resumen de la Propiedad"},
+    "frontdesk": {"fdTitle": "Check-in / Check-out","fdArrivals": "Llegadas de Hoy","fdInHouse": "Huéspedes en Casa","fdDepartures": "Salidas de Hoy"},
+    "reservations": {"resPageTitle": "Reservas"},
+    "rooms": {"rmPageTitle": "🛏️ Gestión de Habitaciones"},
+    "wizard": {
+      "title": "🪄 Asistente de Creación de Propiedad",
+      "subtitle": "Configure su nueva propiedad en 6 pasos sencillos",
+      "labels": {"details":"Detalles","modules":"Módulos","rooms":"Habitaciones","config":"Config","data":"Datos","review":"Revisión"},
+      "image": {"tabs":{"gallery":"Galería","upload":"Subir","url":"URL"},"upload":{"text":"Haga clic para seleccionar o arrastre una imagen","hint":"JPG, PNG o WEBP hasta 5MB","processing":"Procesando imagen..."},"url":{"previewButton":"Previsualizar","placeholder":"https://ejemplo.com/imagen.jpg"}},
+      "details": {"title":"Detalles de la Propiedad","typeLabel":"Tipo","types":{"hotel":"Hotel","resort":"Resort","hostel":"Hostal","pousada":"Posada"},"totalRoomsLabel":"Total de Habitaciones"},
+      "modules": {"title":"Módulos de la Propiedad","subtitle":"Seleccione los módulos que desea activar/vender para esta propiedad:","ems":"EMS (Gestión de Energía)","bms":"BMS (Gestión de Edificios)","automation":"Automatización","analytics":"Analytics","pms":"PMS (Gestión de Propiedad)","iot":"Dispositivos IoT","access":"Control de Acceso","other":"Otros"},
+      "rooms": {"title":"Configuración de Habitaciones","subtitle":"Configure las categorías de habitaciones. El total debe ser igual a","roomsLabel":"habitaciones","addCategory":"+ Agregar Categoría"},
+      "config": {"title":"Configuraciones","currencyLabel":"Moneda","timezoneLabel":"Zona Horaria","checkInLabel":"Hora de Check-in","checkOutLabel":"Hora de Check-out","languageLabel":"Idioma"},
+      "seed": {"title":"Datos Iniciales","roomsExampleTitle":"Crear habitaciones de ejemplo","roomsExampleDesc":"Crea automáticamente todas las habitaciones según las categorías configuradas"},
+      "review": {"title":"Revisión Final","subtitle":"Revise la información antes de crear la propiedad:","imageLabel":"Imagen de la Propiedad","nameLabel":"Nombre","slugLabel":"Slug"},
+      "buttons": {"next":"Siguiente","back":"Atrás","create":"✨ Crear Propiedad"}
+    }
+  }
+}
+{
   "pt": {
   "register": {
       "backToLogin": "Voltar para login",

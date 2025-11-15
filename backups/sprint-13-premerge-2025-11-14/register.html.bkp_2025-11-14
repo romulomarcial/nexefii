@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>nexefii · Solicitar Acesso</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+  <style>
+    :root{
+      --bg:#f6f7fb; --card:#ffffff; --line:#e7eaf0; --text:#0f172a; --muted:#64748b;
+      --primary:#2f6bff; --primary-contrast:#ffffff; --shadow:0 10px 30px rgba(15,23,42,.08);
+      --radius:16px; --success:#22c55e; --error:#ef4444;
+    }
+    *{box-sizing:border-box}
+    body{margin:0;background:var(--bg);font-family:'Inter',system-ui,Segoe UI,Roboto,Arial,sans-serif;color:var(--text)}
+    .wrap{min-height:100dvh;display:grid;place-items:center;padding:24px}
+    .card{width:100%;max-width:580px;background:var(--card);border:1px solid var(--line);
+      border-radius:var(--radius);box-shadow:var(--shadow);padding:32px 32px 28px}
+  .brand{display:flex;align-items:center;gap:10px;margin-bottom:8px}
+  .brand img{height:40px}
+  @media(min-width:1200px){ .brand img{height:48px} }
+    .title{font-weight:700;font-size:16px;letter-spacing:.2px}
+    .subtitle{font-size:13px;color:var(--muted);margin-bottom:20px;line-height:1.5}
+    label{display:block;font-size:12px;font-weight:600;color:var(--text);margin:14px 0 6px}
+    label.required::after{content:' *';color:var(--error)}
+    select,input{width:100%;padding:12px 14px;border:1px solid var(--line);border-radius:12px;
+      font-size:14px;outline:none;background:#fff;transition:all 0.2s}
+    select:focus,input:focus{border-color:var(--primary);box-shadow:0 0 0 4px rgba(47,107,255,.08)}
+    .input-error{border-color:var(--error)}
+    .error-msg{color:var(--error);font-size:11px;margin-top:4px;display:none}
+    .error-msg.show{display:block}
+    .btn{display:inline-flex;justify-content:center;align-items:center;gap:8px;border-radius:12px;
+      padding:12px 20px;border:1px solid var(--line);cursor:pointer;font-weight:600;font-size:14px;
+      transition:all 0.2s;text-decoration:none}
+    .primary{background:var(--primary);color:var(--primary-contrast);border-color:var(--primary)}
+    .primary:hover{background:#2557d6}
+    .ghost{background:transparent;color:var(--text)}
+    .ghost:hover{background:var(--bg)}
+    .full{width:100%}
+    .form-row{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+    .back-link{display:inline-flex;align-items:center;gap:6px;color:var(--muted);
+      font-size:13px;text-decoration:none;margin-bottom:16px;transition:color 0.2s}
+    .back-link:hover{color:var(--text)}
+    .success-card{display:none;text-align:center;padding:20px}
+    .success-card.show{display:block}
+    .success-icon{width:64px;height:64px;margin:0 auto 16px;background:var(--success);
+      border-radius:50%;display:flex;align-items:center;justify-content:center;color:white;font-size:32px}
+      .modules-section{margin:20px 0;padding:16px;background:var(--bg);border-radius:12px}
+      .modules-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:12px}
+      .module-item{display:flex;align-items:center;gap:8px;padding:8px;cursor:pointer}
+      .module-item input[type="checkbox"]{width:18px;height:18px;cursor:pointer}
+      .module-item label{cursor:pointer;font-size:13px}
+    @media (max-width: 640px) {
+        .form-row,.modules-grid{grid-template-columns:1fr}
+    }
+  </style>
+</head>
+<body>
+  <!-- Auth required banner (hidden by default) -->
+  <div id="authBanner" style="display:none;background:#fff3f2;border:1px solid #ffd7d2;padding:12px;border-radius:10px;margin:12px;max-width:580px;margin-left:auto;margin-right:auto;" role="alert">
+    <strong id="authBannerTitle" style="display:block;margin-bottom:6px;color:#b91c1c">Login requerido</strong>
+    <div id="authBannerMsg" style="color:#7f1d1d;margin-bottom:8px">Você precisa estar autenticado para acessar propriedades privadas.</div>
+    <div style="text-align:right"><button id="authBannerAction" class="btn primary" style="padding:8px 12px">Fazer login</button></div>
+  </div>
+  <div class="wrap">
+    <div class="card">
+      <a href="login.html" class="back-link" id="backLink">
+        ← <span id="backText">Voltar para login</span>
+      </a>
+      
+      <div class="brand">
+        <img src="assets/Nexefii_logo_3d-official.png" alt="Nexefii">
+      </div>
+  <div class="subtitle" id="subtitle">Solicite acesso à plataforma. Após o envio, sua solicitação será analisada pela equipe.</div>
+
+      <div id="registerForm">
+        <label id="labLang">Idioma</label>
+        <select id="lang">
+          <option value="pt">Português (Brasil)</option>
+          <option value="en">English</option>
+          <option value="es">Español</option>
+        </select>
+
+        <label id="labFullName" class="required">Nome Completo</label>
+  <input id="fullName" type="text" placeholder="João Silva" autocomplete="name">
+        <div class="error-msg" id="errFullName"></div>
+
+        <div class="form-row">
+          <div>
+            <label id="labEmail" class="required">Email</label>
+            <input id="email" type="email" placeholder="joao@empresa.com" autocomplete="email">
+            <div class="error-msg" id="errEmail"></div>
+          </div>
+          <div>
+            <label id="labPhone" class="required">Telefone</label>
+            <input id="phone" type="tel" placeholder="+55 11 98765-4321" autocomplete="tel">
+            <div class="error-msg" id="errPhone"></div>
+          </div>
+        </div>
+
+  <label id="labCountry" class="required">País</label>
+        <select id="country">
+          <option value="">-- Selecione --</option>
+          <option value="BR">Brasil</option>
+          <option value="US">United States</option>
+          <option value="AR">Argentina</option>
+          <option value="CL">Chile</option>
+          <option value="CO">Colombia</option>
+          <option value="MX">México</option>
+          <option value="PE">Perú</option>
+          <option value="UY">Uruguay</option>
+          <option value="ES">España</option>
+          <option value="PT">Portugal</option>
+          <option value="OTHER">Outro / Other / Otro</option>
+        </select>
+        <div class="error-msg" id="errCountry"></div>
+
+        <label id="labProperty" class="required">Propriedade</label>
+        <select id="property"></select>
+        <div class="error-msg" id="errProperty"></div>
+
+... (trimmed)

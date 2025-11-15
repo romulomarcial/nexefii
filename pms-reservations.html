@@ -4,8 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Reservas - nexefii PMS</title>
-  <link rel="stylesheet" href="style.css">
-  
+  <link rel="stylesheet" href="sprints/sprint-13/outputs/web/css/style.css">
 </head>
 <body>
   <div class="reservation-container">
@@ -42,7 +41,7 @@
             <option value="" data-i18n="resAllRooms">Todos</option>
             <option value="standard" data-i18n="resStandard">Standard</option>
             <option value="deluxe" data-i18n="resDeluxe">Deluxe</option>
-            <option value="suite" data-i18n="resSuite">SuÃ­te</option>
+            <option value="suite" data-i18n="resSuite">Suíte</option>
           </select>
         </div>
 
@@ -62,22 +61,22 @@
       </div>
 
       <div class="sidebar-section">
-        <h3 data-i18n="resQuickFilters">Filtros RÃ¡pidos</h3>
+        <h3 data-i18n="resQuickFilters">Filtros Rápidos</h3>
         <div class="quick-filters">
           <button class="quick-filter-btn active" data-filter="all" data-i18n="resAll">Todas</button>
-          <button class="quick-filter-btn" data-filter="in-house" data-i18n="resInHouseFilter">ðŸ¨ In-House</button>
+          <button class="quick-filter-btn" data-filter="in-house" data-i18n="resInHouseFilter">In-House</button>
           <button class="quick-filter-btn" data-filter="today" data-i18n="resToday">Hoje</button>
-          <button class="quick-filter-btn" data-filter="tomorrow" data-i18n="resTomorrow">AmanhÃ£</button>
+          <button class="quick-filter-btn" data-filter="tomorrow" data-i18n="resTomorrow">Amanhã</button>
           <button class="quick-filter-btn" data-filter="week" data-i18n="resThisWeek">Esta Semana</button>
-          <button class="quick-filter-btn" data-filter="month" data-i18n="resThisMonth">Este MÃªs</button>
+          <button class="quick-filter-btn" data-filter="month" data-i18n="resThisMonth">Este Mês</button>
         </div>
       </div>
 
       <div class="sidebar-section">
         <h3 data-i18n="resAvailability">Disponibilidade</h3>
         <div id="availabilityInfo" style="font-size: 13px; color: #475569;">
-          <p><strong id="availableRooms">--</strong> <span data-i18n="resAvailableRooms">quartos disponÃ­veis</span></p>
-          <p><strong id="occupancyRate">--%</strong> <span data-i18n="resOccupancy">ocupaÃ§Ã£o</span></p>
+          <p><strong id="availableRooms">--</strong> <span data-i18n="resAvailableRooms">quartos disponíveis</span></p>
+          <p><strong id="occupancyRate">--%</strong> <span data-i18n="resOccupancy">ocupação</span></p>
         </div>
       </div>
     </div>
@@ -86,16 +85,14 @@
     <div class="reservation-main">
       <!-- Header -->
       <div class="reservation-header">
-        <h1 data-i18n="resPageTitle">ðŸ“… Reservas</h1>
+        <h1 data-i18n="resPageTitle">Reservas</h1>
         <div class="header-actions">
-          <a class="btn" href="index.html#pms" style="display:inline-flex;align-items:center;gap:8px;text-decoration:none;" title="Voltar ao Card PMS">â† PMS</a>
+          <a class="btn" href="index.html#pms" style="display:inline-flex;align-items:center;gap:8px;text-decoration:none;" title="Voltar ao Card PMS">&larr; PMS</a>
           <select id="pmsModuleSwitcher" class="select" style="padding:8px;border-radius:8px;border:1px solid #e2e8f0"></select>
           <button class="btn" id="btnExport">
-            <span>ðŸ“Š</span>
             <span data-i18n="resExport">Exportar</span>
           </button>
           <button class="btn btn-primary" id="btnNewReservation">
-            <span>âž•</span>
             <span data-i18n="resNewReservation">Nova Reserva</span>
           </button>
         </div>
@@ -109,19 +106,19 @@
           <div class="subvalue"><span id="statArrivalsSubvalue">0</span> <span data-i18n="resRoomsReserved">quartos reservados</span></div>
         </div>
         <div class="stat-card departures">
-          <h4 data-i18n="resDeparturesToday">SaÃ­das Hoje</h4>
+          <h4 data-i18n="resDeparturesToday">Saídas Hoje</h4>
           <div class="value" id="statDeparturesValue">0</div>
           <div class="subvalue"><span id="statDeparturesSubvalue">0</span> <span data-i18n="resRoomsCheckout">quartos check-out</span></div>
         </div>
         <div class="stat-card in-house">
-          <h4 data-i18n="resInHouse">HÃ³spedes</h4>
+          <h4 data-i18n="resInHouse">Hóspedes</h4>
           <div class="value" id="statInHouseValue">0</div>
           <div class="subvalue"><span id="statInHouseSubvalue">0</span> <span data-i18n="resInHotel">no hotel</span></div>
         </div>
         <div class="stat-card revenue">
           <h4 data-i18n="resRevenue">Receita Prevista</h4>
           <div class="value" id="statRevenueValue">R$ 0</div>
-          <div class="subvalue" data-i18n="resNext30Days">prÃ³ximos 30 dias</div>
+          <div class="subvalue" data-i18n="resNext30Days">próximos 30 dias</div>
         </div>
       </div>
 
@@ -129,13 +126,13 @@
       <div class="reservation-content">
         <div class="content-toolbar">
           <div class="view-toggles">
-            <button class="view-toggle-btn active" data-view="list">ðŸ“‹ <span data-i18n="resViewList">Lista</span></button>
-            <button class="view-toggle-btn" data-view="calendar">ðŸ“… <span data-i18n="resViewCalendar">CalendÃ¡rio</span></button>
-            <button class="view-toggle-btn" data-view="timeline">ðŸ“Š <span data-i18n="resViewTimeline">Timeline</span></button>
+            <button class="view-toggle-btn active" data-view="list"><span data-i18n="resViewList">Lista</span></button>
+            <button class="view-toggle-btn" data-view="calendar"><span data-i18n="resViewCalendar">Calendário</span></button>
+            <button class="view-toggle-btn" data-view="timeline"><span data-i18n="resViewTimeline">Timeline</span></button>
           </div>
 
           <div class="search-box">
-            <input type="text" id="searchReservations" data-i18n-placeholder="resSearch" placeholder="Buscar reserva, hÃ³spede...">
+            <input type="text" id="searchReservations" data-i18n-placeholder="resSearch" placeholder="Buscar reserva, hóspede...">
           </div>
         </div>
 
@@ -156,14 +153,14 @@
   <div id="newReservationModal" class="modal" style="display: none;">
     <div class="modal-content" style="max-width: 900px; max-height: 90vh; overflow-y: auto;">
       <div class="modal-header">
-        <h2 data-i18n="resNewResTitle">Nova Reserva</h2>
+      <h2 data-i18n="resNewResTitle">Nova Reserva</h2>
         <button class="modal-close" id="closeNewResModal">&times;</button>
       </div>
       <div class="modal-body">
         <form id="newReservationForm">
           <!-- Guest Information -->
           <div class="form-section">
-            <h3 data-i18n="resGuestInfo">InformaÃ§Ãµes do HÃ³spede</h3>
+            <h3 data-i18n="resGuestInfo">Informações do Hóspede</h3>
             <div class="form-grid">
               <div class="form-group">
                 <label for="guestName" data-i18n="resGuestName">Nome Completo</label>
@@ -182,7 +179,7 @@
                 <input type="text" id="guestDocument">
               </div>
               <div class="form-group">
-                <label for="guestCountry" data-i18n="resGuestCountry">PaÃ­s</label>
+                <label for="guestCountry" data-i18n="resGuestCountry">País</label>
                 <input type="text" id="guestCountry" value="Brasil">
               </div>
             </div>
@@ -190,7 +187,7 @@
 
           <!-- Stay Information -->
           <div class="form-section">
-            <h3 data-i18n="resStayInfo">InformaÃ§Ãµes da Estadia</h3>
+            <h3 data-i18n="resStayInfo">Informações da Estadia</h3>
             <div class="form-grid">
               <div class="form-group">
                 <label for="checkInDate" data-i18n="resCheckInDate">Data Check-in</label>
@@ -209,7 +206,7 @@
 
           <!-- Room Information -->
           <div class="form-section">
-            <h3 data-i18n="resRoomInfo">InformaÃ§Ãµes do Quarto</h3>
+            <h3 data-i18n="resRoomInfo">Informações do Quarto</h3>
             <div class="form-grid">
               <div class="form-group">
                 <label for="roomTypeId" data-i18n="resRoomTypeSelect">Tipo de Quarto</label>
@@ -217,7 +214,7 @@
                   <option value="">-- Selecione --</option>
                   <option value="standard" data-i18n="resStandard">Standard</option>
                   <option value="deluxe" data-i18n="resDeluxe">Deluxe</option>
-                  <option value="suite" data-i18n="resSuite">SuÃ­te</option>
+                  <option value="suite" data-i18n="resSuite">Suíte</option>
                 </select>
               </div>
               <div class="form-group">
@@ -225,7 +222,7 @@
                 <input type="number" id="adults" min="1" max="6" value="2" required>
               </div>
               <div class="form-group">
-                <label for="children" data-i18n="resChildren">CrianÃ§as</label>
+                <label for="children" data-i18n="resChildren">Crianças</label>
                 <input type="number" id="children" min="0" max="4" value="0">
               </div>
               <div class="form-group" style="grid-column: 1 / -1;">
@@ -239,14 +236,14 @@
 
           <!-- Rate Information -->
           <div class="form-section">
-            <h3 data-i18n="resRateInfo">InformaÃ§Ãµes de Tarifa</h3>
+            <h3 data-i18n="resRateInfo">Informações de Tarifa</h3>
             <div class="form-grid">
               <div class="form-group">
-                <label for="ratePlanId" data-i18n="resRatePlan">Plano TarifÃ¡rio</label>
+                <label for="ratePlanId" data-i18n="resRatePlan">Plano Tarifário</label>
                 <select id="ratePlanId" required>
-                  <option value="rack" data-i18n="resRackRate">Tarifa BalcÃ£o</option>
+                  <option value="rack" data-i18n="resRackRate">Tarifa Balcão</option>
                   <option value="corporate" data-i18n="resCorporateRate">Tarifa Corporativa</option>
-                  <option value="nonRefundable" data-i18n="resNonRefundable">NÃ£o ReembolsÃ¡vel</option>
+                  <option value="nonRefundable" data-i18n="resNonRefundable">Não Reembolsável</option>
                 </select>
               </div>
               <div class="form-group">
@@ -262,15 +259,15 @@
 
           <!-- Payment Information -->
           <div class="form-section">
-            <h3 data-i18n="resPaymentInfo">InformaÃ§Ãµes de Pagamento</h3>
+            <h3 data-i18n="resPaymentInfo">Informações de Pagamento</h3>
             <div class="form-grid">
               <div class="form-group">
-                <label for="paymentMethod" data-i18n="resPaymentMethod">MÃ©todo de Pagamento</label>
+                <label for="paymentMethod" data-i18n="resPaymentMethod">Método de Pagamento</label>
                 <select id="paymentMethod">
-                  <option value="credit_card" data-i18n="resCreditCard">CartÃ£o de CrÃ©dito</option>
-                  <option value="debit_card" data-i18n="resDebitCard">CartÃ£o de DÃ©bito</option>
+                  <option value="credit_card" data-i18n="resCreditCard">Cartão de Crédito</option>
+                  <option value="debit_card" data-i18n="resDebitCard">Cartão de Débito</option>
                   <option value="cash" data-i18n="resCash">Dinheiro</option>
-                  <option value="bank_transfer" data-i18n="resBankTransfer">TransferÃªncia</option>
+                  <option value="bank_transfer" data-i18n="resBankTransfer">Transferência</option>
                 </select>
               </div>
               <div class="form-group">
@@ -282,7 +279,7 @@
                 </select>
               </div>
               <div class="form-group">
-                <label for="depositAmount" data-i18n="resDepositAmount">Valor do DepÃ³sito</label>
+                <label for="depositAmount" data-i18n="resDepositAmount">Valor do Depósito</label>
                 <input type="number" id="depositAmount" step="0.01" min="0" value="0">
               </div>
             </div>
@@ -303,7 +300,7 @@
                 </select>
               </div>
               <div class="form-group">
-                <label for="otaName" data-i18n="resOTAName">Nome da OTA (se aplicÃ¡vel)</label>
+                <label for="otaName" data-i18n="resOTAName">Nome da OTA (se aplicável)</label>
                 <input type="text" id="otaName">
               </div>
             </div>
@@ -311,9 +308,9 @@
 
           <!-- Special Requests -->
           <div class="form-section">
-            <h3 data-i18n="resSpecialRequests">SolicitaÃ§Ãµes Especiais</h3>
+            <h3 data-i18n="resSpecialRequests">Solicitações Especiais</h3>
             <div class="form-group">
-              <textarea id="specialRequests" rows="3" data-i18n-placeholder="resSpecialRequestsPlaceholder" placeholder="Ex: Cama extra, berÃ§o, andar alto..."></textarea>
+              <textarea id="specialRequests" rows="3" data-i18n-placeholder="resSpecialRequestsPlaceholder" placeholder="Ex: Cama extra, berço, andar alto..."></textarea>
             </div>
           </div>
 

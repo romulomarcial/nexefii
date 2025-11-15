@@ -1,0 +1,5 @@
+{
+  "engTitle":"Control de Ingeniería",
+  "engIntro":"Vista consolidada de habitaciones, HVAC y alarmas.",
+  "nav": {"master":"Master Control","pms":"PMS","engineering":"Engineering","housekeeping":"Housekeeping","bi":"BI"}
+}

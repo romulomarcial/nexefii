@@ -1,0 +1,20 @@
+{
+  "fdTitle": "Check-in / Check-out",
+  "fdIntro": "Painel reorganizado do Front Desk.",
+  "fdArrivals": "Chegadas Hoje",
+  "fdInHouse": "Hóspedes In-House",
+  "fdDepartures": "Saídas Hoje",
+  "fdArrivalsEmpty": "Nenhuma reserva encontrada",
+  "fdArrivalsFooter": "Reservas com check-in hoje (confirmadas/pendentes).",
+  "fdInHouseEmpty": "Nenhum hóspede in-house",
+  "fdInHouseFooter": "Hóspedes com check-in realizado.",
+  "fdDeparturesEmpty": "Nenhuma saída hoje",
+  "fdDeparturesFooter": "Hóspedes com saída prevista para hoje.",
+  "nav": {
+    "master": "Master Control",
+    "pms": "PMS",
+    "engineering": "Engineering",
+    "housekeeping": "Housekeeping",
+    "bi": "BI"
+  }
+}

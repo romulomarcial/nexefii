@@ -1,0 +1,5 @@
+{
+  "engTitle":"Engineering Control",
+  "engIntro":"Consolidated view of rooms, HVAC and alerts.",
+  "nav": {"master":"Master Control","pms":"PMS","engineering":"Engineering","housekeeping":"Housekeeping","bi":"BI"}
+}

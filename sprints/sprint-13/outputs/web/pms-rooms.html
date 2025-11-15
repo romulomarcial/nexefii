@@ -1,0 +1,19 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title data-i18n="rmPageTitle">Gestão de Quartos</title>
+  <link rel="stylesheet" href="../css/style.css">
+</head>
+<body data-page="pms-rooms">
+  <div id="navbar-placeholder"></div>
+  <main class="container">
+    <h1 data-i18n="rmPageTitle">Gestão de Quartos</h1>
+    <div id="roomsGridView"></div>
+  </main>
+  <script>fetch("./_navbar.html").then(r=>r.text()).then(t=>document.getElementById('navbar-placeholder').innerHTML=t).catch(()=>{});</script>
+  <script src="./js/i18n-loader.js"></script>
+  <script src="./js/thermostat-adapter.js"></script>
+</body>
+</html>

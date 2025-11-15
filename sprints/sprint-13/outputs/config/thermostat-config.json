@@ -1,0 +1,9 @@
+{
+  "provider": "mock",
+  "pollIntervalSeconds": 10,
+  "defaultSetpoint": 22,
+  "zones": [
+    { "id": "101", "name": "Quarto 101" },
+    { "id": "102", "name": "Quarto 102" }
+  ]
+}

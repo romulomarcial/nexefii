@@ -1,0 +1,76 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title data-i18n="fdTitle">Check-in / Check-out</title>
+  <link rel="stylesheet" href="../css/style.css">
+</head>
+<body data-page="pms-frontdesk">
+  <div id="navbar-placeholder"></div>
+  <main class="container">
+    <header class="section-header">
+      <h1 data-i18n="fdTitle">Check-in / Check-out</h1>
+    </header>
+
+    <section class="dashboard-grid">
+      <article class="master-card" id="arrivalsCard">
+        <h3 data-i18n="fdArrivals">Chegadas Hoje</h3>
+        <div id="arrivalsCount" class="stat-value">0</div>
+        <div id="arrivalsList" class="list-placeholder" aria-live="polite">{{fdArrivalsEmpty}}</div>
+        <footer class="small-note" data-i18n="fdArrivalsFooter">Reservas com check-in hoje (confirmadas/pendentes).</footer>
+      </article>
+
+      <article class="master-card" id="inhouseCard">
+        <h3 data-i18n="fdInHouse">Hóspedes In-House</h3>
+        <div id="inhouseCount" class="stat-value">0</div>
+        <div id="inhouseList" class="list-placeholder" aria-live="polite">{{fdInHouseEmpty}}</div>
+        <footer class="small-note" data-i18n="fdInHouseFooter">Hóspedes com check-in realizado.</footer>
+      </article>
+
+      <article class="master-card" id="departuresCard">
+        <h3 data-i18n="fdDepartures">Saídas Hoje</h3>
+        <div id="departuresCount" class="stat-value">0</div>
+        <div id="departuresList" class="list-placeholder" aria-live="polite">{{fdDeparturesEmpty}}</div>
+        <footer class="small-note" data-i18n="fdDeparturesFooter">Hóspedes com saída prevista para hoje.</footer>
+      </article>
+    </section>
+
+    <section id="fdActions" class="actions-row">
+      <button class="btn btn-primary" id="btnRefresh">Atualizar</button>
+      <button class="btn" id="btnExport">Exportar</button>
+    </section>
+
+  </main>
+  <script>
+    // inject shared navbar (Sprint-13 standard)
+    fetch("./_navbar.html").then(r=>r.text()).then(t=>document.getElementById('navbar-placeholder').innerHTML=t).catch(()=>{});
+  </script>
+  <script src="./js/i18n-loader.js"></script>
+  <script src="./js/thermostat-adapter.js"></script>
+  <script>
+    // Render placeholders using translation keys that may be provided by i18n loader.
+    document.addEventListener('DOMContentLoaded', ()=>{
+      // If translation keys for empty lists exist in loaded dictionary, apply them.
+      const applyFallback = (id, key, defaultText)=>{
+        const el = document.getElementById(id);
+        if(!el) return;
+        // try __nexefii_i18n or window.NexefiiI18n
+        const dict = window.__nexefii_i18n || window.NexefiiI18n || null;
+        let text = defaultText;
+        try{
+          if(window.__nexefii_i18n && window.__nexefii_i18n.loadTranslations){ /* loader present */ }
+          // i18n-loader applies translations to data-i18n elements; here we look for window.__nexefii_i18n._last or similar - fallback to element attributes
+        }catch(e){}
+        if(el.innerText.trim().startsWith('{{') ){
+          // replace placeholder with defaultText — actual i18n loader will override later if present
+          el.innerText = defaultText;
+        }
+      };
+      applyFallback('arrivalsList','fdArrivalsEmpty','Nenhuma reserva encontrada');
+      applyFallback('inhouseList','fdInHouseEmpty','Nenhum hóspede in-house');
+      applyFallback('departuresList','fdDeparturesEmpty','Nenhuma saída hoje');
+    });
+  </script>
+</body>
+</html>

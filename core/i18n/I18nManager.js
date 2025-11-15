@@ -44,10 +44,17 @@ class I18nManager {
 
     // Legacy monolithic (non-blocking). Useful while transitioning.
     try {
-      const legacyResp = await fetch('/i18n.json', { cache: 'no-store' });
-      if (legacyResp.ok) {
-        const legacyData = await legacyResp.json();
-        Object.assign(aggregated, legacyData);
+      // Prefer canonical monolithic at /i18n/i18n.json, but keep fallbacks for safety
+      const legacyResp = await this._fetchJsonWithFallback([
+        '/i18n/i18n.json',
+        '/i18n.json',
+        '../i18n/i18n.json',
+        '../i18n.json',
+        'i18n/i18n.json',
+        'i18n.json'
+      ]);
+      if (legacyResp) {
+        Object.assign(aggregated, legacyResp);
         console.log('[I18n] Legacy monolithic loaded for seeding');
       }
     } catch (e) {
@@ -58,11 +65,14 @@ class I18nManager {
       if (!aggregated[lang]) aggregated[lang] = {};
       for (const seg of segments) {
         try {
-          const url = `/i18n/${lang}/${seg}.json`;
-          const resp = await fetch(url, { cache: 'no-store' });
-          if (resp.ok) {
-            const data = await resp.json();
-            this.deepMerge(aggregated[lang], data);
+          const candidate = await this._fetchJsonWithFallback([
+            `/i18n/${lang}/${seg}.json`,
+            `../i18n/${lang}/${seg}.json`,
+            `i18n/${lang}/${seg}.json`,
+            `./i18n/${lang}/${seg}.json`
+          ]);
+          if (candidate) {
+            this.deepMerge(aggregated[lang], candidate);
             console.log(`[I18n] Segment loaded: ${seg} (${lang})`);
           } else {
             console.warn(`[I18n] Segment missing: ${seg} (${lang})`);
@@ -101,9 +111,13 @@ class I18nManager {
       return true; // already loaded
     }
     try {
-      const resp = await fetch(`/i18n/${lang}/${segment}.json`, { cache: 'no-store' });
-      if (resp.ok) {
-        const data = await resp.json();
+      const data = await this._fetchJsonWithFallback([
+        `/i18n/${lang}/${segment}.json`,
+        `../i18n/${lang}/${segment}.json`,
+        `i18n/${lang}/${segment}.json`,
+        `./i18n/${lang}/${segment}.json`
+      ]);
+      if (data) {
         this.deepMerge(this.translations[lang], data);
         this.translations[lang][cacheFlag] = true;
         console.log(`[I18n] Lazy segment loaded: ${segment} (${lang})`);
@@ -117,6 +131,24 @@ class I18nManager {
       console.warn(`[I18n] Lazy segment error: ${segment} (${lang})`, e?.message || e);
       return false;
     }
+  }
+
+  /**
+   * Try fetching JSON from multiple URL candidates and return parsed JSON of first ok response
+   * @param {string[]} urls
+   */
+  async _fetchJsonWithFallback(urls) {
+    for (const u of urls) {
+      try {
+        const r = await fetch(u, { cache: 'no-store' });
+        if (r && r.ok) {
+          try { return await r.json(); } catch(e) { console.warn('[I18n] JSON parse error', u, e); }
+        }
+      } catch (e) {
+        // continue to next
+      }
+    }
+    return null;
   }
 
   /**
@@ -229,28 +261,7 @@ class I18nManager {
     return this.currentLang;
   }
 
-  /**
-   * Set language and notify observers
-   */
-  async setLanguage(lang) {
-    if (!['pt', 'en', 'es'].includes(lang)) {
-      console.warn('[I18n] Invalid language:', lang);
-      return false;
-    }
 
-    this.currentLang = lang;
-    this.saveLanguage(lang);
-    
-    // Notify observers
-    this.notifyObservers();
-    
-    console.log('[I18n] Language changed to:', lang);
-    return true;
-  }
-
-  getLanguage() {
-    return this.currentLang;
-  }
 
   /**
    * Subscribe to language changes
@@ -295,13 +306,26 @@ class I18nManager {
     elements.forEach(el => {
       const key = el.getAttribute('data-i18n');
       const translated = this.t(key);
-      if (el.tagName === 'INPUT' || el.tagName === 'TEXTAREA') {
-        el.placeholder = translated;
+      const def = el.getAttribute('data-i18n-default');
+
+      // Only overwrite if we have a real translation (not the keyPath itself)
+      if (el.tagName === 'INPUT' || el.tagName === 'TEXTAREA' || el.tagName === 'SELECT') {
+        if (translated && translated !== key) {
+          el.placeholder = translated;
+        } else if (def) {
+          el.placeholder = def;
+        }
+        // otherwise leave existing placeholder/text intact
       } else {
-        el.textContent = translated;
+        if (translated && translated !== key) {
+          el.textContent = translated;
+        } else if (def) {
+          el.textContent = def;
+        }
+        // otherwise preserve the element's current text (do not inject the raw key)
       }
     });
-    console.log(`[I18n] Applied translations to ${elements.length} elements`);
+    console.log(`[I18n] Applied translations to ${elements.length} elements (only real translations or defaults replaced)`);
   }
 
   /**

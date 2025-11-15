@@ -1,0 +1,4 @@
+{
+  "title":"Control de Gobernanza",
+  "nav": {"master":"Master Control","pms":"PMS","engineering":"Engineering","housekeeping":"Housekeeping","bi":"BI"}
+}

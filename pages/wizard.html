@@ -3,6 +3,7 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
+  
     <style>
     .progress-container {
       margin-bottom: 3rem;
@@ -798,6 +799,8 @@
   </style>
 </head>
 <body class="wizard-page">
+  <div class="wizard-shell container" style="max-width:1100px; margin: 2rem auto; padding: 0 1rem;">
+    <div class="card wizard-card" style="background: #fff; border-radius: 12px; box-shadow: 0 6px 20px rgba(0,0,0,0.04); padding: 1.25rem;">
 
   <!-- Wizard Header -->
   <div class="wizard-header">
@@ -900,28 +903,28 @@
           <!-- Gallery Tab -->
           <div class="image-tab-content active" id="gallery-tab">
             <div class="image-gallery">
-              <div class="gallery-image selected" data-image="/assets/images/default-hotel-1.jpg">
-                <img loading="lazy" decoding="async" src="/assets/images/default-hotel-1.jpg" alt="Hotel Moderno" onerror="this.onerror=null;this.src='/assets/Nexefii_logo_3d-official.png'">
+              <div class="gallery-image selected" data-image="../assets/images/default-hotel-1.jpg">
+                <img loading="lazy" decoding="async" src="../assets/images/default-hotel-1.jpg" alt="Hotel Moderno" onerror="this.onerror=null;this.src='../assets/Nexefii_logo_3d-official.png'">
                 <div class="gallery-overlay">✓</div>
               </div>
-              <div class="gallery-image" data-image="/assets/images/default-hotel-2.jpg">
-                <img loading="lazy" decoding="async" src="/assets/images/default-hotel-2.jpg" alt="Resort Praia" onerror="this.onerror=null;this.src='/assets/Nexefii_logo_3d-official.png'">
+              <div class="gallery-image" data-image="../assets/images/default-hotel-2.jpg">
+                <img loading="lazy" decoding="async" src="../assets/images/default-hotel-2.jpg" alt="Resort Praia" onerror="this.onerror=null;this.src='../assets/Nexefii_logo_3d-official.png'">
                 <div class="gallery-overlay">✓</div>
               </div>
-              <div class="gallery-image" data-image="/assets/images/default-hotel-3.jpg">
-                <img loading="lazy" decoding="async" src="/assets/images/default-hotel-3.jpg" alt="Hotel Urbano" onerror="this.onerror=null;this.src='/assets/Nexefii_logo_3d-official.png'">
+              <div class="gallery-image" data-image="../assets/images/default-hotel-3.jpg">
+                <img loading="lazy" decoding="async" src="../assets/images/default-hotel-3.jpg" alt="Hotel Urbano" onerror="this.onerror=null;this.src='../assets/Nexefii_logo_3d-official.png'">
                 <div class="gallery-overlay">✓</div>
               </div>
-              <div class="gallery-image" data-image="/assets/images/default-hotel-4.jpg">
-                <img loading="lazy" decoding="async" src="/assets/images/default-hotel-4.jpg" alt="Pousada" onerror="this.onerror=null;this.src='/assets/Nexefii_logo_3d-official.png'">
+              <div class="gallery-image" data-image="../assets/images/default-hotel-4.jpg">
+                <img loading="lazy" decoding="async" src="../assets/images/default-hotel-4.jpg" alt="Pousada" onerror="this.onerror=null;this.src='../assets/Nexefii_logo_3d-official.png'">
                 <div class="gallery-overlay">✓</div>
               </div>
-              <div class="gallery-image" data-image="/assets/images/default-hotel-5.jpg">
-                <img loading="lazy" decoding="async" src="/assets/images/default-hotel-5.jpg" alt="Hotel Boutique" onerror="this.onerror=null;this.src='/assets/Nexefii_logo_3d-official.png'">
+              <div class="gallery-image" data-image="../assets/images/default-hotel-5.jpg">
+                <img loading="lazy" decoding="async" src="../assets/images/default-hotel-5.jpg" alt="Hotel Boutique" onerror="this.onerror=null;this.src='../assets/Nexefii_logo_3d-official.png'">
                 <div class="gallery-overlay">✓</div>
               </div>
-              <div class="gallery-image" data-image="/assets/images/default-hotel-6.jpg">
-                <img loading="lazy" decoding="async" src="/assets/images/default-hotel-6.jpg" alt="Resort Montanha" onerror="this.onerror=null;this.src='/assets/Nexefii_logo_3d-official.png'">
+              <div class="gallery-image" data-image="../assets/images/default-hotel-6.jpg">
+                <img loading="lazy" decoding="async" src="../assets/images/default-hotel-6.jpg" alt="Resort Montanha" onerror="this.onerror=null;this.src='../assets/Nexefii_logo_3d-official.png'">
                 <div class="gallery-overlay">✓</div>
               </div>
             </div>
@@ -951,8 +954,8 @@
             <button type="button" class="btn-preview" id="btn-preview-url" data-i18n="wizard.image.url.previewButton">Pré-visualizar</button>
           </div>
 
-          <!-- Hidden field stores selected image path (always absolute from root) -->
-          <input type="hidden" id="propertyImage" value="/assets/images/default-hotel-1.jpg">
+          <!-- Hidden field stores selected image path (relative from pages/) -->
+          <input type="hidden" id="propertyImage" value="../assets/images/default-hotel-1.jpg">
         </div>
       </div>
     </div>
@@ -1088,61 +1091,10 @@
 
         <div class="form-group">
           <label class="form-label required" data-i18n="wizard.config.timezoneLabel">Fuso Horário</label>
-          <select class="form-select" id="timezone">
-            <!-- Americas -->
-            <optgroup label="🌎 Américas" data-i18n="wizard.config.timezoneGroups.americas">
-              <option value="America/New_York">Nova York (UTC-5)</option>
-              <option value="America/Los_Angeles">Los Angeles (UTC-8)</option>
-              <option value="America/Chicago">Chicago (UTC-6)</option>
-              <option value="America/Denver">Denver (UTC-7)</option>
-              <option value="America/Toronto">Toronto (UTC-5)</option>
-              <option value="America/Sao_Paulo" selected>São Paulo (UTC-3)</option>
-              <option value="America/Manaus">Manaus (UTC-4)</option>
-              <option value="America/Rio_Branco">Rio Branco (UTC-5)</option>
-              <option value="America/Fortaleza">Fortaleza (UTC-3)</option>
-              <option value="America/Buenos_Aires">Buenos Aires (UTC-3)</option>
-              <option value="America/Santiago">Santiago (UTC-3)</option>
-              <option value="America/Lima">Lima (UTC-5)</option>
-              <option value="America/Bogota">Bogotá (UTC-5)</option>
-              <option value="America/Mexico_City">Cidade do México (UTC-6)</option>
-              <option value="America/Caracas">Caracas (UTC-4)</option>
-            </optgroup>
-            <!-- Europe -->
-            <optgroup label="🌍 Europa" data-i18n="wizard.config.timezoneGroups.europe">
-              <option value="Europe/London">Londres (UTC+0)</option>
-              <option value="Europe/Paris">Paris (UTC+1)</option>
-              <option value="Europe/Berlin">Berlim (UTC+1)</option>
-              <option value="Europe/Madrid">Madri (UTC+1)</option>
-              <option value="Europe/Rome">Roma (UTC+1)</option>
-              <option value="Europe/Amsterdam">Amsterdã (UTC+1)</option>
-              <option value="Europe/Brussels">Bruxelas (UTC+1)</option>
-              <option value="Europe/Zurich">Zurique (UTC+1)</option>
-              <option value="Europe/Lisbon">Lisboa (UTC+0)</option>
-              <option value="Europe/Moscow">Moscou (UTC+3)</option>
-            </optgroup>
-            <!-- Asia & Pacific -->
-            <optgroup label="🌏 Ásia & Pacífico" data-i18n="wizard.config.timezoneGroups.asiaPacific">
-              <option value="Asia/Tokyo">Tóquio (UTC+9)</option>
-              <option value="Asia/Shanghai">Xangai (UTC+8)</option>
-              <option value="Asia/Hong_Kong">Hong Kong (UTC+8)</option>
-              <option value="Asia/Singapore">Singapura (UTC+8)</option>
-              <option value="Asia/Seoul">Seul (UTC+9)</option>
-              <option value="Asia/Dubai">Dubai (UTC+4)</option>
-              <option value="Asia/Bangkok">Bangkok (UTC+7)</option>
-              <option value="Asia/Kolkata">Mumbai (UTC+5:30)</option>
-              <option value="Australia/Sydney">Sydney (UTC+10)</option>
-              <option value="Australia/Melbourne">Melbourne (UTC+10)</option>
-              <option value="Pacific/Auckland">Auckland (UTC+12)</option>
-            </optgroup>
-            <!-- Africa & Middle East -->
-            <optgroup label="🌍 África & Oriente Médio" data-i18n="wizard.config.timezoneGroups.africaMiddleEast">
-              <option value="Africa/Cairo">Cairo (UTC+2)</option>
-              <option value="Africa/Johannesburg">Joanesburgo (UTC+2)</option>
-              <option value="Africa/Lagos">Lagos (UTC+1)</option>
-              <option value="Asia/Jerusalem">Jerusalém (UTC+2)</option>
-              <option value="Asia/Istanbul">Istambul (UTC+3)</option>
-            </optgroup>
-          </select>
+          <div style="display:flex;gap:0.5rem;align-items:center;">
+            <select class="form-select" id="timezoneGroupSelect" style="width:40%;" aria-label="Timezone group"></select>
+            <select class="form-select" id="timezoneSelect" style="width:60%;" aria-label="Timezone city"></select>
+          </div>
         </div>
 
         <div class="form-group">
@@ -1159,9 +1111,9 @@
       <div class="form-group">
   <label class="form-label" data-i18n="wizard.config.languageLabel">Idioma</label>
         <select class="form-select" id="language">
-          <option value="pt-BR">Português (Brasil)</option>
-          <option value="en-US">English (US)</option>
-          <option value="es-ES">Español</option>
+          <option value="pt">Português (Brasil)</option>
+          <option value="en">English (US)</option>
+          <option value="es">Español</option>
         </select>
       </div>
     </div>
@@ -1219,7 +1171,7 @@
           <span class="review-label" data-i18n="wizard.review.imageLabel" data-i18n-default="Imagem da Propriedade">Imagem da Propriedade</span>
         </div>
         <div class="review-image-preview">
-          <img id="review-image" src="/assets/images/default-hotel-1.jpg" alt="Imagem da propriedade" loading="lazy" decoding="async" onerror="this.onerror=null;this.src='/assets/Nexefii_logo_3d-official.png'">
+          <img id="review-image" src="../assets/images/default-hotel-1.jpg" alt="Imagem da propriedade" loading="lazy" decoding="async" onerror="this.onerror=null;this.src='../assets/Nexefii_logo_3d-official.png'">
         </div>
         <div class="review-item">
           <span class="review-label" data-i18n="wizard.review.nameLabel">Nome</span>
@@ -1285,22 +1237,62 @@
   </div>
 </div>
 
+    </div>
+  </div>
+
   <!-- Core runtime dependencies (ensure page works standalone) -->
   <script src="../core/database/PropertyDatabase.js"></script>
   <script src="../core/i18n/I18nManager.js"></script>
   <script src="../core/wizard/WizardManager.js"></script>
 
 <script>
-  // Load i18n file (if available) and apply translations to elements with data-i18n
+  // Load page-specific i18n JSONs from ../i18n/<lang>/ (fallback-aware)
   async function loadPageI18n() {
-    try {
-      const res = await fetch('/i18n.json', { cache: 'no-store' });
-      if (!res.ok) return;
-      window.__PAGE_I18N = await res.json();
-    } catch (e) {
-      // ignore — page will keep embedded texts
-      window.__PAGE_I18N = window.__PAGE_I18N || {};
+    const savedLang = (localStorage.getItem('nexefii_language') || localStorage.getItem('nexefii_lang') || navigator.language || 'pt').split('-')[0];
+    const langsToTry = [savedLang, 'pt', 'en', 'es'];
+    window.__PAGE_I18N = window.__PAGE_I18N || {};
+
+    for (const lang of langsToTry) {
+      try {
+        const base = `../i18n/${lang}`;
+        const commonRes = await fetch(`${base}/common.json`, { cache: 'no-store' });
+        const pageRes = await fetch(`${base}/wizard.json`, { cache: 'no-store' });
+
+        const common = (commonRes.ok) ? await commonRes.json() : {};
+        const page = (pageRes.ok) ? await pageRes.json() : {};
+
+        // Merge under language key
+        window.__PAGE_I18N[lang] = Object.assign({}, common, page);
+
+        // Stop after first successful language load
+        if (Object.keys(window.__PAGE_I18N[lang]).length) return;
+      } catch (e) {
+        // try next language
+      }
     }
+
+    // if nothing loaded, ensure object exists to avoid runtime errors
+    window.__PAGE_I18N = window.__PAGE_I18N || {};
+  }
+
+  // Populate language selector using global i18n manager if available
+  function populateLanguageSelector() {
+    const sel = document.getElementById('language');
+    if (!sel) return;
+    try {
+      if (window.NEXEFII && window.NEXEFII.i18n && typeof window.NEXEFII.i18n.getLanguageOptions === 'function') {
+        const opts = window.NEXEFII.i18n.getLanguageOptions();
+        sel.innerHTML = '';
+        opts.forEach(o => {
+          const opt = document.createElement('option');
+          opt.value = o.code; // short code like 'pt','en','es'
+          opt.textContent = `${o.flag} ${o.name}`;
+          sel.appendChild(opt);
+        });
+        // set current value
+        sel.value = (window.NEXEFII?.i18n?.getLanguage?.() || window.NEXEFII?.i18n?.currentLang) || (navigator.language || 'pt').split('-')[0];
+      }
+    } catch (e) { /* ignore */ }
   }
 
   function resolveI18nKey(path, lang) {
@@ -1346,13 +1338,16 @@
         window.NEXEFII.i18n.applyToDOM(document);
       } else {
         await loadPageI18n();
-        const savedLang = (localStorage.getItem('nexefii_lang') || navigator.language || 'pt').split('-')[0];
+        const savedLang = (localStorage.getItem('nexefii_language') || localStorage.getItem('nexefii_lang') || navigator.language || 'pt').split('-')[0];
         applyI18nToPage(savedLang);
       }
     } catch (e) {
       // continue even if i18n failed
       console.warn('[Wizard] i18n initialization issue', e?.message || e);
     }
+
+    // Populate language selector (if available) before initializing wizard
+    try { populateLanguageSelector(); } catch(e) {}
 
     // Initialize Wizard Manager (idempotent / safe re-entry)
     if (typeof WizardManager === 'undefined') {
@@ -1363,6 +1358,94 @@
       ? window.wizard
       : new WizardManager();
     wizard = window.wizard; // create global binding
+  })();
+
+  // Diagnostic: log i18n status and attempt a forced apply if translations appear available
+  (function _wizardI18nDiagnostics(){
+      /**
+       * Inline i18n fallback: try multiple candidate URLs for monolithic and segment JSONs
+       * If a JSON is found, merge into window.__PAGE_I18N and apply translations.
+       */
+      async function applyInlineI18nFallback(preferredLang) {
+        const lang = (preferredLang || (navigator.language || 'pt')).split('-')[0];
+        const candidates = [
+          '/i18n/i18n.json',
+          '/i18n.json',
+          '../i18n/i18n.json',
+          '../i18n.json',
+          'i18n/i18n.json',
+          './i18n.json',
+          'i18n.json',
+          '../../i18n.json'
+        ];
+
+        // Try monolithic
+        for (const url of candidates) {
+          try {
+            const r = await fetch(url, { cache: 'no-store' });
+            if (r && r.ok) {
+              try {
+                const json = await r.json();
+                // If json contains languages at top-level, use it
+                window.__PAGE_I18N = window.__PAGE_I18N || {};
+                if (json[lang]) {
+                  window.__PAGE_I18N[lang] = Object.assign({}, json[lang]);
+                } else if (json.common || json["wizard"]) {
+                  // monolithic merged under language keys? try assign
+                  window.__PAGE_I18N[lang] = Object.assign({}, json[lang] || json);
+                }
+                console.log('[Wizard][i18n][fallback] Loaded monolithic:', url);
+                applyI18nToPage(lang);
+                return true;
+              } catch (e) {
+                console.warn('[Wizard][i18n][fallback] JSON parse failed', url, e);
+              }
+            }
+          } catch (e) { /* ignore and try next */ }
+        }
+
+        // Try segment-based wizard.json under multiple base paths
+        const baseCandidates = ['/i18n', '../i18n', './i18n', 'i18n', '../../i18n'];
+        for (const base of baseCandidates) {
+          const url = `${base}/${lang}/wizard.json`;
+          try {
+            const r = await fetch(url, { cache: 'no-store' });
+            if (r && r.ok) {
+              const pageJson = await r.json();
+              window.__PAGE_I18N = window.__PAGE_I18N || {};
+              window.__PAGE_I18N[lang] = Object.assign({}, pageJson);
+              console.log('[Wizard][i18n][fallback] Loaded segment:', url);
+              applyI18nToPage(lang);
+              return true;
+            }
+          } catch (e) { /* try next */ }
+        }
+
+        console.warn('[Wizard][i18n][fallback] No i18n candidate found for', lang);
+        return false;
+      }
+    setTimeout(() => {
+      try {
+        console.group('[Wizard][i18n] Diagnostics');
+        console.log('NEXEFII.i18n present:', !!window.NEXEFII?.i18n);
+        console.log('i18n currentLang:', window.NEXEFII?.i18n?.getLanguage?.() || window.NEXEFII?.i18n?.currentLang);
+        console.log('i18n translations keys:', Object.keys(window.NEXEFII?.i18n?.translations || {}));
+        console.log('__PAGE_I18N keys:', Object.keys(window.__PAGE_I18N || {}));
+        const sel = document.getElementById('language');
+        console.log('language selector value:', sel?.value);
+
+        // If global manager exists and has translations loaded for current lang, re-apply
+        const lang = window.NEXEFII?.i18n?.getLanguage?.() || (sel?.value || '').split('-')[0];
+        if (window.NEXEFII?.i18n && window.NEXEFII.i18n.translations && window.NEXEFII.i18n.translations[lang]) {
+          console.log(`[Wizard][i18n] Found translations for '${lang}', applying to DOM.`);
+          try { window.NEXEFII.i18n.applyToDOM(document); } catch(e){ console.warn('[Wizard][i18n] apply error', e); }
+        } else {
+          console.log('[Wizard][i18n] Translations for current lang not yet available. Will try inline fallback.');
+          try { applyInlineI18nFallback(lang); } catch(e) { console.warn('[Wizard][i18n] inline fallback failed', e); }
+        }
+        console.groupEnd();
+      } catch (e) { console.warn('[Wizard][i18n] diagnostics failed', e); }
+    }, 450);
   })();
 
   // ============================================================================
@@ -1964,6 +2047,9 @@
 
     const progress = showProgressModal();
 
+    let property = null;
+
+    // === Creation block: any error here means creation failed and should alert ===
     try {
       // Step 1: Create structure (20%)
       progress.updateProgress(10, 'Criando estrutura da propriedade...');
@@ -1978,10 +2064,10 @@
       progress.updateProgress(40, 'Quartos criados!');
       
       // Step 3: Create guests (60%)
-  progress.updateProgress(50, 'Criando hóspedes de exemplo...');
+      progress.updateProgress(50, 'Criando hóspedes de exemplo...');
       await new Promise(resolve => setTimeout(resolve, 300));
-  progress.completeStep(3);
-  progress.updateProgress(60, 'Hóspedes criados!');
+      progress.completeStep(3);
+      progress.updateProgress(60, 'Hóspedes criados!');
       
       // Step 4: Generate reservations (80%)
       progress.updateProgress(70, 'Gerando reservas...');
@@ -1991,16 +2077,16 @@
       
       // Step 5: Save everything (100%)
       progress.updateProgress(90, 'Salvando dados...');
-      const property = await wizard.createProperty();
+      property = await wizard.createProperty();
       property.modules = wizard.data.modules || [];
       progress.completeStep(5);
-  progress.updateProgress(100, 'Concluído!');
+      progress.updateProgress(100, 'Concluído!');
       
       // Show success message
       await new Promise(resolve => setTimeout(resolve, 300));
       progress.showSuccess(property.name);
       
-      // Wait a bit then redirect
+      // Wait a bit then close progress UI
       await new Promise(resolve => setTimeout(resolve, 2000));
       progress.close();
 
@@ -2039,18 +2125,42 @@
         } catch (e) { console.warn('[Wizard] session persist failed', e); }
       } catch (e) { console.warn('[Wizard] upsert property failed', e); }
 
-      // Redirect to property dashboard
-      window.NEXEFII.router.navigate(`/property/${property.slug}/dashboard`);
-      
+      console.log('[Wizard] Property created successfully:', property);
+
     } catch (error) {
+      // Creation failed: close progress and surface an alert to the user
       console.error('[Wizard] Error creating property:', error);
-      progress.close();
-  alert(`✖ Erro ao criar propriedade:\n\n${error.message}`);
+      try { progress.close(); } catch(_) {}
+      alert(`✖ Erro ao criar propriedade:\n\n${error && error.message ? error.message : error}`);
       btnCreate.disabled = false;
       try {
         const text = window.NEXEFII?.i18n ? window.NEXEFII.i18n.t('wizard.buttons.create') : '✨ Criar Propriedade';
         btnCreate.textContent = text;
       } catch(_) { btnCreate.textContent = '✨ Criar Propriedade'; }
+      return; // stop flow — do not attempt navigation
+    }
+
+    // === Navigation block: errors here should NOT show the creation alert ===
+    try {
+      (function safeNavigateToDashboard() {
+        const target = `/property/${property.slug}/dashboard`;
+        try {
+          const maybeRouter = window.NEXEFII && window.NEXEFII.router;
+          if (maybeRouter && typeof maybeRouter.navigate === 'function') {
+            try { maybeRouter.navigate(target); return; } catch(e) { /* fallback below */ }
+          }
+          if (window.Nexefii && typeof window.Nexefii.navigate === 'function') { try { window.Nexefii.navigate(target); return; } catch(e){} }
+          if (window.app && typeof window.app.navigate === 'function') { try { window.app.navigate(target); return; } catch(e){} }
+          if (window.navigation && typeof window.navigation.navigate === 'function') { try { window.navigation.navigate(target); return; } catch(e){} }
+          window.location.href = target;
+        } catch (e) {
+          console.warn('[Wizard] Navigation fallback failed, redirecting via location', e);
+          window.location.href = target;
+        }
+      })();
+    } catch (navErr) {
+      console.error('[Wizard] Navigation after property creation failed:', navErr);
+      // Do not show creation alert here — keep user on modal and log the navigation error.
     }
   }
   // Registrar globalmente para acesso externo (shell.html)
@@ -2097,12 +2207,9 @@
       });
     }
     
-    // Prepare timezone rendering function (used both on init and when language changes)
-    function renderTimezoneSelect() {
-      const tzSelect = document.getElementById('timezone');
-      if (!tzSelect) return;
-      // Backup: lista de grupos e cidades/fusos (hardcoded, pode ser movido para JSON futuramente)
-      const tzData = [
+    // Prepare timezone data and rendering functions (two-level selects)
+    // tzData is the authoritative list of timezone ids and default labels (kept here for now)
+    const tzData = [
         {
           key: 'americas',
           options: [
@@ -2165,32 +2272,93 @@
           ]
         }
       ];
-      // Limpar select
-      tzSelect.innerHTML = '';
-  // Renderizar grupos e opções
-      tzData.forEach(group => {
-        const label = window.NEXEFII?.i18n?.t('wizard.config.timezoneGroups.' + group.key) || group.key;
-        const optgroup = document.createElement('optgroup');
-        optgroup.label = label;
-        group.options.forEach(opt => {
-          const option = document.createElement('option');
-          option.value = opt.value;
-          // Busca nome traduzido da cidade/fuso
-          // Prefer translated city name, fallback to hardcoded label. Then
-          // normalize UTC signs — in some cases a missing '+' was observed
-          // (e.g. "UTC 7/-5"), so ensure offsets have explicit signs.
-          let label = window.NEXEFII?.i18n?.t('wizard.config.timezoneCities.' + opt.value) || opt.label;
-          try {
-            // Replace 'UTC ' followed by digits with 'UTC+' (missing plus)
-            label = label.replace(/UTC\s+(?=\d)/g, 'UTC+');
-            // Ensure each UTC offset has an explicit sign before the number
-            label = label.replace(/UTC([+-]?)(\d+)/g, (m, s, n) => `UTC${s || '+'}${n}`);
-          } catch (e) { /* ignore normalization errors */ }
-          option.textContent = label;
-          optgroup.appendChild(option);
-        });
-        tzSelect.appendChild(optgroup);
+      // Build fast lookup structures from tzData
+    const wizardTimezoneGroups = [
+      { id: 'americas', i18nKey: 'wizard.config.timezoneGroups.americas' },
+      { id: 'europe', i18nKey: 'wizard.config.timezoneGroups.europe' },
+      { id: 'asiaPacific', i18nKey: 'wizard.config.timezoneGroups.asiaPacific' },
+      { id: 'africaMiddleEast', i18nKey: 'wizard.config.timezoneGroups.africaMiddleEast' }
+    ];
+
+    const wizardTimezoneCities = {};
+    tzData.forEach(g => {
+      wizardTimezoneCities[g.key] = (g.options || []).map(o => ({ id: o.value, defaultLabel: o.label }));
+    });
+
+    function translateKey(i18nKey, fallback) {
+      try {
+        if (window.NEXEFII && window.NEXEFII.i18n) {
+          const t = window.NEXEFII.i18n.t(i18nKey);
+          if (t && t !== i18nKey) return t;
+        }
+      } catch (e) {}
+      // fallback to page-local resolver if available
+      try {
+        const pageTxt = resolveI18nKey(i18nKey, (window.NEXEFII?.i18n?.getLanguage?.() || navigator.language || 'pt'));
+        if (pageTxt) return pageTxt;
+      } catch (e) {}
+      return fallback || '';
+    }
+
+    function populateTimezoneGroups() {
+      const sel = document.getElementById('timezoneGroupSelect');
+      if (!sel) return;
+      sel.innerHTML = '';
+      wizardTimezoneGroups.forEach(g => {
+        const opt = document.createElement('option');
+        opt.value = g.id;
+        opt.setAttribute('data-i18n', g.i18nKey);
+        const label = translateKey(g.i18nKey, g.id);
+        opt.textContent = label || g.id;
+        sel.appendChild(opt);
       });
+    }
+
+    function populateTimezoneCities(groupId, preserveSelected) {
+      const sel = document.getElementById('timezoneSelect');
+      if (!sel) return;
+      const cities = wizardTimezoneCities[groupId] || [];
+      // remember current selection if requested
+      const current = preserveSelected ? sel.value : null;
+      sel.innerHTML = '';
+      cities.forEach(city => {
+        const opt = document.createElement('option');
+        opt.value = city.id;
+        const i18nKey = 'wizard.config.timezoneCities.' + city.id;
+        opt.setAttribute('data-i18n', i18nKey);
+        opt.setAttribute('data-i18n-default', city.defaultLabel || city.id);
+        const label = translateKey(i18nKey, city.defaultLabel || city.id) || city.id;
+        opt.textContent = label;
+        sel.appendChild(opt);
+      });
+      // try to restore previous selection if it still exists
+      if (current) {
+        const found = Array.from(sel.options).some(o => { if (o.value === current) { sel.value = current; return true;} return false; });
+        if (!found && sel.options.length) sel.selectedIndex = 0;
+      } else {
+        // set a reasonable default: prefer Sao_Paulo if available, otherwise first
+        const prefer = 'America/Sao_Paulo';
+        if (Array.from(sel.options).some(o => o.value === prefer)) sel.value = prefer;
+        else if (sel.options.length) sel.selectedIndex = 0;
+      }
+    }
+
+    // Wire change on group -> repopulate cities
+    (function wireTimezoneSelectors() {
+      const g = document.getElementById('timezoneGroupSelect');
+      const c = document.getElementById('timezoneSelect');
+      if (!g || !c) return;
+      g.addEventListener('change', (e) => {
+        populateTimezoneCities(e.target.value, false);
+      });
+    })();
+
+    function findGroupForTimezone(tzId) {
+      if (!tzId) return null;
+      for (const key of Object.keys(wizardTimezoneCities)) {
+        if ((wizardTimezoneCities[key] || []).some(c => c.id === tzId)) return key;
+      }
+      return null;
     }
 
     // Try to wait briefly for i18n to be ready so the page is translated on first render.
@@ -2228,17 +2396,29 @@
         }
       } catch(e) { console.warn('[Wizard] i18n apply error at init', e); }
 
-      // Subscribe to language changes so we re-render the select and re-apply translations
+      // Subscribe to language changes so we re-render the group + city selects and re-apply translations
       try {
         i18n.onChange((lang) => {
-          console.log('[Wizard] Language changed to:', lang);
-          // Step 4: Rooms
-          const step4 = document.getElementById('step-3');
-          if (step4 && step4.classList.contains('active')) {
-            renderCategories();
-          }
-          // Re-render timezone select using current translations
-          renderTimezoneSelect();
+          try { console.log('[Wizard] Language changed to:', lang); } catch(_){}
+          // re-render page-level things that depend on translation
+          try {
+            const step4 = document.getElementById('step-3');
+            if (step4 && step4.classList.contains('active')) {
+              try { renderCategories(); } catch(_){}
+            }
+          } catch(_){}
+
+          // Re-populate groups (updates group labels) and then cities preserving current selection
+          try {
+            const groupSel = document.getElementById('timezoneGroupSelect');
+            const currentGroup = groupSel ? groupSel.value : null;
+            populateTimezoneGroups();
+            // restore group selection if possible
+            if (groupSel && currentGroup) groupSel.value = currentGroup;
+            const activeGroup = groupSel && groupSel.value ? groupSel.value : (findGroupForTimezone(document.getElementById('timezoneSelect')?.value) || 'americas');
+            populateTimezoneCities(activeGroup, true);
+          } catch (e) { console.warn('[Wizard] timezone repopulate failed', e); }
+
           // Re-apply translations to DOM, preserving defaults for missing keys
           try {
             const scope = document.querySelector('.wizard-page');
@@ -2270,8 +2450,16 @@
       console.warn('[Wizard] I18n not available (timed out)');
     }
 
-    // Ensure timezone select is populated on initial load as well
-    try { renderTimezoneSelect(); } catch(e) { console.warn('[Wizard] renderTimezoneSelect failed', e); }
+    // Ensure group + city selects are populated on initial load
+    try {
+      populateTimezoneGroups();
+      // attempt to infer initial group from a preserved value or prefer 'americas'
+      const initialTZ = (function(){ try { return null; } catch(_) { return null; } })();
+      const inferredGroup = findGroupForTimezone(initialTZ) || 'americas';
+      const groupSel = document.getElementById('timezoneGroupSelect');
+      if (groupSel) groupSel.value = inferredGroup;
+      populateTimezoneCities(inferredGroup, false);
+    } catch(e) { console.warn('[Wizard] populateTimezone selects failed', e); }
     
     updateUI();
 
@@ -2321,7 +2509,8 @@
   // Initialize wizard page when loaded
   initWizardPage();
 </script>
- 
+</script>
+<script src="../js/lang-switcher.js"></script>
 </body>
 </html>
 

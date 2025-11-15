@@ -1,0 +1,9 @@
+{
+  "rmPageTitle": "Gestão de Quartos",
+  "rmRefresh": "Atualizar",
+  "nav.rooms": "Quartos"
+}
+{
+  "rmPageTitle":"Gestão de Quartos",
+  "nav": {"master":"Master Control","pms":"PMS","engineering":"Engineering","housekeeping":"Housekeeping","bi":"BI"}
+}

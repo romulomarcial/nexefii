@@ -164,7 +164,7 @@ async function hkLoadAndApplyI18N(requestedLang) {
         // fetch fresh
         console.log('[HK] Fetching i18n.json...');
         try {
-            const res = await fetch('i18n.json?t=' + now, {cache:'no-store'});
+            const res = await fetch('i18n/i18n.json?t=' + now, {cache:'no-store'});
             console.log('[HK] Fetch response status:', res.status);
             if (res.ok) {
                 data = await res.json();

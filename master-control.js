@@ -87,7 +87,7 @@ class MasterControlSystem {
   // ========================================
   async loadI18N() {
     try {
-      const res = await fetch('i18n.json', { cache: 'no-store' });
+      const res = await fetch('i18n/i18n.json', { cache: 'no-store' });
       if (!res.ok) throw new Error('http');
       const data = await res.json();
       this.i18n = {

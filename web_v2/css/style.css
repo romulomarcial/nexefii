@@ -1,0 +1,37 @@
+/* Minimal Sprint-13 stylesheet — extended to match master-control visual style */
+:root{--nex-bg:#f5f7fb;--nex-accent:#0f172a;--nex-accent-2:#3b82f6;--nex-text:#0b1220}
+html,body{height:100%;margin:0;font-family:Inter,Arial,Helvetica,sans-serif;color:var(--nex-text);background:var(--nex-bg)}
+
+/* Navbar — styled to match master-control header */
+.nexefii-navbar{background:var(--nex-accent);color:#fff;padding:12px 18px;display:flex;gap:18px;align-items:center;justify-content:space-between}
+.nexefii-navbar .nav-left{display:flex;align-items:center;gap:12px}
+.nexefii-navbar img{height:32px}
+.nexefii-navbar strong{font-weight:700}
+.nexefii-navbar a{color:#fff;text-decoration:none;padding:8px 10px;border-radius:6px;font-weight:600}
+.nexefii-navbar a:hover{background:rgba(255,255,255,0.06)}
+
+/* Master header styles (extracted from master-control-v3.css) */
+.master-header{display:flex;justify-content:space-between;align-items:center;padding:14px 18px;background:linear-gradient(180deg,#ffffff,#f8fafc);border-bottom:1px solid #e6edf5}
+.master-header .header-left{display:flex;align-items:center;gap:12px}
+.master-header .header-right{display:flex;align-items:center;gap:12px}
+.master-badge{background:#eef2ff;color:#1e40af;padding:6px 8px;border-radius:6px;font-weight:700;font-size:12px}
+
+.master-tabs{display:flex;gap:8px;padding:10px 18px;background:transparent}
+.tab-btn{background:transparent;border:0;padding:10px 12px;border-radius:8px;font-weight:600;color:#334155;cursor:pointer}
+.tab-btn.active{background:linear-gradient(135deg,var(--nex-accent-2),#764ba2);color:#fff}
+
+.container{padding:18px}
+main{max-width:1200px;margin:24px auto;padding:0 18px}
+.card{background:#fff;border-radius:8px;padding:16px;box-shadow:0 1px 3px rgba(0,0,0,0.06)}
+.btn{display:inline-block;padding:8px 12px;border-radius:6px}
+.btn.primary{background:var(--nex-accent-2);color:#fff;border:0}
+
+/* Utility and layout */
+.breadcrumb{display:flex;align-items:center;gap:8px;padding:12px 0;color:#64748b}
+.section-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:12px}
+.master-card{background:white;border-radius:12px;padding:16px;box-shadow:0 2px 8px rgba(0,0,0,0.06)}
+
+/* Keep existing small helpers */
+.checkbox-label{transition:background-color 0.2s ease, transform 0.1s ease}
+.checkbox-label:hover{background:#f8f9fa}
+```

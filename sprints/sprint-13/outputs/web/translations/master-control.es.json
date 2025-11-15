@@ -1,0 +1,9 @@
+{
+  "master.title": "Control Maestro",
+  "nav.master": "Maestro"
+}
+{
+  "title": "Panel Master",
+  "intro": "Acceso central para PMS / Engineering / Housekeeping / BI.",
+  "nav": {"master":"Master Control","pms":"PMS","engineering":"Engineering","housekeeping":"Housekeeping","bi":"BI"}
+}

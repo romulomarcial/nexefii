@@ -1,0 +1,9 @@
+{
+  "resPageTitle": "Reservas",
+  "resNewReservation": "Nova Reserva",
+  "nav.reservations": "Reservas"
+}
+{
+  "resPageTitle":"Reservas",
+  "nav": {"master":"Master Control","pms":"PMS","engineering":"Engineering","housekeeping":"Housekeeping","bi":"BI"}
+}

@@ -1,0 +1,9 @@
+{
+  "master.title": "Master Control",
+  "nav.master": "Master"
+}
+{
+  "title": "Master Control",
+  "intro": "Central access for PMS / Engineering / Housekeeping / BI.",
+  "nav": {"master":"Master Control","pms":"PMS","engineering":"Engineering","housekeeping":"Housekeeping","bi":"BI"}
+}

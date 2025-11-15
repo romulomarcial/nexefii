@@ -1,0 +1,22 @@
+﻿<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title data-i18n="title">Engineering Â· Nexefii</title>
+  <link rel="stylesheet" href="../css/style.css">
+  <style>.container{padding:18px}</style>
+</head>
+<body data-page="engineering-control">
+  <div id="navbar-placeholder"></div>
+  <main class="container">
+    <h1 data-i18n="engTitle">Controle de Engenharia</h1>
+    <p data-i18n="engIntro">VisÃ£o consolidada dos quartos, HVAC e alarms.</p>
+    <div id="grid"> <!-- dynamic content --> </div>
+  </main>
+  <script>(async function(){ const r=await fetch('./_navbar.html'); if(r.ok)document.getElementById('navbar-placeholder').innerHTML=await r.text(); })();</script>
+  <script src="./js/i18n-loader.js"></script>
+  <script src="./js/thermostat-adapter.js"></script>
+</body>
+</html>
+
