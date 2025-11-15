@@ -1,5 +1,32 @@
 {
   "dashboard": {
+    "title": "Dashboard Executivo",
+    "subtitle": "Visão executiva por propriedade",
+    "selectProperty": "Selecionar Propriedade",
+    "kpis": {
+      "title": "KPIs",
+      "occupancy": "Ocupação",
+      "roomsAvailable": "Quartos Disponíveis",
+      "roomsOccupied": "Quartos Ocupados",
+      "reservations7d": "Reservas (7d)",
+      "revenue": "Projeção de Receita"
+    },
+    "modules": {
+      "title": "Módulos",
+      "pms": "PMS",
+      "housekeeping": "Governança",
+      "engineering": "Engenharia",
+      "bi": "BI"
+    },
+    "submodules": {
+      "rooms": "Rooms",
+      "reservations": "Reservations",
+      "frontdesk": "Frontdesk"
+    }
+  }
+}
+{
+  "dashboard": {
     "title": "Dashboard",
     "subtitle": "Visão geral da propriedade",
     "loading": "Carregando propriedades...",

@@ -30,44 +30,6 @@
       "privacy": "Privacidade",
       "terms": "Termos"
     },
-    "dashboard": {
-      "title": "Dashboard",
-      "subtitle": "Visão geral da propriedade",
-      "loading": "Carregando propriedades...",
-      "noProperties": "Nenhuma propriedade disponível",
-      "noPropertiesDesc": "Crie ou obtenha acesso a uma propriedade para visualizar métricas.",
-      "openControl": "Abrir Controle",
-      "openAutomation": "Central Virtual de Automação",
-      "forecast": "Previsão (7 dias)",
-      "comparative": {
-        "title": "📊 KPIs Consolidados - Todas as Propriedades",
-        "avgOccupancy": "Ocupação Média",
-        "totalRevenue": "Receita Total Hoje",
-        "operations": "Operações Hoje",
-        "stayovers": "Stayovers",
-        "forecast": "Previsão 7 dias",
-        "totalAlerts": "Alertas Ativos",
-        "requiresAttention": "Requer atenção",
-        "bestPerformance": "Melhor Desempenho"
-      },
-      "kpi": {
-        "revenue": "Receita Hoje",
-        "rooms": "Quartos",
-        "operations": "Operações Hoje",
-        "alerts": "Alertas Ativos"
-      },
-      "reservas": {
-        "recentes": "Reservas Recentes",
-        "verTodas": "Ver Todas"
-      },
-      "acoes": {
-        "rapidas": "Ações Rápidas",
-        "quartos": "Quartos",
-        "novaReserva": "Nova Reserva",
-        "hospedes": "Hóspedes",
-        "configuracoes": "Configurações"
-      }
-    },
     "fdTitle": "Check-in / Check-out",
     "fdArrivals": "Chegadas Hoje",
     "fdInHouse": "Hóspedes In-House",
@@ -367,44 +329,6 @@
       "privacy": "Privacy",
       "terms": "Terms"
     },
-    "dashboard": {
-      "loading": "Loading properties...",
-      "noProperties": "No properties available",
-      "noPropertiesDesc": "Create or gain access to a property to view metrics.",
-      "openControl": "Open Control",
-      "openAutomation": "Virtual Automation Center",
-      "forecast": "7-day Forecast",
-      "comparative": {
-        "title": "📊 Consolidated KPIs - All Properties",
-        "avgOccupancy": "Avg Occupancy",
-        "totalRevenue": "Total Revenue Today",
-        "operations": "Operations Today",
-        "stayovers": "Stayovers",
-        "forecast": "7-day Forecast",
-        "totalAlerts": "Active Alerts",
-        "requiresAttention": "Requires attention",
-        "bestPerformance": "Best Performance"
-      },
-      "kpi": {
-        "revenue": "Revenue Today",
-        "rooms": "Rooms",
-        "operations": "Operations Today",
-        "alerts": "Active Alerts"
-      },
-      "title": "Dashboard",
-      "subtitle": "Property Overview",
-      "reservas": {
-        "recentes": "Recent Reservations",
-        "verTodas": "View All"
-      },
-      "acoes": {
-        "rapidas": "Quick Actions",
-        "quartos": "Rooms",
-        "novaReserva": "New Reservation",
-        "hospedes": "Guests",
-        "configuracoes": "Settings"
-      }
-    },
     "fdTitle": "Check-in / Check-out",
     "fdArrivals": "Today's Arrivals",
     "fdInHouse": "In-House Guests",
@@ -702,44 +626,6 @@
       "help": "Ayuda",
       "privacy": "Privacidad",
       "terms": "Términos"
-    },
-    "dashboard": {
-      "title": "Panel",
-      "subtitle": "Resumen de la propiedad",
-      "loading": "Cargando propiedades...",
-      "noProperties": "No hay propiedades disponibles",
-      "noPropertiesDesc": "Cree u obtenga acceso a una propiedad para ver métricas.",
-      "openControl": "Abrir Control",
-      "openAutomation": "Centro Virtual de Automatización",
-      "forecast": "Pronóstico 7 días",
-      "comparative": {
-        "title": "📊 KPIs Consolidados - Todas las Propiedades",
-        "avgOccupancy": "Ocupación Promedio",
-        "totalRevenue": "Ingresos Totales Hoy",
-        "operations": "Operaciones Hoy",
-        "stayovers": "Stayovers",
-        "forecast": "Pronóstico 7 días",
-        "totalAlerts": "Alertas Activas",
-        "requiresAttention": "Requiere atención",
-        "bestPerformance": "Mejor Desempeño"
-      },
-      "kpi": {
-        "revenue": "Ingresos Hoy",
-        "rooms": "Habitaciones",
-        "operations": "Operaciones Hoy",
-        "alerts": "Alertas Activas"
-      },
-      "reservas": {
-        "recentes": "Reservas Recientes",
-        "verTodas": "Ver Todas"
-      },
-      "acoes": {
-        "rapidas": "Acciones Rápidas",
-        "quartos": "Habitaciones",
-        "novaReserva": "Nueva Reserva",
-        "hospedes": "Huéspedes",
-        "configuracoes": "Configuraciones"
-      }
     },
     "fdTitle": "Check-in / Check-out",
     "fdArrivals": "Llegadas de Hoy",

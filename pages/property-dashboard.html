@@ -1,0 +1,47 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title data-i18n="dashboard.title">Dashboard Executivo</title>
+  <link rel="stylesheet" href="../style.css">
+  <style>
+    .dashboard-header{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:18px}
+    .kpi-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:12px;margin-bottom:16px}
+    .kpi-card{background:#fff;border:1px solid #eee;padding:14px;border-radius:8px}
+    .modules-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:12px}
+    .module-card{background:#fff;border:1px solid #eee;padding:12px;border-radius:8px;cursor:pointer}
+    .submodules{margin-top:8px;display:flex;gap:8px;flex-wrap:wrap}
+    .submodule{padding:6px 8px;border-radius:6px;background:#fafafa;border:1px solid #eee;font-size:13px}
+  </style>
+</head>
+<body class="shell-page">
+  <div class="container" style="padding:20px;max-width:1100px;margin:0 auto">
+    <div class="dashboard-header">
+      <div>
+        <h1 class="page-title" data-i18n="dashboard.title">Dashboard Executivo</h1>
+        <div class="subtitle" data-i18n="dashboard.subtitle">Visão executiva por propriedade</div>
+      </div>
+      <div style="display:flex;align-items:center;gap:12px">
+        <label for="propSelect" data-i18n="dashboard.selectProperty">Propriedade</label>
+        <select id="propSelect" style="min-width:220px"></select>
+      </div>
+    </div>
+
+    <section>
+      <h2 data-i18n="dashboard.kpis.title">KPIs</h2>
+      <div id="kpiGrid" class="kpi-grid"></div>
+    </section>
+
+    <section style="margin-top:18px">
+      <h2 data-i18n="dashboard.modules.title">Módulos</h2>
+      <div id="modulesGrid" class="modules-grid"></div>
+    </section>
+  </div>
+
+  <script src="../js/session-context.js"></script>
+  <script src="../js/property-dashboard-service.js"></script>
+  <script src="../js/property-dashboard.js"></script>
+  <script src="../js/lang-switcher.js"></script>
+</body>
+</html>

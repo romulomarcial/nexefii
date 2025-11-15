@@ -158,9 +158,26 @@ async function loadLoginI18N(){
         
         // Store language
         localStorage.setItem('nexefii_lang', lang);
-        
-        // Redirect to shell
-        window.location.href = '/shell.html';
+        // Persist user object expected by SessionContext compatibility
+        try {
+          const userObj = Object.assign({}, session, { role: session.role || session.role, properties: session.properties || session.properties || [] });
+          // keep old storage key for compatibility
+          localStorage.setItem('nexefii_user', JSON.stringify(userObj));
+        } catch (e) {}
+
+        // Redirect according to role: MASTER -> master-control.html, else -> pages/property-dashboard.html
+        try {
+          // prefer SessionContext if available
+          const role = (window.SessionContext && typeof window.SessionContext.getUserRole === 'function') ? window.SessionContext.getUserRole() : (session.role || 'MASTER');
+          if (role === 'MASTER') {
+            window.location.href = '/master-control.html';
+          } else {
+            window.location.href = '/pages/property-dashboard.html';
+          }
+        } catch (e) {
+          // fallback to shell if something unexpected
+          window.location.href = '/shell.html';
+        }
       } catch (error) {
         showLoginError(error.message || L.genericError);
       }

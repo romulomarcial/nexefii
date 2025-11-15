@@ -1,5 +1,32 @@
 {
   "dashboard": {
+    "title": "Executive Dashboard",
+    "subtitle": "Executive view by property",
+    "selectProperty": "Select Property",
+    "kpis": {
+      "title": "KPIs",
+      "occupancy": "Occupancy",
+      "roomsAvailable": "Rooms Available",
+      "roomsOccupied": "Rooms Occupied",
+      "reservations7d": "Reservations (7d)",
+      "revenue": "Revenue Projection"
+    },
+    "modules": {
+      "title": "Modules",
+      "pms": "PMS",
+      "housekeeping": "Housekeeping",
+      "engineering": "Engineering",
+      "bi": "BI"
+    },
+    "submodules": {
+      "rooms": "Rooms",
+      "reservations": "Reservations",
+      "frontdesk": "Frontdesk"
+    }
+  }
+}
+{
+  "dashboard": {
     "loading": "Loading properties...",
     "noProperties": "No properties available",
     "noPropertiesDesc": "Create or gain access to a property to view metrics.",
