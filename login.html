@@ -82,6 +82,7 @@
   </div>
 
   <script src="nexefii-auth.js"></script>
+  <script src="js/user-model.js"></script>
   <!-- i18n isolado do LOGIN -->
   <script>
     let I18N_LOGIN = null;
@@ -158,12 +159,27 @@ async function loadLoginI18N(){
         
         // Store language
         localStorage.setItem('nexefii_lang', lang);
-        // Persist user object expected by SessionContext compatibility
+        // Persist and synchronize user object expected by SessionContext and UserModel
         try {
-          const userObj = Object.assign({}, session, { role: session.role || session.role, properties: session.properties || session.properties || [] });
-          // keep old storage key for compatibility
-          localStorage.setItem('nexefii_user', JSON.stringify(userObj));
-        } catch (e) {}
+          // sync with UserModel when available to centralize users
+          var finalUser = null;
+          if (window.UserModel && typeof window.UserModel.syncSessionUser === 'function') {
+            finalUser = window.UserModel.syncSessionUser(session);
+          } else {
+            finalUser = Object.assign({}, session, { role: session.role || session.role, properties: session.properties || session.properties || [] });
+            localStorage.setItem('nexefii_user', JSON.stringify(finalUser));
+          }
+
+          // Maintain legacy currentUser key used by master-control.js for compatibility
+          try {
+            if (finalUser && finalUser.role && String(finalUser.role).toUpperCase() === 'MASTER') {
+              localStorage.setItem('currentUser', JSON.stringify({ id: finalUser.id || null, role: 'master', email: finalUser.email || '' }));
+            } else {
+              // remove legacy currentUser if present for non-master
+              // keep it only when needed
+            }
+          } catch (e) { /* noop */ }
+        } catch (e) { /* noop */ }
 
         // Redirect according to role: MASTER -> master-control.html, else -> pages/property-dashboard.html
         try {

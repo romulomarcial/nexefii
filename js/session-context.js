@@ -96,3 +96,10 @@
   };
 
 })(window);
+
+// Ensure user model is initialized if available (non-blocking)
+try {
+  if (window.UserModel && typeof window.UserModel.ensureInitialized === 'function') {
+    window.UserModel.ensureInitialized();
+  }
+} catch (e) { /* noop */ }

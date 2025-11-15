@@ -352,6 +352,54 @@
       </div>
     </div>
 
+    <!-- Users Tab: minimal user management for MASTER -->
+    <div class="tab-content" id="tab-users" style="display:none;">
+      <div class="breadcrumb"><span class="icon">👥</span> <span data-i18n="breadcrumb.users">Usuários</span></div>
+      <div class="section-header">
+        <h2><span class="icon">👥</span> <span data-i18n="users.title">Gestão de Usuários</span></h2>
+        <button class="btn-help" data-help="users" title="Ajuda"><span class="icon">❓</span></button>
+      </div>
+      <div class="help-panel" id="help-users" style="display:none;"><div class="help-content"><p data-i18n="users.help">Área para criação, edição e atribuição de propriedades e módulos aos usuários.</p></div></div>
+
+      <div class="master-card">
+        <div style="display:flex;gap:12px;align-items:center;margin-bottom:12px;">
+          <h3 style="margin:0;">Lista de Usuários</h3>
+          <button class="btn btn-primary" id="btnCreateUser">Criar usuário</button>
+        </div>
+        <div id="usersListArea"></div>
+      </div>
+
+      <div class="master-card" id="userFormCard" style="display:none;margin-top:12px;">
+        <h3 id="userFormTitle">Criar / Editar Usuário</h3>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;">
+          <div>
+            <label>Nome</label>
+            <input id="uf_name" />
+          </div>
+          <div>
+            <label>Email</label>
+            <input id="uf_email" />
+          </div>
+          <div>
+            <label>Role</label>
+            <select id="uf_role"><option value="MASTER">MASTER</option><option value="SUPERADMIN">SUPERADMIN</option><option value="USER">USER</option></select>
+          </div>
+          <div>
+            <label>Senha inicial (apenas criação / reset)</label>
+            <input id="uf_password" type="password" />
+          </div>
+          <div style="grid-column:1/-1;">
+            <label>Propriedades (atribuir)</label>
+            <div id="uf_props" style="display:flex;flex-wrap:wrap;gap:8px;margin-top:6px;"></div>
+          </div>
+        </div>
+        <div style="margin-top:12px;display:flex;gap:8px;">
+          <button class="btn btn-primary" id="uf_save">Salvar</button>
+          <button class="btn" id="uf_cancel">Cancelar</button>
+        </div>
+      </div>
+    </div>
+
     <!-- Backup & Restore Tab (OLD - TO BE REMOVED) -->
     <div class="tab-content" id="tab-backup" style="display:none;">
       <div class="backup-section">
@@ -2433,6 +2481,8 @@
   <script src="demo-data-generator.js"></script>
   <script src="enterprise-backup-system.js"></script>
   <script src="release-management-system.js"></script>
+  <script src="js/user-model.js"></script>
+  <script src="js/master-control-users.js"></script>
   <script src="master-control.js"></script>
   <script src="master-control-enterprise.js"></script>
   <script src="master-control-backups.js"></script>

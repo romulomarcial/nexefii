@@ -33,5 +33,28 @@
     };
   }
 
-  global.PropertyDashboardService = { getPropertyKpis };
+  // Simple in-memory cache for KPIs to avoid heavy recalculation when rendering multiple cards
+  const _kpiCache = { data: {}, ttl: 60000 };
+
+  async function getAllPropertiesKpis(properties){
+    const results = {};
+    const now = Date.now();
+    const promises = (properties||[]).map(async p => {
+      const pid = p && (p.id || p.key || p.slug) || 'default';
+      const cacheKey = String(pid);
+      const cached = _kpiCache.data[cacheKey];
+      if (cached && (now - cached.ts) < _kpiCache.ttl) {
+        results[cacheKey] = cached.value;
+        return;
+      }
+      const k = await getPropertyKpis(pid);
+      _kpiCache.data[cacheKey] = { ts: Date.now(), value: k };
+      results[cacheKey] = k;
+    });
+    await Promise.all(promises);
+    return results; // map of propertyId -> kpis
+  }
+
+  global.PropertyDashboardService = { getPropertyKpis, getAllPropertiesKpis };
 })(window);
+

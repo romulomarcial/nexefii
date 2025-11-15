@@ -1,0 +1,16 @@
+{
+  "master": {
+    "users": {
+      "title": "Gestão de Usuários",
+      "help": "Crie, edite e atribua propriedades e módulos aos usuários.",
+      "create": "Criar usuário",
+      "edit": "Editar usuário",
+      "resetPassword": "Resetar senha",
+      "activate": "Ativar",
+      "deactivate": "Desativar"
+    },
+    "breadcrumb": {
+      "users": "Usuários"
+    }
+  }
+}
