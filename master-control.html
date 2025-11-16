@@ -106,12 +106,53 @@
       </div>
     </div>
 
+    <!-- Integrations Tab -->
+    <div class="tab-content" id="tab-integrations" style="display:none;">
+      <div class="breadcrumb"><span class="icon">🔗</span> <span data-i18n="breadcrumb.integrations">Integrações</span></div>
+      <div class="section-header">
+        <h2><span class="icon">🔗</span> <span data-i18n="master.integrations.title">Integrações</span></h2>
+        <button class="btn-help" data-help="integrations" title="Ajuda"><span class="icon">❓</span></button>
+      </div>
+      <div class="master-card">
+        <div style="display:flex;gap:12px;align-items:center;margin-bottom:12px;">
+          <label style="font-weight:600;">Propriedade</label>
+          <select id="int_prop_select" style="min-width:280px;"></select>
+          <div style="margin-left:auto;"><button class="btn" id="int_add_btn">Adicionar Integração</button></div>
+        </div>
+        <div id="int_list_area"></div>
+      </div>
+
+      <!-- Integration form modal (simple) -->
+      <div id="int_form" style="display:none;position:fixed;left:50%;top:50%;transform:translate(-50%,-50%);background:#fff;padding:16px;border:1px solid #ddd;box-shadow:0 8px 30px rgba(0,0,0,0.15);z-index:999;min-width:420px;">
+        <h3 id="int_form_title">Adicionar / Editar Integração</h3>
+        <input type="hidden" id="int_form_id" />
+        <div style="display:flex;gap:8px;margin-top:8px;">
+          <div style="flex:1;">
+            <label>Propriedade</label>
+            <select id="int_form_prop" style="width:100%"></select>
+          </div>
+          <div style="width:120px;">
+            <label>Módulo</label>
+            <select id="int_form_module"><option>PMS</option><option>OTA</option><option>IOT</option><option>DOOR_LOCK</option><option>POS</option></select>
+          </div>
+        </div>
+        <div style="display:flex;gap:8px;margin-top:8px;"><div style="flex:1;"><label>Provider</label><input id="int_form_provider" style="width:100%"/></div><div style="width:140px;"><label>Ambiente</label><select id="int_form_env"><option value="sandbox">sandbox</option><option value="production">production</option></select></div></div>
+        <div style="margin-top:8px;">
+          <label>API Base URL</label>
+          <input id="int_form_apiBase" style="width:100%" />
+        </div>
+        <div style="margin-top:8px;display:flex;gap:8px;"><div style="flex:1;"><label>API Key</label><input id="int_form_apiKey" style="width:100%"/></div><div style="flex:1;"><label>Client ID</label><input id="int_form_clientId" style="width:100%"/></div></div>
+        <div style="margin-top:12px;display:flex;gap:8px;justify-content:flex-end;"><button id="int_form_close" class="btn">Fechar</button><button id="int_form_save" class="btn btn-primary">Salvar</button></div>
+      </div>
+    </div>
+
     <!-- Navigation Tabs -->
     <div class="master-tabs">
   <button class="tab-btn active" data-tab="dashboard"><span class="icon">📊</span> <span data-i18n="tabs.dashboard">Dashboard</span></button>
   <button class="tab-btn" data-tab="backups"><span class="icon">💾</span> <span data-i18n="tabs.backups">Backups</span></button>
   <button class="tab-btn" data-tab="releases"><span class="icon">🚀</span> <span data-i18n="tabs.releases">Releases & Rollback</span></button>
   <button class="tab-btn" data-tab="users"><span class="icon">👥</span> <span data-i18n="tabs.users">Usuários</span></button>
+  <button class="tab-btn" data-tab="integrations"><span class="icon">🔗</span> <span data-i18n="tabs.integrations">Integrações</span></button>
   <button class="tab-btn" data-tab="properties"><span class="icon">🏨</span> <span data-i18n="tabs.properties">Propriedades</span></button>
   <button class="tab-btn" data-tab="logs"><span class="icon">�</span> <span data-i18n="tabs.logs">Logs & Auditoria</span></button>
   <button class="tab-btn" data-tab="settings"><span class="icon">⚙️</span> <span data-i18n="tabs.settings">Configurações</span></button>
@@ -364,7 +405,10 @@
       <div class="master-card">
         <div style="display:flex;gap:12px;align-items:center;margin-bottom:12px;">
           <h3 style="margin:0;">Lista de Usuários</h3>
-          <button class="btn btn-primary" id="btnCreateUser">Criar usuário</button>
+          <div style="margin-left:auto;display:flex;gap:8px;">
+            <button class="btn btn-primary" id="btnCreateUser">Criar usuário</button>
+            <button class="btn btn-secondary" id="btnSeedDemo">Criar Ambiente Demo</button>
+          </div>
         </div>
         <div id="usersListArea"></div>
       </div>
@@ -2483,6 +2527,9 @@
   <script src="release-management-system.js"></script>
   <script src="js/user-model.js"></script>
   <script src="js/master-control-users.js"></script>
+  <script src="js/integration-model.js"></script>
+  <script src="js/master-control-integrations.js"></script>
+  <script src="js/demo-seeder.js"></script>
   <script src="master-control.js"></script>
   <script src="master-control-enterprise.js"></script>
   <script src="master-control-backups.js"></script>

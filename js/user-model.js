@@ -99,6 +99,55 @@
     } catch (e) { /* noop */ }
   }
 
+  /**
+   * Ensure default users exist: MASTER and SUPERADMIN
+   */
+  function ensureDefaultUsers() {
+    try {
+      let users = getAllUsers();
+      if (!users || !users.length) {
+        // create MASTER
+        const master = createUser({
+          email: 'master@nexefii.local',
+          name: 'Master Admin',
+          role: 'MASTER',
+          password: 'Master@123',
+          properties: [],
+          isActive: true
+        });
+        // create SUPERADMIN
+        const superadmin = createUser({
+          email: 'superadmin@nexefii.local',
+          name: 'Super Admin',
+          role: 'SUPERADMIN',
+          password: 'Super@123',
+          properties: [],
+          isActive: true
+        });
+        // ensure stored session reference points to master by default
+        try {
+          localStorage.setItem('nexefii_user', JSON.stringify({ id: master.id, email: master.email, name: master.name, role: master.role, properties: master.properties }));
+        } catch (e) { /* noop */ }
+        users = getAllUsers();
+      }
+    } catch (e) { /* noop */ }
+  }
+
+  /**
+   * Authenticate using local user store
+   * Returns user object when success, null when fail
+   */
+  function authenticateLocal(email, password) {
+    try {
+      if (!email || !password) return null;
+      const u = findByEmail(email);
+      if (!u || !u.isActive) return null;
+      const hash = hashPassword(password);
+      if (u.passwordHash === hash) return u;
+      return null;
+    } catch (e) { return null; }
+  }
+
   function syncSessionUser(sessionObj) {
     if (!sessionObj || !sessionObj.email) return null;
     const existing = findByEmail(sessionObj.email);
@@ -125,11 +174,15 @@
     updateUser,
     deleteUser,
     ensureInitialized,
+    ensureDefaultUsers,
+    authenticateLocal,
     hashPassword,
     syncSessionUser
   };
 
   // Auto-initialize on load (best-effort)
   try { ensureInitialized(); } catch(e){}
+  // Ensure default users exist (non-intrusive)
+  try { if (typeof ensureDefaultUsers === 'function') ensureDefaultUsers(); } catch(e){}
 
 })(window);

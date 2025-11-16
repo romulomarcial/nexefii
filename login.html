@@ -195,6 +195,36 @@ async function loadLoginI18N(){
           window.location.href = '/shell.html';
         }
       } catch (error) {
+        // If remote auth fails, attempt local authentication using UserModel
+        try {
+          console.log('[Login] Remote auth failed, attempting local auth for', user);
+          if (window.UserModel && typeof window.UserModel.authenticateLocal === 'function') {
+            const localUser = window.UserModel.authenticateLocal(user, pwd);
+            if (localUser) {
+              // treat localUser as session
+              const session = localUser;
+              localStorage.setItem('nexefii_lang', lang);
+              try {
+                var finalUser = null;
+                if (window.UserModel && typeof window.UserModel.syncSessionUser === 'function') {
+                  finalUser = window.UserModel.syncSessionUser(session);
+                } else {
+                  finalUser = Object.assign({}, session, { role: session.role || session.role, properties: session.properties || session.properties || [] });
+                  localStorage.setItem('nexefii_user', JSON.stringify(finalUser));
+                }
+                try {
+                  if (finalUser && finalUser.role && String(finalUser.role).toUpperCase() === 'MASTER') {
+                    localStorage.setItem('currentUser', JSON.stringify({ id: finalUser.id || null, role: 'master', email: finalUser.email || '' }));
+                  }
+                } catch(e){}
+              } catch(e){}
+              // redirect
+              const role = (window.SessionContext && typeof window.SessionContext.getUserRole === 'function') ? window.SessionContext.getUserRole() : (session.role || 'MASTER');
+              if (role === 'MASTER') window.location.href = '/master-control.html'; else window.location.href = '/pages/property-dashboard.html';
+              return;
+            }
+          }
+        } catch (e) { console.warn('[Login] local auth fallback error', e); }
         showLoginError(error.message || L.genericError);
       }
     }

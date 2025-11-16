@@ -37,20 +37,6 @@
     "fdArrivalsHint": "Reservas com check-in hoje (confirmadas/pendentes).",
     "fdInHouseHint": "Hóspedes com check-in realizado.",
     "fdDeparturesHint": "Hóspedes com saída prevista para hoje.",
-    "master": {
-      "users": {
-        "title": "Gestão de Usuários",
-        "help": "Crie, edite e atribua propriedades e módulos aos usuários.",
-        "create": "Criar usuário",
-        "edit": "Editar usuário",
-        "resetPassword": "Resetar senha",
-        "activate": "Ativar",
-        "deactivate": "Desativar"
-      },
-      "breadcrumb": {
-        "users": "Usuários"
-      }
-    },
     "resPageTitle": "Reservas",
     "resFilters": "Filtros",
     "resDateFrom": "Data de Check-in",
@@ -350,20 +336,6 @@
     "fdArrivalsHint": "Reservations arriving today (confirmed/pending).",
     "fdInHouseHint": "Guests currently checked in.",
     "fdDeparturesHint": "Guests scheduled to depart today.",
-    "master": {
-      "users": {
-        "title": "User Management",
-        "help": "Create, edit and assign properties and modules to users.",
-        "create": "Create user",
-        "edit": "Edit user",
-        "resetPassword": "Reset password",
-        "activate": "Activate",
-        "deactivate": "Deactivate"
-      },
-      "breadcrumb": {
-        "users": "Users"
-      }
-    },
     "resPageTitle": "Reservations",
     "resFilters": "Filters",
     "resDateFrom": "Check-in Date",
@@ -662,20 +634,6 @@
     "fdArrivalsHint": "Reservas con llegada hoy (confirmadas/pendientes).",
     "fdInHouseHint": "Huéspedes actualmente con check-in.",
     "fdDeparturesHint": "Huéspedes programados para salir hoy.",
-    "master": {
-      "users": {
-        "title": "Gestión de Usuarios",
-        "help": "Cree, edite y asigne propiedades y módulos a los usuarios.",
-        "create": "Crear usuario",
-        "edit": "Editar usuario",
-        "resetPassword": "Restablecer contraseña",
-        "activate": "Activar",
-        "deactivate": "Desactivar"
-      },
-      "breadcrumb": {
-        "users": "Usuarios"
-      }
-    },
     "resPageTitle": "Reservas",
     "resFilters": "Filtros",
     "resDateFrom": "Fecha de Check-in",

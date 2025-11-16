@@ -9,6 +9,38 @@
       "activate": "Activate",
       "deactivate": "Deactivate"
     },
+    "integrations": {
+      "title": "Integrations",
+      "selectProperty": "Select property",
+      "module": "Module",
+      "provider": "Provider",
+      "environment": "Environment",
+      "status": "Status",
+      "addIntegration": "Add Integration",
+      "editIntegration": "Edit Integration",
+      "deleteIntegration": "Delete Integration",
+      "enabled": "Enabled",
+      "disabled": "Disabled",
+      "lastSync": "Last Sync",
+      "helpText": "Manage integrations per property (PMS, OTA, IOT, Door Lock, POS, etc.)."
+    },
+    "breadcrumb": {
+      "users": "Users",
+      "integrations": "Integrations"
+    }
+  }
+}
+{
+  "master": {
+    "users": {
+      "title": "User Management",
+      "help": "Create, edit and assign properties and modules to users.",
+      "create": "Create user",
+      "edit": "Edit user",
+      "resetPassword": "Reset password",
+      "activate": "Activate",
+      "deactivate": "Deactivate"
+    },
     "breadcrumb": {
       "users": "Users"
     }

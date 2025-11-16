@@ -19,10 +19,12 @@
     if (!ensureMaster()) return;
     const listArea = $id('usersListArea');
     const btnCreate = $id('btnCreateUser');
+    const btnSeed = $id('btnSeedDemo');
     const formCard = $id('userFormCard');
     let editingId = null;
 
     btnCreate.addEventListener('click', ()=>{ openForm(); });
+    if (btnSeed) btnSeed.addEventListener('click', ()=>{ if (window.DemoSeeder && typeof window.DemoSeeder.seedDemoEnvironment === 'function') { window.DemoSeeder.seedDemoEnvironment(); renderList(); populatePropsChecklist(); } else { alert('DemoSeeder não disponível'); } });
     $id('uf_cancel').addEventListener('click', ()=>{ formCard.style.display='none'; editingId=null; });
     $id('uf_save').addEventListener('click', saveForm);
 
