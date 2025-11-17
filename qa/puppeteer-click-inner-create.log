@@ -1,0 +1,13 @@
+[console:warn] [I18n] master-control boot error JSHandle@error
+[console:log] [DemoData] ðŸŽ­ Demo Data Generator carregado
+[console:log] 🚀 Iniciando Master Control System...
+[console:log] 📦 window.NexefiiProps disponível? true
+[console:log] ✅ NexefiiProps.listProperties() retornou 3 propriedades: JSHandle@array
+[fatal] TimeoutError: Navigation timeout of 60000 ms exceeded
+    at new Deferred (R:\Development\Projects\nexefii\node_modules\puppeteer-core\lib\cjs\puppeteer\util\Deferred.js:60:34)
+    at Deferred.create (R:\Development\Projects\nexefii\node_modules\puppeteer-core\lib\cjs\puppeteer\util\Deferred.js:21:16)
+    at new LifecycleWatcher (R:\Development\Projects\nexefii\node_modules\puppeteer-core\lib\cjs\puppeteer\cdp\LifecycleWatcher.js:73:60)
+    at CdpFrame.goto (R:\Development\Projects\nexefii\node_modules\puppeteer-core\lib\cjs\puppeteer\cdp\Frame.js:149:29)
+    at CdpFrame.<anonymous> (R:\Development\Projects\nexefii\node_modules\puppeteer-core\lib\cjs\puppeteer\util\decorators.js:109:27)
+    at CdpPage.goto (R:\Development\Projects\nexefii\node_modules\puppeteer-core\lib\cjs\puppeteer\api\Page.js:572:43)
+    at R:\Development\Projects\nexefii\qa\puppeteer-click-inner-create.js:36:16

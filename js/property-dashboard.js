@@ -107,8 +107,35 @@
       sel.appendChild(o);
     });
     sel.addEventListener('change', (e)=>{
-      const val = e.target.value; SC.setActiveProperty(val); const active = SC.getActiveProperty(); loadAndRender(active);
+      const val = e.target.value;
+      // persist via SessionContext (writes nexefii_active_property)
+      try { SC.setActiveProperty(val); } catch(e) { try { localStorage.setItem('nexefii_active_property', String(val)); } catch(_){} }
+      // notify same-window listeners (storage event doesn't fire in same window)
+      try { window.dispatchEvent(new CustomEvent('nexefii-active-change', { detail: { id: val } })); } catch(_) {}
+      const active = SC.getActiveProperty(); loadAndRender(active);
     });
+
+    // Listen for external storage changes (e.g., wizard created property in another window)
+    window.addEventListener('storage', function(e){
+      try {
+        if (!e || !e.key) return;
+        if (e.key === 'nexefii_active_property') {
+          const newId = e.newValue;
+          if (!newId) return;
+          const selEl = document.getElementById('propSelect');
+          if (selEl) {
+            // try to set selector value if option exists
+            const found = Array.from(selEl.options).some(o => { if (o.value === newId) { selEl.value = newId; return true; } return false; });
+            const props = SC.getAccessibleProperties() || [];
+            const foundProp = props.find(p => (p.id && p.id.toString() === newId.toString()) || (p.key && p.key.toString() === newId.toString()) || (p.slug && p.slug === newId));
+            if (foundProp) loadAndRender(foundProp);
+          }
+        }
+      } catch (err) { /* ignore */ }
+    });
+
+    // Also respond to same-window custom events
+    window.addEventListener('nexefii-active-change', function(ev){ try { const id = ev && ev.detail && ev.detail.id; if (!id) return; const selEl = document.getElementById('propSelect'); if (selEl) { const found = Array.from(selEl.options).some(o => { if (o.value === id) { selEl.value = id; return true; } return false; }); } const props = SC.getAccessibleProperties() || []; const foundProp = props.find(p => (p.id && p.id.toString() === id.toString()) || (p.key && p.key.toString() === id.toString()) || (p.slug && p.slug === id)); if (foundProp) loadAndRender(foundProp); } catch(_){} });
   }
 
   async function init() {

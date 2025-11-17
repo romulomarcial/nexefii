@@ -7,13 +7,13 @@
 (function() {
   'use strict';
 
-  // Esperar masterCtrl estar disponível
+  // Esperar masterCtrl estar disponível (safe: check window.masterCtrl)
   function waitForMasterCtrl(callback) {
-    if (typeof masterCtrl !== 'undefined') {
-      callback();
-    } else {
-      setTimeout(() => waitForMasterCtrl(callback), 100);
-    }
+    try {
+      const instance = window.masterCtrl || (window.NEXEFII && window.NEXEFII.masterControl) || null;
+      if (instance) { callback(); return; }
+    } catch(_) {}
+    setTimeout(() => waitForMasterCtrl(callback), 100);
   }
 
   // ========================================

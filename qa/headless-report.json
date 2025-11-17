@@ -1,31 +1,35 @@
 {
-  "startedAt": "2025-11-17T13:50:54.105Z",
+  "startedAt": "2025-11-17T17:02:27.628Z",
   "baseUrl": "http://127.0.0.1:8004",
   "pages": [
     {
       "url": "http://127.0.0.1:8004/",
-      "startedAt": "2025-11-17T13:50:57.769Z",
-      "status": null,
+      "startedAt": "2025-11-17T17:02:45.474Z",
+      "status": 200,
       "metrics": {
         "console": {
           "error": 0,
           "warn": 0,
-          "log": 0
+          "log": 1
         },
         "pageErrors": 0,
         "http4xx5xx": 0
       },
-      "console": [],
+      "console": [
+        {
+          "type": "info",
+          "text": "✓ Demo user created - Username: demo | Password: demo123 | Properties: São Paulo, Miami"
+        }
+      ],
       "pageErrors": [],
       "httpErrors": [],
       "ok": true,
-      "gotoError": "Error: net::ERR_CONNECTION_REFUSED at http://127.0.0.1:8004/",
-      "finishedAt": "2025-11-17T13:51:00.605Z"
+      "finishedAt": "2025-11-17T17:02:47.255Z"
     },
     {
       "url": "http://127.0.0.1:8004/index.html",
-      "startedAt": "2025-11-17T13:51:00.701Z",
-      "status": null,
+      "startedAt": "2025-11-17T17:02:47.367Z",
+      "status": 200,
       "metrics": {
         "console": {
           "error": 0,
@@ -39,32 +43,52 @@
       "pageErrors": [],
       "httpErrors": [],
       "ok": true,
-      "gotoError": "Error: net::ERR_CONNECTION_REFUSED at http://127.0.0.1:8004/index.html",
-      "finishedAt": "2025-11-17T13:51:03.580Z"
+      "finishedAt": "2025-11-17T17:02:49.158Z"
     },
     {
       "url": "http://127.0.0.1:8004/master-control.html",
-      "startedAt": "2025-11-17T13:51:03.696Z",
+      "startedAt": "2025-11-17T17:02:49.218Z",
       "status": null,
       "metrics": {
         "console": {
           "error": 0,
-          "warn": 0,
-          "log": 0
+          "warn": 1,
+          "log": 4
         },
         "pageErrors": 0,
         "http4xx5xx": 0
       },
-      "console": [],
+      "console": [
+        {
+          "type": "warn",
+          "text": "[I18n] master-control boot error JSHandle@error"
+        },
+        {
+          "type": "log",
+          "text": "[DemoData] ðŸŽ­ Demo Data Generator carregado"
+        },
+        {
+          "type": "log",
+          "text": "🚀 Iniciando Master Control System..."
+        },
+        {
+          "type": "log",
+          "text": "📦 window.NexefiiProps disponível? true"
+        },
+        {
+          "type": "log",
+          "text": "✅ NexefiiProps.listProperties() retornou 2 propriedades: JSHandle@array"
+        }
+      ],
       "pageErrors": [],
       "httpErrors": [],
       "ok": true,
-      "gotoError": "Error: net::ERR_CONNECTION_REFUSED at http://127.0.0.1:8004/master-control.html",
-      "finishedAt": "2025-11-17T13:51:06.536Z"
+      "gotoError": "TimeoutError: Navigation timeout of 120000 ms exceeded",
+      "finishedAt": "2025-11-17T17:04:50.025Z"
     },
     {
       "url": "http://127.0.0.1:8004/alerts-control.html",
-      "startedAt": "2025-11-17T13:51:06.643Z",
+      "startedAt": "2025-11-17T17:04:50.099Z",
       "status": null,
       "metrics": {
         "console": {
@@ -79,12 +103,12 @@
       "pageErrors": [],
       "httpErrors": [],
       "ok": true,
-      "gotoError": "Error: net::ERR_CONNECTION_REFUSED at http://127.0.0.1:8004/alerts-control.html",
-      "finishedAt": "2025-11-17T13:51:09.469Z"
+      "gotoError": "TimeoutError: Navigation timeout of 120000 ms exceeded",
+      "finishedAt": "2025-11-17T17:06:50.905Z"
     },
     {
       "url": "http://127.0.0.1:8004/housekeeping-control.html",
-      "startedAt": "2025-11-17T13:51:09.596Z",
+      "startedAt": "2025-11-17T17:06:50.997Z",
       "status": null,
       "metrics": {
         "console": {
@@ -99,12 +123,12 @@
       "pageErrors": [],
       "httpErrors": [],
       "ok": true,
-      "gotoError": "Error: net::ERR_CONNECTION_REFUSED at http://127.0.0.1:8004/housekeeping-control.html",
-      "finishedAt": "2025-11-17T13:51:12.444Z"
+      "gotoError": "TimeoutError: Navigation timeout of 120000 ms exceeded",
+      "finishedAt": "2025-11-17T17:08:51.802Z"
     },
     {
       "url": "http://127.0.0.1:8004/engineering-list.html",
-      "startedAt": "2025-11-17T13:51:12.514Z",
+      "startedAt": "2025-11-17T17:08:51.937Z",
       "status": null,
       "metrics": {
         "console": {
@@ -119,8 +143,8 @@
       "pageErrors": [],
       "httpErrors": [],
       "ok": true,
-      "gotoError": "Error: net::ERR_CONNECTION_REFUSED at http://127.0.0.1:8004/engineering-list.html",
-      "finishedAt": "2025-11-17T13:51:15.349Z"
+      "gotoError": "TimeoutError: Navigation timeout of 120000 ms exceeded",
+      "finishedAt": "2025-11-17T17:10:52.743Z"
     }
   ],
   "summary": {
@@ -129,5 +153,5 @@
     "consoleErrors": 0,
     "httpErrors": 0
   },
-  "finishedAt": "2025-11-17T13:51:15.629Z"
+  "finishedAt": "2025-11-17T17:10:53.097Z"
 }

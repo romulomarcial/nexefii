@@ -73,3 +73,41 @@
 	});
 
 })(this);
+
+// Expose a safe, canonical helper to read properties without instantiating MasterControlSystem
+(function (global) {
+	try {
+		global.NEXEFII = global.NEXEFII || {};
+		if (!global.NEXEFII.getAllProperties) {
+			global.NEXEFII.getAllProperties = function () {
+				try {
+					const safeParse = function (s, fb) { try { return s ? JSON.parse(s) : fb; } catch (e) { return fb; } };
+					const seen = new Set();
+					const out = [];
+					// try NexefiiProps
+					try {
+						if (global.NexefiiProps && typeof global.NexefiiProps.listProperties === 'function') {
+							const list = global.NexefiiProps.listProperties() || [];
+							list.forEach(p => { const id = p && (p.key || p.id || p.slug); if (id && !seen.has(id)) { seen.add(id); out.push({ id, name: (p && p.name) || id }); } });
+						}
+					} catch (e) { /* ignore */ }
+
+					// try localStorage map
+					try {
+						const map = safeParse(global.localStorage.getItem('nexefii_properties'), {});
+						Object.keys(map || {}).forEach(id => { if (id && !seen.has(id)) { seen.add(id); out.push({ id, name: id }); } });
+					} catch (e) { /* ignore */ }
+
+					// try enterprise backup
+					try {
+						if (global.enterpriseBackup && global.enterpriseBackup.tenantBackups) {
+							Object.keys(global.enterpriseBackup.tenantBackups).forEach(tid => { if (tid && !seen.has(tid)) { seen.add(tid); out.push({ id: tid, name: tid }); } });
+						}
+					} catch (e) { /* ignore */ }
+
+					return out;
+				} catch (e) { return []; }
+			};
+		}
+	} catch (e) { /* noop */ }
+})(this);

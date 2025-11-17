@@ -1,0 +1,1 @@
+- **Propriedades tab inner button:** Propriedades tab inner 'Criar Propriedade' button wired to reuse the header `btnCreateProperty` wizard flow (no layout or markup changes).

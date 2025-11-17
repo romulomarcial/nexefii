@@ -7,7 +7,12 @@
   function readRawUser() {
     try {
       const raw = localStorage.getItem(STORAGE_KEY);
-      if (!raw) return null;
+      if (!raw) {
+        // fallbacks for legacy/demo keys
+        const alt = localStorage.getItem('nexefii_session') || localStorage.getItem('currentUser') || localStorage.getItem('nexefii_session');
+        if (!alt) return null;
+        try { return JSON.parse(alt); } catch(e) { return null; }
+      }
       return JSON.parse(raw);
     } catch (e) { return null; }
   }

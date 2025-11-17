@@ -7,6 +7,7 @@
   <link rel="icon" type="image/svg+xml" href="favicon.svg">
   <link rel="alternate icon" href="favicon.ico">
   <link rel="stylesheet" href="sprints/sprint-13/outputs/web/css/style.css">
+  <script src="/core/i18n/I18nManager.js"></script>
   <script>
     // Client-side auth guard (redirect to login when not authenticated)
     (function(){
@@ -110,8 +111,12 @@
         (function(){
           function openWizard(){
             try {
-              var w = window.open('/pages/wizard.html','_blank','noopener,noreferrer');
-              if (!w) { console.warn('[Master] popup blocked when opening wizard'); }
+              try {
+                // Open wizard in the same tab (no popup)
+                location.href = 'pages/wizard.html?mode=create&from=master-control';
+              } catch(e) {
+                console.warn('[Master] openWizard navigation failed', e);
+              }
             } catch(e){ console.warn('[Master] openWizard error', e); }
           }
 
@@ -130,8 +135,19 @@
           }
 
           document.addEventListener('DOMContentLoaded', function(){
-            var btn = document.getElementById('btnCreateProperty');
-            if (btn) btn.addEventListener('click', openWizard);
+            // Attach openWizard to all elements that may trigger wizard (covers duplicate IDs)
+            try {
+              var btns = document.querySelectorAll('#btnCreateProperty');
+              if (btns && btns.length) {
+                btns.forEach(function(b){
+                  try {
+                    // avoid double-binding if script re-executes
+                    if (!b.__wizardHooked) { b.addEventListener('click', openWizard); b.__wizardHooked = true; }
+                  } catch(e) { /* skip individual button errors */ }
+                });
+              }
+            } catch(e) { console.warn('[Master] warning attaching createProperty handlers', e); }
+
             // if wizard already wrote a selection before this tab gained focus
             try { var pending = localStorage.getItem('nexefii_wizard_selected_property'); if (pending) { applyWizardSelection(pending); localStorage.removeItem('nexefii_wizard_selected_property'); } } catch(e){}
           });
@@ -2136,6 +2152,7 @@
 
   </div>
   <script src="core/i18n/I18nManager.js"></script>
+  <script src="core/init/setActivePropertyFromQuery.js"></script>
   <script>
     // Initialize I18n for master-control and apply translations
     (function(){
@@ -2144,6 +2161,9 @@
         (async function(){
           try {
             await window.__nexefii_i18n.loadTranslations();
+            // expose to legacy consumers
+            window.NEXEFII = window.NEXEFII || {};
+            window.NEXEFII.i18n = window.__nexefii_i18n;
             await window.__nexefii_i18n.loadSegment(null,'master-control');
             window.__nexefii_i18n.applyToDOM(document);
             // Sync <title> if present

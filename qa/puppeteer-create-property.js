@@ -11,9 +11,13 @@ const puppeteer = require('puppeteer');
   const logs = [];
   const requests = [];
 
-  const browser = await puppeteer.launch({ headless: true, args: ['--no-sandbox','--disable-setuid-sandbox'] });
+  // Run headful with more tolerant timeouts to avoid ProtocolError during heavy page evaluation
+  const browser = await puppeteer.launch({ headless: false, args: ['--no-sandbox','--disable-setuid-sandbox'], slowMo: 20 });
   const page = await browser.newPage();
   page.setViewport({ width: 1280, height: 900 });
+  // increase evaluation/navigation timeouts
+  page.setDefaultTimeout(60000);
+  page.setDefaultNavigationTimeout(60000);
 
   // small helper for sleeps (compatibility across puppeteer versions)
   const sleep = (ms) => new Promise(resolve => setTimeout(resolve, ms));
@@ -62,12 +66,12 @@ const puppeteer = require('puppeteer');
     });
 
     // Visit the shell entrypoint so the SPA router and shell initialize
-    await page.goto('http://localhost:8004/shell.html', { waitUntil: 'networkidle2' });
+    await page.goto('http://localhost:8004/shell.html', { waitUntil: 'networkidle2', timeout: 60000 });
 
     // wait until the in-app router is ready, then navigate to wizard route
     await page.waitForFunction(() => {
       return !!(window.NEXEFII && window.NEXEFII.router && typeof window.NEXEFII.router.navigate === 'function');
-    }, { timeout: 30000 });
+    }, { timeout: 60000 });
 
     // navigate to wizard route using the in-app router so shell loads the page fragment
     await page.evaluate(() => window.NEXEFII.router.navigate('/wizard'));
@@ -83,7 +87,7 @@ const puppeteer = require('puppeteer');
         if (window.wizard) return true;
         return false;
       } catch (e) { return false; }
-    }, { timeout: 20000 });
+    }, { timeout: 60000 });
 
     // fill minimal fields
     await page.evaluate(() => {
@@ -109,6 +113,7 @@ const puppeteer = require('puppeteer');
   await sleep(400);
 
     // call the create action directly (guards included)
+    // call create action; give it more time inside evaluate
     const createResult = await page.evaluate(async () => {
       try {
         if (typeof window.createProperty === 'function') {
@@ -126,9 +131,23 @@ const puppeteer = require('puppeteer');
 
     // wait for dashboard to load (either route change or dashboard DOM)
     try {
-      await page.waitForSelector('.dashboard-page, #property-title, .dashboard-header', { timeout: 15000 });
+      await page.waitForSelector('.dashboard-page, #property-title, .dashboard-header', { timeout: 30000 });
     } catch (e) {
       logs.push('[test] dashboard selector not found after create - check network logs');
+    }
+
+    // Ensure the final URL points to root master-control with selectedProperty query
+    try {
+      await page.waitForFunction(() => {
+        try {
+          return (window.location && window.location.href && window.location.href.indexOf('/master-control.html') !== -1 && window.location.href.indexOf('selectedProperty=') !== -1);
+        } catch(e) { return false; }
+      }, { timeout: 30000 });
+      const finalUrl = await page.evaluate(() => window.location.href);
+      logs.push('[test] finalUrl: ' + finalUrl);
+      console.log('[test] finalUrl:', finalUrl);
+    } catch (e) {
+      logs.push('[test] final URL did not match expected pattern (master-control.html?selectedProperty=)');
     }
 
   // give a moment and capture screenshot

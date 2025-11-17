@@ -10,11 +10,11 @@
 
   // === WAIT FOR MASTER CONTROL TO BE READY ===
   function waitForMasterCtrl(callback) {
-    if (typeof masterCtrl !== 'undefined') {
-      callback();
-    } else {
-      setTimeout(() => waitForMasterCtrl(callback), 100);
-    }
+    try {
+      const instance = window.masterCtrl || (window.NEXEFII && window.NEXEFII.masterControl) || null;
+      if (instance) { callback(); return; }
+    } catch(_) {}
+    setTimeout(() => waitForMasterCtrl(callback), 100);
   }
 
   // === HELP SYSTEM ===

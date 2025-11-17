@@ -80,6 +80,12 @@ class MasterControlSystem {
         if (!window.masterCtrl) {
           window.masterCtrl = new MasterControlSystem();
         }
+        // Expose canonical reference for legacy scripts
+        try {
+          window.NEXEFII = window.NEXEFII || {};
+          window.NEXEFII.masterControl = window.masterCtrl;
+          window.masterCtrl = window.masterCtrl; // ensure global exists
+        } catch(_) {}
         if (typeof window.masterCtrl.initUI === 'function') {
           window.masterCtrl.initUI();
         }
@@ -225,6 +231,28 @@ class MasterControlSystem {
         typeof args[i] !== 'undefined' ? args[i] : m
       );
     } catch { return str; }
+  }
+
+  // Safe addLog method: stores a log entry and prints to console.
+  addLog(level = 'info', message = '', meta = null) {
+    try {
+      const entry = {
+        ts: new Date().toISOString(),
+        level: String(level || 'info'),
+        message: String(message || ''),
+        meta: meta || null
+      };
+      try { this.logs = this.logs || []; this.logs.push(entry); } catch(_) {}
+      try { console.log('[MasterControlLog]', entry); } catch(_) {}
+      // Forward to enterprise logger if present
+      try {
+        if (window.NEXEFII && window.NEXEFII.Log && typeof window.NEXEFII.Log.write === 'function') {
+          try { window.NEXEFII.Log.write(entry); } catch(_) {}
+        }
+      } catch(_) {}
+    } catch (e) {
+      try { console.warn('[MasterControlLog] addLog failed', e); } catch(_) {}
+    }
   }
 
   // ========================================
