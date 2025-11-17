@@ -1,0 +1,41 @@
+{
+  "master": {
+    "title": "Painel Master",
+    "badge": "SUPER ADMIN",
+    "user": "Usuário Master",
+    "integrations": {
+      "title": "Integrações"
+    }
+  },
+  "btn": {
+    "createProperty": "Criar Propriedade",
+    "logout": "Sair"
+  },
+  "nav": {
+    "propertyDashboard": "Painel da Propriedade",
+    "pms": "PMS - Frontdesk",
+    "housekeeping": "Governança",
+    "engineering": "Engenharia",
+    "alerts": "Alertas / TI",
+    "admin": "Admin"
+  },
+  "tabs": {
+    "dashboard": "Dashboard",
+    "backups": "Backups",
+    "releases": "Releases & Rollback",
+    "users": "Usuários",
+    "integrations": "Integrações",
+    "properties": "Propriedades",
+    "logs": "Logs & Auditoria",
+    "settings": "Configurações",
+    "maintenance": "Manutenção",
+    "i18n": "Internacionalização",
+    "metrics": "Métricas"
+  },
+  "breadcrumb": {
+    "integrations": "Integrações",
+    "dashboard": "Dashboard",
+    "home": "Início",
+    "backups": "Backups"
+  }
+}

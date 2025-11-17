@@ -3,6 +3,7 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
+  <script src="/core/i18n/I18nManager.js"></script>
   
     <style>
     .progress-container {
@@ -1235,6 +1236,24 @@
       <span data-i18n="wizard.buttons.next">Próximo</span> →
     </button>
   </div>
+</div>
+
+<script>
+  // Initialize I18n for wizard page
+  (function(){
+    try {
+      window.__nexefii_i18n = window.__nexefii_i18n || new I18nManager();
+      (async function(){
+        try {
+          await window.__nexefii_i18n.loadTranslations();
+          await window.__nexefii_i18n.loadSegment(null,'wizard');
+          window.__nexefii_i18n.applyToDOM(document);
+          var t = document.querySelector('title'); if(t) t.textContent = window.__nexefii_i18n.t('wizard.title');
+        } catch(e){ console.warn('[I18n] wizard init failed', e); }
+      })();
+    } catch(e){ console.warn('[I18n] wizard boot error', e); }
+  })();
+</script>
 </div>
 
     </div>
@@ -2513,4 +2532,37 @@
 <script src="../js/lang-switcher.js"></script>
 </body>
 </html>
+<script>
+  // Wizard integration helper: when the wizard completes, call `wizardSelectProperty(propId)`
+  (function(){
+    window.wizardSelectProperty = function(propId){
+      try {
+        if (!propId) return;
+        // Persist selection so opener can react via storage event
+        localStorage.setItem('nexefii_wizard_selected_property', String(propId));
+        // Also set active property for this window/session
+        try { localStorage.setItem('nexefii_active_property', String(propId)); } catch(e){}
+        // Close the wizard window if it was opened as a popup
+        try { if (window.opener) { window.close(); return; } } catch(e){}
+        // If not popup, navigate back to master-control to show result
+        try { location.href = '/master-control.html'; } catch(e){}
+      } catch(e){ console.warn('[Wizard] wizardSelectProperty error', e); }
+    };
+
+    // Best-effort: attach to common finish button ids/classes if present
+    document.addEventListener('DOMContentLoaded', function(){
+      var btn = document.getElementById('wizardFinish') || document.querySelector('[data-action="wizard-finish"]') || document.querySelector('.wizard-finish');
+      if (btn) {
+        btn.addEventListener('click', function(ev){
+          try {
+            // attempt to read a property id input
+            var inp = document.querySelector('[name="propertyId"]') || document.getElementById('propertyId');
+            var val = inp ? (inp.value || inp.dataset && inp.dataset.value) : null;
+            if (val) window.wizardSelectProperty(val);
+          } catch(e){ /* ignore */ }
+        });
+      }
+    });
+  })();
+</script>
 

@@ -150,6 +150,27 @@
           try { localStorage.setItem('currentUser', JSON.stringify({ id: sessionUser.id || null, role: 'master', email: sessionUser.email || '' })); } catch(e){}
           window.location.href = '/master-control.html';
         } else {
+          // For non-master users, pick an active property when available and include it in the redirect.
+          try {
+            let propId = null;
+            if (sessionUser && Array.isArray(sessionUser.properties) && sessionUser.properties.length) {
+              const p = sessionUser.properties[0];
+              propId = (p && (p.id || p.key || p.slug)) || p;
+            }
+            if (!propId && window.SessionContext && typeof SessionContext.getAccessibleProperties === 'function') {
+              const props = SessionContext.getAccessibleProperties() || [];
+              if (props.length) {
+                const p = props[0];
+                propId = (p && (p.id || p.key || p.slug)) || p;
+              }
+            }
+            if (propId) {
+              try { window.SessionContext && window.SessionContext.setActiveProperty && window.SessionContext.setActiveProperty(propId); } catch(e){}
+              window.location.href = '/pages/property-dashboard.html?propertyId=' + encodeURIComponent(propId);
+              return;
+            }
+          } catch(e) { /* best-effort, fall through to default redirect */ }
+
           window.location.href = '/pages/property-dashboard.html';
         }
       }

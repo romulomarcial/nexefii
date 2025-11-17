@@ -97,13 +97,56 @@
     <!-- Header -->
     <div class="master-header">
     <div class="header-left">
-  <h1><span class="icon">🔐</span> <span data-i18n="title">Painel Master</span></h1>
-  <span class="master-badge" data-i18n="badge">SUPER ADMIN</span>
+    <h1><span class="icon">🔐</span> <span data-i18n="master.title">Painel Master</span></h1>
+    <span class="master-badge" data-i18n="master.badge">SUPER ADMIN</span>
       </div>
   <div class="header-right">
-    <span class="user-info" id="masterUserInfo">Master User</span>
+      <span class="user-info" id="masterUserInfo" data-i18n="master.user">Master User</span>
   <button class="btn btn-danger" id="btnLogoutMaster"><span class="icon">🚪</span> <span data-i18n="logout">Sair</span></button>
+    <button class="btn btn-primary" id="btnCreateProperty" title="Criar Propriedade"><span class="icon">➕</span> <span data-i18n="btn.createProperty">Criar Propriedade</span></button>
       </div>
+      <script>
+        // Open wizard and listen for selected property via localStorage key set by wizard
+        (function(){
+          function openWizard(){
+            try {
+              var w = window.open('/pages/wizard.html','_blank','noopener,noreferrer');
+              if (!w) { console.warn('[Master] popup blocked when opening wizard'); }
+            } catch(e){ console.warn('[Master] openWizard error', e); }
+          }
+
+          function applyWizardSelection(propId){
+            try {
+              if (!propId) return;
+              if (window.SessionContext && typeof SessionContext.setActiveProperty === 'function') {
+                SessionContext.setActiveProperty(propId);
+              } else {
+                try { localStorage.setItem('nexefii_active_property', propId); } catch(e){}
+              }
+              // best-effort: refresh to reflect selection
+              console.log('[Master] Wizard selected property:', propId, '— refreshing UI');
+              setTimeout(function(){ location.reload(); }, 300);
+            } catch(e){ console.warn('[Master] applyWizardSelection error', e); }
+          }
+
+          document.addEventListener('DOMContentLoaded', function(){
+            var btn = document.getElementById('btnCreateProperty');
+            if (btn) btn.addEventListener('click', openWizard);
+            // if wizard already wrote a selection before this tab gained focus
+            try { var pending = localStorage.getItem('nexefii_wizard_selected_property'); if (pending) { applyWizardSelection(pending); localStorage.removeItem('nexefii_wizard_selected_property'); } } catch(e){}
+          });
+
+          window.addEventListener('storage', function(e){
+            try {
+              if (!e) return;
+              if (e.key === 'nexefii_wizard_selected_property' && e.newValue) {
+                applyWizardSelection(e.newValue);
+                try { localStorage.removeItem('nexefii_wizard_selected_property'); } catch(e){}
+              }
+            } catch(err){ console.warn('[Master] storage handler error', err); }
+          });
+        })();
+      </script>
     </div>
 
     <!-- Integrations Tab -->
@@ -159,6 +202,18 @@
   <button class="tab-btn" data-tab="maintenance"><span class="icon">🔧</span> <span data-i18n="tabs.maintenance">Manutenção</span></button>
   <button class="tab-btn" data-tab="i18n"><span class="icon">🌐</span> <span data-i18n="tabs.i18n">Internacionalização</span></button>
   <button class="tab-btn" data-tab="metrics"><span class="icon">�</span> <span data-i18n="tabs.metrics">Métricas</span></button>
+    </div>
+
+    <!-- Quick Modules Navigation for Master -->
+    <div class="master-module-nav" style="margin:12px 0;display:flex;gap:8px;flex-wrap:wrap;">
+      <a class="btn btn-secondary" href="pms-frontdesk.html" data-i18n="nav.pms">PMS - Frontdesk</a>
+      <a class="btn btn-secondary" href="pms-rooms.html" data-i18n="nav.pms.rooms">PMS - Rooms</a>
+      <a class="btn btn-secondary" href="pms-reservations.html" data-i18n="nav.pms.reservations">PMS - Reservations</a>
+      <a class="btn btn-secondary" href="housekeeping-control.html" data-i18n="nav.housekeeping">Housekeeping</a>
+      <a class="btn btn-secondary" href="engineering-control.html" data-i18n="nav.engineering">Engineering</a>
+      <a class="btn btn-secondary" href="alerts-control.html" data-i18n="nav.alerts">Alerts / IT</a>
+      <a class="btn btn-secondary" href="admin.html" data-i18n="nav.admin">Admin</a>
+      <a class="btn btn-secondary" href="pages/property-dashboard.html" data-i18n="nav.propertyDashboard">Property Dashboard</a>
     </div>
 
     <!-- Dashboard Tab (formerly Overview) -->
@@ -2080,6 +2135,25 @@
     </div>
 
   </div>
+  <script src="core/i18n/I18nManager.js"></script>
+  <script>
+    // Initialize I18n for master-control and apply translations
+    (function(){
+      try {
+        window.__nexefii_i18n = window.__nexefii_i18n || new I18nManager();
+        (async function(){
+          try {
+            await window.__nexefii_i18n.loadTranslations();
+            await window.__nexefii_i18n.loadSegment(null,'master-control');
+            window.__nexefii_i18n.applyToDOM(document);
+            // Sync <title> if present
+            var t = document.getElementById('pageTitle');
+            if (t) t.textContent = window.__nexefii_i18n.t('master.title');
+          } catch(e){ console.warn('[I18n] master-control init failed', e); }
+        })();
+      } catch(e){ console.warn('[I18n] master-control boot error', e); }
+    })();
+  </script>
 
   <!-- Toasts (aria-live) -->
   <div id="toastContainer" class="toast-container" aria-live="polite" aria-atomic="true"></div>

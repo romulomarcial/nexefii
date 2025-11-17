@@ -43,5 +43,53 @@
   <script src="../js/property-dashboard-service.js"></script>
   <script src="../js/property-dashboard.js"></script>
   <script src="../js/lang-switcher.js"></script>
+  <script src="/core/i18n/I18nManager.js"></script>
+  <script>
+    // Initialize I18n for property dashboard
+    (function(){
+      try {
+        window.__nexefii_i18n = window.__nexefii_i18n || new I18nManager();
+        (async function(){
+          try {
+            await window.__nexefii_i18n.loadTranslations();
+            await window.__nexefii_i18n.loadSegment(null,'dashboard');
+            window.__nexefii_i18n.applyToDOM(document);
+            var t = document.querySelector('title'); if(t) t.textContent = window.__nexefii_i18n.t('dashboard.title');
+          } catch(e){ console.warn('[I18n] property-dashboard init failed', e); }
+        })();
+      } catch(e){ console.warn('[I18n] property-dashboard boot error', e); }
+    })();
+  </script>
+  <script>
+    // Populate modules grid with links to module pages, passing selected propertyId
+    (function(){
+      function makeCard(title, href) {
+        var d = document.createElement('div'); d.className='module-card';
+        d.tabIndex = 0;
+        d.innerHTML = '<strong>' + title + '</strong><div class="submodules">Abrir</div>';
+        d.addEventListener('click', function(){
+          try {
+            var sel = document.getElementById('propSelect');
+            var propId = sel && sel.value ? sel.value : (window.SessionContext && SessionContext.getActiveProperty && SessionContext.getActiveProperty() ? SessionContext.getActiveProperty().id : null);
+            if (propId) location.href = href + (href.indexOf('?')===-1 ? '?propertyId=' + encodeURIComponent(propId) : '&propertyId=' + encodeURIComponent(propId));
+            else location.href = href;
+          } catch(e){ location.href = href; }
+        });
+        return d;
+      }
+
+      document.addEventListener('DOMContentLoaded', function(){
+        var grid = document.getElementById('modulesGrid');
+        if (!grid) return;
+        grid.appendChild(makeCard('PMS - Frontdesk', '/pms-frontdesk.html'));
+        grid.appendChild(makeCard('PMS - Rooms', '/pms-rooms.html'));
+        grid.appendChild(makeCard('PMS - Reservations', '/pms-reservations.html'));
+        grid.appendChild(makeCard('Housekeeping', '/housekeeping-control.html'));
+        grid.appendChild(makeCard('Engineering', '/engineering-control.html'));
+        grid.appendChild(makeCard('Alerts / IT', '/alerts-control.html'));
+        grid.appendChild(makeCard('Admin', '/admin.html'));
+      });
+    })();
+  </script>
 </body>
 </html>
