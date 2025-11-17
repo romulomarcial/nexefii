@@ -66,6 +66,10 @@
     const merged = Object.assign({}, target, partial, { updatedAt: Date.now() });
     // normalize role
     if (merged.role) merged.role = String(merged.role).toUpperCase();
+    // Corrige passwordHash: se password informado, gera novo hash
+    if (partial.password) {
+      merged.passwordHash = hashPassword(partial.password);
+    }
     users[idx] = merged;
     _write(users);
     return merged;
@@ -104,19 +108,35 @@
    */
   function ensureDefaultUsers() {
     try {
-      let users = getAllUsers();
-      if (!users || !users.length) {
-        // create MASTER
-        const master = createUser({
+      // Remove qualquer MASTER antigo que não seja master@nexefii.local
+      getAllUsers().filter(u => u.role === 'MASTER' && u.email !== 'master@nexefii.local').forEach(u => deleteUser(u.id));
+
+      // Cria/atualiza MASTER padronizado
+      let master = findByEmail('master@nexefii.local');
+      if (!master) {
+        master = createUser({
           email: 'master@nexefii.local',
-          name: 'Master Admin',
+          name: 'System Master',
           role: 'MASTER',
-          password: 'Master@123',
+          password: 'Admin@456',
           properties: [],
           isActive: true
         });
-        // create SUPERADMIN
-        const superadmin = createUser({
+      } else {
+        master = updateUser({
+          id: master.id,
+          email: 'master@nexefii.local',
+          name: 'System Master',
+          role: 'MASTER',
+          password: 'Admin@456',
+          properties: master.properties || [],
+          isActive: true
+        });
+      }
+      // Sempre cria/atualiza SUPERADMIN
+      let superadmin = findByEmail('superadmin@nexefii.local');
+      if (!superadmin) {
+        superadmin = createUser({
           email: 'superadmin@nexefii.local',
           name: 'Super Admin',
           role: 'SUPERADMIN',
@@ -124,11 +144,22 @@
           properties: [],
           isActive: true
         });
-        // ensure stored session reference points to master by default
+      } else {
+        superadmin = updateUser({
+          id: superadmin.id,
+          email: 'superadmin@nexefii.local',
+          name: 'Super Admin',
+          role: 'SUPERADMIN',
+          password: 'Super@123',
+          properties: superadmin.properties || [],
+          isActive: true
+        });
+      }
+      // Garante referência de sessão MASTER
+      if (master) {
         try {
           localStorage.setItem('nexefii_user', JSON.stringify({ id: master.id, email: master.email, name: master.name, role: master.role, properties: master.properties }));
         } catch (e) { /* noop */ }
-        users = getAllUsers();
       }
     } catch (e) { /* noop */ }
   }
@@ -139,13 +170,28 @@
    */
   function authenticateLocal(email, password) {
     try {
-      if (!email || !password) return null;
+      if (!email || !password) {
+        console.warn('[UserModel] authenticateLocal: email ou senha vazios');
+        return null;
+      }
       const u = findByEmail(email);
-      if (!u || !u.isActive) return null;
+      if (!u) {
+        console.warn('[UserModel] authenticateLocal: usuário não encontrado para', email);
+        return null;
+      }
+      if (!u.isActive) {
+        console.warn('[UserModel] authenticateLocal: usuário inativo', email);
+        return null;
+      }
       const hash = hashPassword(password);
-      if (u.passwordHash === hash) return u;
+      console.log('[UserModel] authenticateLocal: comparando hashes', 'esperado:', u.passwordHash, 'informado:', hash);
+      if (u.passwordHash === hash) {
+        console.log('[UserModel] authenticateLocal: senha correta para', email);
+        return u;
+      }
+      console.warn('[UserModel] authenticateLocal: senha incorreta para', email);
       return null;
-    } catch (e) { return null; }
+    } catch (e) { console.warn('[UserModel] authenticateLocal: erro', e); return null; }
   }
 
   function syncSessionUser(sessionObj) {

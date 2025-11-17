@@ -30,6 +30,65 @@
       "privacy": "Privacidade",
       "terms": "Termos"
     },
+    "dashboard": {
+      "title": "Dashboard Executivo",
+      "subtitle": "Visão executiva por propriedade",
+      "selectProperty": "Selecionar Propriedade",
+      "loading": "Carregando propriedades...",
+      "noProperties": "Nenhuma propriedade disponível",
+      "noPropertiesDesc": "Crie ou obtenha acesso a uma propriedade para visualizar métricas.",
+      "openControl": "Abrir Controle",
+      "openAutomation": "Central Virtual de Automação",
+      "forecast": "Previsão (7 dias)",
+      "kpis": {
+        "title": "KPIs",
+        "occupancy": "Ocupação",
+        "roomsAvailable": "Quartos Disponíveis",
+        "roomsOccupied": "Quartos Ocupados",
+        "reservations7d": "Reservas (7d)",
+        "revenue": "Projeção de Receita"
+      },
+      "modules": {
+        "title": "Módulos",
+        "pms": "PMS",
+        "housekeeping": "Governança",
+        "engineering": "Engenharia",
+        "bi": "BI"
+      },
+      "submodules": {
+        "rooms": "Rooms",
+        "reservations": "Reservations",
+        "frontdesk": "Frontdesk"
+      },
+      "comparative": {
+        "title": "📊 KPIs Consolidados - Todas as Propriedades",
+        "avgOccupancy": "Ocupação Média",
+        "totalRevenue": "Receita Total Hoje",
+        "operations": "Operações Hoje",
+        "stayovers": "Stayovers",
+        "forecast": "Previsão 7 dias",
+        "totalAlerts": "Alertas Ativos",
+        "requiresAttention": "Requer atenção",
+        "bestPerformance": "Melhor Desempenho"
+      },
+      "kpi": {
+        "revenue": "Receita Hoje",
+        "rooms": "Quartos",
+        "operations": "Operações Hoje",
+        "alerts": "Alertas Ativos"
+      },
+      "reservas": {
+        "recentes": "Reservas Recentes",
+        "verTodas": "Ver Todas"
+      },
+      "acoes": {
+        "rapidas": "Ações Rápidas",
+        "quartos": "Quartos",
+        "novaReserva": "Nova Reserva",
+        "hospedes": "Hóspedes",
+        "configuracoes": "Configurações"
+      }
+    },
     "fdTitle": "Check-in / Check-out",
     "fdArrivals": "Chegadas Hoje",
     "fdInHouse": "Hóspedes In-House",
@@ -37,6 +96,36 @@
     "fdArrivalsHint": "Reservas com check-in hoje (confirmadas/pendentes).",
     "fdInHouseHint": "Hóspedes com check-in realizado.",
     "fdDeparturesHint": "Hóspedes com saída prevista para hoje.",
+    "master": {
+      "users": {
+        "title": "Gestão de Usuários",
+        "help": "Crie, edite e atribua propriedades e módulos aos usuários.",
+        "create": "Criar usuário",
+        "edit": "Editar usuário",
+        "resetPassword": "Resetar senha",
+        "activate": "Ativar",
+        "deactivate": "Desativar"
+      },
+      "integrations": {
+        "title": "Integrações",
+        "selectProperty": "Selecionar propriedade",
+        "module": "Módulo",
+        "provider": "Provedor",
+        "environment": "Ambiente",
+        "status": "Status",
+        "addIntegration": "Adicionar Integração",
+        "editIntegration": "Editar Integração",
+        "deleteIntegration": "Remover Integração",
+        "enabled": "Ativado",
+        "disabled": "Desativado",
+        "lastSync": "Última Sincronização",
+        "helpText": "Gerencie integrações por propriedade (PMS, OTA, IOT, Door Lock, POS, etc.)."
+      },
+      "breadcrumb": {
+        "users": "Usuários",
+        "integrations": "Integrações"
+      }
+    },
     "resPageTitle": "Reservas",
     "resFilters": "Filtros",
     "resDateFrom": "Data de Check-in",
@@ -329,6 +418,65 @@
       "privacy": "Privacy",
       "terms": "Terms"
     },
+    "dashboard": {
+      "title": "Executive Dashboard",
+      "subtitle": "Executive view by property",
+      "selectProperty": "Select Property",
+      "loading": "Loading properties...",
+      "noProperties": "No properties available",
+      "noPropertiesDesc": "Create or gain access to a property to view metrics.",
+      "openControl": "Open Control",
+      "openAutomation": "Virtual Automation Center",
+      "forecast": "7-day Forecast",
+      "kpis": {
+        "title": "KPIs",
+        "occupancy": "Occupancy",
+        "roomsAvailable": "Rooms Available",
+        "roomsOccupied": "Rooms Occupied",
+        "reservations7d": "Reservations (7d)",
+        "revenue": "Revenue Projection"
+      },
+      "modules": {
+        "title": "Modules",
+        "pms": "PMS",
+        "housekeeping": "Housekeeping",
+        "engineering": "Engineering",
+        "bi": "BI"
+      },
+      "submodules": {
+        "rooms": "Rooms",
+        "reservations": "Reservations",
+        "frontdesk": "Frontdesk"
+      },
+      "comparative": {
+        "title": "📊 Consolidated KPIs - All Properties",
+        "avgOccupancy": "Avg Occupancy",
+        "totalRevenue": "Total Revenue Today",
+        "operations": "Operations Today",
+        "stayovers": "Stayovers",
+        "forecast": "7-day Forecast",
+        "totalAlerts": "Active Alerts",
+        "requiresAttention": "Requires attention",
+        "bestPerformance": "Best Performance"
+      },
+      "kpi": {
+        "revenue": "Revenue Today",
+        "rooms": "Rooms",
+        "operations": "Operations Today",
+        "alerts": "Active Alerts"
+      },
+      "reservas": {
+        "recentes": "Recent Reservations",
+        "verTodas": "View All"
+      },
+      "acoes": {
+        "rapidas": "Quick Actions",
+        "quartos": "Rooms",
+        "novaReserva": "New Reservation",
+        "hospedes": "Guests",
+        "configuracoes": "Settings"
+      }
+    },
     "fdTitle": "Check-in / Check-out",
     "fdArrivals": "Today's Arrivals",
     "fdInHouse": "In-House Guests",
@@ -336,6 +484,36 @@
     "fdArrivalsHint": "Reservations arriving today (confirmed/pending).",
     "fdInHouseHint": "Guests currently checked in.",
     "fdDeparturesHint": "Guests scheduled to depart today.",
+    "master": {
+      "users": {
+        "title": "User Management",
+        "help": "Create, edit and assign properties and modules to users.",
+        "create": "Create user",
+        "edit": "Edit user",
+        "resetPassword": "Reset password",
+        "activate": "Activate",
+        "deactivate": "Deactivate"
+      },
+      "integrations": {
+        "title": "Integrations",
+        "selectProperty": "Select property",
+        "module": "Module",
+        "provider": "Provider",
+        "environment": "Environment",
+        "status": "Status",
+        "addIntegration": "Add Integration",
+        "editIntegration": "Edit Integration",
+        "deleteIntegration": "Delete Integration",
+        "enabled": "Enabled",
+        "disabled": "Disabled",
+        "lastSync": "Last Sync",
+        "helpText": "Manage integrations per property (PMS, OTA, IOT, Door Lock, POS, etc.)."
+      },
+      "breadcrumb": {
+        "users": "Users",
+        "integrations": "Integrations"
+      }
+    },
     "resPageTitle": "Reservations",
     "resFilters": "Filters",
     "resDateFrom": "Check-in Date",
@@ -627,6 +805,65 @@
       "privacy": "Privacidad",
       "terms": "Términos"
     },
+    "dashboard": {
+      "title": "Panel Ejecutivo",
+      "subtitle": "Visión ejecutiva por propiedad",
+      "selectProperty": "Seleccionar Propiedad",
+      "loading": "Cargando propiedades...",
+      "noProperties": "No hay propiedades disponibles",
+      "noPropertiesDesc": "Cree u obtenga acceso a una propiedad para ver métricas.",
+      "openControl": "Abrir Control",
+      "openAutomation": "Centro Virtual de Automatización",
+      "forecast": "Pronóstico 7 días",
+      "kpis": {
+        "title": "KPIs",
+        "occupancy": "Ocupación",
+        "roomsAvailable": "Habitaciones Disponibles",
+        "roomsOccupied": "Habitaciones Ocupadas",
+        "reservations7d": "Reservas (7d)",
+        "revenue": "Proyección de Ingresos"
+      },
+      "modules": {
+        "title": "Módulos",
+        "pms": "PMS",
+        "housekeeping": "Governanza",
+        "engineering": "Ingeniería",
+        "bi": "BI"
+      },
+      "submodules": {
+        "rooms": "Rooms",
+        "reservations": "Reservations",
+        "frontdesk": "Frontdesk"
+      },
+      "comparative": {
+        "title": "📊 KPIs Consolidados - Todas las Propiedades",
+        "avgOccupancy": "Ocupación Promedio",
+        "totalRevenue": "Ingresos Totales Hoy",
+        "operations": "Operaciones Hoy",
+        "stayovers": "Stayovers",
+        "forecast": "Pronóstico 7 días",
+        "totalAlerts": "Alertas Activas",
+        "requiresAttention": "Requiere atención",
+        "bestPerformance": "Mejor Desempeño"
+      },
+      "kpi": {
+        "revenue": "Ingresos Hoy",
+        "rooms": "Habitaciones",
+        "operations": "Operaciones Hoy",
+        "alerts": "Alertas Activas"
+      },
+      "reservas": {
+        "recentes": "Reservas Recientes",
+        "verTodas": "Ver Todas"
+      },
+      "acoes": {
+        "rapidas": "Acciones Rápidas",
+        "quartos": "Habitaciones",
+        "novaReserva": "Nueva Reserva",
+        "hospedes": "Huéspedes",
+        "configuracoes": "Configuraciones"
+      }
+    },
     "fdTitle": "Check-in / Check-out",
     "fdArrivals": "Llegadas de Hoy",
     "fdInHouse": "Huéspedes In-House",
@@ -634,6 +871,36 @@
     "fdArrivalsHint": "Reservas con llegada hoy (confirmadas/pendientes).",
     "fdInHouseHint": "Huéspedes actualmente con check-in.",
     "fdDeparturesHint": "Huéspedes programados para salir hoy.",
+    "master": {
+      "users": {
+        "title": "Gestión de Usuarios",
+        "help": "Cree, edite y asigne propiedades y módulos a los usuarios.",
+        "create": "Crear usuario",
+        "edit": "Editar usuario",
+        "resetPassword": "Restablecer contraseña",
+        "activate": "Activar",
+        "deactivate": "Desactivar"
+      },
+      "integrations": {
+        "title": "Integraciones",
+        "selectProperty": "Seleccionar propiedad",
+        "module": "Módulo",
+        "provider": "Proveedor",
+        "environment": "Ambiente",
+        "status": "Estado",
+        "addIntegration": "Agregar Integración",
+        "editIntegration": "Editar Integración",
+        "deleteIntegration": "Eliminar Integración",
+        "enabled": "Activado",
+        "disabled": "Desactivado",
+        "lastSync": "Última Sincronización",
+        "helpText": "Administre integraciones por propiedad (PMS, OTA, IOT, Door Lock, POS, etc.)."
+      },
+      "breadcrumb": {
+        "users": "Usuarios",
+        "integrations": "Integraciones"
+      }
+    },
     "resPageTitle": "Reservas",
     "resFilters": "Filtros",
     "resDateFrom": "Fecha de Check-in",

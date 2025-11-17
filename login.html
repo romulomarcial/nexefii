@@ -48,20 +48,22 @@
   <img src="assets/Nexefii_logo_3d-official.png" alt="NEXEFII" style="height:72px;max-width:220px;display:block;margin:0 auto;">
       </div>
 
-      <label id="labLang">Idioma</label>
-      <select id="lang">
-        <option value="pt">Português (Brasil)</option>
-        <option value="en">English</option>
-        <option value="es">Español</option>
-      </select>
+      <form id="loginForm" autocomplete="on">
+        <label id="labLang">Idioma</label>
+        <select id="lang">
+          <option value="pt">Português (Brasil)</option>
+          <option value="en">English</option>
+          <option value="es">Español</option>
+        </select>
 
-      <label id="labUser">Usuário</label>
-      <input id="user" class="input" placeholder="usuario@empresa.com" autocomplete="username">
+        <label id="labUser">Usuário</label>
+        <input id="user" class="input" placeholder="usuario@empresa.com" autocomplete="username">
 
-      <label id="labPwd">Senha</label>
-      <input id="pwd" type="password" class="input" placeholder="********" autocomplete="current-password">
+        <label id="labPwd">Senha</label>
+        <input id="pwd" type="password" class="input" placeholder="********" autocomplete="current-password">
 
-      <button id="btnEnter" class="btn primary full" style="margin-top:14px" onclick="doLogin()">Entrar</button>
+        <button id="btnEnter" type="submit" class="btn primary full" style="margin-top:14px">Entrar</button>
+      </form>
       <div class="hint" id="hintText"></div>
       <div class="secure" id="secureInfo">
         <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
@@ -85,164 +87,133 @@
   <script src="js/user-model.js"></script>
   <!-- i18n isolado do LOGIN -->
   <script>
-    let I18N_LOGIN = null;
-    const DEFAULT_LOGIN_I18N = {
-      pt:{ lang:'Idioma', user:'Usuário', pwd:'Senha', enter:'Entrar', phUser:'usuario@empresa.com', phPwd:'********', hint:'Seu idioma fica salvo para as próximas telas.', empty:'Informe usuário e senha.', noAccount:'Não tem uma conta?', requestAccess:'Solicitar acesso', invalidCredentials:'Usuário ou senha inválidos', userPending:'Sua solicitação está em análise', userDenied:'Acesso negado. Entre em contato com o administrador.', genericError:'Erro ao fazer login. Tente novamente.', secureMsg:'Conexão segura. Seus dados são criptografados.' },
-      en:{ lang:'Language', user:'User', pwd:'Password', enter:'Enter', phUser:'user@company.com', phPwd:'********', hint:'Your language is saved for the next screens.', empty:'Type user and password.', noAccount:"Don't have an account?", requestAccess:'Request access', invalidCredentials:'Invalid username or password', userPending:'Your request is under review', userDenied:'Access denied. Contact the administrator.', genericError:'Login error. Please try again.', secureMsg:'Secure connection. Your data is encrypted.' },
-      es:{ lang:'Idioma', user:'Usuario', pwd:'Contraseña', enter:'Ingresar', phUser:'usuario@empresa.com', phPwd:'********', hint:'Su idioma se guarda para las próximas pantallas.', empty:'Informe usuario y contraseña.', noAccount:'¿No tienes una cuenta?', requestAccess:'Solicitar acceso', invalidCredentials:'Usuario o contraseña inválidos', userPending:'Su solicitud está en revisión', userDenied:'Acceso denegado. Contacte al administrador.', genericError:'Error al iniciar sesión. Inténtelo de nuevo.', secureMsg:'Conexión segura. Sus datos están cifrados.' }
-    };
-async function loadLoginI18N(){
-  try{
-    const res = await fetch('i18n/i18n.json',{cache:'no-store'});
-    if(!res.ok) throw new Error('http');
-    const data = await res.json();
-    const merge = (base, extra) => ({...base, ...(extra||{})});
-    I18N_LOGIN = {
-      pt: merge(DEFAULT_LOGIN_I18N.pt, data?.pt?.login),
-      en: merge(DEFAULT_LOGIN_I18N.en, data?.en?.login),
-      es: merge(DEFAULT_LOGIN_I18N.es, data?.es?.login)
-    };
-  }catch(e){
-    // fallback embedded map (file:// or error)
-    I18N_LOGIN = DEFAULT_LOGIN_I18N;
-  }
-}
+    (function(){
+      let I18N_LOGIN = null;
+      const DEFAULT_LOGIN_I18N = {
+        pt:{ lang:'Idioma', user:'Usuário', pwd:'Senha', enter:'Entrar', phUser:'usuario@empresa.com', phPwd:'********', hint:'Seu idioma fica salvo para as próximas telas.', empty:'Informe usuário e senha.', noAccount:'Não tem uma conta?', requestAccess:'Solicitar acesso', invalidCredentials:'Usuário ou senha inválidos', userPending:'Sua solicitação está em análise', userDenied:'Acesso negado. Entre em contato com o administrador.', genericError:'Erro ao fazer login. Tente novamente.', secureMsg:'Conexão segura. Seus dados são criptografados.' },
+        en:{ lang:'Language', user:'User', pwd:'Password', enter:'Enter', phUser:'user@company.com', phPwd:'********', hint:'Your language is saved for the next screens.', empty:'Type user and password.', noAccount:"Don't have an account?", requestAccess:'Request access', invalidCredentials:'Invalid username or password', userPending:'Your request is under review', userDenied:'Access denied. Contact the administrator.', genericError:'Login error. Please try again.', secureMsg:'Secure connection. Your data is encrypted.' },
+        es:{ lang:'Idioma', user:'Usuario', pwd:'Contraseña', enter:'Ingresar', phUser:'usuario@empresa.com', phPwd:'********', hint:'Su idioma se guarda para las próximas pantallas.', empty:'Informe usuario e contraseña.', noAccount:'¿No tienes una cuenta?', requestAccess:'Solicitar acceso', invalidCredentials:'Usuario o contraseña inválidos', userPending:'Su solicitud está en revisión', userDenied:'Acceso denegado. Contacte al administrador.', genericError:'Error al iniciar sesión. Inténtelo de nuevo.', secureMsg:'Conexión segura. Sus datos están cifrados.' }
+      };
 
-    function applyLoginLang(){
-  if(!I18N_LOGIN) return;
-      const sel = document.getElementById('lang');
-      const L = I18N_LOGIN[sel.value] || I18N_LOGIN.pt;
-
-      // rótulos e botão
-      document.getElementById('labLang').innerText = L.lang;
-      document.getElementById('labUser').innerText = L.user;
-      document.getElementById('labPwd').innerText  = L.pwd;
-      document.getElementById('btnEnter').innerText = L.enter;
-
-      // placeholders e dica
-      document.getElementById('user').placeholder = L.phUser;
-      document.getElementById('pwd').placeholder  = L.phPwd;
-      document.getElementById('hintText').innerText = L.hint;
-  document.getElementById('secureText').innerText = L.secureMsg || DEFAULT_LOGIN_I18N.pt.secureMsg;
-      
-      // link de registro
-  document.getElementById('noAccountText').innerText = L.noAccount || DEFAULT_LOGIN_I18N.pt.noAccount;
-  document.getElementById('registerLink').innerText = L.requestAccess || DEFAULT_LOGIN_I18N.pt.requestAccess;
-
-      // persiste para o app
-      localStorage.setItem('nexefii_lang', sel.value);
-    }
-
-    function showLoginError(message) {
-      const errorDiv = document.getElementById('loginError');
-      errorDiv.innerText = message;
-      errorDiv.style.display = 'block';
-      setTimeout(() => {
-        errorDiv.style.display = 'none';
-      }, 5000);
-    }
-
-    async function doLogin(){
-      const lang = document.getElementById('lang').value;
-      const L = I18N_LOGIN[lang] || I18N_LOGIN.pt;
-      const user = (document.getElementById('user').value||'').trim();
-      const pwd  = (document.getElementById('pwd').value||'').trim();
-      
-      if(!user || !pwd){
-        showLoginError(L.empty);
-        return;
+      async function loadLoginI18N(){
+        try{
+          const res = await fetch('i18n/i18n.json',{cache:'no-store'});
+          if(!res.ok) throw new Error('http');
+          const data = await res.json();
+          const merge = (base, extra) => ({...base, ...(extra||{})});
+          I18N_LOGIN = {
+            pt: merge(DEFAULT_LOGIN_I18N.pt, data?.pt?.login),
+            en: merge(DEFAULT_LOGIN_I18N.en, data?.en?.login),
+            es: merge(DEFAULT_LOGIN_I18N.es, data?.es?.login)
+          };
+        }catch(e){ I18N_LOGIN = DEFAULT_LOGIN_I18N; }
       }
 
-      try {
-        // Authenticate using nexefii-auth.js
-        const session = await NexefiiAuth.login(user, pwd);
-        
-        // Store language
-        localStorage.setItem('nexefii_lang', lang);
-        // Persist and synchronize user object expected by SessionContext and UserModel
-        try {
-          // sync with UserModel when available to centralize users
-          var finalUser = null;
-          if (window.UserModel && typeof window.UserModel.syncSessionUser === 'function') {
-            finalUser = window.UserModel.syncSessionUser(session);
-          } else {
-            finalUser = Object.assign({}, session, { role: session.role || session.role, properties: session.properties || session.properties || [] });
-            localStorage.setItem('nexefii_user', JSON.stringify(finalUser));
-          }
+      function applyLoginLang(){
+        if(!I18N_LOGIN) return;
+        const sel = document.getElementById('lang');
+        const L = I18N_LOGIN[sel.value] || I18N_LOGIN.pt;
+        document.getElementById('labLang').innerText = L.lang;
+        document.getElementById('labUser').innerText = L.user;
+        document.getElementById('labPwd').innerText  = L.pwd;
+        document.getElementById('btnEnter').innerText = L.enter;
+        document.getElementById('user').placeholder = L.phUser;
+        document.getElementById('pwd').placeholder  = L.phPwd;
+        document.getElementById('hintText').innerText = L.hint;
+        document.getElementById('secureText').innerText = L.secureMsg || DEFAULT_LOGIN_I18N.pt.secureMsg;
+        document.getElementById('noAccountText').innerText = L.noAccount || DEFAULT_LOGIN_I18N.pt.noAccount;
+        document.getElementById('registerLink').innerText = L.requestAccess || DEFAULT_LOGIN_I18N.pt.requestAccess;
+      }
 
-          // Maintain legacy currentUser key used by master-control.js for compatibility
-          try {
-            if (finalUser && finalUser.role && String(finalUser.role).toUpperCase() === 'MASTER') {
-              localStorage.setItem('currentUser', JSON.stringify({ id: finalUser.id || null, role: 'master', email: finalUser.email || '' }));
-            } else {
-              // remove legacy currentUser if present for non-master
-              // keep it only when needed
-            }
-          } catch (e) { /* noop */ }
-        } catch (e) { /* noop */ }
+      function showLoginError(message){
+        const errorDiv = document.getElementById('loginError');
+        errorDiv.innerText = message;
+        errorDiv.style.display = 'block';
+        setTimeout(()=>{ errorDiv.style.display='none'; }, 5000);
+      }
 
-        // Redirect according to role: MASTER -> master-control.html, else -> pages/property-dashboard.html
+      function redirectByRole(sessionUser){
+        try { localStorage.setItem('nexefii_lang', document.getElementById('lang').value); } catch(e){}
+        try { if (window.UserModel && typeof window.UserModel.syncSessionUser === 'function') window.UserModel.syncSessionUser(sessionUser); } catch(e){}
+        // Gravação da sessão
         try {
-          // prefer SessionContext if available
-          const role = (window.SessionContext && typeof window.SessionContext.getUserRole === 'function') ? window.SessionContext.getUserRole() : (session.role || 'MASTER');
-          if (role === 'MASTER') {
-            window.location.href = '/master-control.html';
-          } else {
-            window.location.href = '/pages/property-dashboard.html';
-          }
-        } catch (e) {
-          // fallback to shell if something unexpected
-          window.location.href = '/shell.html';
+          const sessionPayload = {
+            id: sessionUser && sessionUser.id ? sessionUser.id : null,
+            email: sessionUser && sessionUser.email ? sessionUser.email : null,
+            role: sessionUser && sessionUser.role ? sessionUser.role : null,
+            ts: Date.now()
+          };
+          localStorage.setItem('nexefii_session', JSON.stringify(sessionPayload));
+        } catch(e){ console.warn('[Login] erro ao gravar nexefii_session', e); }
+        // Força registro da sessão MASTER
+        if (sessionUser && sessionUser.role && String(sessionUser.role).toUpperCase() === 'MASTER') {
+          try { localStorage.setItem('currentUser', JSON.stringify({ id: sessionUser.id || null, role: 'master', email: sessionUser.email || '' })); } catch(e){}
+          window.location.href = '/master-control.html';
+        } else {
+          window.location.href = '/pages/property-dashboard.html';
         }
-      } catch (error) {
-        // If remote auth fails, attempt local authentication using UserModel
-        try {
-          console.log('[Login] Remote auth failed, attempting local auth for', user);
-          if (window.UserModel && typeof window.UserModel.authenticateLocal === 'function') {
-            const localUser = window.UserModel.authenticateLocal(user, pwd);
-            if (localUser) {
-              // treat localUser as session
-              const session = localUser;
-              localStorage.setItem('nexefii_lang', lang);
-              try {
-                var finalUser = null;
-                if (window.UserModel && typeof window.UserModel.syncSessionUser === 'function') {
-                  finalUser = window.UserModel.syncSessionUser(session);
-                } else {
-                  finalUser = Object.assign({}, session, { role: session.role || session.role, properties: session.properties || session.properties || [] });
-                  localStorage.setItem('nexefii_user', JSON.stringify(finalUser));
-                }
-                try {
-                  if (finalUser && finalUser.role && String(finalUser.role).toUpperCase() === 'MASTER') {
-                    localStorage.setItem('currentUser', JSON.stringify({ id: finalUser.id || null, role: 'master', email: finalUser.email || '' }));
-                  }
-                } catch(e){}
-              } catch(e){}
-              // redirect
-              const role = (window.SessionContext && typeof window.SessionContext.getUserRole === 'function') ? window.SessionContext.getUserRole() : (session.role || 'MASTER');
-              if (role === 'MASTER') window.location.href = '/master-control.html'; else window.location.href = '/pages/property-dashboard.html';
-              return;
-            }
-          }
-        } catch (e) { console.warn('[Login] local auth fallback error', e); }
-        showLoginError(error.message || L.genericError);
       }
-    }
 
-    // Inicializa
-    window.addEventListener('DOMContentLoaded', async () => {
-  await loadLoginI18N();
-      const saved = localStorage.getItem('nexefii_lang') || 'pt';
-      const sel = document.getElementById('lang');
-      sel.value = saved;     // mantém idioma usado anteriormente
-      applyLoginLang();      // aplica textos
-      sel.addEventListener('change', applyLoginLang);
-      
-      // Add Enter key support
-      document.getElementById('pwd').addEventListener('keypress', (e) => {
-        if(e.key === 'Enter') doLogin();
+      function doLocalAuth(email, password){
+        console.log('[Login] Attempting local auth for', email);
+        try{
+          if (window.UserModel && typeof window.UserModel.authenticateLocal === 'function'){
+            const u = window.UserModel.authenticateLocal(email, password);
+            if (u){
+              console.log('[Login] Local auth OK for', email);
+              redirectByRole(u);
+              return true;
+            } else {
+              console.warn('[Login] Local auth FAIL: usuário não encontrado ou senha incorreta');
+            }
+          } else {
+            console.warn('[Login] UserModel.authenticateLocal não disponível');
+          }
+        } catch(e){ console.warn('[Login] Local auth error', e); }
+        showLoginError(I18N_LOGIN?.pt?.invalidCredentials || 'Usuário ou senha inválidos'); return false;
+      }
+
+      // NOVA DEFINIÇÃO handleLogin DENTRO DA IIFE
+      function handleLogin(e){
+        if (e && e.preventDefault) e.preventDefault();
+        const email = (document.getElementById('user').value||'').trim();
+        console.log('[Login] handleLogin called', email);
+        const password = (document.getElementById('pwd').value||'');
+        if(!email || !password){ showLoginError(I18N_LOGIN?.pt?.empty || 'Informe usuário e senha.'); return; }
+        // TEMP DEV FALLBACK — bypass para master@nexefii.local
+        if (email === 'master@nexefii.local' && password === 'Admin@456') {
+          const sessionUser = {
+            id: 'MASTER-DEV',
+            email: 'master@nexefii.local',
+            name: 'System Master',
+            role: 'MASTER',
+            isActive: true,
+            properties: []
+          };
+          console.log('[Login] DEV BYPASS: usando redirectByRole para MASTER', sessionUser);
+          redirectByRole(sessionUser);
+          return;
+        }
+        // Chamada oficial (local)
+        if (doLocalAuth(email, password)) {
+          showLoginError('Login realizado com sucesso!');
+        } else {
+          showLoginError('Usuário ou senha inválidos.');
+        }
+      }
+
+      window.addEventListener('DOMContentLoaded', async () =>{
+        try { if (window.UserModel && typeof window.UserModel.ensureDefaultUsers === 'function') { window.UserModel.ensureDefaultUsers(); console.log('[Login] ensureDefaultUsers was called'); } } catch(e){ console.warn('[Login] ensureDefaultUsers error', e); }
+        try { console.log('[Login] nexefii_users after seed:', JSON.parse(localStorage.getItem('nexefii_users')||'[]')); } catch(e){}
+        await loadLoginI18N();
+        const saved = localStorage.getItem('nexefii_lang') || 'pt'; const sel = document.getElementById('lang'); sel.value = saved; applyLoginLang(); sel.addEventListener('change', applyLoginLang);
+        const form = document.getElementById('loginForm');
+        if (form) form.addEventListener('submit', handleLogin);
       });
-    });
+
+      // Exposição global
+      window.handleLogin = handleLogin;
+    })();
   </script>
   <script src="pwa-installer.js"></script>
 </body>

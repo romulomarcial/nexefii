@@ -50,6 +50,51 @@ class MasterControlSystem {
     
     // Inicializar UI
     this.initUI();
+    // Textos de ajuda dos painéis Master Control
+    const HelpTexts = {
+      'help-master-properties': 'Aqui você gerencia as propriedades conectadas ao Nexefii: cadastro, identificação e configurações gerais.',
+      'help-master-users': 'Use esta área para criar, editar e desativar usuários. Defina papéis e quais propriedades cada usuário acessa.',
+      'help-master-integrations': 'Configure integrações com PMS, fechaduras, BI e outros sistemas. Selecione a propriedade e informe o provider e as credenciais.',
+      'help-master-advanced': 'Recursos avançados: backups, release management e ferramentas administrativas globais. Use com cautela.'
+    };
+
+    function wirePanelHelp(){
+      try {
+        document.querySelectorAll('.panel-help[data-help-id]').forEach(btn => {
+          btn.addEventListener('click', () => {
+            const id = btn.getAttribute('data-help-id');
+            const msg = HelpTexts[id] || 'Ajuda não configurada para esta seção.';
+            alert(msg);
+          });
+        });
+      } catch(e) {
+        console.warn('[MasterControl] wirePanelHelp error', e);
+      }
+    }
+    // Inicialização global segura
+    document.addEventListener('DOMContentLoaded', function(){
+      try {
+        if (!window.MasterControlSystem) {
+          window.MasterControlSystem = MasterControlSystem;
+        }
+        if (!window.masterCtrl) {
+          window.masterCtrl = new MasterControlSystem();
+        }
+        if (typeof window.masterCtrl.initUI === 'function') {
+          window.masterCtrl.initUI();
+        }
+        if (typeof window.MasterTabs === 'function') {
+          window.MasterTabsInstance = MasterTabs();
+          window.MasterTabsInstance.wire();
+          window.MasterTabsInstance.activate('tab-master-properties');
+        }
+        if (typeof wirePanelHelp === 'function') {
+          wirePanelHelp();
+        }
+      } catch(e) {
+        console.error('[MasterControl] Erro na inicialização principal', e);
+      }
+    });
     
     // Inicializar Enterprise UI (somente se disponível; caso contrário, deferir)
     if (typeof this.initEnterpriseUI === 'function') {

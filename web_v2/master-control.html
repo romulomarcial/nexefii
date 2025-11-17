@@ -1,3 +1,13 @@
+    <section id="panel-master-integrations" style="display:none">
+      <div class="panel-header">
+        <div class="panel-title-row">
+          <h2 class="panel-title">Integrações</h2>
+          <button type="button" class="panel-help" data-help-id="help-master-integrations">?</button>
+        </div>
+        <p class="panel-subtitle">Configure integrações com PMS, fechaduras, BI e outros sistemas. Selecione uma propriedade, cadastre o provider e as credenciais.</p>
+      </div>
+      <!-- Conteúdo de integrações (int_prop_select, int_list_area, int_form etc.) vai aqui -->
+    </section>
 <!doctype html>
 <html lang="pt-br">
 <head>
@@ -13,6 +23,33 @@
     body { background:#f5f7fb; font-family:Inter,Arial; margin:0; }
     main { padding:24px; max-width:1200px; margin:auto; }
     h1 { margin-bottom:12px; font-size:28px; font-weight:600; }
+    .panel-title-row {
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:8px;
+    }
+    .panel-title {
+      margin:0;
+      font-size:16px;
+      font-weight:600;
+    }
+    .panel-help {
+      width:24px;
+      height:24px;
+      border-radius:999px;
+      border:1px solid #e5e7eb;
+      background:#f9fafb;
+      cursor:pointer;
+      font-size:13px;
+      font-weight:700;
+      line-height:1;
+    }
+    .panel-subtitle {
+      margin:4px 0 12px;
+      font-size:13px;
+      color:#6b7280;
+    }
   </style>
 </head>
 

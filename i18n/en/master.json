@@ -30,19 +30,3 @@
     }
   }
 }
-{
-  "master": {
-    "users": {
-      "title": "User Management",
-      "help": "Create, edit and assign properties and modules to users.",
-      "create": "Create user",
-      "edit": "Edit user",
-      "resetPassword": "Reset password",
-      "activate": "Activate",
-      "deactivate": "Deactivate"
-    },
-    "breadcrumb": {
-      "users": "Users"
-    }
-  }
-}

@@ -3,6 +3,12 @@
     "title": "Dashboard Executivo",
     "subtitle": "Visão executiva por propriedade",
     "selectProperty": "Selecionar Propriedade",
+    "loading": "Carregando propriedades...",
+    "noProperties": "Nenhuma propriedade disponível",
+    "noPropertiesDesc": "Crie ou obtenha acesso a uma propriedade para visualizar métricas.",
+    "openControl": "Abrir Controle",
+    "openAutomation": "Central Virtual de Automação",
+    "forecast": "Previsão (7 dias)",
     "kpis": {
       "title": "KPIs",
       "occupancy": "Ocupação",
@@ -22,19 +28,7 @@
       "rooms": "Rooms",
       "reservations": "Reservations",
       "frontdesk": "Frontdesk"
-    }
-  }
-}
-{
-  "dashboard": {
-    "title": "Dashboard",
-    "subtitle": "Visão geral da propriedade",
-    "loading": "Carregando propriedades...",
-    "noProperties": "Nenhuma propriedade disponível",
-    "noPropertiesDesc": "Crie ou obtenha acesso a uma propriedade para visualizar métricas.",
-    "openControl": "Abrir Controle",
-    "openAutomation": "Central Virtual de Automação",
-    "forecast": "Previsão (7 dias)",
+    },
     "comparative": {
       "title": "📊 KPIs Consolidados - Todas as Propriedades",
       "avgOccupancy": "Ocupação Média",
