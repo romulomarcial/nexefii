@@ -2155,23 +2155,46 @@
   <script src="core/init/setActivePropertyFromQuery.js"></script>
   <script>
     // Initialize I18n for master-control and apply translations
+    // Guarded init: wait for I18nManager to be defined before invoking it to avoid
+    // "I18nManager is not defined" ReferenceError during early boot.
     (function(){
-      try {
-        window.__nexefii_i18n = window.__nexefii_i18n || new I18nManager();
-        (async function(){
-          try {
-            await window.__nexefii_i18n.loadTranslations();
-            // expose to legacy consumers
-            window.NEXEFII = window.NEXEFII || {};
-            window.NEXEFII.i18n = window.__nexefii_i18n;
-            await window.__nexefii_i18n.loadSegment(null,'master-control');
-            window.__nexefii_i18n.applyToDOM(document);
-            // Sync <title> if present
-            var t = document.getElementById('pageTitle');
-            if (t) t.textContent = window.__nexefii_i18n.t('master.title');
-          } catch(e){ console.warn('[I18n] master-control init failed', e); }
-        })();
-      } catch(e){ console.warn('[I18n] master-control boot error', e); }
+      function doInit() {
+        try {
+          window.__nexefii_i18n = window.__nexefii_i18n || new I18nManager();
+          (async function(){
+            try {
+              await window.__nexefii_i18n.loadTranslations();
+              // expose to legacy consumers
+              window.NEXEFII = window.NEXEFII || {};
+              window.NEXEFII.i18n = window.__nexefii_i18n;
+              await window.__nexefii_i18n.loadSegment(null,'master-control');
+              window.__nexefii_i18n.applyToDOM(document);
+              // Sync <title> if present
+              var t = document.getElementById('pageTitle');
+              if (t) t.textContent = window.__nexefii_i18n.t('master.title');
+            } catch(e){ console.warn('[I18n] master-control init failed', e); }
+          })();
+        } catch(e){ console.warn('[I18n] master-control boot error', e); }
+      }
+
+      function startInitWithTimeout(timeoutMs) {
+        try {
+          if (typeof I18nManager !== 'undefined') return doInit();
+          var start = Date.now();
+          var iv = setInterval(function(){
+            try {
+              if (typeof I18nManager !== 'undefined') { clearInterval(iv); return doInit(); }
+              if (Date.now() - start > (timeoutMs || 3000)) { clearInterval(iv); console.warn('[I18n] I18nManager not available after wait; skipping init'); }
+            } catch(e){ clearInterval(iv); console.warn('[I18n] i18n init poll error', e); }
+          }, 50);
+        } catch(e){ console.warn('[I18n] startInitWithTimeout error', e); }
+      }
+
+      if (document.readyState === 'loading') {
+        window.addEventListener('DOMContentLoaded', function(){ startInitWithTimeout(3000); });
+      } else {
+        startInitWithTimeout(3000);
+      }
     })();
   </script>
 
