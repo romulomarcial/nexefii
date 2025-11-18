@@ -29,6 +29,9 @@
       "reservations": "Reservations",
       "frontdesk": "Frontdesk"
     },
+    "actions": {
+      "open": "Open"
+    },
     "comparative": {
       "title": "📊 Consolidated KPIs - All Properties",
       "avgOccupancy": "Avg Occupancy",

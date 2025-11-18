@@ -1,5 +1,5 @@
 ﻿/**
- * Gerador de PÃ¡ginas de Teste Local para Propriedades
+ * Gerador de Páginas de Teste Local para Propriedades
  * Permite testar propriedades em localhost antes de publicar
  */
 
@@ -169,30 +169,30 @@ function generateLocalTestHTML(property) {
 <body>
   <div class="container">
     <div class="header">
-      <h1>ðŸ¨ ${property.name}</h1>
+      <h1>✨ ${property.name}</h1>
       <p class="subtitle">Teste Local - Property ID: <strong>${property.key}</strong></p>
     </div>
 
     <div class="alert">
-      <span class="alert-icon">ðŸ§ª</span>
+      <span class="alert-icon">⚠️</span>
       <div class="alert-content">
         <h3>Ambiente de Teste Local</h3>
         <p>
-          VocÃª estÃ¡ visualizando a propriedade em modo de teste. 
-          Esta Ã© uma simulaÃ§Ã£o local que permite validar todas as configuraÃ§Ãµes 
+          Você está visualizando a propriedade em modo de teste.
+          Esta é uma simulação local que permite validar todas as configurações
           antes de publicar na web em <strong>https://${property.key}.nexefii.com</strong>
         </p>
       </div>
     </div>
 
     <div class="success-message">
-      <h3>âœ… Propriedade Validada com Sucesso!</h3>
-      <p>Todos os dados foram carregados corretamente. A propriedade estÃ¡ pronta para ser publicada.</p>
+      <h3>✓ Propriedade Validada com Sucesso!</h3>
+      <p>Todos os dados foram carregados corretamente. A propriedade está pronta para ser publicada.</p>
     </div>
 
     <div class="info-grid">
       <div class="info-card">
-        <h3><span>ðŸ“‹</span> InformaÃ§Ãµes Gerais</h3>
+        <h3><span>🔍</span> Informações Gerais</h3>
         <div class="info-item">
           <span class="info-label">Property ID:</span>
           <span class="info-value"><code>${property.key}</code></span>
@@ -203,64 +203,64 @@ function generateLocalTestHTML(property) {
         </div>
         <div class="info-item">
           <span class="info-label">Capacidade:</span>
-          <span class="info-value">${property.capacity || 'NÃ£o definida'}</span>
+          <span class="info-value">${property.capacity || 'Não definida'}</span>
         </div>
         <div class="info-item">
           <span class="info-label">Status:</span>
           <span class="badge ${property.deployed ? 'badge-success' : 'badge-warning'}">
-            ${property.deployed ? 'âœ… Implantado' : 'â³ Aguardando PublicaÃ§Ã£o'}
+            ${property.deployed ? '✓ Implantado' : '⏳ Aguardando Publicação'}
           </span>
         </div>
       </div>
 
       <div class="info-card">
-        <h3><span>ðŸŽ¯</span> MÃ³dulos Adquiridos</h3>
+        <h3><span>🎯</span> Módulos Adquiridos</h3>
         <div class="modules-list">
-          ${(property.modulesPurchased || []).map(m => `<span class="module-badge">${m}</span>`).join('') || '<span class="module-badge">Nenhum mÃ³dulo</span>'}
+          ${(property.modulesPurchased || []).map(m => `<span class="module-badge">${m}</span>`).join('') || '<span class="module-badge">Nenhum módulo</span>'}
         </div>
       </div>
     </div>
 
     <div class="test-section">
-      <h2><span>ðŸ”</span> ValidaÃ§Ã£o de Dados</h2>
+      <h2><span>🧩</span> Validação de Dados</h2>
       <div class="test-item success">
-        <span class="test-icon">âœ…</span>
+        <span class="test-icon">✓</span>
         <div>
           <strong>Propriedade registrada no sistema</strong>
           <br><small>LocalStorage: nexefii_properties</small>
         </div>
       </div>
       <div class="test-item success">
-        <span class="test-icon">âœ…</span>
+        <span class="test-icon">✓</span>
         <div>
-          <strong>MÃ³dulos configurados</strong>
-          <br><small>${(property.modulesPurchased || []).length} mÃ³dulo(s) ativo(s)</small>
+          <strong>Módulos configurados</strong>
+          <br><small>${(property.modulesPurchased || []).length} módulo(s) ativo(s)</small>
         </div>
       </div>
       <div class="test-item success">
-        <span class="test-icon">âœ…</span>
+        <span class="test-icon">✓</span>
         <div>
           <strong>Capacidade definida</strong>
-          <br><small>${property.capacity || 'PadrÃ£o'}</small>
+          <br><small>${property.capacity || 'Padrão'}</small>
         </div>
       </div>
       <div class="test-item success">
-        <span class="test-icon">âœ…</span>
+        <span class="test-icon">✓</span>
         <div>
-          <strong>Estrutura de dados vÃ¡lida</strong>
+          <strong>Estrutura de dados válida</strong>
           <br><small>Pronto para deploy</small>
         </div>
       </div>
     </div>
 
     <div class="test-section">
-      <h2><span>ðŸŒ</span> SimulaÃ§Ã£o de Ambiente</h2>
+      <h2><span>🌐</span> Simulação de Ambiente</h2>
       <div class="info-item">
         <span class="info-label">URL Local:</span>
         <span class="info-value"><code>file:///${property.key}-test.html</code></span>
       </div>
       <div class="info-item">
-        <span class="info-label">URL de ProduÃ§Ã£o (apÃ³s publicar):</span>
+        <span class="info-label">URL de Produção (após publicar):</span>
         <span class="info-value"><code>https://${property.key}.nexefii.com</code></span>
       </div>
       <div class="info-item">
@@ -271,25 +271,25 @@ function generateLocalTestHTML(property) {
 
     <div class="button-group">
       <button class="btn btn-secondary" onclick="window.close()">
-        âŒ Fechar Teste
+        ✖ Fechar Teste
       </button>
       <button class="btn btn-primary" onclick="window.open('index.html?property=${property.key}', '_blank')" style="background: linear-gradient(135deg, #48bb78 0%, #38a169 100%);">
-        ðŸŒ Abrir Index da Propriedade
+        🌐 Abrir Index da Propriedade
       </button>
       <button class="btn btn-primary" onclick="if(window.opener && window.opener.masterCtrl) { window.opener.masterCtrl.confirmPublishProperty('${property.key}'); window.close(); }">
-        ðŸš€ Aprovar e Publicar na Web
+        🚀 Aprovar e Publicar na Web
       </button>
     </div>
   </div>
 
   <script>
-    console.log('ðŸ¨ Propriedade carregada:', ${JSON.stringify(property, null, 2)});
+    console.log('\uD83C\uDFE8 Propriedade carregada:', ${JSON.stringify(property, null, 2)});
     
-    // Simular validaÃ§Ãµes
-    setTimeout(() => console.log('âœ… ValidaÃ§Ã£o 1: Dados carregados'), 500);
-    setTimeout(() => console.log('âœ… ValidaÃ§Ã£o 2: MÃ³dulos verificados'), 1000);
-    setTimeout(() => console.log('âœ… ValidaÃ§Ã£o 3: ConfiguraÃ§Ãµes OK'), 1500);
-    setTimeout(() => console.log('âœ… ValidaÃ§Ã£o completa!'), 2000);
+    // Simular validações (usando escapes Unicode para garantir exibição correta)
+    setTimeout(() => console.log('\u2705 Valida\u00E7\u00E3o 1: Dados carregados'), 500);
+    setTimeout(() => console.log('\u2705 Valida\u00E7\u00E3o 2: M\u00F3dulos verificados'), 1000);
+    setTimeout(() => console.log('\u2705 Valida\u00E7\u00E3o 3: Configura\u00E7\u00F5es OK'), 1500);
+    setTimeout(() => console.log('\u2705 Valida\u00E7\u00E3o completa!'), 2000);
   </script>
 </body>
 </html>`;

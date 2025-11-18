@@ -25,9 +25,12 @@
       "bi": "BI"
     },
     "submodules": {
-      "rooms": "Rooms",
-      "reservations": "Reservations",
-      "frontdesk": "Frontdesk"
+      "rooms": "Habitaciones",
+      "reservations": "Reservas",
+      "frontdesk": "Recepción"
+    },
+    "actions": {
+      "open": "Abrir"
     },
     "comparative": {
       "title": "📊 KPIs Consolidados - Todas las Propiedades",

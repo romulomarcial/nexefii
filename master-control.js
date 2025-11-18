@@ -93,6 +93,26 @@ class MasterControlSystem {
           window.MasterTabsInstance = MasterTabs();
           window.MasterTabsInstance.wire();
           window.MasterTabsInstance.activate('tab-master-properties');
+          try {
+            // If module query param present, attempt to open relevant tab
+            const params = new URL(window.location.href).searchParams;
+            const mod = params.get('module');
+            if (mod) {
+              const moduleToTab = {
+                housekeeping: 'tab-integrations',
+                governance: 'tab-integrations',
+                pms: 'tab-properties',
+                engineering: 'tab-system',
+                bi: 'tab-metrics',
+                alerts: 'tab-logs'
+              };
+              const targetTab = moduleToTab[mod] || null;
+              if (targetTab) {
+                try { window.MasterTabsInstance.activate(targetTab); } catch (e) { console.warn('[MasterControl] failed to activate tab for module', mod, e); }
+              }
+              console.info('[MasterControl] module param detected, requested module=', mod, 'targetTab=', targetTab);
+            }
+          } catch(e) { console.warn('[MasterControl] module param handling failed', e); }
         }
         if (typeof wirePanelHelp === 'function') {
           wirePanelHelp();

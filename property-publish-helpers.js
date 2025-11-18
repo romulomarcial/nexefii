@@ -1,16 +1,16 @@
 ﻿/**
- * FunÃ§Ãµes auxiliares para teste local e publicaÃ§Ã£o de propriedades
- * Este arquivo complementa o master-control.js com funÃ§Ãµes mais simples
+ * Funções auxiliares para teste local e publicação de propriedades
+ * Este arquivo complementa o master-control.js com funções mais simples
  */
 
-// Aguardar masterCtrl estar disponÃ­vel e adicionar as funÃ§Ãµes
+// Aguardar masterCtrl estar disponível e adicionar as funções
 (function() {
   console.log('[property-publish-helpers] Carregando helpers...');
   
-  // FunÃ§Ã£o para esperar masterCtrl estar disponÃ­vel
+  // Função para esperar masterCtrl estar disponível
   const waitForMasterCtrl = () => {
     if (window.masterCtrl) {
-      console.log('[property-publish-helpers] masterCtrl encontrado, adicionando funÃ§Ãµes...');
+      console.log('[property-publish-helpers] masterCtrl encontrado, adicionando funções...');
       addHelperFunctions();
     } else {
       console.log('[property-publish-helpers] Aguardando masterCtrl...');
@@ -26,8 +26,8 @@
   
   const property = window.NexefiiProps.getProperty(propertyKey);
   if (!property) {
-    console.error('[testPropertyLocally] Propriedade nÃ£o encontrada:', propertyKey);
-    this.showToast('Propriedade nÃ£o encontrada!', 'error');
+    console.error('[testPropertyLocally] Propriedade não encontrada:', propertyKey);
+    this.showToast('Propriedade não encontrada!', 'error');
     return;
   }
 
@@ -35,9 +35,9 @@
 
   // Verificar se generateLocalTestHTML existe
   if (typeof generateLocalTestHTML !== 'function') {
-    console.error('[testPropertyLocally] generateLocalTestHTML nÃ£o estÃ¡ disponÃ­vel!');
+    console.error('[testPropertyLocally] generateLocalTestHTML não está disponível!');
     console.log('[testPropertyLocally] Tipo de generateLocalTestHTML:', typeof generateLocalTestHTML);
-    this.showToast('âŒ Gerador de teste nÃ£o carregado! Verifique se property-local-test-generator.js estÃ¡ carregado.', 'error');
+    this.showToast('❌ Gerador de teste não carregado! Verifique se property-local-test-generator.js está carregado.', 'error');
     return;
   }
 
@@ -51,7 +51,7 @@
     testWindow.document.write(testHTML);
     testWindow.document.close();
     console.log('[testPropertyLocally] Janela de teste aberta com sucesso!');
-    this.showToast('âœ… Teste local aberto em nova janela!', 'success');
+    this.showToast('✓ Teste local aberto em nova janela!', 'success');
   } else {
     console.warn('[testPropertyLocally] Popup bloqueado, fazendo download...');
     // Download se popup bloqueado
@@ -65,7 +65,7 @@
     document.body.removeChild(a);
     URL.revokeObjectURL(url);
     console.log('[testPropertyLocally] Download iniciado');
-    this.showToast('ðŸ“¥ Arquivo de teste baixado! Abra o arquivo HTML para testar.', 'info');
+    this.showToast('💾 Arquivo de teste baixado! Abra o arquivo HTML para testar.', 'info');
   }
 };
 
@@ -93,16 +93,16 @@ window.masterCtrl.confirmPublishProperty = function(propertyKey) {
   
   modalContent.innerHTML = `
     <div style="text-align: center; margin-bottom: 30px;">
-      <div style="font-size: 64px; margin-bottom: 20px;">âš ï¸</div>
-      <h2 style="margin: 0 0 15px 0; color: #2d3748; font-size: 28px;">Confirmar PublicaÃ§Ã£o na Web</h2>
+      <div style="font-size: 64px; margin-bottom: 20px;">⚠️</div>
+      <h2 style="margin: 0 0 15px 0; color: #2d3748; font-size: 28px;">Confirmar Publicação na Web</h2>
       <p style="color: #718096; font-size: 16px; line-height: 1.6;">
-        VocÃª estÃ¡ prestes a publicar a propriedade <strong>${property.name}</strong> no ambiente de produÃ§Ã£o.
+        Você está prestes a publicar a propriedade <strong>${property.name}</strong> no ambiente de produção.
       </p>
     </div>
 
     <div style="background: #fef3c7; border-left: 4px solid #f59e0b; padding: 20px; border-radius: 8px; margin-bottom: 25px;">
       <h4 style="margin: 0 0 10px 0; color: #92400e; display: flex; align-items: center; gap: 8px;">
-        <span>ðŸ“‹</span> Checklist de ValidaÃ§Ã£o
+        <span>🔍</span> Checklist de Validação
       </h4>
       <div style="color: #78350f;">
         <label style="display: flex; align-items: center; gap: 10px; margin-bottom: 12px; cursor: pointer;">
@@ -111,11 +111,11 @@ window.masterCtrl.confirmPublishProperty = function(propertyKey) {
         </label>
         <label style="display: flex; align-items: center; gap: 10px; margin-bottom: 12px; cursor: pointer;">
           <input type="checkbox" class="publish-check" style="width: 18px; height: 18px; cursor: pointer;">
-          <span>Todos os mÃ³dulos estÃ£o configurados corretamente</span>
+          <span>Todos os módulos estão configurados corretamente</span>
         </label>
         <label style="display: flex; align-items: center; gap: 10px; margin-bottom: 12px; cursor: pointer;">
           <input type="checkbox" class="publish-check" style="width: 18px; height: 18px; cursor: pointer;">
-          <span>Estou ciente que a URL <strong>https://${property.key}.nexefii.com</strong> serÃ¡ criada</span>
+          <span>Estou ciente que a URL <strong>https://${property.key}.nexefii.com</strong> será criada</span>
         </label>
         <label style="display: flex; align-items: center; gap: 10px; cursor: pointer;">
           <input type="checkbox" class="publish-check" style="width: 18px; height: 18px; cursor: pointer;">
@@ -126,10 +126,10 @@ window.masterCtrl.confirmPublishProperty = function(propertyKey) {
 
     <div style="display: flex; gap: 15px; justify-content: center;">
       <button id="cancelPublishBtn" style="padding: 14px 28px; border: 2px solid #e2e8f0; background: white; border-radius: 8px; font-weight: 600; cursor: pointer; color: #4a5568; font-size: 16px;">
-        âŒ Cancelar
+        ✖ Cancelar
       </button>
       <button id="confirmPublishBtn" disabled style="padding: 14px 28px; border: none; background: #cbd5e0; color: white; border-radius: 8px; font-weight: 600; cursor: not-allowed; font-size: 16px;">
-        ðŸš€ Confirmar PublicaÃ§Ã£o
+        🚀 Confirmar Publicação
       </button>
     </div>
   `;
@@ -211,8 +211,8 @@ window.masterCtrl.insertDemoData = function(propertyKey) {
   
   modalContent.innerHTML = `
     <div style="text-align: center; margin-bottom: 30px;">
-      <div style="font-size: 64px; margin-bottom: 20px;">ðŸŽ­</div>
-      <h2 style="margin: 0 0 15px 0; color: #2d3748; font-size: 28px;">Inserir Dados de DemonstraÃ§Ã£o</h2>
+      <div style="font-size: 64px; margin-bottom: 20px;">🧪</div>
+      <h2 style="margin: 0 0 15px 0; color: #2d3748; font-size: 28px;">Inserir Dados de Demonstração</h2>
       <p style="color: #718096; font-size: 16px; line-height: 1.6;">
         Propriedade: <strong>${property.name}</strong>
       </p>
@@ -220,22 +220,22 @@ window.masterCtrl.insertDemoData = function(propertyKey) {
 
     <div style="background: #e0f2fe; border-left: 4px solid #0284c7; padding: 20px; border-radius: 8px; margin-bottom: 25px;">
       <h4 style="margin: 0 0 10px 0; color: #0c4a6e; display: flex; align-items: center; gap: 8px;">
-        <span>ðŸ“Š</span> Dados que serÃ£o gerados:
+        <span>📦</span> Dados que serão gerados:
       </h4>
       <div style="color: #075985; line-height: 1.8;">
-        âœ… Reservas (90 dias de histÃ³rico + 30 futuro)<br>
-        âœ… InventÃ¡rio de quartos (${property.roomCount} quartos)<br>
-        âœ… MÃ©tricas PMS (ocupaÃ§Ã£o, receita, ADR, RevPAR)<br>
-        âœ… Tarefas de Housekeeping<br>
-        âœ… Ordens de Engenharia<br>
-        âœ… Alertas do sistema<br>
-        âœ… Perfis de hÃ³spedes
+        ✓ Reservas (90 dias de histórico + 30 futuro)<br>
+        ✓ Inventário de quartos (${property.roomCount} quartos)<br>
+        ✓ Métricas PMS (ocupação, receita, ADR, RevPAR)<br>
+        ✓ Tarefas de Housekeeping<br>
+        ✓ Ordens de Engenharia<br>
+        ✓ Alertas do sistema<br>
+        ✓ Perfis de hóspedes
       </div>
     </div>
 
     <div style="background: #fef3c7; border-left: 4px solid #f59e0b; padding: 20px; border-radius: 8px; margin-bottom: 25px;">
       <h4 style="margin: 0 0 10px 0; color: #92400e; display: flex; align-items: center; gap: 8px;">
-        <span>ðŸ”„</span> AtualizaÃ§Ã£o AutomÃ¡tica
+        <span>🔁</span> Atualização Automática
       </h4>
       <div style="color: #78350f;">
         <label style="display: flex; align-items: center; gap: 10px; cursor: pointer;">
@@ -250,10 +250,10 @@ window.masterCtrl.insertDemoData = function(propertyKey) {
 
     <div style="display: flex; gap: 15px; justify-content: center;">
       <button id="cancelDemoBtn" style="padding: 14px 28px; border: 2px solid #e2e8f0; background: white; border-radius: 8px; font-weight: 600; cursor: pointer; color: #4a5568; font-size: 16px;">
-        âŒ Cancelar
+        ✖ Cancelar
       </button>
       <button id="confirmDemoBtn" style="padding: 14px 28px; border: none; background: linear-gradient(135deg, #10b981 0%, #059669 100%); color: white; border-radius: 8px; font-weight: 600; cursor: pointer; font-size: 16px; box-shadow: 0 4px 12px rgba(16, 185, 129, 0.4);">
-        ðŸŽ­ Inserir Dados
+        🧪 Inserir Dados
       </button>
     </div>
   `;
@@ -270,15 +270,39 @@ window.masterCtrl.insertDemoData = function(propertyKey) {
     modal.remove();
     
     // Mostrar loading
-    this.showToast('ðŸŽ­ Gerando dados fake...', 'info');
+    this.showToast('🧪 Gerando dados fake...', 'info');
     
     // Inserir dados (pequeno delay para UX)
     setTimeout(() => {
-      const result = window.DemoDataGenerator.insertDemoData(propertyKey, autoRefresh);
+      // Ensure DemoDataGenerator insert is wrapped to default to light mode and catch quota errors
+      try {
+        if (window.DemoDataGenerator && typeof window.DemoDataGenerator.insertDemoData === 'function' && !window.DemoDataGenerator.__wrappedForSafety) {
+          const orig = window.DemoDataGenerator.insertDemoData.bind(window.DemoDataGenerator);
+          window.DemoDataGenerator.insertDemoData = function(pk, options){
+            try {
+              options = options || {};
+              if (!options.demoMode) options.demoMode = 'light';
+              return orig(pk, options);
+            } catch (err) {
+              if (err && (err.name === 'QuotaExceededError' || err.code === 22)) {
+                console.error('[DemoData] Quota exceeded while saving', pk, err);
+                alert('Limite de dados locais atingido ao inserir dados de demonstração. Limpe dados antigos do navegador ou escolha um modo de demonstração mais leve.');
+                return { success: false, error: 'quota_exceeded' };
+              }
+              throw err;
+            }
+          };
+          window.DemoDataGenerator.__wrappedForSafety = true;
+        }
+      } catch(e){ console.warn('[insertDemoData] wrapper setup failed', e); }
+
+      const result = (window.DemoDataGenerator && typeof window.DemoDataGenerator.insertDemoData === 'function')
+        ? window.DemoDataGenerator.insertDemoData(propertyKey, { demoMode: 'light', autoRefresh })
+        : { success: false, error: 'no_generator' };
       
       if (result.success) {
         const autoRefreshMsg = autoRefresh ? ' (auto-refresh ativado)' : '';
-        this.showToast(`âœ… Dados inseridos com sucesso!${autoRefreshMsg}`, 'success');
+        this.showToast(`✓ Dados inseridos com sucesso!${autoRefreshMsg}`, 'success');
         
         // Recarregar dashboard se estiver aberto
         if (typeof window.PropertyDashboard !== 'undefined' && window.PropertyDashboard.refresh) {
@@ -287,7 +311,7 @@ window.masterCtrl.insertDemoData = function(propertyKey) {
           }, 500);
         }
       } else {
-        this.showToast(`âŒ Erro ao inserir dados: ${result.error}`, 'error');
+        this.showToast(`❌ Erro ao inserir dados: ${result.error}`, 'error');
       }
     }, 300);
   };
@@ -300,7 +324,137 @@ window.masterCtrl.insertDemoData = function(propertyKey) {
   });
 };
 
-    console.log('[property-publish-helpers] âœ… FunÃ§Ãµes adicionadas com sucesso!');
+    console.log('[property-publish-helpers] ✓ Funções adicionadas com sucesso!');
+
+    // Attach click delegation for property actions in the properties table
+    try {
+      // avoid double-binding
+      if (!window.__propPublishHelpersBound) {
+        window.__propPublishHelpersBound = true;
+        const tbody = document.getElementById('propertiesTableBody');
+        if (tbody) {
+          tbody.addEventListener('click', function(ev){
+            try {
+              const btn = ev.target.closest('button');
+              if (!btn) return;
+              const txt = (btn.textContent || btn.innerText || '').trim().toLowerCase();
+              const row = btn.closest('tr');
+              if (!row) return;
+              // Attempt to find canonical property key from data attributes or row content
+              let propKey = row.dataset && (row.dataset.key || row.dataset.propertyKey || row.dataset.slug || row.dataset.id);
+              if (!propKey) {
+                // try to heuristically find by name/slug in row text
+                const rowText = (row.textContent || '').trim();
+                const list = (window.NexefiiProps && typeof window.NexefiiProps.listProperties === 'function') ? window.NexefiiProps.listProperties() : [];
+                for (const p of list) {
+                  if (!p) continue;
+                  const matches = [p.key, p.slug, p.propertySlug, p.id, p.name].filter(Boolean).map(String);
+                  if (matches.some(m => rowText.indexOf(String(m)) !== -1)) { propKey = p.key || p.slug || p.id; break; }
+                }
+              }
+
+              // Normalize buttons by label
+              if (txt.indexOf('implantar') !== -1 || txt.indexOf('implantar') === 0) {
+                if (propKey && typeof window.masterCtrl.startDeployment === 'function') {
+                  window.masterCtrl.startDeployment(propKey);
+                } else {
+                  console.warn('[property-publish-helpers] startDeployment not available or propKey missing', propKey);
+                }
+                ev.preventDefault();
+                return;
+              }
+
+              if (txt.indexOf('testar') !== -1 || txt.indexOf('teste') !== -1 || txt.indexOf('test') !== -1) {
+                if (propKey && typeof window.masterCtrl.testPropertyLocally === 'function') {
+                  window.masterCtrl.testPropertyLocally(propKey);
+                } else {
+                  console.warn('[property-publish-helpers] testPropertyLocally not available or propKey missing', propKey);
+                }
+                ev.preventDefault();
+                return;
+              }
+
+              if (txt.indexOf('publicar') !== -1 || txt.indexOf('publica') !== -1) {
+                if (propKey && typeof window.masterCtrl.confirmPublishProperty === 'function') {
+                  window.masterCtrl.confirmPublishProperty(propKey);
+                } else {
+                  console.warn('[property-publish-helpers] confirmPublishProperty not available or propKey missing', propKey);
+                }
+                ev.preventDefault();
+                return;
+              }
+
+            } catch (e) { console.warn('[property-publish-helpers] table click handler error', e); }
+          });
+        }
+      }
+    } catch(e) { console.warn('[property-publish-helpers] attach handlers failed', e); }
+
+    // Implement startDeployment (persist deploy config and mark property deployed)
+    window.masterCtrl.startDeployment = function(propertyKey, config) {
+      try {
+        console.log('[startDeployment] Starting deployment for', propertyKey, config || {});
+        const property = (window.NexefiiProps && typeof window.NexefiiProps.getProperty === 'function') ? window.NexefiiProps.getProperty(propertyKey) : null;
+        if (!property) {
+          console.warn('[startDeployment] property not found', propertyKey);
+          this.showToast && this.showToast('Propriedade não encontrada!', 'error');
+          return false;
+        }
+        // attach deploy metadata
+        property._deployed = true;
+        property._deployConfig = Object.assign({}, property._deployConfig || {}, config || {});
+        // persist via NexefiiProps.upsertProperty if available
+        try {
+          if (window.NexefiiProps && typeof window.NexefiiProps.upsertProperty === 'function') {
+            window.NexefiiProps.upsertProperty(Object.assign({}, property, { key: property.key || property.id || property.slug }));
+          } else if (typeof localStorage !== 'undefined') {
+            try { const m = JSON.parse(localStorage.getItem('nexefii_properties')||'{}'); m[property.key || property.id || property.slug] = property; localStorage.setItem('nexefii_properties', JSON.stringify(m)); } catch(e){}
+          }
+        } catch(e){ console.warn('[startDeployment] persist failed', e); }
+
+        // Optionally insert demo data if DemoDataGenerator present and config requests it
+        try {
+          if (config && config.demoEnabled && window.DemoDataGenerator && typeof window.DemoDataGenerator.insertDemoData === 'function') {
+              setTimeout(() => {
+                try {
+                  // ensure wrapper exists
+                  try {
+                    if (!window.DemoDataGenerator.__wrappedForSafety) {
+                      const orig = window.DemoDataGenerator.insertDemoData.bind(window.DemoDataGenerator);
+                      window.DemoDataGenerator.insertDemoData = function(pk, options){
+                        try { options = options || {}; if (!options.demoMode) options.demoMode = 'light'; return orig(pk, options); } catch(err){ if (err && (err.name==='QuotaExceededError' || err.code===22)) { alert('Limite de dados locais atingido ao inserir dados de demonstração.'); return { success:false, error:'quota_exceeded' }; } throw err; }
+                      };
+                      window.DemoDataGenerator.__wrappedForSafety = true;
+                    }
+                  } catch(e){}
+
+                  window.DemoDataGenerator.insertDemoData(propertyKey, { demoMode: 'light', autoRefresh: !!config.autoRefresh });
+                } catch(e){ console.warn('[startDeployment] demo insert failed', e); }
+              }, 200);
+            }
+        } catch(e) { /* ignore */ }
+
+        this.showToast && this.showToast('Configuração de implantação salva', 'success');
+        return true;
+      } catch(e) { console.error('[startDeployment] error', e); return false; }
+    };
+
+    // Implement publishProperty (mark published and compute public URL)
+    window.masterCtrl.publishProperty = function(propertyKey) {
+      try {
+        const property = (window.NexefiiProps && typeof window.NexefiiProps.getProperty === 'function') ? window.NexefiiProps.getProperty(propertyKey) : null;
+        if (!property) { console.warn('[publishProperty] property not found', propertyKey); this.showToast && this.showToast('Propriedade não encontrada!', 'error'); return null; }
+        property._published = true;
+        const slug = property.slug || property.propertySlug || property.key || property.id;
+        const publicUrl = slug ? (`/property/${slug}/dashboard`) : null;
+        property.publicUrl = publicUrl;
+        // persist
+        try { if (window.NexefiiProps && typeof window.NexefiiProps.upsertProperty === 'function') window.NexefiiProps.upsertProperty(property); else { const m = JSON.parse(localStorage.getItem('nexefii_properties')||'{}'); m[property.key||property.id||property.slug]=property; localStorage.setItem('nexefii_properties', JSON.stringify(m)); } } catch(e){console.warn('[publishProperty] persist failed', e);}        
+        console.log('[Publish] Property', slug, 'published at', publicUrl);
+        this.showToast && this.showToast('Propriedade publicada em ' + publicUrl, 'success');
+        return publicUrl;
+      } catch(e) { console.error('[publishProperty] error', e); return null; }
+    };
   };
   
   // Iniciar espera pelo masterCtrl

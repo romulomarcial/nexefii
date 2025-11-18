@@ -41,35 +41,74 @@
 
   <script src="../js/session-context.js"></script>
   <script src="../js/property-dashboard-service.js"></script>
-  <script src="../js/property-dashboard.js"></script>
-  <script src="../js/lang-switcher.js"></script>
   <script src="/core/i18n/I18nManager.js"></script>
-  <script src="/core/init/setActivePropertyFromQuery.js"></script>
   <script>
-    // Initialize I18n for property dashboard
+    // Initialize I18n for property dashboard — do not rely on Promises here
     (function(){
       try {
-        window.__nexefii_i18n = window.__nexefii_i18n || new I18nManager();
-        (async function(){
+        window.__nexefii_i18n = window.__nexefii_i18n || (typeof I18nManager === 'function' ? new I18nManager() : null);
+        window.NEXEFII = window.NEXEFII || {};
+        if (window.__nexefii_i18n) window.NEXEFII.i18n = window.__nexefii_i18n;
+
+        document.addEventListener('DOMContentLoaded', function () {
+          if (!window.__nexefii_i18n) return;
+
+          // ensure helper to batch-load segments exists
+          if (typeof window.__nexefii_i18n.loadSegments !== 'function') {
+            window.__nexefii_i18n.loadSegments = function(arr){
+              var self = this;
+              try {
+                var maybeArr = (arr||[]).map(function(s){ try{ return self.loadSegment && self.loadSegment(null,s); } catch(e){ return null; } });
+                var anyThen = maybeArr.some(function(m){ return m && typeof m.then === 'function'; });
+                if (anyThen) return Promise.all(maybeArr.map(function(m){ return m && typeof m.then === 'function' ? m : Promise.resolve(m); }));
+                return Promise.resolve(maybeArr);
+              } catch(e){ return Promise.resolve([]); }
+            };
+          }
+
           try {
-            await window.__nexefii_i18n.loadTranslations();
-            window.NEXEFII = window.NEXEFII || {};
-            window.NEXEFII.i18n = window.__nexefii_i18n;
-            await window.__nexefii_i18n.loadSegment(null,'dashboard');
-            window.__nexefii_i18n.applyToDOM(document);
-            var t = document.querySelector('title'); if(t) t.textContent = window.__nexefii_i18n.t('dashboard.title');
+            // Start loading translations immediately (do not wait for DOMContentLoaded)
+            var maybe = null;
+            if (typeof window.__nexefii_i18n.loadTranslations === 'function') {
+              try { maybe = window.__nexefii_i18n.loadTranslations(); } catch(err){ console.warn('[PropertyDashboard] i18n loadTranslations error:', err); }
+            }
+
+            var applyNow = function(){
+              try { if (window.__nexefii_i18n && typeof window.__nexefii_i18n.applyToDOM === 'function') { window.__nexefii_i18n.applyToDOM(document); var t = document.querySelector('title'); if(t) t.textContent = window.__nexefii_i18n.t('dashboard.title'); } } catch(e){}
+            };
+
+            if (maybe && typeof maybe.then === 'function') {
+              try {
+                maybe.then(function(){
+                  return window.__nexefii_i18n.loadSegments(["common","dashboard","rooms","frontdesk","reservations"]);
+                }).then(function(){ applyNow(); }).catch(function(e){ console.warn('[I18n] property-dashboard init failed', e); applyNow(); });
+              } catch(e){ applyNow(); }
+            } else {
+              // If loader is synchronous, allow it to finish before calling applyToDOM — small delay suffices
+              setTimeout(function(){ try { applyNow(); } catch(e){} }, 80);
+            }
           } catch(e){ console.warn('[I18n] property-dashboard init failed', e); }
-        })();
+
+          // Do NOT call init() here; `property-dashboard.js` handles DOMContentLoaded -> init
+        });
+
+        // Attempt to set title immediately if translator is available
+        try { var t = document.querySelector('title'); if (t && window.__nexefii_i18n && typeof window.__nexefii_i18n.t === 'function') t.textContent = window.__nexefii_i18n.t('dashboard.title'); } catch(e){}
       } catch(e){ console.warn('[I18n] property-dashboard boot error', e); }
     })();
   </script>
+
+  <script src="/properties.js"></script>
+  <script src="../js/property-dashboard.js"></script>
+  <script src="../js/lang-switcher.js"></script>
+  <script src="/core/init/setActivePropertyFromQuery.js"></script>
   <script>
     // Populate modules grid with links to module pages, passing selected propertyId
     (function(){
       function makeCard(title, href) {
         var d = document.createElement('div'); d.className='module-card';
         d.tabIndex = 0;
-        d.innerHTML = '<strong>' + title + '</strong><div class="submodules">Abrir</div>';
+        d.innerHTML = '<strong>' + title + '</strong><div class="submodules"><span data-i18n="dashboard.actions.open">Abrir</span></div>';
         d.addEventListener('click', function(){
           try {
             var sel = document.getElementById('propSelect');
@@ -84,9 +123,9 @@
       document.addEventListener('DOMContentLoaded', function(){
         var grid = document.getElementById('modulesGrid');
         if (!grid) return;
-        grid.appendChild(makeCard('PMS - Frontdesk', '/pms-frontdesk.html'));
-        grid.appendChild(makeCard('PMS - Rooms', '/pms-rooms.html'));
-        grid.appendChild(makeCard('PMS - Reservations', '/pms-reservations.html'));
+        grid.appendChild(makeCard('PMS - <span data-i18n="dashboard.submodules.frontdesk">Frontdesk</span>', '/pms-frontdesk.html'));
+        grid.appendChild(makeCard('PMS - <span data-i18n="dashboard.submodules.rooms">Rooms</span>', '/pms-rooms.html'));
+        grid.appendChild(makeCard('PMS - <span data-i18n="dashboard.submodules.reservations">Reservations</span>', '/pms-reservations.html'));
         grid.appendChild(makeCard('Housekeeping', '/housekeeping-control.html'));
         grid.appendChild(makeCard('Engineering', '/engineering-control.html'));
         grid.appendChild(makeCard('Alerts / IT', '/alerts-control.html'));

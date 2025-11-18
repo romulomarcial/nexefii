@@ -2,7 +2,7 @@
 (function(){
   try {
     const params = new URLSearchParams(location.search);
-    const pid = params.get('propertyId') || params.get('propId') || params.get('property');
+    const pid = params.get('propertyKey') || params.get('propertyId') || params.get('propId') || params.get('property');
     if (!pid) return;
     // Persist for SessionContext consumers
     try { localStorage.setItem('nexefii_active_property', pid); } catch(e){}
