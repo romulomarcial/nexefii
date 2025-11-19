@@ -1537,7 +1537,7 @@
 
     <!-- Property Backups Tab (NEW) -->
     <div class="tab-content nx-section" id="tab-property-backups">
-      <div class="enterprise-backup-section">
+      <div class="mc-shell releases-section">
         <!-- Dashboard Metrics -->
         <div class="master-card">
           <div class="section-header">
@@ -1781,7 +1781,7 @@
 
     <!-- General Structure Backups Tab (NEW) -->
     <div class="tab-content nx-section" id="tab-general-backups">
-      <div class="enterprise-backup-section">
+      <div class="mc-shell releases-section">
         <!-- Dashboard Metrics -->
         <div class="master-card">
           <div class="section-header">
@@ -1930,10 +1930,21 @@
 
     <!-- Releases & Rollback Tab (NEW) -->
     <div class="tab-content nx-section" id="tab-releases">
-      <div class="enterprise-backup-section">
+      <!-- Breadcrumb + page title to match other tabs -->
+      <div class="mc-shell releases-section">
+        <div class="breadcrumb mc-breadcrumb">
+          <span class="icon">🏠</span> <span data-i18n="breadcrumb.home">Início</span>
+          <span class="separator">›</span>
+          <span data-i18n="breadcrumb.releases">Releases & Rollback</span>
+        </div>
+        <div class="section-header mc-section-header">
+          <h2 class="mc-page-title"><span class="icon">🚀</span> <span data-i18n="releases.title">Releases & Rollback</span></h2>
+          <div class="mc-title-underline" aria-hidden="true"></div>
+          <button class="btn-help" data-help="releases" title="Ajuda"><span class="icon">❓</span></button>
+        </div>
         <!-- Release Metrics -->
-        <div class="master-card">
-          <div class="section-header">
+        <div class="master-card mc-card mc-releases-card">
+          <div class="section-header mc-section-header">
             <h3><span class="icon">📊</span> <span data-i18n="releases.metricsTitle">Métricas de Releases</span></h3>
             <button class="btn-help" data-help="release-metrics" title="Ajuda">
               <span class="icon">❓</span>
@@ -1979,8 +1990,8 @@
         </div>
 
         <!-- Create Release -->
-        <div class="master-card">
-          <div class="section-header">
+        <div class="master-card mc-card mc-releases-card">
+          <div class="section-header mc-section-header">
             <h3><span class="icon">🚀</span> <span data-i18n="releases.createTitle">Criar Nova Release</span></h3>
             <button class="btn-help" data-help="create-release" title="Ajuda">
               <span class="icon">❓</span>
@@ -2014,49 +2025,49 @@
           </div>
           
           <div class="release-form">
-            <div class="form-group">
+            <div class="form-group mc-form-group">
               <label data-i18n="releases.version">Versão (Semântica)</label>
-              <input type="text" id="releaseVersion" class="input" placeholder="2.6.0" data-i18n-placeholder="releases.versionExample">
+              <input type="text" id="releaseVersion" class="input mc-input" placeholder="2.6.0" data-i18n-placeholder="releases.versionExample">
               <small data-i18n="releases.versionHelp">Formato: MAJOR.MINOR.PATCH (ex: 2.6.0)</small>
             </div>
-            <div class="form-group">
+            <div class="form-group mc-form-group">
               <label data-i18n="releases.name">Nome da Release</label>
-              <input type="text" id="releaseName" class="input" placeholder="November Update" data-i18n-placeholder="releases.nameExample">
+              <input type="text" id="releaseName" class="input mc-input" placeholder="November Update" data-i18n-placeholder="releases.nameExample">
             </div>
-            <div class="form-group">
+            <div class="form-group mc-form-group">
               <label data-i18n="releases.channel">Canal</label>
-              <select id="releaseChannel" class="select">
+              <select id="releaseChannel" class="select mc-select">
                 <option value="dev" data-i18n="releases.channelDev">Development</option>
                 <option value="staging" data-i18n="releases.channelStaging">Staging</option>
                 <option value="prod" data-i18n="releases.channelProd">Production</option>
               </select>
             </div>
-            <div class="form-group">
+            <div class="form-group mc-form-group">
               <label data-i18n="releases.changelog">Changelog</label>
-              <textarea id="releaseChangelog" class="input" rows="4" placeholder="- Nova funcionalidade X&#10;- Correção de bug Y&#10;- Melhoria de performance Z" data-i18n-placeholder="releases.changelogExample"></textarea>
+              <textarea id="releaseChangelog" class="input mc-input" rows="4" placeholder="- Nova funcionalidade X&#10;- Correção de bug Y&#10;- Melhoria de performance Z" data-i18n-placeholder="releases.changelogExample"></textarea>
             </div>
-            <div class="form-group">
+            <div class="form-group mc-form-group">
               <label data-i18n="releases.migrations">Migrations (SQL/NoSQL)</label>
-              <textarea id="releaseMigrations" class="input" rows="3" placeholder='[{"id": "001", "type": "forward", "sql": "ALTER TABLE..."}]' data-i18n-placeholder="releases.migrationsExample"></textarea>
+              <textarea id="releaseMigrations" class="input mc-input" rows="3" placeholder='[{"id": "001", "type": "forward", "sql": "ALTER TABLE..."}]' data-i18n-placeholder="releases.migrationsExample"></textarea>
               <small data-i18n="releases.migrationsHelp">JSON array de migrations (forward/backward)</small>
             </div>
-            <div class="form-group">
+            <div class="form-group mc-form-group">
               <label data-i18n="releases.files">Arquivos Alterados</label>
-              <textarea id="releaseFiles" class="input" rows="2" placeholder="style.css, master-control.js, properties.js" data-i18n-placeholder="releases.filesExample"></textarea>
+              <textarea id="releaseFiles" class="input mc-input" rows="2" placeholder="style.css, master-control.js, properties.js" data-i18n-placeholder="releases.filesExample"></textarea>
             </div>
-            <button class="btn btn-primary" id="btnCreateRelease"><span class="icon">📦</span> <span data-i18n="releases.create">Criar Release</span></button>
+            <button class="btn btn-primary mc-module-pill" id="btnCreateRelease"><span class="icon">📦</span> <span data-i18n="releases.create">Criar Release</span></button>
           </div>
         </div>
 
         <!-- Release Timeline -->
-        <div class="master-card full-width">
-          <div class="card-header">
+        <div class="master-card mc-card mc-releases-card full-width">
+          <div class="card-header mc-section-header">
             <h3><span class="icon">🕐</span> <span data-i18n="releases.timelineTitle">Timeline de Releases</span></h3>
             <button class="btn-help" data-help="release-timeline" title="Ajuda">
               <span class="icon">❓</span>
             </button>
             <div class="card-actions">
-              <select id="releaseFilterChannel" class="select">
+              <select id="releaseFilterChannel" class="select mc-select">
                 <option value="all" data-i18n="releases.filterAll">Todos os Canais</option>
                 <option value="dev" data-i18n="releases.channelDev">Development</option>
                 <option value="staging" data-i18n="releases.channelStaging">Staging</option>
@@ -2096,13 +2107,13 @@
         </div>
 
         <!-- Feature Flags -->
-        <div class="master-card full-width">
-          <div class="card-header">
+        <div class="master-card mc-card mc-releases-card full-width">
+          <div class="card-header mc-section-header">
             <h3><span class="icon">🚩</span> <span data-i18n="releases.featureFlagsTitle">Feature Flags</span></h3>
             <button class="btn-help" data-help="feature-flags" title="Ajuda">
               <span class="icon">❓</span>
             </button>
-            <button class="btn btn-primary" id="btnCreateFeatureFlag"><span class="icon">➕</span> <span data-i18n="releases.createFlag">Nova Flag</span></button>
+            <button class="btn btn-primary mc-module-pill" id="btnCreateFeatureFlag"><span class="icon">➕</span> <span data-i18n="releases.createFlag">Nova Flag</span></button>
           </div>
           
           <!-- Help Panel -->

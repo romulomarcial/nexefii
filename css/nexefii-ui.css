@@ -180,6 +180,15 @@ body.nx-page{
 .mc-actions-row{display:flex;gap:10px;align-items:center;margin-top:8px}
 .mc-actions-row .mc-module-pill{padding:6px 12px;font-weight:600}
 
+/* Duplicated for Releases: scope backup-related rules under .releases-section for identical visuals */
+.releases-section .backup-subnav{display:flex;gap:8px;margin:12px 0 16px}
+.releases-section .backup-subnav .subnav-btn{padding:8px 12px;border-radius:8px;background:#f5f5fa;border:1px solid var(--nx-border);cursor:pointer}
+.releases-section .backup-subnav .subnav-btn.active{background:linear-gradient(90deg,#4f46e5,#06b6d4);color:#fff;border-color:transparent}
+.releases-section .mc-backups-card{padding:18px;border-radius:12px;box-shadow:0 10px 24px rgba(15,23,42,0.04);background:#fff;min-height:120px;margin-top:12px}
+.releases-section .mc-form-group .mc-select{width:100%;height:40px;padding:8px 12px;border:1px solid var(--nx-border);border-radius:8px;background:white;appearance:none}
+.releases-section .mc-actions-row{display:flex;gap:10px;align-items:center;margin-top:8px}
+.releases-section .mc-actions-row .mc-module-pill{padding:6px 12px;font-weight:600}
+
 /* Ensure help buttons in section headers align like in Integrations */
 .mc-section-header{display:flex;align-items:center;gap:12px}
 .mc-section-header .btn-help{margin-left:auto}
@@ -188,3 +197,115 @@ body.nx-page{
   .backup-subnav{flex-direction:column}
   .mc-actions-row{flex-direction:column;align-items:stretch}
 }
+
+@media (max-width:780px){
+  .releases-section .backup-subnav{flex-direction:column}
+  .releases-section .mc-actions-row{flex-direction:column;align-items:stretch}
+}
+
+/* Releases-specific refinements to match Integrations/Backups */
+.mc-releases-card{padding:18px;border-radius:12px;box-shadow:0 10px 24px rgba(15,23,42,0.04);background:#fff;min-height:120px;margin-top:12px}
+.mc-input{width:100%;padding:8px 12px;border:1px solid var(--nx-border);border-radius:8px;background:white}
+.mc-select{width:100%;height:40px;padding:8px 12px;border:1px solid var(--nx-border);border-radius:8px;background:white}
+.mc-section-header{display:flex;align-items:center;gap:12px}
+.mc-section-header .btn-help{margin-left:auto}
+.mc-title-underline{height:3px;background:linear-gradient(90deg,#4f46e5,#06b6d4);width:72px;border-radius:2px;margin:6px 0 12px}
+.mc-card + .mc-card{margin-top:16px}
+
+/* ===== Releases tab specific styles (scoped) ===== */
+/* Keep these selectors strictly scoped to #tab-releases per request */
+#tab-releases{padding-top:16px;padding-bottom:32px}
+
+#tab-releases .mc-breadcrumb{margin-bottom:8px}
+
+#tab-releases .section-header.mc-section-header{margin-bottom:16px}
+
+#tab-releases .master-card.mc-card.mc-releases-card{
+  background:#ffffff;
+  border-radius:12px;
+  box-shadow:0 8px 20px rgba(15,23,42,0.06);
+  border:1px solid #e5e7eb;
+  padding:24px;
+  margin:0 0 24px 0;
+}
+
+#tab-releases .mc-input,
+#tab-releases .mc-select{
+  height:40px;
+  border-radius:8px;
+  border:1px solid #e5e7eb;
+  padding:0 12px;
+  box-sizing:border-box;
+}
+
+#tab-releases textarea.mc-input{
+  min-height:96px;
+  padding-top:8px;
+  padding-bottom:8px;
+}
+
+#tab-releases .mc-module-pill{
+  border-radius:999px;
+  padding:10px 20px;
+  font-weight:500;
+}
+
+/* Small responsive tweak kept local to releases */
+@media (max-width:780px){
+  #tab-releases .master-card.mc-card.mc-releases-card{padding:16px}
+  #tab-releases .mc-input, #tab-releases .mc-select{height:42px}
+}
+
+/* ===== end releases-specific styles ===== */
+
+/* ===== User-requested Releases styling (appended) ===== */
+
+/* 1) Standard nx-card used in Releases (match Backups/Integrations) */
+.nx-card {
+  background: #fff;
+  border-radius: 12px;
+  padding: 24px;
+  box-shadow: 0 8px 24px rgba(15, 23, 42, 0.06);
+  border: 1px solid #e5e7eb;
+  margin-bottom: 24px;
+}
+
+/* 2) Ensure the releases wrapper follows the same shell pattern */
+.mc-shell.releases-section {
+  max-width: 1180px;
+  margin: 0 auto;
+  padding: 8px 0 32px 0;
+}
+
+/* 3) Section header inside releases matches other modules */
+.releases-section .mc-section-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding-bottom: 8px;
+  margin-bottom: 16px;
+  border-bottom: 2px solid rgba(0,0,0,0.06);
+}
+
+/* 4) Inputs, selects and textareas inside Releases to match other tabs */
+.releases-section .mc-input,
+.releases-section .mc-select {
+  height: 40px;
+  border: 1px solid #d0d7df;
+  border-radius: 8px;
+  padding: 0 12px;
+}
+
+.releases-section textarea.mc-input {
+  min-height: 110px;
+  padding: 10px 12px;
+}
+
+/* 5) Pill buttons styling inside Releases to match Integrations */
+.releases-section .mc-module-pill {
+  border-radius: 100px;
+  padding: 10px 22px;
+  font-weight: 500;
+}
+
+/* ===== end user-requested Releases styling ===== */
