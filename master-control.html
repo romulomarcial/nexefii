@@ -362,15 +362,16 @@
     <!-- Backups Tab (Consolidated: Property + General Structure) -->
     <div class="tab-content nx-section" id="tab-backups">
       <!-- Breadcrumb -->
-      <div class="breadcrumb">
+      <div class="breadcrumb mc-breadcrumb">
         <span class="icon">🏠</span> <span data-i18n="breadcrumb.home">Início</span> 
         <span class="separator">›</span>
         <span data-i18n="breadcrumb.backups">Backups</span>
       </div>
       
       <!-- Section Header with Help -->
-      <div class="section-header">
-        <h2><span class="icon">💾</span> <span data-i18n="backups.title">Backups</span></h2>
+      <div class="section-header mc-section-header">
+        <h2 class="mc-page-title"><span class="icon">💾</span> <span data-i18n="backups.title">Backups</span></h2>
+        <div class="mc-title-underline" aria-hidden="true"></div>
         <button class="btn-help" data-help="backups" title="Ajuda">
           <span class="icon">❓</span>
         </button>
@@ -384,7 +385,7 @@
       </div>
       
       <!-- Backup Sub-Navigation -->
-      <div class="backup-section">
+      <div class="mc-shell backup-section">
         <div class="backup-subnav" id="backupSubnav">
           <button class="btn subnav-btn active" data-target="section-property-backups">
             <span class="icon">🏨</span> <span data-i18n="backups.propertyBackups.tab">Property Backups</span>
@@ -395,7 +396,7 @@
         </div>
         
         <!-- Property Backups Section -->
-        <div class="master-card nx-card" id="section-property-backups">
+        <div class="master-card mc-card mc-backups-card nx-card" id="section-property-backups">
           <!-- Sub-section Header with Help -->
           <div class="section-header">
             <h3><span class="icon">🏨</span> <span data-i18n="backups.propertyBackups.title">Property Backups</span></h3>
@@ -415,19 +416,19 @@
           </div>
 
           <!-- Property Selection -->
-          <div class="form-group" style="margin-bottom: 20px;">
+          <div class="form-group mc-form-group" style="margin-bottom: 20px;">
             <label style="font-weight: bold;"><span class="icon">🏨</span> Selecionar Propriedade</label>
-            <select id="propertyBackupSelect" class="select" style="width: 100%;">
+            <select id="propertyBackupSelect" class="select mc-select" style="width: 100%;">
               <option value="">-- Selecione uma propriedade --</option>
             </select>
           </div>
           
           <!-- Property Backup Actions -->
-          <div class="actions-row">
-            <button class="btn btn-primary" id="btnPropertyFullBackup">
+          <div class="actions-row mc-actions-row">
+            <button class="btn btn-primary mc-module-pill" id="btnPropertyFullBackup">
               <span class="icon">💾</span> Full Backup
             </button>
-            <button class="btn" id="btnPropertyIncrementalBackup">
+            <button class="btn mc-module-pill" id="btnPropertyIncrementalBackup">
               <span class="icon">📦</span> Incremental
             </button>
           </div>
@@ -439,7 +440,7 @@
         </div>
         
         <!-- General Structure Section -->
-        <div class="master-card nx-card" id="section-general-structure" style="display:none;">
+        <div class="master-card mc-card mc-backups-card nx-card" id="section-general-structure" style="display:none;">
           <!-- Sub-section Header with Help -->
           <div class="section-header">
             <h3><span class="icon">🏗️</span> Backup de Estrutura Geral</h3>
@@ -460,14 +461,14 @@
 
           
           <!-- General Structure Actions -->
-          <div class="actions-row">
-            <button class="btn btn-primary" id="btnGeneralFullBackup">
+          <div class="actions-row mc-actions-row">
+            <button class="btn btn-primary mc-module-pill" id="btnGeneralFullBackup">
               <span class="icon">�</span> Full Backup
             </button>
-            <button class="btn" id="btnGeneralSnapshot">
+            <button class="btn mc-module-pill" id="btnGeneralSnapshot">
               <span class="icon">�</span> Snapshot
             </button>
-          </div>              </label>
+          </div>
               <label class="checkbox-label">
                 <input type="checkbox" value="shared_assets" checked>
                 <span><span class="icon">🖼️</span> <span data-i18n="backups.generalStructure.components.assets">Assets</span></span>
