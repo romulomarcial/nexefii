@@ -79,107 +79,21 @@
       background: #f0f0f0 !important;
       color: #666 !important;
     }
-    .deployment-log::-webkit-scrollbar {
-      width: 8px;
-    }
-    .deployment-log::-webkit-scrollbar-track {
-      background: #0a0a0a;
-    }
-    .deployment-log::-webkit-scrollbar-thumb {
-      background: #00ff00;
-      border-radius: 4px;
-    }
-    .deployment-log::-webkit-scrollbar-thumb:hover {
-      background: #00cc00;
-    }
   </style>
-</head>
-<body class="nx-page">
-  <div class="nx-page-container">
-  <div class="master-container nx-page-body">
-    <!-- Header -->
-    <div class="master-header nx-page-header">
-    <div class="header-left">
-    <h1><span class="icon">🔐</span> <span data-i18n="master.title">Painel Master</span></h1>
-    <span class="master-badge" data-i18n="master.badge">SUPER ADMIN</span>
-      </div>
-  <div class="header-right">
-      <span class="user-info" id="masterUserInfo" data-i18n="master.user">Master User</span>
-  <button class="btn btn-danger" id="btnLogoutMaster"><span class="icon">🚪</span> <span data-i18n="logout">Sair</span></button>
-    
-      </div>
-      <script>
-        // Open wizard and listen for selected property via localStorage key set by wizard
-        (function(){
-          function openWizard(){
-            try {
-              try {
-                // Open wizard in the same tab (no popup)
-                location.href = 'pages/wizard.html?mode=create&from=master-control';
-              } catch(e) {
-                console.warn('[Master] openWizard navigation failed', e);
-              }
-            } catch(e){ console.warn('[Master] openWizard error', e); }
-          }
-
-          function applyWizardSelection(propId){
-            try {
-              if (!propId) return;
-              if (window.SessionContext && typeof SessionContext.setActiveProperty === 'function') {
-                SessionContext.setActiveProperty(propId);
-              } else {
-                try { localStorage.setItem('nexefii_active_property', propId); } catch(e){}
-              }
-              // best-effort: refresh to reflect selection
-              console.log('[Master] Wizard selected property:', propId, '— refreshing UI');
-              setTimeout(function(){ location.reload(); }, 300);
-            } catch(e){ console.warn('[Master] applyWizardSelection error', e); }
-          }
-
-          document.addEventListener('DOMContentLoaded', function(){
-            // Attach openWizard to all elements that may trigger wizard (covers duplicate IDs)
-            try {
-              var btns = document.querySelectorAll('#btnCreateProperty');
-              if (btns && btns.length) {
-                btns.forEach(function(b){
-                  try {
-                    // avoid double-binding if script re-executes
-                    if (!b.__wizardHooked) { b.addEventListener('click', openWizard); b.__wizardHooked = true; }
-                  } catch(e) { /* skip individual button errors */ }
-                });
-              }
-            } catch(e) { console.warn('[Master] warning attaching createProperty handlers', e); }
-
-            // if wizard already wrote a selection before this tab gained focus
-            try { var pending = localStorage.getItem('nexefii_wizard_selected_property'); if (pending) { applyWizardSelection(pending); localStorage.removeItem('nexefii_wizard_selected_property'); } } catch(e){}
-          });
-
-          window.addEventListener('storage', function(e){
-            try {
-              if (!e) return;
-              if (e.key === 'nexefii_wizard_selected_property' && e.newValue) {
-                applyWizardSelection(e.newValue);
-                try { localStorage.removeItem('nexefii_wizard_selected_property'); } catch(e){}
-              }
-            } catch(err){ console.warn('[Master] storage handler error', err); }
-          });
-        })();
-      </script>
-    </div>
 
     <!-- Navigation Tabs -->
     <div class="master-tabs nx-tab-strip">
-  <button class="tab-btn active" data-tab="dashboard"><span class="icon">📊</span> <span data-i18n="tabs.dashboard">Dashboard</span></button>
-  <button class="tab-btn" data-tab="backups"><span class="icon">💾</span> <span data-i18n="tabs.backups">Backups</span></button>
-  <button class="tab-btn" data-tab="releases"><span class="icon">🚀</span> <span data-i18n="tabs.releases">Releases & Rollback</span></button>
-  <button class="tab-btn" data-tab="users"><span class="icon">👥</span> <span data-i18n="tabs.users">Usuários</span></button>
-  <button class="tab-btn" data-tab="integrations"><span class="icon">🔗</span> <span data-i18n="tabs.integrations">Integrações</span></button>
-  <button class="tab-btn" data-tab="properties"><span class="icon">🏨</span> <span data-i18n="tabs.properties">Propriedades</span></button>
-  <button class="tab-btn" data-tab="logs"><span class="icon">�</span> <span data-i18n="tabs.logs">Logs & Auditoria</span></button>
-  <button class="tab-btn" data-tab="settings"><span class="icon">⚙️</span> <span data-i18n="tabs.settings">Configurações</span></button>
-  <button class="tab-btn" data-tab="maintenance"><span class="icon">🔧</span> <span data-i18n="tabs.maintenance">Manutenção</span></button>
-  <button class="tab-btn" data-tab="i18n"><span class="icon">🌐</span> <span data-i18n="tabs.i18n">Internacionalização</span></button>
-  <button class="tab-btn" data-tab="metrics"><span class="icon">�</span> <span data-i18n="tabs.metrics">Métricas</span></button>
+      <button class="tab-btn active" data-tab="dashboard"><span class="icon">📊</span> <span data-i18n="tabs.dashboard">Dashboard</span></button>
+      <button class="tab-btn" data-tab="backups"><span class="icon">💾</span> <span data-i18n="tabs.backups">Backups</span></button>
+      <button class="tab-btn" data-tab="releases"><span class="icon">🚀</span> <span data-i18n="tabs.releases">Releases & Rollback</span></button>
+      <button class="tab-btn" data-tab="users"><span class="icon">👥</span> <span data-i18n="tabs.users">Usuários</span></button>
+      <button class="tab-btn" data-tab="integrations"><span class="icon">🔗</span> <span data-i18n="tabs.integrations">Integrações</span></button>
+      <button class="tab-btn" data-tab="properties"><span class="icon">🏨</span> <span data-i18n="tabs.properties">Propriedades</span></button>
+      <button class="tab-btn" data-tab="logs"><span class="icon">📚</span> <span data-i18n="tabs.logs">Logs & Auditoria</span></button>
+      <button class="tab-btn" data-tab="settings"><span class="icon">⚙️</span> <span data-i18n="tabs.settings">Configurações</span></button>
+      <button class="tab-btn" data-tab="maintenance"><span class="icon">🔧</span> <span data-i18n="tabs.maintenance">Manutenção</span></button>
+      <button class="tab-btn" data-tab="i18n"><span class="icon">🌐</span> <span data-i18n="tabs.i18n">Internacionalização</span></button>
+      <button class="tab-btn" data-tab="metrics"><span class="icon">📈</span> <span data-i18n="tabs.metrics">Métricas</span></button>
     </div>
 
     <!-- Integrations Tab -->
@@ -191,27 +105,27 @@
         <button class="btn-help" data-help="integrations" title="Ajuda"><span class="icon">❓</span></button>
       </div>
       <div class="mc-integrations-shell nx-section">
-        <div class="master-card mc-card mc-integrations-card nx-card nx-section-card">
+        <div class="mc-integrations-card nx-card nx-section-card">
           <!-- breadcrumb + title above -->
           <!-- BARRA DE LINKS PMS: replicate existing master-module-nav markup here for integrations -->
           <div class="master-module-nav mc-integrations-module-nav nx-flex" style="margin:8px 0 12px;flex-wrap:wrap;">
-            <a class="btn btn-secondary mc-module-pill" href="pms-frontdesk.html" data-i18n="nav.pms">PMS - Frontdesk</a>
-            <a class="btn btn-secondary mc-module-pill" href="pms-rooms.html" data-i18n="nav.pms.rooms">PMS - Rooms</a>
-            <a class="btn btn-secondary mc-module-pill" href="pms-reservations.html" data-i18n="nav.pms.reservations">PMS - Reservations</a>
-            <a class="btn btn-secondary mc-module-pill" href="housekeeping-control.html" data-i18n="nav.housekeeping">Housekeeping</a>
-            <a class="btn btn-secondary mc-module-pill" href="engineering-control.html" data-i18n="nav.engineering">Engineering</a>
-            <a class="btn btn-secondary mc-module-pill" href="alerts-control.html" data-i18n="nav.alerts">Alerts / IT</a>
-            <a class="btn btn-secondary mc-module-pill" href="admin.html" data-i18n="nav.admin">Admin</a>
-            <a class="btn btn-secondary mc-module-pill" href="pages/property-dashboard.html" data-i18n="nav.propertyDashboard">Property Dashboard</a>
+            <a class="btn btn-secondary" href="pms-frontdesk.html" data-i18n="nav.pms">PMS - Frontdesk</a>
+            <a class="btn btn-secondary" href="pms-rooms.html" data-i18n="nav.pms.rooms">PMS - Rooms</a>
+            <a class="btn btn-secondary" href="pms-reservations.html" data-i18n="nav.pms.reservations">PMS - Reservations</a>
+            <a class="btn btn-secondary" href="housekeeping-control.html" data-i18n="nav.housekeeping">Housekeeping</a>
+            <a class="btn btn-secondary" href="engineering-control.html" data-i18n="nav.engineering">Engineering</a>
+            <a class="btn btn-secondary" href="alerts-control.html" data-i18n="nav.alerts">Alerts / IT</a>
+            <a class="btn btn-secondary" href="admin.html" data-i18n="nav.admin">Admin</a>
+            <a class="btn btn-secondary" href="pages/property-dashboard.html" data-i18n="nav.propertyDashboard">Property Dashboard</a>
           </div>
 
           <!-- LINHA DE SELEÇÃO DE PROPRIEDADE + ADICIONAR INTEGRAÇÃO -->
-          <div class="mc-integrations-toolbar" style="margin-bottom:12px;">
-            <div class="mc-integrations-toolbar-left">
+          <div class="mc-integrations-filters" style="margin-bottom:12px;">
+            <div class="mc-filter-left">
               <label style="font-weight:600;">Propriedade</label>
               <select id="int_prop_select" style="min-width:280px;"></select>
             </div>
-            <div class="mc-integrations-toolbar-right">
+            <div class="mc-filter-right">
               <button class="btn" id="int_add_btn">Adicionar Integração</button>
             </div>
           </div>
@@ -245,7 +159,9 @@
       </div>
     </div>
 
-    <!-- Navigation tabs moved above header to sit directly beneath the master header -->
+    
+
+    <!-- Quick Modules Navigation moved into integration card (avoid duplication) -->
 
     <!-- Dashboard Tab (formerly Overview) -->
     <div class="tab-content active nx-section" id="tab-dashboard">
@@ -362,14 +278,14 @@
     <!-- Backups Tab (Consolidated: Property + General Structure) -->
     <div class="tab-content nx-section" id="tab-backups">
       <!-- Breadcrumb -->
-      <div class="breadcrumb">
+      <div class="breadcrumb mc-breadcrumb">
         <span class="icon">🏠</span> <span data-i18n="breadcrumb.home">Início</span> 
         <span class="separator">›</span>
         <span data-i18n="breadcrumb.backups">Backups</span>
       </div>
       
       <!-- Section Header with Help -->
-      <div class="section-header">
+      <div class="section-header mc-section-header">
         <h2><span class="icon">💾</span> <span data-i18n="backups.title">Backups</span></h2>
         <button class="btn-help" data-help="backups" title="Ajuda">
           <span class="icon">❓</span>
@@ -506,14 +422,18 @@
       <div class="master-card nx-card" id="userFormCard" style="display:none;margin-top:12px;">
         <h3 id="userFormTitle">Criar / Editar Usuário</h3>
         <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;">
-          <div>
-            <label>Nome</label>
-            <input id="uf_name" />
+          </div>
+
+          
+
+          <!-- Integrations Tab -->
           </div>
           <div>
             <label>Email</label>
             <input id="uf_email" />
-          </div>
+          
+
+          <!-- Integrations Tab -->
           <div>
             <label>Role</label>
             <select id="uf_role"><option value="MASTER">MASTER</option><option value="SUPERADMIN">SUPERADMIN</option><option value="USER">USER</option></select>
@@ -799,70 +719,82 @@
       </div>
       
       <div class="system-grid">
-        <!-- Backup Policies -->
-        <div class="master-card nx-card">
-          <h3><span class="icon">💾</span> <span data-i18n="settings.backupPolicies">Políticas de Backup</span></h3>
-          <div class="settings-list">
-            <div class="setting-item">
-              <label data-i18n="settings.autoBackup">Backup Automático</label>
-              <select id="autoBackupFrequency" class="select">
-                <option value="disabled" data-i18n="settings.backupAuto.disabled">Desabilitado</option>
-                <option value="daily" data-i18n="settings.backupAuto.daily">Diário</option>
-                <option value="weekly" data-i18n="settings.backupAuto.weekly">Semanal</option>
-                <option value="monthly" data-i18n="settings.backupAuto.monthly">Mensal</option>
-              </select>
+        <!-- New two-column layout for settings: Backup Policies + System Behavior -->
+        <div class="mc-settings-row">
+          <!-- Card A: Backup Policies -->
+          <div class="mc-card mc-settings-card mc-settings-backup">
+            <div class="mc-settings-card-header">
+              <h3 class="mc-card-title"><span class="icon">💾</span> <span data-i18n="settings.backupPolicies">Políticas de Backup</span></h3>
             </div>
-            <div class="setting-item">
-              <label data-i18n="settings.retention">Retenção de Backups (dias)</label>
-              <input type="number" id="backupRetention" value="30" min="1" class="input">
-            </div>
-            <div class="setting-item">
-              <label>
-                <input type="checkbox" id="compressBackups" checked>
-                <span data-i18n="settings.compress">Comprimir backups automaticamente</span>
-              </label>
-            </div>
-            <div class="setting-item">
-              <label>
-                <input type="checkbox" id="encryptBackups">
-                <span data-i18n="settings.encrypt">Criptografar backups sensíveis</span>
-              </label>
+            <div class="mc-settings-grid">
+              <div class="setting-item">
+                <label data-i18n="settings.autoBackup">Backup Automático</label>
+                <select id="autoBackupFrequency" class="select">
+                  <option value="disabled" data-i18n="settings.backupAuto.disabled">Desabilitado</option>
+                  <option value="daily" data-i18n="settings.backupAuto.daily">Diário</option>
+                  <option value="weekly" data-i18n="settings.backupAuto.weekly">Semanal</option>
+                  <option value="monthly" data-i18n="settings.backupAuto.monthly">Mensal</option>
+                </select>
+              </div>
+
+              <div class="setting-item">
+                <label data-i18n="settings.retention">Retenção de Backups (dias)</label>
+                <input type="number" id="backupRetention" value="30" min="1" class="input">
+              </div>
+
+              <div class="setting-item">
+                <label>
+                  <input type="checkbox" id="compressBackups" checked>
+                  <span data-i18n="settings.compress">Comprimir backups automaticamente</span>
+                </label>
+              </div>
+
+              <div class="setting-item">
+                <label>
+                  <input type="checkbox" id="encryptBackups">
+                  <span data-i18n="settings.encrypt">Criptografar backups sensíveis</span>
+                </label>
+              </div>
             </div>
           </div>
-        </div>
 
-        <!-- System Behavior -->
-        <div class="master-card nx-card">
-          <h3><span class="icon">⚙️</span> <span data-i18n="settings.systemBehavior">Comportamento do Sistema</span></h3>
-          <div class="settings-list">
-            <div class="setting-item">
-              <label data-i18n="settings.logLevel">Nível de Log</label>
-              <select id="logLevel" class="select">
-                <option value="error" data-i18n="settings.logLevels.error">Erro</option>
-                <option value="warning" data-i18n="settings.logLevels.warning">Aviso</option>
-                <option value="info" data-i18n="settings.logLevels.info" selected>Info</option>
-                <option value="debug" data-i18n="settings.logLevels.debug">Debug</option>
-              </select>
+          <!-- Card B: System Behavior -->
+          <div class="mc-card mc-settings-card mc-settings-behavior">
+            <div class="mc-settings-card-header">
+              <h3 class="mc-card-title"><span class="icon">⚙️</span> <span data-i18n="settings.systemBehavior">Comportamento do Sistema</span></h3>
             </div>
-            <div class="setting-item">
-              <label data-i18n="settings.autoVersioning">Versionamento Automático</label>
-              <select id="autoVersioning" class="select">
-                <option value="enabled" selected data-i18n="settings.enabled">Habilitado</option>
-                <option value="disabled" data-i18n="settings.disabled">Desabilitado</option>
-              </select>
-            </div>
-            <div class="setting-item">
-              <label>
-                <input type="checkbox" id="doubleConfirmation" checked>
-                <span data-i18n="settings.doubleConfirm">Confirmação dupla para ações críticas</span>
-              </label>
+            <div class="mc-settings-grid">
+              <div class="setting-item">
+                <label data-i18n="settings.logLevel">Nível de Log</label>
+                <select id="logLevel" class="select">
+                  <option value="error" data-i18n="settings.logLevels.error">Erro</option>
+                  <option value="warning" data-i18n="settings.logLevels.warning">Aviso</option>
+                  <option value="info" data-i18n="settings.logLevels.info" selected>Info</option>
+                  <option value="debug" data-i18n="settings.logLevels.debug">Debug</option>
+                </select>
+              </div>
+
+              <div class="setting-item">
+                <label data-i18n="settings.autoVersioning">Versionamento Automático</label>
+                <select id="autoVersioning" class="select">
+                  <option value="enabled" selected data-i18n="settings.enabled">Habilitado</option>
+                  <option value="disabled" data-i18n="settings.disabled">Desabilitado</option>
+                </select>
+              </div>
+
+              <div class="setting-item">
+                <label>
+                  <input type="checkbox" id="doubleConfirmation" checked>
+                  <span data-i18n="settings.doubleConfirm">Confirmação dupla para ações críticas</span>
+                </label>
+              </div>
             </div>
           </div>
-        </div>
+        </div><!-- /.mc-settings-row -->
 
-        <!-- Storage Management -->
-        <div class="master-card full-width">
-          <h3><span class="icon">🗄️</span> <span data-i18n="settings.storage">Armazenamento</span></h3>
+        <!-- Storage card (full width below) -->
+        <div class="mc-card mc-settings-card mc-settings-storage" style="margin-top:18px;">
+          <h3 class="mc-card-title"><span class="icon">🗄️</span> <span data-i18n="settings.storage">Armazenamento</span></h3>
           <div class="storage-info">
             <div class="storage-bar">
               <div class="storage-used" id="storageUsedBar" style="width: 0%"></div>
@@ -875,14 +807,13 @@
           </div>
         </div>
 
-        <!-- Save Button -->
-        <div class="master-card full-width">
-          <button class="btn btn-primary btn-large" id="btnSaveSettings" onclick="window.masterCtrl.saveSettings()">
+        <!-- Action bar: Save button only -->
+        <div class="mc-card mc-settings-card mc-settings-actions" style="display:flex;justify-content:center;align-items:center;margin-top:16px;padding:14px;">
+          <button class="btn btn-primary" id="btnSaveSettings" onclick="window.masterCtrl.saveSettings()">
             <span class="icon">💾</span> <span data-i18n="settings.save">Salvar Configurações</span>
           </button>
         </div>
-      </div>
-    </div>
+ 
 
     <!-- Maintenance Tab (NEW) -->
     <div class="tab-content nx-section" id="tab-maintenance">
@@ -1300,20 +1231,7 @@
     </div>
     <!-- Properties Management Tab (NEW) -->
     <div class="tab-content nx-section" id="tab-properties">
-      <!-- Breadcrumb -->
-      <div class="breadcrumb">
-        <span class="icon">🏠</span> <span data-i18n="breadcrumb.home">Início</span> 
-        <span class="separator">›</span> 
-        <span data-i18n="tabs.properties">Propriedades</span>
-      </div>
-
-      <!-- Section Header with Help -->
-      <div class="section-header">
-        <h2><span class="icon">🏨</span> <span data-i18n="properties.title">Gestão de Propriedades</span></h2>
-        <button class="btn-help" data-help="properties" title="Ajuda">
-          <span class="icon">❓</span>
-        </button>
-      </div>
+      
 
       <!-- Help Panel -->
       <div class="help-panel" id="help-properties" style="display:none;">
@@ -1356,64 +1274,87 @@
         </div>
       </div>
 
-      <div class="properties-section">
-        
-        <div class="master-card mc-card mc-properties-card">
-          <div class="mc-properties-header">
-            <div class="actions-bar">
-              <button class="btn btn-primary" id="btnCreateProperty">
-                <span class="icon">➕</span> <span data-i18n="properties.create">Criar Propriedade</span>
-              </button>
-              <button class="btn" id="btnRefreshProperties">
-                <span class="icon">🔄</span> <span data-i18n="properties.refresh">Atualizar Lista</span>
-              </button>
-              <div class="mc-properties-search">
+      <div class="properties-section mc-properties-shell">
+
+        <div class="mc-properties-card master-card nx-card">
+
+          <!-- Card Header: small breadcrumb + title inside card -->
+          <div class="mc-properties-card-header card-header">
+            <div>
+              <div class="breadcrumb mc-breadcrumb" style="margin-bottom:6px;">
+                <span class="icon">🏠</span> <span data-i18n="breadcrumb.home">Início</span>
+                <span class="separator">›</span>
+                <span data-i18n="tabs.properties">Propriedades</span>
+              </div>
+              <h3 class="mc-card-title"><span class="icon">🏨</span> <span data-i18n="properties.title">Gestão de Propriedades</span></h3>
+            </div>
+            <button class="btn-help" data-help="properties" title="Ajuda"><span class="icon">❓</span></button>
+          </div>
+
+          <!-- Toolbar: filters left, actions right -->
+          <div class="mc-properties-toolbar" style="display:flex;gap:12px;align-items:center;justify-content:space-between;flex-wrap:wrap;">
+            <div class="mc-filter-left" style="display:flex;gap:12px;align-items:center;">
+              <div class="search-box">
                 <input type="text" id="searchProperties" placeholder="Buscar propriedades..." data-i18n-placeholder="properties.search">
               </div>
             </div>
+
+            <div class="mc-filter-right" style="display:flex;gap:10px;align-items:center;">
+              <button class="btn" id="btnRefreshProperties">
+                <span class="icon">🔄</span> <span data-i18n="properties.refresh">Atualizar Lista</span>
+              </button>
+              <button class="btn btn-primary" id="btnCreateProperty">
+                <span class="icon">➕</span> <span data-i18n="properties.create">Criar Propriedade</span>
+              </button>
+            </div>
           </div>
 
-          <div class="mc-properties-table-wrapper">
+          <!-- Table inside card -->
+          <div class="mc-properties-table-wrapper" style="margin-top:12px;">
             <h3><span class="icon">📋</span> <span data-i18n="properties.listTitle">Propriedades Cadastradas</span></h3>
             <div class="table-container">
               <table class="data-table" id="propertiesTable">
-                <thead>
-                  <tr>
-                    <th data-i18n="properties.table.id">Property ID</th>
-                    <th data-i18n="properties.table.name">Nome</th>
-                    <th data-i18n="properties.table.modules">Módulos Adquiridos</th>
-                    <th data-i18n="properties.table.capacity">Capacidade</th>
-                    <th data-i18n="properties.table.link">Link</th>
-                    <th data-i18n="properties.table.status">Status</th>
-                    <th data-i18n="properties.table.actions">Ações</th>
-                  </tr>
-                </thead>
+              <thead>
+                <tr>
+                  <th data-i18n="properties.table.id">Property ID</th>
+                  <th data-i18n="properties.table.name">Nome</th>
+                  <th data-i18n="properties.table.modules">Módulos Adquiridos</th>
+                  <th data-i18n="properties.table.capacity">Capacidade</th>
+                  <th data-i18n="properties.table.link">Link</th>
+                  <th data-i18n="properties.table.status">Status</th>
+                  <th data-i18n="properties.table.actions">Ações</th>
+                </tr>
+              </thead>
                 <tbody id="propertiesTableBody">
-                  <!-- Populated by JavaScript -->
+                <!-- Populated by JavaScript -->
                 </tbody>
               </table>
+          </div>
             </div>
           </div>
-        </div>
 
-      </div>
+        </div>
     </div>
 
 
 
     <!-- Logs Tab -->
     <div class="tab-content nx-section" id="tab-logs">
-      <div class="logs-section">
-        <div class="master-card mc-card mc-logs-card">
-          <div class="mc-logs-header">
-            <div class="section-header">
-              <h3><span class="icon">📝</span> <span data-i18n="logs.title">Logs de Auditoria</span></h3>
-              <button class="btn-help" data-help="logs" title="Ajuda">
-                <span class="icon">❓</span>
-              </button>
-            </div>
+      <!-- Logs Tab: single large card with title inside -->
+      <div class="logs-section mc-logs-shell">
+        <div class="mc-logs-card master-card nx-card">
+
+          <!-- Card Header: Title inside the card -->
+          <div class="mc-logs-card-header card-header">
+            <h3 class="mc-card-title"><span class="icon">📝</span> <span data-i18n="logs.title">Logs de Auditoria</span></h3>
+            <button class="btn-help" data-help="logs" title="Ajuda"><span class="icon">❓</span></button>
           </div>
 
+          <!-- Export button, aligned left (below title) -->
+          <div class="mc-logs-toolbar-top" style="margin-bottom:12px;">
+            <button class="btn" onclick="masterCtrl.exportLogs()"><span class="icon">📤</span> <span data-i18n="logs.export">Exportar Logs</span></button>
+          </div>
+          
           <!-- Help Panel -->
           <div class="help-panel" id="help-logs" style="display:none;">
             <div class="help-content">
@@ -1443,36 +1384,31 @@
               <p><em>🔍 Investigação: Logs são essenciais para rastrear problemas e identificar uso indevido</em></p>
             </div>
           </div>
-
+          
           <div class="mc-logs-toolbar">
-            <div class="mc-logs-toolbar-left">
-              <div class="filters-row">
-                <select id="filterLogType" class="select">
-                  <option value="" data-i18n="logs.allTypes">Todos os Tipos</option>
-                  <option value="auth" data-i18n="logs.auth">Autenticação</option>
-                  <option value="backup" data-i18n="logs.backup">Backup</option>
-                  <option value="restore" data-i18n="logs.restore">Restore</option>
-                  <option value="user" data-i18n="logs.user">Usuário</option>
-                  <option value="system" data-i18n="logs.system">Sistema</option>
-                </select>
-                <select id="filterLogLevel" class="select">
-                  <option value="" data-i18n="logs.allLevels">Todos os Níveis</option>
-                  <option value="info" data-i18n="logs.info">Info</option>
-                  <option value="warning" data-i18n="logs.warning">Aviso</option>
-                  <option value="error" data-i18n="logs.error">Erro</option>
-                  <option value="critical" data-i18n="logs.critical">Crítico</option>
-                </select>
-                <input type="date" id="filterLogDate" class="input">
-              </div>
+            <div class="mc-logs-toolbar-left filters-row mc-logs-filters">
+              <select id="filterLogType" class="select">
+              <option value="" data-i18n="logs.allTypes">Todos os Tipos</option>
+              <option value="auth" data-i18n="logs.auth">Autenticação</option>
+              <option value="backup" data-i18n="logs.backup">Backup</option>
+              <option value="restore" data-i18n="logs.restore">Restore</option>
+              <option value="user" data-i18n="logs.user">Usuário</option>
+              <option value="system" data-i18n="logs.system">Sistema</option>
+            </select>
+            <select id="filterLogLevel" class="select">
+              <option value="" data-i18n="logs.allLevels">Todos os Níveis</option>
+              <option value="info" data-i18n="logs.info">Info</option>
+              <option value="warning" data-i18n="logs.warning">Aviso</option>
+              <option value="error" data-i18n="logs.error">Erro</option>
+              <option value="critical" data-i18n="logs.critical">Crítico</option>
+            </select>
+              <input type="date" id="filterLogDate" class="input">
             </div>
-            <div class="mc-logs-toolbar-right">
-              <div class="card-header">
-                <button class="btn" onclick="masterCtrl.exportLogs()"><span class="icon">📤</span> <span data-i18n="logs.export">Exportar Logs</span></button>
-              </div>
+            <div class="mc-logs-toolbar-right card-header">
+              <!-- toolbar-right kept (if more buttons needed) -->
             </div>
           </div>
-
-          <div class="mc-logs-list-wrapper">
+          <div class="mc-logs-table-wrapper mc-logs-results">
             <div class="logs-list" id="logsList">
               <!-- Logs will be rendered here -->
             </div>
@@ -2365,8 +2301,8 @@
       </div>
     </div>
   </div>
-  <!-- Create/Edit Property Modal -->
-  <div class="mc-properties-create-inline">
+  <!-- Create/Edit Property Modal (moved into hidden inline wrapper) -->
+  <section class="mc-properties-create-inline">
   <div id="propertyModal" class="modal" style="display:none;">
     <div class="modal-content" style="max-width:700px; background: white;">
       <div class="modal-header">
@@ -2451,7 +2387,7 @@
       </div>
     </div>
   </div>
-  </div>
+  </section>
 
   <!-- Deployment Wizard Modal -->
   <div id="deploymentWizard" class="modal" style="display:none;">
