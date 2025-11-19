@@ -193,19 +193,29 @@
   }
 
   // Navigation helper: navigate to Master Control with selected module and property
-  function navigateToModule(moduleKey){
+  function navigateToModule(moduleKey) {
+    var propertyKey = getDashboardPropertyKey();
+    if (!propertyKey) {
+      console.warn('[PropertyDashboard] navigateToModule(): no propertyKey; aborting', { moduleKey: moduleKey });
+      return;
+    }
+
+    var url = 'master-control.html?propertyKey=' + encodeURIComponent(propertyKey);
+    if (moduleKey) {
+      url += '&module=' + encodeURIComponent(moduleKey);
+    }
+
+    console.info('[PropertyDashboard] navigateToModule()', {
+      moduleKey: moduleKey,
+      propertyKey: propertyKey,
+      url: url
+    });
+
     try {
-      const property = getDashboardPropertyKey();
-      console.info('[PropertyDashboard] navigateToModule()', { moduleKey, property });
-      const params = new URLSearchParams();
-      if (property) params.set('selectedProperty', property);
-      if (moduleKey) {
-        // Allow mapping: housekeeping is known as 'governance' in master control
-        const moduleParam = (moduleKey === 'housekeeping') ? 'governance' : moduleKey;
-        params.set('module', moduleParam);
-      }
-      window.location.href = '/master-control.html?' + params.toString();
-    } catch(e){ console.warn('[PropertyDashboard] navigateToModule error', e); }
+      window.location.href = url;
+    } catch (e) {
+      console.error('[PropertyDashboard] navigateToModule(): navigation failed', e);
+    }
   }
 
   function wireModuleClicks(){

@@ -1,0 +1,100 @@
+[console] [DemoData] ðŸŽ­ Demo Data Generator carregado
+[console] 🚀 Iniciando Master Control System...
+[console] 📦 window.NexefiiProps disponível? true
+[console] ✅ NexefiiProps.listProperties() retornou 3 propriedades: JSHandle@array
+[console] populateBackupPropertySelect(): window.NexefiiProps disponível? true
+[console] populateBackupPropertySelect(): NexefiiProps retornou 3 propriedades: JSHandle@array
+[console] populateBackupPropertySelect(): Propriedades encontradas: 3 JSHandle@array
+[console] populateBackupPropertySelect(): Select backupPropertySelect populado com 4 opções
+[console] populatePropertySelects(): window.NexefiiProps disponível? true
+[console] populatePropertySelects(): window.NexefiiProps.listProperties disponível? true
+[console] populatePropertySelects(): NexefiiProps retornou 3 propriedades: JSHandle@array
+[console] populatePropertySelects(): Total de propriedades após processamento: 3 JSHandle@array
+[console] populatePropertySelects(): Select newUserProperties populado com 3 opções
+[console] populatePropertySelects(): Select editUserProperties populado com 3 opções
+[console] getPropertiesList(): NexefiiProps retornou 3 propriedades
+[console] getPropertiesList(): Retornando 3 propriedades: JSHandle@array
+[console] getPropertiesList(): NexefiiProps retornou 3 propriedades
+[console] getPropertiesList(): Retornando 3 propriedades: JSHandle@array
+[console] [cleanupUserProperties] Nenhum usuário precisou de correção
+[console] ✅ Master Control System initialized
+[console] [MasterControl] masterCtrl exposto globalmente: object
+[console] [Enterprise] MasterControlSystem not found; skipping enterprise wiring.
+[console] ✅ Backup Manager initialized successfully!
+[console] 🔧 Loading Master Control V3 Compatibility Layer...
+[console] [property-publish-helpers] Carregando helpers...
+[console] [property-publish-helpers] masterCtrl encontrado, adicionando funções...
+[console] [property-publish-helpers] ✓ Funções adicionadas com sucesso!
+[console] populateBackupPropertySelect(): window.NexefiiProps disponível? true
+[console] populateBackupPropertySelect(): NexefiiProps retornou 3 propriedades: JSHandle@array
+[console] populateBackupPropertySelect(): Propriedades encontradas: 3 JSHandle@array
+[console] populateBackupPropertySelect(): Select backupPropertySelect populado com 4 opções
+[console] populatePropertySelects(): window.NexefiiProps disponível? true
+[console] populatePropertySelects(): window.NexefiiProps.listProperties disponível? true
+[console] populatePropertySelects(): NexefiiProps retornou 3 propriedades: JSHandle@array
+[console] populatePropertySelects(): Total de propriedades após processamento: 3 JSHandle@array
+[console] populatePropertySelects(): Select newUserProperties populado com 3 opções
+[console] populatePropertySelects(): Select editUserProperties populado com 3 opções
+[console] getPropertiesList(): NexefiiProps retornou 3 propriedades
+[console] getPropertiesList(): Retornando 3 propriedades: JSHandle@array
+[console] [MasterControl] initMasterTabsOnLoad(): activated fallback dashboard
+[console] 🚀 Initializing V3 Compatibility Features...
+[console] ✅ Tab Navigation fixed: 11 tabs
+[console] ✅ Help System initialized: 21 buttons
+[console] ✅ New Backup Subnavigation initialized: 2 buttons
+[console] ✅ Old Backup Subnavigation initialized: 5 buttons
+[console] BackupManager: Carregando propriedades de 0 usuários
+[console] BackupManager: Propriedades encontradas: JSHandle@array
+[console] ✅ Backup Actions initialized
+[console] ✅ Quick Actions initialized
+[console] ✅ Language Selector initialized: 3 languages
+[console] ✅ Settings initialized
+[console] ✅ Maintenance Actions initialized
+[console] ✅ V3 Compatibility Layer initialized successfully!
+[console] [DOM] Password field is not contained in a form: (More info: https://goo.gl/9p2vKq) %o
+[console] [DOM] Input elements should have autocomplete attributes (suggested: "current-password"): (More info: https://goo.gl/9p2vKq) %o
+tabState master-control load: {"visible":["tab-dashboard"],"activeButtons":["dashboard"]}
+Integrations order check (initial): {"ok":true,"idxNav":0,"idxSelect":1}
+PASS: Integrations order check
+PASS: Master control initial tab: only dashboard visible.
+[console] [Init] Active property set from query: nexefiiRioDeJaneiro
+[console] [PropertyDashboard] getDashboardPropertyKey(): JSHandle@object
+[console] [PropertyDashboard] activePropertyKey = nexefiiRioDeJaneiro
+[console] [PropertyDashboard] resolvedProp = JSHandle@object
+[console] [PropertyDashboard] sessionActiveProperty (before sync) = 
+[console] [PropertyDashboard] sessionActiveProperty (after sync) = 
+[console] [PropertyDashboard] isMaster= true hasActive= true
+[console] [PropertyDashboard] loaded props from NexefiiProps.listProperties(): JSHandle@array
+[console] [PropertyDashboard] populatePropertySelector(): options = 1 activePropertyKey = nexefiiRioDeJaneiro
+[console] [I18n] Legacy monolithic loaded for seeding
+[console] [I18n] Segment loaded: common (pt)
+[console] [I18n] Segment loaded: wizard (pt)
+[console] [I18n] Segment loaded: dashboard (pt)
+[console] [I18n] Segment loaded: rooms (pt)
+[console] [I18n] Segment loaded: frontdesk (pt)
+[console] [I18n] Segment loaded: reservations (pt)
+[console] [I18n] Segment loaded: common (en)
+[console] [I18n] Segment loaded: wizard (en)
+[console] [I18n] Segment loaded: dashboard (en)
+[console] [I18n] Segment loaded: rooms (en)
+[console] [I18n] Segment loaded: frontdesk (en)
+[console] [I18n] Segment loaded: reservations (en)
+[console] [I18n] Segment loaded: common (es)
+[console] [I18n] Segment loaded: wizard (es)
+[console] [I18n] Segment loaded: dashboard (es)
+[console] [I18n] Segment loaded: rooms (es)
+[console] [I18n] Segment loaded: frontdesk (es)
+[console] [I18n] Segment loaded: reservations (es)
+[console] [I18n] Languages ready: JSHandle@array
+[console] [I18n] Applied translations to 16 elements (only real translations or defaults replaced)
+[console] [PropertyDashboard] wireModuleClicks(): wired modules = 1
+[console] [I18n] Applied translations to 12 elements (only real translations or defaults replaced)
+[console] [PropertyDashboard] getDashboardPropertyKey(): JSHandle@object
+[console] [PropertyDashboard] navigateToModule() JSHandle@object
+[console] Failed to load resource: the server responded with a status of 404 (File not found)
+Clicked engineering module
+Navigation finalUrl: http://127.0.0.1:8004/pages/master-control.html?propertyKey=nexefiiRioDeJaneiro&module=engineering
+PASS: Navigation included propertyKey and module param. finalUrl:http://127.0.0.1:8004/pages/master-control.html?propertyKey=nexefiiRioDeJaneiro&module=engineering
+tabState after navigation: {"visible":[],"activeButtons":[]}
+WARN: master-control after navigation: tab state is not single-dashboard
+Saved screenshot to r:\Development\Projects\nexefii\qa\puppeteer-validate-tabs-navigation.png

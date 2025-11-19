@@ -1,0 +1,146 @@
+/* Nexefii UI (nx-) - Minimal starter styles to modernize master-control and property-dashboard
+   - .nx-page, .nx-page-header, .nx-page-body: page layout
+   - .nx-card: card wrapper for sections and tab content
+   - .nx-kpi-grid, .nx-module-grid: responsive grids
+   - .nx-btn: subtle modern button style (preserve ids for JS binding)
+   - Prefix prevents collisions with existing legacy styles
+*/
+
+/* Base resets and variables */
+:root{
+  --nx-bg:#ffffff;
+  --nx-surface:#ffffff;
+  --nx-border:#e6e7ea;
+  --nx-muted:#6b7280;
+  --nx-primary:#5264f3;
+  --nx-radius:10px;
+  --nx-shadow: 0 6px 18px rgba(15,23,42,0.06);
+}
+
+body.nx-page{
+  font-family: Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial;
+  background: linear-gradient(180deg, #f7fafc, #ffffff);
+  color: #111827;
+}
+
+/* Page wrapper */
+.nx-page{min-height:100vh;display:flex;flex-direction:column}
+.nx-page .nx-page-container{width:100%;max-width:1200px;margin:0 auto;padding:20px}
+
+/* Header */
+.nx-page-header{display:flex;align-items:center;justify-content:space-between;gap:18px;padding:18px 0}
+.nx-page-header h1{font-size:20px;margin:0}
+
+/* Tab strip for master control */
+.nx-tab-strip{display:flex;gap:6px;align-items:stretch;margin:8px 0 16px}
+.nx-tab-strip .tab-btn{flex:1 1 0;text-align:center;min-width:90px;padding:6px 10px;border-radius:8px;border:0;background:#f5f5fa;font-size:12px;line-height:1.3;cursor:pointer}
+.nx-tab-strip .tab-btn .icon{display:block}
+.nx-page-header-right{display:flex;align-items:center}
+.nx-tab-strip .tab-btn.active{background:#4f46e5;color:#fff}
+.nx-tab-strip .tab-btn:hover{opacity:0.95}
+
+/* Content body */
+.nx-page-body{flex:1;background:transparent;padding-bottom:40px}
+
+/* NX page shell and card to emulate wizard layout */
+.nx-page-shell{max-width:1200px;margin:24px auto;padding:0 16px}
+.nx-page-card{padding:24px 24px 32px}
+.nx-section{margin-top:24px}
+.nx-section-card{padding:12px}
+.nx-page-header{display:flex;justify-content:space-between;align-items:flex-end;gap:16px;margin-bottom:24px}
+.nx-page-header-left{display:flex;flex-direction:column}
+.nx-subtitle{color:var(--nx-muted)}
+.nx-section-title{font-weight:700;margin:0 0 12px}
+
+/* Section card */
+.nx-card{background:var(--nx-surface);border:1px solid var(--nx-border);border-radius:var(--nx-radius);box-shadow:var(--nx-shadow);padding:14px}
+.nx-card + .nx-card{margin-top:16px}
+
+/* Master Control - Dashboard specific (mc-) */
+.mc-shell{max-width:1200px;margin:18px auto;padding:0 16px}
+.mc-dashboard-layout{display:flex;gap:20px;align-items:flex-start}
+
+/* Integrations specific */
+.mc-integrations-shell{max-width:1200px;margin:18px auto;padding:0 16px}
+.mc-integrations-module-nav a.btn{margin-right:8px;padding:6px 10px;border-radius:999px;background:#f8fafc;border:1px solid var(--nx-border);font-weight:600}
+.mc-integrations-module-nav a.btn.active, .mc-integrations-module-nav a.btn[aria-current="true"]{background:linear-gradient(90deg,#4f46e5,#06b6d4);color:#fff;border-color:transparent}
+.mc-integrations-filters{display:flex;align-items:center;gap:12px;justify-content:space-between;margin:12px 0}
+.mc-integrations-filters .mc-filter-left{display:flex;gap:10px;align-items:center}
+.mc-integrations-filters .mc-filter-right{display:flex;align-items:center}
+.mc-integrations-card{padding:18px;border-radius:12px;box-shadow:0 10px 24px rgba(15,23,42,0.04);background:#fff}
+
+@media (max-width:780px){
+  .mc-integrations-filters{flex-direction:column;align-items:stretch}
+  .mc-integrations-filters .mc-filter-right{justify-content:flex-start}
+}
+.mc-card{background:#fff;border-radius:12px;border:1px solid var(--nx-border);padding:20px;box-shadow:0 10px 24px rgba(15,23,42,0.04)}
+.mc-stats{flex:1 1 60%}
+.mc-quick-actions{flex:1 1 40%}
+.mc-recent-activity{margin-top:18px}
+.mc-stat-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:12px;margin-top:12px}
+.mc-stat-card{background:#fff;padding:14px;border-radius:10px;border:1px solid var(--nx-border);box-shadow:0 8px 18px rgba(15,23,42,0.03)}
+.mc-stat-card .stat-label{font-size:12px;color:var(--nx-muted);font-weight:600}
+.mc-stat-card .stat-value{font-size:22px;font-weight:700;margin-top:6px}
+.mc-quick-actions-inner{display:flex;flex-direction:column;gap:12px}
+.mc-quick-actions-inner .btn{margin-right:8px}
+.mc-quick-actions-inner .btn.btn-primary{background:#10b981;border-color:#10b981}
+.mc-breadcrumb{background:#f8fafc;padding:8px 12px;border-radius:8px;margin-bottom:8px;border:1px solid var(--nx-border)}
+.mc-page-title{font-size:24px;margin:4px 0}
+.mc-title-underline{height:3px;background:linear-gradient(90deg,#4f46e5,#06b6d4);width:72px;border-radius:2px;margin:6px 0 12px}
+.mc-section-header .btn-help{margin-left:auto}
+
+@media (max-width:780px){
+  .mc-dashboard-layout{flex-direction:column}
+  .mc-stats, .mc-quick-actions{flex:1 1 auto}
+}
+
+/* KPI grid */
+.nx-kpi-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:12px}
+.nx-kpi-grid .nx-kpi-card{padding:14px;border-radius:8px;background:linear-gradient(180deg,#fff,#fbfdff);text-align:left}
+/* Also style legacy kpi-card elements inside NX grid */
+.nx-kpi-grid .kpi-card{padding:14px;border-radius:8px;background:linear-gradient(180deg,#fff,#fbfdff);text-align:left}
+.nx-kpi-label{color:var(--nx-muted);font-size:13px}
+.nx-kpi-value{font-size:20px;font-weight:700;margin-top:6px}
+
+/* Modules grid */
+.nx-module-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:14px}
+.nx-module-card{background:#fff;border:1px solid var(--nx-border);border-radius:12px;padding:14px;cursor:pointer;display:flex;flex-direction:column;min-height:90px}
+.nx-module-card:hover{transform:translateY(-4px);box-shadow:rgba(46,41,51,0.08) 0 12px 32px}
+/* Also style legacy module-card elements inside NX grid */
+.nx-module-grid .module-card{background:#fff;border:1px solid var(--nx-border);border-radius:12px;padding:14px;cursor:pointer;display:flex;flex-direction:column;min-height:90px}
+
+/* Master module nav pill buttons */
+.master-module-nav a.btn, .master-module-nav .btn { display:inline-flex;align-items:center;gap:8px;padding:8px 12px;border-radius:999px;background:#f8fafc;border:1px solid var(--nx-border);text-decoration:none;color:#111;font-weight:700;transition:all .18s ease; }
+.master-module-nav a.btn:hover, .master-module-nav .btn:hover{background:linear-gradient(90deg,#eef2ff,#fbefff);transform:translateY(-3px)}
+
+/* KPI card visual refinement */
+.nx-kpi-grid .kpi-card{box-shadow:0 8px 24px rgba(15,23,42,0.04);transition:transform .18s ease; border-radius:10px}
+.nx-kpi-grid .kpi-card:hover{transform:translateY(-3px)}
+
+/* General nx-card refinement */
+.nx-card{border-radius:12px;padding:18px;box-shadow:0 10px 30px rgba(15,23,42,0.06)}
+
+/* Tab icon spacing improvements */
+.nx-tab-strip .tab-btn .icon{display:inline-block;margin-bottom:4px;line-height:1}
+.nx-tab-strip .tab-btn span{display:block}
+
+/* Make top tabs responsive: stack on narrow screens */
+@media (max-width:780px){
+  .nx-tab-strip{flex-direction:column}
+  .nx-tab-strip .tab-btn{min-width:auto;padding:10px 12px}
+}
+
+/* Actions and buttons (do not remove ids) */
+.nx-btn{display:inline-flex;align-items:center;gap:8px;background:var(--nx-primary);color:white;padding:8px 12px;border-radius:8px;border:0;font-weight:600;text-decoration:none}
+.nx-btn.secondary{background:#f3f4f6;color:#111}
+
+/* Small helpers */
+.nx-flex{display:flex;align-items:center;gap:12px}
+.nx-muted{color:var(--nx-muted)}
+
+/* Responsive tweaks */
+@media (max-width:780px){
+  .nx-page .nx-page-container{padding:12px}
+  .nx-page-header{flex-direction:column;align-items:flex-start}
+  .nx-module-grid{grid-template-columns:repeat(auto-fit,minmax(160px,1fr))}
+}

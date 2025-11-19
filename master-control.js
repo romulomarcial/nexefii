@@ -93,34 +93,50 @@ class MasterControlSystem {
           window.MasterTabsInstance = MasterTabs();
           window.MasterTabsInstance.wire();
           window.MasterTabsInstance.activate('tab-master-properties');
-          try {
-            // If module query param present, attempt to open relevant tab
-            const params = new URL(window.location.href).searchParams;
-            const mod = params.get('module');
-            if (mod) {
-              const moduleToTab = {
-                housekeeping: 'tab-integrations',
-                governance: 'tab-integrations',
-                pms: 'tab-properties',
-                engineering: 'tab-system',
-                bi: 'tab-metrics',
-                alerts: 'tab-logs'
-              };
-              const targetTab = moduleToTab[mod] || null;
-              if (targetTab) {
-                try { window.MasterTabsInstance.activate(targetTab); } catch (e) { console.warn('[MasterControl] failed to activate tab for module', mod, e); }
-              }
-              console.info('[MasterControl] module param detected, requested module=', mod, 'targetTab=', targetTab);
-            }
-          } catch(e) { console.warn('[MasterControl] module param handling failed', e); }
+          // Note: module param handling was removed to restore original master-control
+          // behaviour. We keep default tab activation (tab-master-properties) and avoid
+          // any module -> tab mapping here.
         }
         if (typeof wirePanelHelp === 'function') {
           wirePanelHelp();
         }
+        // Ensure tab visibility is correct on initial load
+        try {
+          if (typeof initMasterTabsOnLoad === 'function') initMasterTabsOnLoad();
+        } catch(e) { console.warn('[MasterControl] initMasterTabsOnLoad failed', e); }
       } catch(e) {
         console.error('[MasterControl] Erro na inicialização principal', e);
       }
     });
+
+    // Ensure that only the default tab is visible on first load
+    function initMasterTabsOnLoad() {
+      try {
+        // Prefer the MasterTabs instance if available to apply canonical activation
+        if (typeof window.MasterTabsInstance !== 'undefined' && window.MasterTabsInstance && typeof window.MasterTabsInstance.activate === 'function') {
+          // Activate the Dashboard tab explicitly
+          try { window.MasterTabsInstance.activate('tab-dashboard'); } catch (e) { console.warn('[MasterControl] MasterTabsInstance.activate failed', e); }
+          console.info('[MasterControl] initMasterTabsOnLoad(): activated via MasterTabsInstance tab-dashboard');
+          return;
+        }
+
+        // Fallback: apply the same classes/display manipulation used by tab clicks
+        var btns = document.querySelectorAll('.tab-btn');
+        var contents = document.querySelectorAll('.tab-content');
+        // Remove active from all buttons and contents
+        btns.forEach(b => b.classList.remove('active'));
+        contents.forEach(c => { c.classList.remove('active'); c.style.display = 'none'; });
+
+        // Activate only the dashboard button and section
+        var dashBtn = document.querySelector('.tab-btn[data-tab="dashboard"]');
+        if (dashBtn) dashBtn.classList.add('active');
+        var dashSection = document.getElementById('tab-dashboard');
+        if (dashSection) { dashSection.classList.add('active'); dashSection.style.display = 'block'; }
+        console.info('[MasterControl] initMasterTabsOnLoad(): activated fallback dashboard');
+      } catch (e) {
+        console.warn('[MasterControl] initMasterTabsOnLoad(): failed to ensure initial tab state', e);
+      }
+    }
     
     // Inicializar Enterprise UI (somente se disponível; caso contrário, deferir)
     if (typeof this.initEnterpriseUI === 'function') {

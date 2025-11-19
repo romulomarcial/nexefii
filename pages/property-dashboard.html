@@ -5,6 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title data-i18n="dashboard.title">Dashboard Executivo</title>
   <link rel="stylesheet" href="../style.css">
+  <link rel="stylesheet" href="../css/nexefii-ui.css">
   <style>
     .dashboard-header{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:18px}
     .kpi-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:12px;margin-bottom:16px}
@@ -15,29 +16,32 @@
     .submodule{padding:6px 8px;border-radius:6px;background:#fafafa;border:1px solid #eee;font-size:13px}
   </style>
 </head>
-<body class="shell-page">
-  <div class="container" style="padding:20px;max-width:1100px;margin:0 auto">
-    <div class="dashboard-header">
-      <div>
-        <h1 class="page-title" data-i18n="dashboard.title">Dashboard Executivo</h1>
-        <div class="subtitle" data-i18n="dashboard.subtitle">Visão executiva por propriedade</div>
+<body class="shell-page nx-page">
+  <div class="nx-page-container">
+    <div class="nx-page-shell">
+      <div class="nx-card nx-page-card container nx-page-body" style="padding:20px;max-width:1100px;margin:0 auto">
+    <div class="dashboard-header nx-page-header">
+      <div class="nx-page-header-left">
+        <h1 class="page-title" id="dashboardTitle" data-i18n="dashboard.title">Dashboard Executivo</h1>
+        <div class="nx-subtitle subtitle" data-i18n="dashboard.subtitle">Visão executiva por propriedade</div>
       </div>
-      <div style="display:flex;align-items:center;gap:12px">
+      <div class="nx-page-header-right" style="display:flex;align-items:center;gap:12px">
         <label for="propSelect" data-i18n="dashboard.selectProperty">Propriedade</label>
         <select id="propSelect" style="min-width:220px"></select>
       </div>
     </div>
 
-    <section>
+    <section class="nx-section">
       <h2 data-i18n="dashboard.kpis.title">KPIs</h2>
-      <div id="kpiGrid" class="kpi-grid"></div>
+      <div id="kpiGrid" class="kpi-grid nx-kpi-grid"></div>
     </section>
 
-    <section style="margin-top:18px">
+    <section class="nx-section" style="margin-top:18px">
       <h2 data-i18n="dashboard.modules.title">Módulos</h2>
-      <div id="modulesGrid" class="modules-grid"></div>
+      <div id="modulesGrid" class="modules-grid nx-module-grid"></div>
     </section>
-  </div>
+      </div> <!-- .nx-page-shell -->
+    </div>
 
   <script src="../js/session-context.js"></script>
   <script src="../js/property-dashboard-service.js"></script>
@@ -102,6 +106,7 @@
   <script src="../js/property-dashboard.js"></script>
   <script src="../js/lang-switcher.js"></script>
   <script src="/core/init/setActivePropertyFromQuery.js"></script>
+  </div><!-- /.nx-page-container -->
   <script>
     // Populate modules grid with links to module pages, passing selected propertyId
     (function(){

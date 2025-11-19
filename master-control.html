@@ -7,6 +7,7 @@
   <link rel="icon" type="image/svg+xml" href="favicon.svg">
   <link rel="alternate icon" href="favicon.ico">
   <link rel="stylesheet" href="sprints/sprint-13/outputs/web/css/style.css">
+  <link rel="stylesheet" href="css/nexefii-ui.css">
   <script src="/core/i18n/I18nManager.js"></script>
   <script>
     // Client-side auth guard (redirect to login when not authenticated)
@@ -93,10 +94,11 @@
     }
   </style>
 </head>
-<body>
-  <div class="master-container">
+<body class="nx-page">
+  <div class="nx-page-container">
+  <div class="master-container nx-page-body">
     <!-- Header -->
-    <div class="master-header">
+    <div class="master-header nx-page-header">
     <div class="header-left">
     <h1><span class="icon">🔐</span> <span data-i18n="master.title">Painel Master</span></h1>
     <span class="master-badge" data-i18n="master.badge">SUPER ADMIN</span>
@@ -166,19 +168,42 @@
     </div>
 
     <!-- Integrations Tab -->
-    <div class="tab-content" id="tab-integrations" style="display:none;">
-      <div class="breadcrumb"><span class="icon">🔗</span> <span data-i18n="breadcrumb.integrations">Integrações</span></div>
-      <div class="section-header">
-        <h2><span class="icon">🔗</span> <span data-i18n="master.integrations.title">Integrações</span></h2>
+    <div class="tab-content nx-section" id="tab-integrations" style="display:none;">
+      <div class="breadcrumb mc-breadcrumb"><span class="icon">🔗</span> <span data-i18n="breadcrumb.integrations">Integrações</span></div>
+      <div class="section-header mc-section-header">
+        <h2 class="mc-page-title"><span class="icon">🔗</span> <span data-i18n="master.integrations.title">Integrações</span></h2>
+        <div class="mc-title-underline" aria-hidden="true"></div>
         <button class="btn-help" data-help="integrations" title="Ajuda"><span class="icon">❓</span></button>
       </div>
-      <div class="master-card">
-        <div style="display:flex;gap:12px;align-items:center;margin-bottom:12px;">
-          <label style="font-weight:600;">Propriedade</label>
-          <select id="int_prop_select" style="min-width:280px;"></select>
-          <div style="margin-left:auto;"><button class="btn" id="int_add_btn">Adicionar Integração</button></div>
+      <div class="mc-integrations-shell nx-section">
+        <div class="mc-integrations-card nx-card nx-section-card">
+          <!-- breadcrumb + title above -->
+          <!-- BARRA DE LINKS PMS: replicate existing master-module-nav markup here for integrations -->
+          <div class="master-module-nav mc-integrations-module-nav nx-flex" style="margin:8px 0 12px;flex-wrap:wrap;">
+            <a class="btn btn-secondary" href="pms-frontdesk.html" data-i18n="nav.pms">PMS - Frontdesk</a>
+            <a class="btn btn-secondary" href="pms-rooms.html" data-i18n="nav.pms.rooms">PMS - Rooms</a>
+            <a class="btn btn-secondary" href="pms-reservations.html" data-i18n="nav.pms.reservations">PMS - Reservations</a>
+            <a class="btn btn-secondary" href="housekeeping-control.html" data-i18n="nav.housekeeping">Housekeeping</a>
+            <a class="btn btn-secondary" href="engineering-control.html" data-i18n="nav.engineering">Engineering</a>
+            <a class="btn btn-secondary" href="alerts-control.html" data-i18n="nav.alerts">Alerts / IT</a>
+            <a class="btn btn-secondary" href="admin.html" data-i18n="nav.admin">Admin</a>
+            <a class="btn btn-secondary" href="pages/property-dashboard.html" data-i18n="nav.propertyDashboard">Property Dashboard</a>
+          </div>
+
+          <!-- LINHA DE SELEÇÃO DE PROPRIEDADE + ADICIONAR INTEGRAÇÃO -->
+          <div class="mc-integrations-filters" style="margin-bottom:12px;">
+            <div class="mc-filter-left">
+              <label style="font-weight:600;">Propriedade</label>
+              <select id="int_prop_select" style="min-width:280px;"></select>
+            </div>
+            <div class="mc-filter-right">
+              <button class="btn" id="int_add_btn">Adicionar Integração</button>
+            </div>
+          </div>
+
+          <div id="int_list_area"></div>
         </div>
-        <div id="int_list_area"></div>
+      </div>
       </div>
 
       <!-- Integration form modal (simple) -->
@@ -206,7 +231,7 @@
     </div>
 
     <!-- Navigation Tabs -->
-    <div class="master-tabs">
+    <div class="master-tabs nx-tab-strip">
   <button class="tab-btn active" data-tab="dashboard"><span class="icon">📊</span> <span data-i18n="tabs.dashboard">Dashboard</span></button>
   <button class="tab-btn" data-tab="backups"><span class="icon">💾</span> <span data-i18n="tabs.backups">Backups</span></button>
   <button class="tab-btn" data-tab="releases"><span class="icon">🚀</span> <span data-i18n="tabs.releases">Releases & Rollback</span></button>
@@ -233,15 +258,16 @@
     </div>
 
     <!-- Dashboard Tab (formerly Overview) -->
-    <div class="tab-content active" id="tab-dashboard">
+    <div class="tab-content active nx-section" id="tab-dashboard">
       <!-- Breadcrumb -->
-      <div class="breadcrumb">
+      <div class="breadcrumb mc-breadcrumb">
         <span class="icon">🏠</span> <span data-i18n="breadcrumb.dashboard">Dashboard</span>
       </div>
       
       <!-- Section Header with Help -->
-      <div class="section-header">
-        <h2><span class="icon">📊</span> <span data-i18n="dashboard.title">Dashboard</span></h2>
+      <div class="section-header mc-section-header">
+        <h2 class="mc-page-title"><span class="icon">📊</span> <span data-i18n="dashboard.title">Dashboard</span></h2>
+        <div class="mc-title-underline" aria-hidden="true"></div>
         <button class="btn-help" data-help="dashboard" title="Ajuda">
           <span class="icon">❓</span>
         </button>
@@ -254,24 +280,25 @@
         </div>
       </div>
       
-      <div class="dashboard-grid">
+      <div class="mc-shell">
+        <div class="mc-dashboard-layout">
         <!-- System Stats -->
-        <div class="master-card">
+        <div class="master-card mc-card mc-stats">
           <h3><span class="icon">📈</span> <span data-i18n="overview.statsTitle">Estatísticas do Sistema</span></h3>
-          <div class="stat-grid">
-            <div class="stat-item">
+          <div class="mc-stat-grid stat-grid">
+            <div class="stat-item mc-stat-card">
               <span class="stat-label" data-i18n="overview.totalUsers">Total de Usuários</span>
               <span class="stat-value" id="totalUsers">0</span>
             </div>
-            <div class="stat-item">
+            <div class="stat-item mc-stat-card">
               <span class="stat-label" data-i18n="overview.activeUsers">Usuários Ativos</span>
               <span class="stat-value" id="activeUsers">0</span>
             </div>
-            <div class="stat-item">
+            <div class="stat-item mc-stat-card">
               <span class="stat-label" data-i18n="overview.properties">Propriedades</span>
               <span class="stat-value" id="totalProperties">0</span>
             </div>
-            <div class="stat-item">
+            <div class="stat-item mc-stat-card">
               <span class="stat-label" data-i18n="overview.backups">Backups</span>
               <span class="stat-value" id="totalBackups">0</span>
             </div>
@@ -279,7 +306,7 @@
         </div>
 
         <!-- Quick Actions -->
-        <div class="master-card">
+        <div class="master-card mc-card mc-quick-actions">
           <div class="section-header">
             <h3><span class="icon">⚡</span> <span data-i18n="overview.quickActions">Ações Rápidas</span></h3>
             <button class="btn-help" data-help="quick-actions" title="Ajuda">
@@ -322,7 +349,7 @@
             </div>
           </div>
           
-          <div class="quick-actions">
+          <div class="quick-actions mc-quick-actions-inner">
             <button class="btn btn-primary" id="btnQuickFull" onclick="masterCtrl.createQuickGeneralBackup('full')"><span class="icon">💾</span> <span data-i18n="overview.fullBackup">Backup Completo</span></button>
             <button class="btn btn-primary" id="btnQuickInc" onclick="masterCtrl.createQuickGeneralBackup('incremental')"><span class="icon">📦</span> <span data-i18n="overview.incBackup">Backup Incremental</span></button>
             <button class="btn" id="btnQuickView" onclick="masterCtrl.viewGeneralBackups()"><span class="icon">📋</span> <span data-i18n="overview.viewBackups">Ver Backups</span></button>
@@ -330,18 +357,20 @@
           </div>
         </div>
 
-        <!-- Recent Activity -->
-        <div class="master-card full-width">
+        </div> <!-- /.mc-dashboard-layout -->
+
+        <!-- Recent Activity (full width) -->
+        <div class="master-card full-width mc-card mc-recent-activity">
           <h3><span class="icon">🕐</span> <span data-i18n="overview.recentActivity">Atividade Recente</span></h3>
           <div class="activity-list" id="recentActivity">
             <!-- Activity items will be rendered here -->
           </div>
         </div>
-      </div>
+      </div> <!-- /.mc-shell -->
     </div>
 
     <!-- Backups Tab (Consolidated: Property + General Structure) -->
-    <div class="tab-content" id="tab-backups">
+    <div class="tab-content nx-section" id="tab-backups">
       <!-- Breadcrumb -->
       <div class="breadcrumb">
         <span class="icon">🏠</span> <span data-i18n="breadcrumb.home">Início</span> 
@@ -376,7 +405,7 @@
         </div>
         
         <!-- Property Backups Section -->
-        <div class="master-card" id="section-property-backups">
+        <div class="master-card nx-card" id="section-property-backups">
           <!-- Sub-section Header with Help -->
           <div class="section-header">
             <h3><span class="icon">🏨</span> <span data-i18n="backups.propertyBackups.title">Property Backups</span></h3>
@@ -420,7 +449,7 @@
         </div>
         
         <!-- General Structure Section -->
-        <div class="master-card" id="section-general-structure" style="display:none;">
+        <div class="master-card nx-card" id="section-general-structure" style="display:none;">
           <!-- Sub-section Header with Help -->
           <div class="section-header">
             <h3><span class="icon">🏗️</span> Backup de Estrutura Geral</h3>
@@ -465,7 +494,7 @@
     </div>
 
     <!-- Users Tab: minimal user management for MASTER -->
-    <div class="tab-content" id="tab-users" style="display:none;">
+    <div class="tab-content nx-section" id="tab-users" style="display:none;">
       <div class="breadcrumb"><span class="icon">👥</span> <span data-i18n="breadcrumb.users">Usuários</span></div>
       <div class="section-header">
         <h2><span class="icon">👥</span> <span data-i18n="users.title">Gestão de Usuários</span></h2>
@@ -473,7 +502,7 @@
       </div>
       <div class="help-panel" id="help-users" style="display:none;"><div class="help-content"><p data-i18n="users.help">Área para criação, edição e atribuição de propriedades e módulos aos usuários.</p></div></div>
 
-      <div class="master-card">
+      <div class="master-card nx-card">
         <div style="display:flex;gap:12px;align-items:center;margin-bottom:12px;">
           <h3 style="margin:0;">Lista de Usuários</h3>
           <div style="margin-left:auto;display:flex;gap:8px;">
@@ -484,7 +513,7 @@
         <div id="usersListArea"></div>
       </div>
 
-      <div class="master-card" id="userFormCard" style="display:none;margin-top:12px;">
+      <div class="master-card nx-card" id="userFormCard" style="display:none;margin-top:12px;">
         <h3 id="userFormTitle">Criar / Editar Usuário</h3>
         <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;">
           <div>
@@ -516,7 +545,7 @@
     </div>
 
     <!-- Backup & Restore Tab (OLD - TO BE REMOVED) -->
-    <div class="tab-content" id="tab-backup" style="display:none;">
+    <div class="tab-content nx-section" id="tab-backup" style="display:none;">
       <div class="backup-section">
         <div class="backup-subnav" id="backupSubnav">
           <button class="btn subnav-btn active" data-target="section-create">🛠️ <span data-i18n="backup.createTitle">Criar Backup</span></button>
@@ -525,7 +554,7 @@
           <button class="btn subnav-btn" data-target="section-restore">♻️ <span data-i18n="backup.restoreTitle">Restaurar Backup</span></button>
           <button class="btn subnav-btn" data-target="section-exports">📤 <span data-i18n="backup.exports.title">Exportações</span></button>
         </div>
-        <div class="master-card" id="section-create">
+        <div class="master-card nx-card" id="section-create">
           <h3><span class="icon">💾</span> <span data-i18n="backup.createTitle">Criar Backup</span></h3>
           <div class="backup-options">
             <div class="option-group">
@@ -602,7 +631,7 @@
           </div>
         </div>
 
-        <div class="master-card" id="section-scheduling">
+        <div class="master-card nx-card" id="section-scheduling">
           <div class="card-header" style="display:flex;justify-content:space-between;align-items:center;gap:8px;">
             <h3 style="margin:0;"><span class="icon">⏱️</span> <span data-i18n="backup.scheduling.title">Agendamento por Propriedade</span></h3>
             <button class="btn" id="btnScheduleHelp" title="Ajuda / Help">❓</button>
@@ -620,14 +649,14 @@
           </div>
         </div>
 
-        <div class="master-card" id="section-history">
+        <div class="master-card nx-card" id="section-history">
           <h3><span class="icon">📋</span> <span data-i18n="backup.historyTitle">Histórico de Backups</span></h3>
           <div class="backup-list" id="backupList">
             <!-- Backup items will be rendered here -->
           </div>
         </div>
 
-        <div class="master-card" id="section-restore">
+        <div class="master-card nx-card" id="section-restore">
           <h3><span class="icon">♻️</span> <span data-i18n="backup.restoreTitle">Restaurar Backup</span></h3>
           <div class="restore-section">
             <div class="form-group">
@@ -651,7 +680,7 @@
           </div>
         </div>
 
-        <div class="master-card" id="section-exports">
+        <div class="master-card nx-card" id="section-exports">
           <div class="card-header" style="display:flex;justify-content:space-between;align-items:center;gap:8px;">
             <h3 style="margin:0;"><span class="icon">📤</span> <span data-i18n="backup.exports.title">Exportações</span></h3>
             <button class="btn" id="btnRefreshExports"><span class="icon">🔄</span> <span data-i18n="backup.exports.refresh">Atualizar</span></button>
@@ -667,9 +696,9 @@
     </div>
 
     <!-- Users Tab -->
-    <div class="tab-content" id="tab-users">
+    <div class="tab-content nx-section" id="tab-users">
       <div class="users-section">
-        <div class="master-card">
+        <div class="master-card nx-card">
           <div class="section-header">
             <h3><span class="icon">👥</span> <span data-i18n="users.title">Gestão de Usuários</span></h3>
             <button class="btn-help" data-help="users" title="Ajuda">
@@ -746,7 +775,7 @@
     </div>
 
     <!-- Settings Tab (NEW) -->
-    <div class="tab-content" id="tab-settings">
+    <div class="tab-content nx-section" id="tab-settings">
       <!-- Section Header with Help -->
       <div class="section-header">
         <h2><span class="icon">⚙️</span> <span data-i18n="settings.title">Configurações</span></h2>
@@ -781,7 +810,7 @@
       
       <div class="system-grid">
         <!-- Backup Policies -->
-        <div class="master-card">
+        <div class="master-card nx-card">
           <h3><span class="icon">💾</span> <span data-i18n="settings.backupPolicies">Políticas de Backup</span></h3>
           <div class="settings-list">
             <div class="setting-item">
@@ -813,7 +842,7 @@
         </div>
 
         <!-- System Behavior -->
-        <div class="master-card">
+        <div class="master-card nx-card">
           <h3><span class="icon">⚙️</span> <span data-i18n="settings.systemBehavior">Comportamento do Sistema</span></h3>
           <div class="settings-list">
             <div class="setting-item">
@@ -866,7 +895,7 @@
     </div>
 
     <!-- Maintenance Tab (NEW) -->
-    <div class="tab-content" id="tab-maintenance">
+    <div class="tab-content nx-section" id="tab-maintenance">
       <!-- Section Header with Help -->
       <div class="section-header">
         <h2><span class="icon">🔧</span> <span data-i18n="maintenance.title">Manutenção</span></h2>
@@ -930,7 +959,7 @@
           </div>
         
         <!-- Cache Management -->
-        <div class="master-card">
+        <div class="master-card nx-card">
           <h3><span class="icon">🗑️</span> <span data-i18n="maintenance.cache.title">Gerenciamento de Cache</span></h3>
           <p data-i18n="maintenance.cache.description">Limpa cache temporário e otimiza performance.</p>
           <div class="maintenance-actions">
@@ -997,7 +1026,7 @@
     </div>
 
     <!-- Internationalization Tab (NEW) -->
-    <div class="tab-content" id="tab-i18n">
+    <div class="tab-content nx-section" id="tab-i18n">
     <!-- Section Header with Help -->
       <div class="section-header">
         <h2><span class="icon">🌐</span> <span data-i18n="i18n.title">Internacionalização</span></h2>
@@ -1097,7 +1126,7 @@
     </div>
 
     <!-- Metrics Tab (NEW) -->
-    <div class="tab-content" id="tab-metrics">
+    <div class="tab-content nx-section" id="tab-metrics">
       <!-- Section Header with Help -->
       <div class="section-header">
         <h2><span class="icon">📈</span> <span data-i18n="metrics.title">Métricas</span></h2>
@@ -1216,7 +1245,7 @@
     </div>
 
     <!-- System Tab (OLD - DEPRECATED) -->
-    <div class="tab-content" id="tab-system" style="display:none;">
+    <div class="tab-content nx-section" id="tab-system" style="display:none;">
       <div class="system-grid">
         <div class="master-card">
           <h3 data-i18n="system.settingsTitle">⚙️ Configurações do Sistema</h3>
@@ -1280,7 +1309,7 @@
       </div>
     </div>
     <!-- Properties Management Tab (NEW) -->
-    <div class="tab-content" id="tab-properties">
+    <div class="tab-content nx-section" id="tab-properties">
       <!-- Breadcrumb -->
       <div class="breadcrumb">
         <span class="icon">🏠</span> <span data-i18n="breadcrumb.home">Início</span> 
@@ -1385,7 +1414,7 @@
 
 
     <!-- Logs Tab -->
-    <div class="tab-content" id="tab-logs">
+    <div class="tab-content nx-section" id="tab-logs">
       <div class="logs-section">
         <div class="master-card">
           <div class="section-header">
@@ -1454,7 +1483,7 @@
     </div>
 
     <!-- Versions Tab -->
-    <div class="tab-content" id="tab-versions">
+    <div class="tab-content nx-section" id="tab-versions">
       <div class="versions-section">
         <div class="master-card">
           <div class="section-header">
@@ -1507,7 +1536,7 @@
     </div>
 
     <!-- Property Backups Tab (NEW) -->
-    <div class="tab-content" id="tab-property-backups">
+    <div class="tab-content nx-section" id="tab-property-backups">
       <div class="enterprise-backup-section">
         <!-- Dashboard Metrics -->
         <div class="master-card">
@@ -1751,7 +1780,7 @@
     </div>
 
     <!-- General Structure Backups Tab (NEW) -->
-    <div class="tab-content" id="tab-general-backups">
+    <div class="tab-content nx-section" id="tab-general-backups">
       <div class="enterprise-backup-section">
         <!-- Dashboard Metrics -->
         <div class="master-card">
@@ -1900,7 +1929,7 @@
     </div>
 
     <!-- Releases & Rollback Tab (NEW) -->
-    <div class="tab-content" id="tab-releases">
+    <div class="tab-content nx-section" id="tab-releases">
       <div class="enterprise-backup-section">
         <!-- Release Metrics -->
         <div class="master-card">
@@ -2647,6 +2676,7 @@
   <script src="js/integration-model.js"></script>
   <script src="js/master-control-integrations.js"></script>
   <script src="js/demo-seeder.js"></script>
+  </div><!-- /.nx-page-container -->
   <script src="master-control.js"></script>
   <script src="master-control-enterprise.js"></script>
   <script src="master-control-backups.js"></script>
