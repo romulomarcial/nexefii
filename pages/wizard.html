@@ -2548,9 +2548,119 @@
   initWizardPage();
 </script>
 </script>
+<!-- Prefill & parent integration helpers: support postMessage, query param and localStorage fallbacks -->
+<script>
+  (function(){
+    // Wait for NexefiiProps to be available and return property object
+    async function getPropertyObject(key){
+      if (!key) return null;
+      for (let i=0;i<20;i++){
+        if (window.NexefiiProps && typeof window.NexefiiProps.getProperty === 'function') break;
+        await new Promise(r => setTimeout(r, 100));
+      }
+      try { return (window.NexefiiProps && typeof window.NexefiiProps.getProperty === 'function') ? window.NexefiiProps.getProperty(String(key)) : null; } catch(e){ return null; }
+    }
+
+    function applyPropertyToWizard(prop){
+      if (!prop || !window.wizard) return;
+      try{
+        wizard.data.name = prop.name || wizard.data.name;
+        wizard.data.slug = prop.slug || prop.key || wizard.data.slug;
+        wizard.data.icon = prop.icon || wizard.data.icon;
+        wizard.data.image = prop.image || prop.image || wizard.data.image;
+        wizard.data.description = prop.description || wizard.data.description;
+        wizard.data.type = prop.type || wizard.data.type;
+        wizard.data.roomsCount = (prop.stats && prop.stats.rooms) || prop.roomsCount || wizard.data.roomsCount || 0;
+        wizard.data.address = prop.address || wizard.data.address || {};
+        wizard.data.settings = prop.settings || wizard.data.settings || {};
+        wizard.data.modules = prop.modules || wizard.data.modules || [];
+        if (prop.roomCategories) wizard.data.roomCategories = prop.roomCategories;
+
+        // Populate visible inputs
+        try { const el = document.getElementById('name'); if (el) el.value = wizard.data.name; } catch(e){}
+        try { const el = document.getElementById('slug'); if (el) el.value = wizard.data.slug; } catch(e){}
+        try { const el = document.getElementById('description'); if (el) el.value = wizard.data.description; } catch(e){}
+        try{
+          const iconEls = document.querySelectorAll('.icon-option');
+          iconEls.forEach(i=>{
+            if (i.dataset && i.dataset.icon && i.dataset.icon === wizard.data.icon) i.classList.add('selected');
+            else i.classList.remove('selected');
+          });
+        }catch(e){}
+        try { const pi = document.getElementById('propertyImage'); if (pi) pi.value = wizard.data.image || ''; }catch(e){}
+        try { const el = document.getElementById('type'); if (el) el.value = wizard.data.type; }catch(e){}
+        try { const el = document.getElementById('roomsCount'); if (el) el.value = wizard.data.roomsCount || 0; }catch(e){}
+        try { document.getElementById('street').value = wizard.data.address?.street || ''; }catch(e){}
+        try { document.getElementById('city').value = wizard.data.address?.city || ''; }catch(e){}
+        try { document.getElementById('state').value = wizard.data.address?.state || ''; }catch(e){}
+        try { document.getElementById('zip').value = wizard.data.address?.zip || ''; }catch(e){}
+        try { document.getElementById('country').value = wizard.data.address?.country || wizard.data.address?.country || 'Brasil'; }catch(e){}
+
+        // Settings & timezone
+        try {
+          if (typeof populateTimezoneGroups === 'function') populateTimezoneGroups();
+          const tz = wizard.data.settings?.timezone;
+          const group = (typeof findGroupForTimezone === 'function') ? findGroupForTimezone(tz) : null;
+          if (group && typeof populateTimezoneCities === 'function') {
+            const gsel = document.getElementById('timezoneGroupSelect'); if (gsel) gsel.value = group;
+            populateTimezoneCities(group, true);
+            try { const tzSel = document.getElementById('timezoneSelect'); if (tzSel && tz) tzSel.value = tz; } catch(e){}
+          }
+        } catch(e){}
+        try { const cur = wizard.data.settings?.currency; if (cur) document.getElementById('currency').value = cur; } catch(e){}
+
+        // Modules
+        try {
+          const modules = wizard.data.modules || [];
+          ['ems','bms','automation','analytics','pms','iot','access','other'].forEach(m=>{
+            const el = document.getElementById('module-'+m);
+            if (el) el.checked = modules.some(x=>String(x).toLowerCase() === m || String(x).toLowerCase() === ('module-'+m));
+          });
+        } catch(e){}
+
+        // Render dependent UI
+        try { if (typeof renderCategories === 'function') renderCategories(); } catch(e){}
+        try { if (typeof updateUI === 'function') updateUI(); } catch(e){}
+        try { wizard.isEdit = true; } catch(e){}
+      }catch(e){ console.warn('[Wizard][prefill] apply failed', e); }
+    }
+
+    async function attemptPrefillFromKey(key){ if (!key) return; const prop = await getPropertyObject(key); if (prop) applyPropertyToWizard(prop); }
+
+    // postMessage listener (parent -> iframe)
+    window.addEventListener('message', function(ev){
+      try {
+        const d = ev.data; if (!d || typeof d !== 'object') return;
+        if (d.type === 'edit-property') {
+          // If full property object provided, apply immediately
+          if (d.property) {
+            try { applyPropertyToWizard(d.property); return; } catch(e) { /* fallback below */ }
+          }
+          if (d.propertyKey) attemptPrefillFromKey(String(d.propertyKey));
+        }
+      } catch(e){}
+    }, false);
+
+    // On load, try URL query param then localStorage
+    (function initPrefillOnLoad(){
+      try {
+        const sp = (new URL(location.href)).searchParams;
+        const q = sp.get('property') || sp.get('selectedProperty') || sp.get('prop') || null;
+        if (q) { attemptPrefillFromKey(q); return; }
+        const k = localStorage.getItem('nexefii_wizard_selected_property');
+        if (k) { try { localStorage.removeItem('nexefii_wizard_selected_property'); } catch(e){}; attemptPrefillFromKey(k); }
+      } catch(e){}
+    })();
+
+    // expose helper
+    window.__wizardPrefill = { attemptPrefillFromKey };
+  })();
+</script>
+
 <script src="../js/lang-switcher.js"></script>
 </body>
 </html>
+
 <script>
   // Wizard integration helper: when the wizard completes, call `wizardSelectProperty(propId)`
   (function(){
@@ -2582,7 +2692,7 @@
           try {
             // attempt to read a property id input
             var inp = document.querySelector('[name="propertyId"]') || document.getElementById('propertyId');
-            var val = inp ? (inp.value || inp.dataset && inp.dataset.value) : null;
+            var val = inp ? (inp.value || (inp.dataset && inp.dataset.value)) : null;
             if (val) window.wizardSelectProperty(val);
           } catch(e){ /* ignore */ }
         });

@@ -139,6 +139,32 @@
     .deployment-log::-webkit-scrollbar-thumb:hover {
       background: #00cc00;
     }
+    /* Property wizard iframe loading overlay */
+    .pw-loading-overlay {
+      position: absolute;
+      inset: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: rgba(255,255,255,0.85);
+      z-index: 9999;
+      visibility: hidden;
+      opacity: 0;
+      transition: opacity 180ms ease, visibility 180ms ease;
+    }
+    .pw-loading-overlay.open {
+      visibility: visible;
+      opacity: 1;
+    }
+    .pw-spinner {
+      width: 48px;
+      height: 48px;
+      border-radius: 50%;
+      border: 4px solid rgba(0,0,0,0.08);
+      border-top-color: #667eea;
+      animation: pw-spin 1s linear infinite;
+    }
+    @keyframes pw-spin { to { transform: rotate(360deg); } }
   </style>
 </head>
 <body class="nx-page">
@@ -180,8 +206,23 @@
                 return;
               }
 
+              // Show loading overlay while the iframe is loading
+              try { showPropertyWizardLoading(); } catch(e) {}
+
               // Sempre força um reload fresco do wizard
               frame.src = 'pages/wizard.html?mode=create&from=master-control&ts=' + Date.now();
+
+              // ensure we hide the loading overlay when iframe loads or errors
+              try {
+                frame.addEventListener('load', function onLoad() {
+                  try { hidePropertyWizardLoading(); } catch(e){}
+                  frame.removeEventListener('load', onLoad);
+                });
+                frame.addEventListener('error', function onErr() {
+                  try { hidePropertyWizardLoading(); } catch(e){}
+                  frame.removeEventListener('error', onErr);
+                });
+              } catch(e) {}
 
               modal.classList.add('open');
               modal.setAttribute('aria-hidden', 'false');
@@ -201,6 +242,23 @@
             } catch (e) {
               console.warn('[Master] closeWizardModal error', e);
             }
+          }
+
+          // Loading overlay helpers for the property wizard iframe
+          function showPropertyWizardLoading() {
+            try {
+              var el = document.getElementById('propertyWizardLoading');
+              if (!el) return;
+              el.classList.add('open');
+            } catch (e) { /* ignore */ }
+          }
+
+          function hidePropertyWizardLoading() {
+            try {
+              var el = document.getElementById('propertyWizardLoading');
+              if (!el) return;
+              el.classList.remove('open');
+            } catch (e) { /* ignore */ }
           }
 
           function applyWizardSelection(propId) {
@@ -228,6 +286,108 @@
               console.warn('[Master] applyWizardSelection error', e);
             }
           }
+
+          // ----- Delete property modal helpers -----
+          var pendingDeletePropertyId = null;
+
+          function getDeletePropertyModal() {
+            return document.getElementById('confirmDeletePropertyModal') || null;
+          }
+
+          function openDeletePropertyConfirm(propId) {
+            if (!propId) return;
+            pendingDeletePropertyId = propId;
+            try {
+              var modal = getDeletePropertyModal();
+              if (!modal) {
+                // fallback: native confirm
+                try {
+                  if (confirm('Remover propriedade ' + propId + '?')) {
+                    performDeleteProperty(propId);
+                  }
+                } catch (e) { console.warn('[Master] native confirm failed', e); }
+                return;
+              }
+
+              var msgEl = document.getElementById('confirmDeletePropertyMessage');
+              if (msgEl) {
+                msgEl.textContent = 'Tem certeza de que deseja remover a propriedade "' + propId + '"? Esta ação não pode ser desfeita.';
+              }
+
+              modal.classList.add('open');
+              modal.setAttribute('aria-hidden', 'false');
+              try { document.body.style.overflow = 'hidden'; } catch (e) {}
+            } catch (e) {
+              console.warn('[Master] openDeletePropertyConfirm error', e);
+            }
+          }
+
+          function closeDeletePropertyModal() {
+            try {
+              var modal = getDeletePropertyModal();
+              if (!modal) return;
+              modal.classList.remove('open');
+              modal.setAttribute('aria-hidden', 'true');
+              try { document.body.style.overflow = ''; } catch (e) {}
+            } catch (e) {
+              console.warn('[Master] closeDeletePropertyModal error', e);
+            } finally {
+              pendingDeletePropertyId = null;
+            }
+          }
+
+          function performDeleteProperty(propId) {
+            if (!propId) return;
+            // Async wrapper to support both sync and async implementations of NexefiiProps.deleteProperty
+            (async function(){
+              var confirmBtn = document.getElementById('confirmDeletePropertyBtn');
+              var originalText = confirmBtn ? confirmBtn.innerHTML : null;
+              try {
+                if (confirmBtn) {
+                  confirmBtn.setAttribute('disabled', 'true');
+                  confirmBtn.classList.add('loading');
+                  confirmBtn.innerHTML = '<span class="icon">⏳</span> Removendo...';
+                }
+
+                if (window.NexefiiProps && typeof NexefiiProps.deleteProperty === 'function') {
+                  try {
+                    var maybe = NexefiiProps.deleteProperty(propId);
+                    var res = await Promise.resolve(maybe);
+                    console.info('[Master] deleteProperty result:', res);
+                    try {
+                      if (window.masterCtrl && typeof masterCtrl.showToast === 'function') {
+                        masterCtrl.showToast('✅ Propriedade removida', 'success');
+                      }
+                    } catch (e) {}
+                  } catch (e) {
+                    console.warn('[Master] NexefiiProps.deleteProperty threw', e);
+                    try { if (window.masterCtrl && typeof masterCtrl.showToast === 'function') masterCtrl.showToast('❌ Erro ao remover: ' + e.message, 'error'); } catch(e){}
+                  }
+                } else {
+                  console.warn('[Master] NexefiiProps.deleteProperty not available; skipping.');
+                }
+              } catch (e) {
+                console.warn('[Master] performDeleteProperty error', e);
+              } finally {
+                if (confirmBtn) {
+                  try { confirmBtn.removeAttribute('disabled'); } catch(e){}
+                  try { confirmBtn.innerHTML = originalText || 'Remover'; } catch(e){}
+                  confirmBtn.classList.remove('loading');
+                }
+                closeDeletePropertyModal();
+                try {
+                  if (window.masterCtrl && typeof masterCtrl.renderPropertiesTable === 'function') {
+                    masterCtrl.renderPropertiesTable();
+                  } else {
+                    location.reload();
+                  }
+                } catch (e) { location.reload(); }
+              }
+            })();
+          }
+
+          // Expose a global helper so other scripts (delegation) can open the modal
+          try { window.openDeletePropertyConfirm = openDeletePropertyConfirm; } catch(e) {}
 
           document.addEventListener('DOMContentLoaded', function () {
             // Garante que todos os botões #btnCreateProperty abram o wizard no modal
@@ -272,6 +432,43 @@
               }
             } catch (e) {
               console.warn('[Master] property wizard close wiring error', e);
+            }
+
+            // Wiring do modal de delete
+            try {
+              var delModal = getDeletePropertyModal();
+              if (delModal) {
+                var closeEls = delModal.querySelectorAll('[data-pd-close]');
+                closeEls.forEach(function (el) {
+                  el.addEventListener('click', function (ev) {
+                    ev.preventDefault();
+                    closeDeletePropertyModal();
+                  });
+                });
+
+                var confirmBtn = document.getElementById('confirmDeletePropertyBtn');
+                if (confirmBtn) {
+                  confirmBtn.addEventListener('click', function (ev) {
+                    ev.preventDefault();
+                    if (pendingDeletePropertyId) {
+                      performDeleteProperty(pendingDeletePropertyId);
+                    } else {
+                      closeDeletePropertyModal();
+                    }
+                  });
+                }
+
+                var delBackdrop = delModal.querySelector('.mc-modal-backdrop');
+                if (delBackdrop) {
+                  delBackdrop.addEventListener('click', function (ev) {
+                    if (ev.target === delBackdrop) {
+                      closeDeletePropertyModal();
+                    }
+                  });
+                }
+              }
+            } catch (e) {
+              console.warn('[Master] delete property modal wiring error', e);
             }
 
             // Se o wizard já tiver escrito a seleção antes desse tab ganhar foco
@@ -461,15 +658,52 @@
           <button type="button" class="mc-modal-close" data-pw-close aria-label="Fechar">✕</button>
         </div>
         <div class="mc-modal-body" style="min-height:80vh;padding:0;">
-          <iframe
-            id="propertyWizardFrame"
-            src=""
-            style="width:100%;height:80vh;border:none;"
-          ></iframe>
+          <div style="position:relative;width:100%;height:80vh;">
+            <div class="pw-loading-overlay" id="propertyWizardLoading">
+              <div class="pw-spinner" aria-hidden="true"></div>
+            </div>
+            <iframe
+              id="propertyWizardFrame"
+              src=""
+              style="width:100%;height:80vh;border:none;display:block;"
+            ></iframe>
+          </div>
         </div>
       </div>
     </div>
-      <!-- (propertyWizardModal blocks removed here to avoid duplicates) -->
+          <!-- (propertyWizardModal blocks removed here to avoid duplicates) -->
+
+        <!-- Confirm delete property modal -->
+        <div id="confirmDeletePropertyModal" class="mc-modal" aria-hidden="true">
+          <div class="mc-modal-backdrop" data-pd-close></div>
+          <div
+            class="mc-modal-dialog"
+            role="dialog"
+            aria-modal="true"
+            aria-labelledby="confirmDeletePropertyTitle"
+            style="max-width: 480px; width: 90%;"
+          >
+            <div class="mc-modal-header">
+              <h3 id="confirmDeletePropertyTitle">
+                <span class="icon">🗑️</span>
+                <span data-i18n="properties.delete.title">Remover Propriedade</span>
+              </h3>
+              <button type="button" class="mc-modal-close" data-pd-close aria-label="Fechar">✕</button>
+            </div>
+            <div class="mc-modal-body">
+              <p id="confirmDeletePropertyMessage">
+                Tem certeza de que deseja remover esta propriedade?
+              </p>
+              <p style="font-size:0.9rem;color:#666;">
+                <strong>Atenção:</strong> esta ação não pode ser desfeita.
+              </p>
+              <div style="display:flex;justify-content:flex-end;gap:8px;margin-top:16px;">
+                <button type="button" class="btn" data-pd-close data-i18n="common.cancel">Cancelar</button>
+                <button type="button" class="btn btn-danger" id="confirmDeletePropertyBtn" data-i18n="common.confirm">Remover</button>
+              </div>
+            </div>
+          </div>
+        </div>
 
     <!-- Navigation tabs moved above header to sit directly beneath the master header -->
 
@@ -789,11 +1023,16 @@
           <button type="button" class="mc-modal-close" data-pw-close aria-label="Fechar">✕</button>
         </div>
         <div class="mc-modal-body" style="min-height:60vh;padding:0;">
-          <iframe
-            id="propertyWizardFrame"
-            src=""
-            style="width:100%;height:60vh;border:none;"
-          ></iframe>
+          <div style="position:relative;width:100%;height:60vh;">
+            <div class="pw-loading-overlay" id="propertyWizardLoading">
+              <div class="pw-spinner" aria-hidden="true"></div>
+            </div>
+            <iframe
+              id="propertyWizardFrame"
+              src=""
+              style="width:100%;height:60vh;border:none;display:block;"
+            ></iframe>
+          </div>
         </div>
       </div>
     </div>

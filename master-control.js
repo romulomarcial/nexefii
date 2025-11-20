@@ -16,6 +16,112 @@ class MasterControlSystem {
     this.initSystem();
   }
 
+  // Ensure delegated handlers on the properties table body (edit / delete / deploy)
+  _ensurePropertiesTableDelegation() {
+    if (this._propsDelegationHooked) return;
+    try {
+      const tbody = document.getElementById('propertiesTableBody');
+      if (!tbody) return;
+
+      tbody.addEventListener('click', (ev) => {
+        try {
+          const btn = ev.target.closest && ev.target.closest('button[data-action]');
+          if (!btn) return;
+          const action = btn.getAttribute('data-action');
+          const propId = btn.getAttribute('data-prop-id') || btn.dataset.propId;
+          if (!action || !propId) return;
+
+          // Route delegated actions
+          if (action === 'edit-property') {
+            ev.preventDefault();
+            // Open the wizard in edit mode if available
+            try { this.openWizardForEdit(propId); } catch (e) { console.warn('[masterCtrl] openWizardForEdit failed', e); }
+            return;
+          }
+
+          if (action === 'delete-property') {
+            ev.preventDefault();
+            try {
+              // Prefer the modal-based confirm if available (exposed globally by master-control.html)
+              if (window.openDeletePropertyConfirm && typeof window.openDeletePropertyConfirm === 'function') {
+                try { window.openDeletePropertyConfirm(propId); } catch (e) { console.warn('[masterCtrl] openDeletePropertyConfirm threw', e); }
+              } else if (window.masterCtrl && typeof window.masterCtrl.openDeletePropertyConfirm === 'function') {
+                try { window.masterCtrl.openDeletePropertyConfirm(propId); } catch (e) { console.warn('[masterCtrl] masterCtrl.openDeletePropertyConfirm threw', e); }
+              } else {
+                // Fallback to existing deletion method
+                try { this.deleteProperty(propId); } catch (e) { console.warn('[masterCtrl] deleteProperty failed', e); }
+              }
+            } catch (e) { console.warn('[masterCtrl] delete-property delegation error', e); }
+            return;
+          }
+
+          if (action === 'deploy-property') {
+            // allow existing onclick deploy handler to run; we still provide delegation fallback
+            // but also prevent double-handling by not stopping propagation here
+            return;
+          }
+        } catch (innerErr) { console.warn('[masterCtrl] properties delegation handler error', innerErr); }
+      });
+
+      this._propsDelegationHooked = true;
+    } catch (err) {
+      console.warn('[masterCtrl] unable to attach properties delegation', err);
+    }
+  }
+
+  // Open the property wizard inside the modal iframe in EDIT mode for a specific property
+  openWizardForEdit(propertyKey) {
+    if (!propertyKey) return;
+    try {
+      const modal = document.getElementById('propertyWizardModal');
+      const frame = document.getElementById('propertyWizardFrame');
+
+      if (!modal || !frame) {
+        // Fallback to navigation
+        const url = 'pages/wizard.html?mode=edit&property=' + encodeURIComponent(propertyKey) + '&from=master-control';
+        try { location.href = url; } catch (e) { console.warn('[masterCtrl] navigation fallback failed', e); }
+        return;
+      }
+
+      // Communicate selected property to the wizard (robust: set localStorage and query param)
+      try { localStorage.setItem('nexefii_wizard_selected_property', String(propertyKey)); } catch (e) { /* ignore */ }
+
+      // Load wizard in edit mode and open modal
+      frame.src = 'pages/wizard.html?mode=edit&property=' + encodeURIComponent(propertyKey) + '&from=master-control&ts=' + Date.now();
+      // Open modal immediately and then send a postMessage to the iframe when it finishes loading.
+      modal.classList.add('open');
+      modal.setAttribute('aria-hidden', 'false');
+      document.body.style.overflow = 'hidden';
+
+      try {
+        // Try to obtain full property object to send to the iframe as a convenience (may be null)
+        let propObj = null;
+        try { propObj = (window.NexefiiProps && typeof window.NexefiiProps.getProperty === 'function') ? window.NexefiiProps.getProperty(propertyKey) : null; } catch(e) { propObj = null; }
+
+        const onLoadHandler = function(){
+          try {
+            if (frame && frame.contentWindow) {
+              try { frame.contentWindow.postMessage({ type: 'edit-property', propertyKey: String(propertyKey), property: propObj }, '*'); } catch(e){ console.warn('[masterCtrl] postMessage to wizard failed', e); }
+            }
+          } catch(e) { console.warn('[masterCtrl] wizard frame onload handler failed', e); }
+          // remove handler once executed
+          try { frame.removeEventListener('load', onLoadHandler); } catch(e){}
+        };
+
+        // If frame already loaded quickly, send immediately; otherwise wait for load event
+        frame.addEventListener('load', onLoadHandler);
+        // Safety timeout: attempt to post after 500ms if load doesn't fire (works around cached frames)
+        setTimeout(() => {
+          try { if (frame && frame.contentWindow) frame.contentWindow.postMessage({ type: 'edit-property', propertyKey: String(propertyKey), property: propObj }, '*'); } catch(e){}
+        }, 500);
+      } catch (e) {
+        console.warn('[masterCtrl] postMessage scheduling failed', e);
+      }
+    } catch (e) {
+      console.warn('[masterCtrl] openWizardForEdit error', e);
+    }
+  }
+
   initSystem() {
     // Verificar autenticação master
     this.checkMasterAuth();
@@ -3638,6 +3744,8 @@ class MasterControlSystem {
   renderPropertiesTable(filter = '') {
     const tbody = document.getElementById('propertiesTableBody');
     if (!tbody) return;
+    // Ensure delegated click handlers are attached (once)
+    try { this._ensurePropertiesTableDelegation(); } catch(e) { /* ignore */ }
 
     const properties = window.NexefiiProps ? window.NexefiiProps.listProperties() : [];
     const filtered = filter ? properties.filter(p => 
@@ -3700,13 +3808,13 @@ class MasterControlSystem {
           <td>${propertyLink}</td>
           <td>${deployStatus}</td>
           <td style="white-space: nowrap;">
-            <button class="btn btn-sm" onclick="window.masterCtrl.editProperty('${prop.key}')" title="Editar">
+            <button class="btn btn-sm" onclick="window.masterCtrl.editProperty('${prop.key}')" title="Editar" data-action="edit-property" data-prop-id="${prop.key}">
               <span class="icon">✏️</span>
             </button>
-            <button class="btn btn-sm btn-success" onclick="window.masterCtrl.openPropertyLocal('${prop.key}')" title="${prop.deployed ? 'Já implantado' : 'Implantar'}" ${deployBtnDisabled}>
+            <button class="btn btn-sm btn-success" onclick="window.masterCtrl.openPropertyLocal('${prop.key}')" title="${prop.deployed ? 'Já implantado' : 'Implantar'}" ${deployBtnDisabled} data-action="deploy-property" data-prop-id="${prop.key}">
               <span class="icon">🚀</span>
             </button>
-            <button class="btn btn-sm btn-danger" onclick="window.masterCtrl.deleteProperty('${prop.key}')" title="Deletar">
+            <button class="btn btn-sm btn-danger" onclick="(window.openDeletePropertyConfirm || window.masterCtrl.openDeletePropertyConfirm || function(k){ try{ window.masterCtrl.deleteProperty(k); }catch(e){} })( '${prop.key}')" title="Deletar" data-action="delete-property" data-prop-id="${prop.key}">
               <span class="icon">🗑️</span>
             </button>
           </td>
@@ -3896,7 +4004,15 @@ class MasterControlSystem {
   }
 
   editProperty(propertyKey) {
-    this.openPropertyModal('edit', propertyKey);
+    // Open the full property Wizard in EDIT mode (reuses the creation wizard UI)
+    // This centralizes editing into the wizard iframe so the same flows/components
+    // are reused for create & edit, improving UX consistency and maintainability.
+    try {
+      this.openWizardForEdit(propertyKey);
+    } catch (e) {
+      // Fallback: open the legacy inline modal if anything fails
+      try { this.openPropertyModal('edit', propertyKey); } catch (_) { console.warn('[masterCtrl] editProperty fallback failed', _); }
+    }
   }
 
   // Nova função: Abrir propriedade local para validação
