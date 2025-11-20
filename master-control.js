@@ -2658,6 +2658,7 @@ class MasterControlSystem {
       
       var createSel = document.getElementById('newUserProperties');
       var editSel = document.getElementById('editUserProperties');
+      var ufPropsContainer = document.getElementById('uf_props');
       var opts = '';
       for (var j=0;j<props.length;j++) {
         var displayName = props[j].name || props[j].key;
@@ -2667,14 +2668,35 @@ class MasterControlSystem {
         createSel.innerHTML = opts;
         console.log('populatePropertySelects(): Select newUserProperties populado com', createSel.options.length, 'opções');
       } else {
-        console.warn('populatePropertySelects(): Select newUserProperties não encontrado');
+        // create a hidden select to satisfy legacy scripts
+        try {
+          createSel = document.createElement('select'); createSel.id = 'newUserProperties'; createSel.multiple = true; createSel.style.display = 'none'; createSel.innerHTML = opts; document.body.appendChild(createSel);
+          console.log('populatePropertySelects(): Select newUserProperties criado dinamicamente e populado com', createSel.options.length, 'opções');
+        } catch(e) { console.warn('populatePropertySelects(): não encontrou newUserProperties e falhou ao criar', e); }
       }
       if (editSel) {
         editSel.innerHTML = opts;
         console.log('populatePropertySelects(): Select editUserProperties populado com', editSel.options.length, 'opções');
       } else {
-        console.warn('populatePropertySelects(): Select editUserProperties não encontrado');
+        try {
+          editSel = document.createElement('select'); editSel.id = 'editUserProperties'; editSel.multiple = true; editSel.style.display = 'none'; editSel.innerHTML = opts; document.body.appendChild(editSel);
+          console.log('populatePropertySelects(): Select editUserProperties criado dinamicamente e populado com', editSel.options.length, 'opções');
+        } catch(e) { console.warn('populatePropertySelects(): não encontrou editUserProperties e falhou ao criar', e); }
       }
+      // Also populate uf_props (checkbox list) if present in the canonical users modal
+      try {
+        if (ufPropsContainer) {
+          ufPropsContainer.innerHTML = '';
+          for (var k=0;k<props.length;k++) {
+            var p = props[k];
+            var val = p.key || p.id || p.slug || p.name;
+            var lab = document.createElement('label'); lab.className = 'checkbox-label'; lab.style.marginRight = '8px';
+            lab.innerHTML = '<input type="checkbox" value="' + val + '" data-propname="' + (p.name||p.key||p.slug) + '" /> <span>' + (p.name||p.key||p.slug) + '</span>';
+            ufPropsContainer.appendChild(lab);
+          }
+          console.log('populatePropertySelects(): uf_props populado com', ufPropsContainer.querySelectorAll('input[type=checkbox]').length, 'checkboxes');
+        }
+      } catch(e) { console.warn('populatePropertySelects(): erro populando uf_props', e); }
     } catch(e) { 
       console.error('Erro em populatePropertySelects:', e);
     }
@@ -3069,12 +3091,30 @@ class MasterControlSystem {
   openCreateUserModal() {
     // Atualizar lista de propriedades antes de abrir modal
     this.populatePropertySelects();
-    document.getElementById('createUserModal').style.display = 'flex';
+    // Preferir o modal canônico '#userModal' (moved form). Fallback para legacy '#createUserModal'.
+    var modal = document.getElementById('userModal') || document.getElementById('createUserModal');
+    if (modal) {
+      try { modal.style.display = 'flex'; modal.classList.add('open'); modal.setAttribute('aria-hidden','false'); } catch(e) { try { modal.style.display='flex'; } catch(_){} }
+      // ensure the moved form card is visible
+      var card = document.getElementById('userFormCard'); if (card) card.style.display = 'block';
+    }
   }
 
   closeCreateUserModal() {
-    document.getElementById('createUserModal').style.display = 'none';
-    document.getElementById('createUserForm').reset();
+    // Close canonical modal first, fallback to legacy
+    var modal = document.getElementById('userModal') || document.getElementById('createUserModal');
+    if (modal) {
+      try { modal.style.display = 'none'; modal.classList.remove('open'); modal.setAttribute('aria-hidden','true'); } catch(e) { try { modal.style.display='none'; } catch(_){} }
+    }
+    // Reset moved form fields if present
+    try {
+      var card = document.getElementById('userFormCard'); if (card) {
+        var inputs = card.querySelectorAll('input,select,textarea');
+        inputs.forEach(function(i){ if (i.type === 'checkbox' || i.type === 'radio') i.checked = false; else i.value = ''; });
+      }
+    } catch(e){}
+    // Reset legacy create form if present
+    try { var cf = document.getElementById('createUserForm'); if (cf && typeof cf.reset === 'function') cf.reset(); } catch(e){}
   }
 
   handleCreateUserSubmit() {

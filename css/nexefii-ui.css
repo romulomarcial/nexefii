@@ -309,3 +309,159 @@ body.nx-page{
 }
 
 /* ===== end user-requested Releases styling ===== */
+
+/* ===== Users tab styling (appended) ===== */
+
+/* 1) Wrapper for users tab */
+.users-section {
+  max-width: 1180px;
+  margin: 0 auto;
+  padding: 8px 0 32px 0;
+}
+
+/* 2) Users card visual parity */
+.users-card {
+  background: #ffffff;
+  border-radius: 12px;
+  padding: 20px 24px 24px 24px;
+  box-shadow: 0 8px 24px rgba(15, 23, 42, 0.06);
+  border: 1px solid #e5e7eb;
+}
+
+/* 3) Toolbar layout */
+.mc-users-toolbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 16px;
+  margin-bottom: 16px;
+}
+
+.mc-users-toolbar-left {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.mc-users-toolbar-right {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+}
+
+.mc-users-filter {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.mc-users-filter-search {
+  padding: 0 10px;
+  border-radius: 999px;
+  border: 1px solid #e5e7eb;
+  background: #f9fafb;
+}
+
+.mc-users-filter-search .mc-input {
+  border: none;
+  background: transparent;
+  height: 32px;
+  padding: 0;
+  min-width: 180px;
+}
+
+.mc-users-filter-search .icon {
+  font-size: 14px;
+}
+
+/* 4) Inputs and selects sizing inside users section */
+.users-section .mc-select {
+  height: 36px;
+  min-width: 160px;
+}
+
+.users-section .mc-input {
+  height: 36px;
+}
+
+/* 5) Users table styling */
+.mc-users-table-wrapper {
+  margin-top: 8px;
+}
+
+.mc-users-table-wrapper table {
+  width: 100%;
+}
+
+.mc-users-table-wrapper thead th {
+  font-weight: 600;
+  font-size: 13px;
+  text-transform: uppercase;
+  letter-spacing: 0.02em;
+}
+
+.mc-users-table-wrapper tbody td {
+  font-size: 13px;
+  padding-top: 8px;
+  padding-bottom: 8px;
+}
+
+/* 6) Basic responsiveness */
+@media (max-width: 900px) {
+  .mc-users-toolbar {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .mc-users-toolbar-right {
+    justify-content: flex-start;
+  }
+
+  .mc-users-filter-search {
+    width: 100%;
+  }
+
+  .mc-users-filter-search .mc-input {
+    width: 100%;
+  }
+}
+
+/* ===== end users tab styling ===== */
+
+/* ===== Modal styles for user creation modal ===== */
+.mc-modal {
+  position: fixed;
+  inset: 0;
+  display: none;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+}
+.mc-modal.open { display: flex; }
+.mc-modal-backdrop {
+  position: absolute;
+  inset: 0;
+  background: rgba(15, 23, 42, 0.45);
+}
+.mc-modal-dialog {
+  position: relative;
+  background: #ffffff;
+  border-radius: 16px;
+  padding: 20px 24px 24px 24px;
+  max-width: 640px;
+  width: 100%;
+  max-height: 90vh;
+  overflow: auto;
+  box-shadow: 0 20px 45px rgba(15, 23, 42, 0.2);
+  border: 1px solid #e5e7eb;
+  z-index: 1;
+}
+.mc-modal-header{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:12px}
+.mc-modal-header h3{margin:0;font-size:18px;font-weight:600;display:flex;align-items:center;gap:8px}
+.mc-modal-close{border:none;background:transparent;cursor:pointer;font-size:16px;line-height:1}
+.mc-modal-body{margin-top:4px}
+@media (max-width:640px){.mc-modal-dialog{max-width:94vw;padding:16px 16px 20px 16px}}
+
+/* ===== end modal styles ===== */

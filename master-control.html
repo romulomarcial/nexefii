@@ -49,6 +49,53 @@
       } catch (e) { /* ignore */ }
     })();
   </script>
+
+  <script>
+    (function(){
+      try {
+        var openBtn = document.getElementById('btnCreateUser');
+        var modal = document.getElementById('userModal');
+        if (!modal) return;
+
+        function openModal(e){
+          try{
+            modal.classList.add('open');
+            modal.setAttribute('aria-hidden','false');
+            document.body.style.overflow = 'hidden';
+          }catch(err){/* defensive */}
+        }
+
+        function closeModal(e){
+          try{
+            modal.classList.remove('open');
+            modal.setAttribute('aria-hidden','true');
+            document.body.style.overflow = '';
+          }catch(err){/* defensive */}
+        }
+
+        if (openBtn) {
+          openBtn.addEventListener('click', function(evt){
+            try{ openModal(evt); }catch(e){}
+            // do not prevent other handlers; keep existing behavior intact
+          });
+        }
+
+        // close controls
+        var closes = modal.querySelectorAll('[data-user-modal-close]');
+        closes.forEach(function(el){ el.addEventListener('click', closeModal); });
+
+        var backdrop = modal.querySelector('.mc-modal-backdrop');
+        if (backdrop) backdrop.addEventListener('click', closeModal);
+
+        // ensure existing cancel button also closes modal (adds attribute but preserves handlers)
+        var cancel = document.getElementById('uf_cancel');
+        if (cancel) {
+          cancel.setAttribute('data-user-modal-close','');
+          cancel.addEventListener('click', function(){ setTimeout(closeModal, 10); });
+        }
+      } catch (e) { console.warn('user modal init failed', e); }
+    })();
+  </script>
   <style>
     /* Deployment Wizard Enhancements */
     .check-card {
@@ -221,27 +268,86 @@
       </div>
       </div>
 
-      <!-- Integration form modal (simple) -->
-      <div id="int_form" style="display:none;position:fixed;left:50%;top:50%;transform:translate(-50%,-50%);background:#fff;padding:16px;border:1px solid #ddd;box-shadow:0 8px 30px rgba(0,0,0,0.15);z-index:999;min-width:420px;">
-        <h3 id="int_form_title">Adicionar / Editar Integração</h3>
-        <input type="hidden" id="int_form_id" />
-        <div style="display:flex;gap:8px;margin-top:8px;">
-          <div style="flex:1;">
-            <label>Propriedade</label>
-            <select id="int_form_prop" style="width:100%"></select>
+      <!-- Placeholder user modal inside Integrations removed — canonical modal exists in Users tab -->
+
+      <!-- Integration form modal -->
+      <div id="int_form" class="mc-modal" aria-hidden="true" style="display:none;">
+        <div class="mc-modal-backdrop" data-int-modal-close></div>
+        <div class="mc-modal-dialog" role="dialog" aria-modal="true" aria-labelledby="int_form_title">
+          <div class="mc-modal-header">
+            <h3 id="int_form_title">Adicionar / Editar Integração</h3>
+            <button
+              type="button"
+              id="int_form_close"
+              class="mc-modal-close"
+              data-int-modal-close
+              aria-label="Fechar"
+            >
+              ✕
+            </button>
           </div>
-          <div style="width:120px;">
-            <label>Módulo</label>
-            <select id="int_form_module"><option>PMS</option><option>OTA</option><option>IOT</option><option>DOOR_LOCK</option><option>POS</option></select>
+          <div class="mc-modal-body">
+            <div class="master-card nx-card" id="intFormCard" style="margin-top:0;">
+              <input type="hidden" id="int_form_id" />
+
+              <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;">
+                <!-- linha 1: Propriedade / Módulo -->
+                <div>
+                  <label for="int_form_prop">Propriedade</label>
+                  <select id="int_form_prop" style="width:100%"></select>
+                </div>
+                <div>
+                  <label for="int_form_module">Módulo</label>
+                  <select id="int_form_module">
+                    <option>PMS</option>
+                    <option>PMS_FRONTDESK</option>
+                    <option>PMS_ROOMS</option>
+                    <option>PMS_RESERVATIONS</option>
+                    <option>HOUSEKEEPING</option>
+                    <option>ENGINEERING</option>
+                    <option>ALERTS_IT</option>
+                    <option>ADMIN</option>
+                    <option>DOOR_LOCK</option>
+                    <option>POS</option>
+                  </select>
+                </div>
+
+                <!-- linha 2: Provider / Ambiente -->
+                <div>
+                  <label for="int_form_provider">Provider</label>
+                  <input id="int_form_provider" type="text" autocomplete="organization" style="width:100%" />
+                </div>
+                <div>
+                  <label for="int_form_env">Ambiente</label>
+                  <select id="int_form_env" style="width:100%">
+                    <option value="sandbox">sandbox</option>
+                    <option value="production">production</option>
+                  </select>
+                </div>
+
+                <!-- linha 3: API Base URL (full width) -->
+                <div style="grid-column:1/-1;">
+                  <label for="int_form_apiBase">API Base URL</label>
+                  <input id="int_form_apiBase" type="url" autocomplete="url" style="width:100%" />
+                </div>
+
+                <!-- linha 4: API Key / Client ID -->
+                <div>
+                  <label for="int_form_apiKey">API Key</label>
+                  <input id="int_form_apiKey" type="text" autocomplete="off" style="width:100%" />
+                </div>
+                <div>
+                  <label for="int_form_clientId">Client ID</label>
+                  <input id="int_form_clientId" type="text" autocomplete="off" style="width:100%" />
+                </div>
+              </div>
+
+              <div style="margin-top:12px;display:flex;gap:8px;justify-content:flex-end;">
+                <button type="button" class="btn btn-primary" id="int_form_save">Salvar</button>
+              </div>
+            </div>
           </div>
         </div>
-        <div style="display:flex;gap:8px;margin-top:8px;"><div style="flex:1;"><label>Provider</label><input id="int_form_provider" style="width:100%"/></div><div style="width:140px;"><label>Ambiente</label><select id="int_form_env"><option value="sandbox">sandbox</option><option value="production">production</option></select></div></div>
-        <div style="margin-top:8px;">
-          <label>API Base URL</label>
-          <input id="int_form_apiBase" style="width:100%" />
-        </div>
-        <div style="margin-top:8px;display:flex;gap:8px;"><div style="flex:1;"><label>API Key</label><input id="int_form_apiKey" style="width:100%"/></div><div style="flex:1;"><label>Client ID</label><input id="int_form_clientId" style="width:100%"/></div></div>
-        <div style="margin-top:12px;display:flex;gap:8px;justify-content:flex-end;"><button id="int_form_close" class="btn">Fechar</button><button id="int_form_save" class="btn btn-primary">Salvar</button></div>
       </div>
     </div>
 
@@ -482,58 +588,76 @@
           </div>
         </div>
       </div>
+
+      <!-- Moved user modal into canonical users tab: -->
+      <div id="userModal" class="mc-modal" aria-hidden="true">
+        <div class="mc-modal-backdrop" data-user-modal-close></div>
+        <div class="mc-modal-dialog" role="dialog" aria-modal="true" aria-labelledby="userModalTitle">
+          <div class="mc-modal-header">
+            <h3 id="userModalTitle"><span class="icon">👤</span> <span data-i18n="users.createTitle">Criar Usuário</span></h3>
+            <button type="button" class="mc-modal-close" data-user-modal-close aria-label="Fechar">✕</button>
+          </div>
+          <div class="mc-modal-body">
+            <!-- Begin moved user form (ids preserved) -->
+            <div class="master-card nx-card" id="userFormCard" style="display:none;margin-top:12px;">
+              <form id="userForm" onsubmit="return false;">
+                <h3 id="userFormTitle">Criar / Editar Usuário</h3>
+                <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;">
+                  <div>
+                    <label>Nome</label>
+                    <input id="uf_name" type="text" autocomplete="name" />
+                  </div>
+                  <div>
+                    <label>Email</label>
+                    <input id="uf_email" type="email" autocomplete="username" />
+                  </div>
+                  <div>
+                    <label>Role</label>
+                    <select id="uf_role"><option value="MASTER">MASTER</option><option value="SUPERADMIN">SUPERADMIN</option><option value="USER">USER</option></select>
+                  </div>
+                  <div>
+                    <label>Senha inicial (apenas criação / reset)</label>
+                    <input id="uf_password" type="password" autocomplete="new-password" />
+                  </div>
+                  <div style="grid-column:1/-1;">
+                    <label>Propriedades (atribuir)</label>
+                    <div class="uf-props-wrapper" style="margin-top:6px;display:flex;flex-direction:column;gap:8px;">
+                      <div class="uf-props-toolbar" style="display:flex;gap:8px;align-items:center;flex-wrap:wrap;">
+                        <input
+                          type="text"
+                          id="uf_props_search"
+                          autocomplete="off"
+                          placeholder="Buscar propriedade..."
+                          style="flex:1;min-width:180px;padding:4px 8px;font-size:13px;border:1px solid #ccc;border-radius:4px;"
+                        />
+                        <button type="button" id="uf_props_select_all" class="btn btn-ghost" style="font-size:12px;padding:4px 8px;">
+                          Selecionar tudo
+                        </button>
+                        <button type="button" id="uf_props_clear_all" class="btn btn-ghost" style="font-size:12px;padding:4px 8px;">
+                          Limpar seleção
+                        </button>
+                      </div>
+                      <div
+                        id="uf_props"
+                        class="uf-props-list"
+                        style="max-height:220px;overflow-y:auto;border:1px solid #eee;border-radius:4px;padding:8px;display:flex;flex-direction:column;gap:4px;background:#fafafa;"
+                      ></div>
+                    </div>
+                  </div>
+                </div>
+                <div style="margin-top:12px;display:flex;gap:8px;">
+                  <button class="btn btn-primary" id="uf_save" type="button">Salvar</button>
+                  <button class="btn" id="uf_cancel" data-user-modal-close type="button">Cancelar</button>
+                </div>
+              </form>
+            </div>
+            <!-- End moved user form -->
+          </div>
+        </div>
+      </div>
     </div>
 
-    <!-- Users Tab: minimal user management for MASTER -->
-    <div class="tab-content nx-section" id="tab-users" style="display:none;">
-      <div class="breadcrumb"><span class="icon">👥</span> <span data-i18n="breadcrumb.users">Usuários</span></div>
-      <div class="section-header">
-        <h2><span class="icon">👥</span> <span data-i18n="users.title">Gestão de Usuários</span></h2>
-        <button class="btn-help" data-help="users" title="Ajuda"><span class="icon">❓</span></button>
-      </div>
-      <div class="help-panel" id="help-users" style="display:none;"><div class="help-content"><p data-i18n="users.help">Área para criação, edição e atribuição de propriedades e módulos aos usuários.</p></div></div>
-
-      <div class="master-card nx-card">
-        <div style="display:flex;gap:12px;align-items:center;margin-bottom:12px;">
-          <h3 style="margin:0;">Lista de Usuários</h3>
-          <div style="margin-left:auto;display:flex;gap:8px;">
-            <button class="btn btn-primary" id="btnCreateUser">Criar usuário</button>
-            <button class="btn btn-secondary" id="btnSeedDemo">Criar Ambiente Demo</button>
-          </div>
-        </div>
-        <div id="usersListArea"></div>
-      </div>
-
-      <div class="master-card nx-card" id="userFormCard" style="display:none;margin-top:12px;">
-        <h3 id="userFormTitle">Criar / Editar Usuário</h3>
-        <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;">
-          <div>
-            <label>Nome</label>
-            <input id="uf_name" />
-          </div>
-          <div>
-            <label>Email</label>
-            <input id="uf_email" />
-          </div>
-          <div>
-            <label>Role</label>
-            <select id="uf_role"><option value="MASTER">MASTER</option><option value="SUPERADMIN">SUPERADMIN</option><option value="USER">USER</option></select>
-          </div>
-          <div>
-            <label>Senha inicial (apenas criação / reset)</label>
-            <input id="uf_password" type="password" />
-          </div>
-          <div style="grid-column:1/-1;">
-            <label>Propriedades (atribuir)</label>
-            <div id="uf_props" style="display:flex;flex-wrap:wrap;gap:8px;margin-top:6px;"></div>
-          </div>
-        </div>
-        <div style="margin-top:12px;display:flex;gap:8px;">
-          <button class="btn btn-primary" id="uf_save">Salvar</button>
-          <button class="btn" id="uf_cancel">Cancelar</button>
-        </div>
-      </div>
-    </div>
+    <!-- Duplicate Users tab removed. Canonical users tab follows below. -->
 
     <!-- Backup & Restore Tab (OLD - TO BE REMOVED) -->
     <div class="tab-content nx-section" id="tab-backup" style="display:none;">
@@ -688,62 +812,82 @@
 
     <!-- Users Tab -->
     <div class="tab-content nx-section" id="tab-users">
-      <div class="users-section">
-        <div class="master-card nx-card">
-          <div class="section-header">
-            <h3><span class="icon">👥</span> <span data-i18n="users.title">Gestão de Usuários</span></h3>
-            <button class="btn-help" data-help="users" title="Ajuda">
-              <span class="icon">❓</span>
-            </button>
+      <div class="mc-shell users-section">
+
+        <!-- Breadcrumb -->
+        <div class="breadcrumb mc-breadcrumb">
+          <span class="icon">👥</span> <span data-i18n="breadcrumb.home">Início</span>
+          <span class="separator">›</span>
+          <span data-i18n="breadcrumb.users">Usuários</span>
+        </div>
+
+        <!-- Section header (preserve content) -->
+        <div class="section-header mc-section-header">
+          <h2 class="mc-page-title"><span class="icon">👥</span> <span data-i18n="users.title">Gestão de Usuários</span></h2>
+          <div class="mc-title-underline" aria-hidden="true"></div>
+          <button class="btn-help" data-help="users" title="Ajuda"><span class="icon">❓</span></button>
+        </div>
+
+        <!-- Help Panel (preserved) -->
+        <div class="help-panel" id="help-users" style="display:none;">
+          <div class="help-content">
+            <h4>Gestão de Usuários - Controle de Acesso:</h4>
+            <p><strong>👥 Usuários:</strong> Controle completo de usuários, permissões e acesso ao sistema.</p>
+            
+            <p><strong>Níveis de Acesso:</strong></p>
+            <ul>
+              <li><strong>Master:</strong> Acesso total ao sistema, incluindo este painel</li>
+              <li><strong>Admin:</strong> Gerenciamento de propriedades e usuários da empresa</li>
+              <li><strong>Manager:</strong> Gestão operacional de propriedades específicas</li>
+              <li><strong>User:</strong> Acesso básico às funcionalidades da propriedade</li>
+            </ul>
+            
+            <p><strong>Status:</strong></p>
+            <ul>
+              <li><strong>Ativo:</strong> Usuário pode fazer login normalmente</li>
+              <li><strong>Pendente:</strong> Aguardando ativação ou aprovação</li>
+              <li><strong>Suspenso:</strong> Acesso temporariamente bloqueado</li>
+            </ul>
+            
+            <p><strong>Propriedades:</strong> Atribua propriedades específicas aos usuários para controlar acesso</p>
+            
+            <p><em>🔒 Segurança: Sempre use senhas fortes e revise permissões regularmente</em></p>
           </div>
-          
-          <!-- Help Panel -->
-          <div class="help-panel" id="help-users" style="display:none;">
-            <div class="help-content">
-              <h4>Gestão de Usuários - Controle de Acesso:</h4>
-              <p><strong>👥 Usuários:</strong> Controle completo de usuários, permissões e acesso ao sistema.</p>
-              
-              <p><strong>Níveis de Acesso:</strong></p>
-              <ul>
-                <li><strong>Master:</strong> Acesso total ao sistema, incluindo este painel</li>
-                <li><strong>Admin:</strong> Gerenciamento de propriedades e usuários da empresa</li>
-                <li><strong>Manager:</strong> Gestão operacional de propriedades específicas</li>
-                <li><strong>User:</strong> Acesso básico às funcionalidades da propriedade</li>
-              </ul>
-              
-              <p><strong>Status:</strong></p>
-              <ul>
-                <li><strong>Ativo:</strong> Usuário pode fazer login normalmente</li>
-                <li><strong>Pendente:</strong> Aguardando ativação ou aprovação</li>
-                <li><strong>Suspenso:</strong> Acesso temporariamente bloqueado</li>
-              </ul>
-              
-              <p><strong>Propriedades:</strong> Atribua propriedades específicas aos usuários para controlar acesso</p>
-              
-              <p><em>🔒 Segurança: Sempre use senhas fortes e revise permissões regularmente</em></p>
+        </div>
+
+        <!-- Users card with toolbar and table -->
+        <div class="master-card mc-card nx-card users-card">
+          <div class="mc-users-toolbar">
+            <div class="mc-users-toolbar-left">
+              <!-- existing create button (preserve id/events/text) -->
+              <button class="btn btn-primary" id="btnCreateUser"><span class="icon">➕</span> <span data-i18n="users.create">Criar Usuário</span></button>
+            </div>
+            <div class="mc-users-toolbar-right">
+              <div class="mc-users-filter mc-users-filter-search">
+                <span class="icon">🔍</span>
+                <input type="text" class="mc-input" id="searchUsers" autocomplete="off" placeholder="Buscar usuário..." data-i18n-placeholder="users.search" />
+              </div>
+              <div class="mc-users-filter">
+                <select id="filterUserRole" class="mc-select">
+                  <option value="" data-i18n="users.allLevels">Todos os Níveis</option>
+                  <option value="master" data-i18n="users.roleMaster">Master</option>
+                  <option value="admin" data-i18n="users.roleAdmin">Admin</option>
+                  <option value="manager" data-i18n="users.roleManager">Manager</option>
+                  <option value="user" data-i18n="users.roleUser">User</option>
+                </select>
+              </div>
+              <div class="mc-users-filter">
+                <select id="filterUserStatus" class="mc-select">
+                  <option value="" data-i18n="users.allStatus">Todos os Status</option>
+                  <option value="active" data-i18n="users.statusActive">Ativo</option>
+                  <option value="pending" data-i18n="users.statusPending">Pendente</option>
+                  <option value="suspended" data-i18n="users.statusSuspended">Suspenso</option>
+                </select>
+              </div>
             </div>
           </div>
-          
-          <div class="card-header">
-            <button class="btn btn-primary" id="btnCreateUser"><span class="icon">➕</span> <span data-i18n="users.create">Criar Usuário</span></button>
-          </div>
-          <div class="filters-row">
-            <input type="text" id="searchUsers" data-i18n-placeholder="users.search" placeholder="🔍 Buscar usuário..." class="search-input">
-            <select id="filterUserRole" class="select">
-              <option value="" data-i18n="users.allLevels">Todos os Níveis</option>
-              <option value="master" data-i18n="users.roleMaster">Master</option>
-              <option value="admin" data-i18n="users.roleAdmin">Admin</option>
-              <option value="manager" data-i18n="users.roleManager">Manager</option>
-              <option value="user" data-i18n="users.roleUser">User</option>
-            </select>
-            <select id="filterUserStatus" class="select">
-              <option value="" data-i18n="users.allStatus">Todos os Status</option>
-              <option value="active" data-i18n="users.statusActive">Ativo</option>
-              <option value="pending" data-i18n="users.statusPending">Pendente</option>
-              <option value="suspended" data-i18n="users.statusSuspended">Suspenso</option>
-            </select>
-          </div>
-          <div class="users-table-container">
+
+          <div class="mc-users-table-wrapper">
             <table class="master-table">
               <thead>
                 <tr>
@@ -1103,7 +1247,7 @@
           <div class="test-section">
             <div class="form-group">
               <label data-i18n="i18n.test.key">Chave de Tradução</label>
-              <input type="text" id="testI18nKey" class="input" placeholder="master.title" data-i18n-placeholder="i18n.test.keyPlaceholder">
+              <input type="text" id="testI18nKey" class="input" autocomplete="off" placeholder="master.title" data-i18n-placeholder="i18n.test.keyPlaceholder">
             </div>
             <button class="btn btn-primary" id="btnTestI18n">
               <span class="icon">🔍</span> <span data-i18n="i18n.test.execute">Testar</span>
@@ -1369,7 +1513,7 @@
                 <span class="icon">🔄</span> <span data-i18n="properties.refresh">Atualizar Lista</span>
               </button>
               <div class="mc-properties-search">
-                <input type="text" id="searchProperties" placeholder="Buscar propriedades..." data-i18n-placeholder="properties.search">
+                <input type="text" id="searchProperties" autocomplete="off" placeholder="Buscar propriedades..." data-i18n-placeholder="properties.search">
               </div>
             </div>
           </div>
@@ -1463,7 +1607,7 @@
                   <option value="error" data-i18n="logs.error">Erro</option>
                   <option value="critical" data-i18n="logs.critical">Crítico</option>
                 </select>
-                <input type="date" id="filterLogDate" class="input">
+                <input type="date" id="filterLogDate" class="input" autocomplete="off">
               </div>
             </div>
             <div class="mc-logs-toolbar-right">
@@ -1634,7 +1778,7 @@
           <div class="card-header">
             <h3><span class="icon">📚</span> <span data-i18n="propertyBackups.catalogTitle">Catálogo de Backups</span></h3>
             <div class="card-actions">
-              <input type="text" id="tbSearchInput" class="input" placeholder="Buscar por propriedade..." data-i18n-placeholder="propertyBackups.search">
+              <input type="text" id="tbSearchInput" class="input" autocomplete="off" placeholder="Buscar por propriedade..." data-i18n-placeholder="propertyBackups.search">
               <select id="tbFilterType" class="select">
                 <option value="all" data-i18n="propertyBackups.filterAll">Todos</option>
                 <option value="full" data-i18n="propertyBackups.filterFull">Completo</option>
@@ -1878,7 +2022,7 @@
           <div class="card-header">
             <h3><span class="icon">📚</span> <span data-i18n="generalBackups.catalogTitle">Catálogo de Backups de Estrutura</span></h3>
             <div class="card-actions">
-              <input type="text" id="gbSearchInput" class="input" placeholder="Buscar..." data-i18n-placeholder="generalBackups.search">
+              <input type="text" id="gbSearchInput" class="input" autocomplete="off" placeholder="Buscar..." data-i18n-placeholder="generalBackups.search">
             </div>
           </div>
           <div class="table-container">
@@ -2224,7 +2368,7 @@
           var iv = setInterval(function(){
             try {
               if (typeof I18nManager !== 'undefined') { clearInterval(iv); return doInit(); }
-              if (Date.now() - start > (timeoutMs || 3000)) { clearInterval(iv); console.warn('[I18n] I18nManager not available after wait; skipping init'); }
+              if (Date.now() - start > (timeoutMs || 3000)) { clearInterval(iv); console.info('[I18n] I18nManager not available after wait; skipping init'); }
             } catch(e){ clearInterval(iv); console.warn('[I18n] i18n init poll error', e); }
           }, 50);
         } catch(e){ console.warn('[I18n] startInitWithTimeout error', e); }
@@ -2258,7 +2402,7 @@
     </div>
   </div>
 
-  <!-- Create User Modal -->
+  <!-- Create User Modal (legacy) - commented out because canonical modal is used above
   <div id="createUserModal" class="modal" style="display:none;">
     <div class="modal-content" style="max-width:600px;">
       <div class="modal-header">
@@ -2304,7 +2448,8 @@
         </form>
       </div>
     </div>
-  </div>
+  </div
+  -->
 
   <!-- Scripts -->
   <div id="restoreSelectiveModal" class="modal" style="display:none;">
@@ -2339,15 +2484,15 @@
       <div class="modal-body">
         <div class="form-group">
           <label data-i18n="userModal.name">Nome</label>
-          <input id="editUserName" class="input" type="text">
+          <input id="editUserName" class="input" type="text" autocomplete="name">
         </div>
         <div class="form-group">
           <label data-i18n="userModal.email">Email</label>
-          <input id="editUserEmail" class="input" type="email">
+          <input id="editUserEmail" class="input" type="email" autocomplete="email">
         </div>
         <div class="form-group">
           <label data-i18n="userModal.username">Username</label>
-          <input id="editUserUsername" class="input" type="text">
+          <input id="editUserUsername" class="input" type="text" autocomplete="username">
         </div>
         <div class="form-group">
           <label data-i18n="userModal.role">Nível</label>
@@ -2389,18 +2534,18 @@
         <form id="propertyForm" class="modal-form">
           <div class="form-group">
             <label><span class="icon">🔑</span> <span data-i18n="properties.modal.id">Property ID</span> <span class="required">*</span></label>
-            <input type="text" id="propertyId" class="input" placeholder="ex: nexefiiSaoPaulo" required data-i18n-placeholder="properties.modal.idPlaceholder">
+            <input type="text" id="propertyId" class="input" autocomplete="off" placeholder="ex: nexefiiSaoPaulo" required data-i18n-placeholder="properties.modal.idPlaceholder">
             <small data-i18n="properties.modal.idHelp">Identificador único (sem espaços, primary key no banco)</small>
           </div>
 
           <div class="form-group">
             <label><span class="icon">🏨</span> <span data-i18n="properties.modal.name">Nome da Propriedade</span></label>
-            <input type="text" id="propertyName" class="input" placeholder="ex: nexefii São Paulo" data-i18n-placeholder="properties.modal.namePlaceholder">
+            <input type="text" id="propertyName" class="input" autocomplete="off" placeholder="ex: nexefii São Paulo" data-i18n-placeholder="properties.modal.namePlaceholder">
           </div>
 
           <div class="form-group">
             <label><span class="icon">🖼️</span> <span data-i18n="properties.modal.image">URL da Imagem</span></label>
-            <input type="text" id="propertyImage" class="input" placeholder="assets/images/hotel_sp.jpg" data-i18n-placeholder="properties.modal.imagePlaceholder">
+            <input type="text" id="propertyImage" class="input" autocomplete="off" placeholder="assets/images/hotel_sp.jpg" data-i18n-placeholder="properties.modal.imagePlaceholder">
           </div>
 
           <div class="form-group">
@@ -2570,7 +2715,7 @@
                 <label style="display: block; font-weight: 600; margin-bottom: 6px; font-size: 13px;">
                   <span class="icon">🔗</span> <span data-i18n="deployment.config.url">URL de Deploy</span>
                 </label>
-                <input type="text" id="deployUrl" class="input" style="width: 100%; padding: 8px; border-radius: 6px; font-size: 13px;" placeholder="https://api.nexefii.com" data-i18n-placeholder="deployment.config.urlPlaceholder">
+                <input type="url" id="deployUrl" class="input" autocomplete="url" style="width: 100%; padding: 8px; border-radius: 6px; font-size: 13px;" placeholder="https://api.nexefii.com" data-i18n-placeholder="deployment.config.urlPlaceholder">
               </div>
             </div>
 

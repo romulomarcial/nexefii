@@ -6,7 +6,7 @@
 	'use strict';
 
 	if (!global.MasterControlSystem) {
-		console.warn('[Enterprise] MasterControlSystem not found; skipping enterprise wiring.');
+		console.info('[Enterprise] MasterControlSystem not found; skipping enterprise wiring.');
 		return;
 	}
 

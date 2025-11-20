@@ -140,11 +140,28 @@
 		});
 	}
 
-	function openForm(propertyId, existing){
+	// Modal helpers for integration modal (open/close centralization)
+	function openIntegrationModal(){
+		const modal = $id('int_form');
+		if (!modal) { console.warn('[Integrations] int_form modal não encontrado'); return; }
+		modal.style.display = 'flex';
+		modal.classList.add('open');
+		modal.setAttribute('aria-hidden','false');
+		try { global.document.body.style.overflow = 'hidden'; } catch(e){}
+	}
+
+	function closeIntegrationModal(){
 		const modal = $id('int_form');
 		if (!modal) return;
+		modal.classList.remove('open');
+		modal.setAttribute('aria-hidden','true');
+		modal.style.display = 'none';
+		try { global.document.body.style.overflow = ''; } catch(e){}
+	}
 
-		modal.style.display = 'block';
+	function openForm(propertyId, existing){
+		// show modal using helper to keep behavior consistent with other modals
+		openIntegrationModal();
 
 		const psel = $id('int_form_prop');
 		psel.innerHTML = '';
@@ -168,8 +185,8 @@
 	}
 
 	function closeForm(){
-		const modal = $id('int_form');
-		if (modal) modal.style.display = 'none';
+		// delegate to helper to hide modal and restore page state
+		closeIntegrationModal();
 	}
 
 	function saveForm(){
@@ -244,10 +261,21 @@
 		}
 
 		const modalSave  = $id('int_form_save');
-		const modalClose = $id('int_form_close');
-
 		if (modalSave)  modalSave.addEventListener('click', saveForm);
-		if (modalClose) modalClose.addEventListener('click', closeForm);
+
+		const intModal = $id('int_form');
+		if (intModal) {
+			// header X close button
+			const closeBtn = $id('int_form_close');
+			if (closeBtn) {
+				closeBtn.addEventListener('click', function(e){ e.preventDefault(); closeIntegrationModal(); });
+			}
+
+			// backdrop / elements that have data-int-modal-close should close the modal when clicked directly
+			Array.from(intModal.querySelectorAll('[data-int-modal-close]')).forEach(function(el){
+				el.addEventListener('click', function(e){ if (e.target === el) { closeIntegrationModal(); } });
+			});
+		}
 	}
 
 	global.document.addEventListener('DOMContentLoaded', function(){
