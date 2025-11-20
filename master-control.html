@@ -1123,31 +1123,10 @@
       </div>
     </div>
 
-    <!-- Property Wizard modal (iframe-based, reusing mc-modal styles) -->
-    <div id="propertyWizardModal" class="mc-modal" aria-hidden="true">
-      <div class="mc-modal-backdrop" data-pw-close></div>
-      <div class="mc-modal-dialog" role="dialog" aria-modal="true" aria-labelledby="propertyWizardTitle">
-        <div class="mc-modal-header">
-          <h3 id="propertyWizardTitle">
-            <span class="icon">🏨</span>
-            <span data-i18n="properties.wizard.title">Criar / Configurar Propriedade</span>
-          </h3>
-          <button type="button" class="mc-modal-close" data-pw-close aria-label="Fechar">✕</button>
-        </div>
-        <div class="mc-modal-body" style="min-height:60vh;padding:0;">
-          <div style="position:relative;width:100%;height:60vh;">
-            <div class="pw-loading-overlay" id="propertyWizardLoading">
-              <div class="pw-spinner" aria-hidden="true"></div>
-            </div>
-            <iframe
-              id="propertyWizardFrame"
-              src=""
-              style="width:100%;height:60vh;border:none;display:block;"
-            ></iframe>
-          </div>
-        </div>
-      </div>
-    </div>
+    <!-- Bloco duplicado de `propertyWizardModal` removido.
+         Mantemos a instância canônica anterior (80vh) para o wizard.
+         Removido para evitar IDs duplicados e conflitos de escopo/handlers.
+         (Bloco ocultado conforme solicitação de consolidação de modais.) -->
 
     <!-- Duplicate Users tab removed. Canonical users tab follows below. -->
 
@@ -1558,32 +1537,10 @@
         </div>
       </div>
       
-      <div class="maintenance-grid">          <!-- Help Panel -->
-          <div class="help-panel" id="help-maintenance" style="display:none;">
-            <div class="help-content">
-              <h4>Manutenção do Sistema:</h4>
-              <p><strong>🔧 Manutenção:</strong> Ferramentas para otimização, limpeza e recuperação do sistema.</p>
-              
-              <p><strong>Operações Disponíveis:</strong></p>
-              <ul>
-                <li><strong>🗑️ Limpar Cache:</strong> Remove dados temporários para liberar espaço e melhorar performance</li>
-                <li><strong>⚡ Otimizar Banco:</strong> Compacta e reorganiza estruturas de dados do localStorage</li>
-                <li><strong>🔍 Verificar Integridade:</strong> Valida consistência dos dados armazenados</li>
-                <li><strong>🧹 Limpar Logs:</strong> Remove logs antigos mantendo apenas período recente</li>
-                <li><strong>📊 Reindexar:</strong> Reconstrói índices para melhorar velocidade de busca</li>
-              </ul>
-              
-              <p><strong>Quando Usar:</strong></p>
-              <ul>
-                <li>Sistema lento ou travando</li>
-                <li>localStorage próximo do limite (5-10MB)</li>
-                <li>Após importar/restaurar backups grandes</li>
-                <li>Manutenção preventiva mensal</li>
-              </ul>
-              
-              <p><em>⚠️ Importante: Faça backup antes de operações de limpeza ou otimização</em></p>
-            </div>
-          </div>
+      <div class="maintenance-grid">
+        <!-- Bloco duplicado de help-panel `help-maintenance` ocultado.
+             Mantém-se apenas o painel canônico acima para evitar IDs duplicados
+             e confusões no DOM. Bloco removido para consolidação de ajuda. -->
         
         <!-- Cache Management -->
         <div class="master-card nx-card">
