@@ -1258,7 +1258,38 @@ class MasterControlSystem {
 
     // Buttons
   var el;
-  el = document.getElementById('btnLogoutMaster'); if (el) el.addEventListener('click', () => this.logout());
+  el = document.getElementById('btnLogoutMaster'); if (el) {
+    try {
+      // Ensure no legacy inline onclick remains and make this handler authoritative.
+      // Stop other handlers from executing to avoid legacy scripts injecting
+      // duplicate inline messages into the page. We use capture +
+      // stopImmediatePropagation to prevent other listeners from running.
+      try { el.onclick = null; } catch(e){}
+      try { el.removeAttribute && el.removeAttribute('onclick'); } catch(e){}
+      el.addEventListener('click', (ev) => {
+        try { ev.preventDefault(); ev.stopImmediatePropagation(); } catch(e){}
+        try {
+          // Prefer the modal-based logout confirmation when available.
+          if (window.openLogoutConfirm && typeof window.openLogoutConfirm === 'function') {
+            window.openLogoutConfirm();
+          } else {
+            // Fallback to legacy logout behavior if the modal isn't available.
+            this.logout();
+          }
+        } catch(e) { try { window.location.href='login.html'; } catch(_){} }
+      }, true);
+    } catch(e) {
+      try {
+        el.addEventListener('click', () => {
+          if (window.openLogoutConfirm && typeof window.openLogoutConfirm === 'function') {
+            window.openLogoutConfirm();
+          } else {
+            this.logout();
+          }
+        });
+      } catch(_){}
+    }
+  }
   el = document.getElementById('btnCreateBackup'); if (el) el.addEventListener('click', () => this.handleCreateBackup());
   el = document.getElementById('btnRestoreBackup'); if (el) el.addEventListener('click', () => this.handleRestoreBackup());
   el = document.getElementById('btnCreateUser'); if (el) el.addEventListener('click', () => this.openCreateUserModal());

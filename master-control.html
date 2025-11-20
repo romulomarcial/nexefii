@@ -613,6 +613,11 @@
           });
         })();
       </script>
+
+    <!-- [NEXEFII] Legacy defensive script removed after root cause fix in `master-control.js`.
+         The authoritative logout handler is now attached in `master-control.js` and
+         prevents legacy inline handlers from injecting duplicate footer messages. -->
+
     </div>
 
     <!-- Navigation Tabs -->
@@ -2847,19 +2852,111 @@
   <!-- Toasts (aria-live) -->
   <div id="toastContainer" class="toast-container" aria-live="polite" aria-atomic="true"></div>
 
-  <!-- Accessible Confirm Modal -->
-  <div id="confirmModal" class="modal" style="display:none;" role="dialog" aria-modal="true" aria-labelledby="confirmTitle" aria-describedby="confirmMessage">
-    <div class="modal-content" style="max-width:520px;">
-      <div class="modal-header">
-        <h2 id="confirmTitle">Confirmação</h2>
-        <button class="modal-close" aria-label="Fechar" onclick="(function(){ document.getElementById('confirmModal').style.display='none'; })()">&times;</button>
+  <!-- [NEXEFII] Unified confirmation modal used by master-control.js (confirmAction) -->
+  <div
+    id="confirmModal"
+    aria-hidden="true"
+    style="
+      display: none;
+      position: fixed;
+      inset: 0;
+      z-index: 9999;
+      background: rgba(15, 23, 42, 0.45);
+      align-items: center;
+      justify-content: center;
+    "
+  >
+    <div
+      role="dialog"
+      aria-modal="true"
+      aria-labelledby="confirmTitle"
+      style="
+        background: #ffffff;
+        border-radius: 16px;
+        max-width: 480px;
+        width: 90%;
+        box-shadow: 0 24px 48px rgba(15, 23, 42, 0.35);
+        padding: 24px 24px 20px;
+        display: flex;
+        flex-direction: column;
+        gap: 16px;
+        font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI',
+          sans-serif;
+      "
+    >
+      <!-- Header -->
+      <div
+        style="
+          display: flex;
+          align-items: center;
+          justify-content: space-between;
+          gap: 12px;
+        "
+      >
+        <h2
+          id="confirmTitle"
+          data-i18n="msgs.confirmRestoreTitle"
+          style="
+            margin: 0;
+            font-size: 18px;
+            font-weight: 600;
+            color: #0f172a;
+          "
+        >
+          ATENÇÃO!
+        </h2>
       </div>
-      <div class="modal-body">
-        <p id="confirmMessage">Tem certeza?</p>
+
+      <!-- Body -->
+      <div style="font-size: 14px; color: #475569;">
+        <p
+          id="confirmMessage"
+          style="margin: 0;"
+        >
+          Deseja confirmar esta ação?
+        </p>
       </div>
-      <div class="form-actions" style="padding: 0 16px 16px; display:flex; gap:8px; justify-content:flex-end;">
-        <button id="btnConfirmCancel" class="btn btn-secondary">Cancelar</button>
-        <button id="btnConfirmOk" class="btn btn-danger">Confirmar</button>
+
+      <!-- Footer / buttons -->
+      <div
+        style="
+          display: flex;
+          justify-content: flex-end;
+          gap: 12px;
+          margin-top: 8px;
+        "
+      >
+        <button
+          type="button"
+          id="btnConfirmCancel"
+          style="
+            padding: 8px 18px;
+            border-radius: 999px;
+            border: 1px solid #cbd5f5;
+            background: #ffffff;
+            font-size: 14px;
+            font-weight: 500;
+            cursor: pointer;
+          "
+        >
+          Cancelar
+        </button>
+        <button
+          type="button"
+          id="btnConfirmOk"
+          style="
+            padding: 8px 18px;
+            border-radius: 999px;
+            border: none;
+            background: #2563eb;
+            color: #ffffff;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+          "
+        >
+          Confirmar
+        </button>
       </div>
     </div>
   </div>
