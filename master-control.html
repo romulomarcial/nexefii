@@ -1445,24 +1445,31 @@
     </div>
     <!-- Properties Management Tab (NEW) -->
     <div class="tab-content nx-section" id="tab-properties">
-      <!-- Breadcrumb -->
-      <div class="breadcrumb">
-        <span class="icon">🏠</span> <span data-i18n="breadcrumb.home">Início</span> 
-        <span class="separator">›</span> 
-        <span data-i18n="tabs.properties">Propriedades</span>
-      </div>
+      <div class="mc-shell properties-section">
 
-      <!-- Section Header with Help -->
-      <div class="section-header">
-        <h2><span class="icon">🏨</span> <span data-i18n="properties.title">Gestão de Propriedades</span></h2>
-        <button class="btn-help" data-help="properties" title="Ajuda">
-          <span class="icon">❓</span>
-        </button>
-      </div>
+        <!-- Breadcrumb -->
+        <div class="breadcrumb mc-breadcrumb">
+          <span class="icon">🏠</span>
+          <span data-i18n="breadcrumb.home">Início</span>
+          <span class="separator">›</span>
+          <span data-i18n="tabs.properties">Propriedades</span>
+        </div>
 
-      <!-- Help Panel -->
-      <div class="help-panel" id="help-properties" style="display:none;">
-        <div class="help-content">
+        <!-- Section Header with Help -->
+        <div class="section-header mc-section-header">
+          <h2 class="mc-page-title">
+            <span class="icon">🏨</span>
+            <span data-i18n="properties.title">Gestão de Propriedades</span>
+          </h2>
+          <div class="mc-title-underline" aria-hidden="true"></div>
+          <button class="btn-help" data-help="properties" title="Ajuda">
+            <span class="icon">❓</span>
+          </button>
+        </div>
+
+        <!-- Help Panel (conteúdo original preservado) -->
+        <div class="help-panel" id="help-properties" style="display:none;">
+          <div class="help-content">
           <h4>Gestão de Propriedades:</h4>
           <p><strong>📋 Visão Geral:</strong> Módulo completo para gerenciar todas as propriedades (hotéis) cadastradas no sistema.</p>
           
@@ -1499,29 +1506,37 @@
             <li>Implantação deve ser feita com cuidado em ambiente de produção</li>
           </ul>
         </div>
-      </div>
+        </div>
 
-      <div class="properties-section">
-        
-        <div class="master-card mc-card mc-properties-card">
-          <div class="mc-properties-header">
-            <div class="actions-bar">
+        <!-- Card principal de propriedades (conteúdo original preservado) -->
+        <div class="master-card mc-card mc-properties-card nx-card nx-section-card">
+          <div class="properties-actions mc-toolbar" style="display:flex;justify-content:space-between;align-items:center;margin-bottom:16px;gap:12px;flex-wrap:wrap;">
+            <div class="mc-toolbar-left" style="display:flex;align-items:center;gap:8px;flex-wrap:wrap;">
               <button class="btn btn-primary" id="btnCreateProperty">
-                <span class="icon">➕</span> <span data-i18n="properties.create">Criar Propriedade</span>
+                <span class="icon">➕</span>
+                <span data-i18n="properties.create">Criar Propriedade</span>
               </button>
               <button class="btn" id="btnRefreshProperties">
-                <span class="icon">🔄</span> <span data-i18n="properties.refresh">Atualizar Lista</span>
+                <span class="icon">🔄</span>
+                <span data-i18n="properties.refresh">Atualizar lista</span>
               </button>
-              <div class="mc-properties-search">
-                <input type="text" id="searchProperties" autocomplete="off" placeholder="Buscar propriedades..." data-i18n-placeholder="properties.search">
-              </div>
+            </div>
+            <div class="mc-toolbar-right" style="margin-left:auto;">
+              <input
+                class="mc-input"
+                id="searchProperties"
+                type="text"
+                autocomplete="off"
+                placeholder="Buscar propriedades..."
+                data-i18n-placeholder="properties.search"
+              >
             </div>
           </div>
 
           <div class="mc-properties-table-wrapper">
             <h3><span class="icon">📋</span> <span data-i18n="properties.listTitle">Propriedades Cadastradas</span></h3>
             <div class="table-container">
-              <table class="data-table" id="propertiesTable">
+              <table class="data-table nx-table" id="propertiesTable" style="width:100%;border-collapse:separate;border-spacing:0 4px;">
                 <thead>
                   <tr>
                     <th data-i18n="properties.table.id">Property ID</th>
@@ -1543,8 +1558,6 @@
 
       </div>
     </div>
-
-
 
     <!-- Logs Tab -->
     <div class="tab-content nx-section" id="tab-logs">
