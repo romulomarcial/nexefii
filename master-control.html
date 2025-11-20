@@ -389,6 +389,99 @@
           // Expose a global helper so other scripts (delegation) can open the modal
           try { window.openDeletePropertyConfirm = openDeletePropertyConfirm; } catch(e) {}
 
+          /*
+           * Generic confirm modal helper
+           * Reuses the existing `#confirmDeletePropertyModal` DOM to avoid duplication
+           * and keep consistent visuals with the delete flow. Call with an options
+           * object: { title, message, confirmText, cancelText, onConfirm }.
+           * The function temporarily replaces the confirm button handler and restores
+           * the previous handler when closed.
+           */
+          function openConfirmModal(opts) {
+            if (!opts) opts = {};
+            var modal = getDeletePropertyModal();
+            if (!modal) {
+              // fallback to native confirm for environments without modal markup
+              try {
+                if (confirm(opts.message || opts.title || 'Confirm?')) {
+                  if (typeof opts.onConfirm === 'function') opts.onConfirm();
+                }
+              } catch (e) { console.warn('[Master] fallback confirm failed', e); }
+              return;
+            }
+
+            // Title
+            try {
+              var titleEl = modal.querySelector('#confirmDeletePropertyTitle');
+              if (titleEl && opts.title) titleEl.textContent = opts.title;
+            } catch (e) { /* ignore */ }
+
+            // Message
+            try {
+              var msgEl = document.getElementById('confirmDeletePropertyMessage');
+              if (msgEl) msgEl.textContent = opts.message || msgEl.textContent || '';
+            } catch (e) { /* ignore */ }
+
+            // Confirm button
+            var confirmBtn = document.getElementById('confirmDeletePropertyBtn');
+            var previousHandler = null;
+            var previousText = null;
+            if (confirmBtn) {
+              previousText = confirmBtn.innerHTML;
+              // remove all listeners by cloning node
+              var newBtn = confirmBtn.cloneNode(true);
+              confirmBtn.parentNode.replaceChild(newBtn, confirmBtn);
+              confirmBtn = document.getElementById('confirmDeletePropertyBtn');
+
+              previousHandler = function(){ /* placeholder */ };
+              // attach new handler
+              confirmBtn.addEventListener('click', function onConfirm(ev) {
+                ev.preventDefault();
+                try { if (typeof opts.onConfirm === 'function') opts.onConfirm(); } catch(e){ console.warn('[Master] onConfirm threw', e); }
+                // close modal after action
+                closeDeletePropertyModal();
+              });
+
+              // update confirm button label
+              try { confirmBtn.innerHTML = opts.confirmText || 'Confirmar'; } catch(e){}
+            }
+
+            // update cancel button label if provided
+            try {
+              var cancelBtn = modal.querySelector('[data-pd-close]');
+              if (cancelBtn && opts.cancelText) cancelBtn.textContent = opts.cancelText;
+            } catch (e) { /* ignore */ }
+
+            // open modal
+            try {
+              modal.classList.add('open');
+              modal.setAttribute('aria-hidden', 'false');
+              try { document.body.style.overflow = 'hidden'; } catch(e){}
+            } catch (e) { console.warn('[Master] openConfirmModal error', e); }
+          }
+
+          // Convenience: open logout confirm using the generic modal
+          function openLogoutConfirm() {
+            openConfirmModal({
+              title: '⚠️ ' + (document.getElementById('pageTitle')?.textContent || 'Confirmar'),
+              message: 'Deseja sair do Master Control Panel?',
+              confirmText: 'Sair',
+              cancelText: 'Cancelar',
+              onConfirm: function() {
+                try {
+                  if (window.masterCtrl && typeof masterCtrl.performLogout === 'function') {
+                    masterCtrl.performLogout();
+                  } else {
+                    // Minimal logout fallback: redirect to login page
+                    window.location.href = 'login.html';
+                  }
+                } catch (e) {
+                  try { window.location.href = 'login.html'; } catch(_){}
+                }
+              }
+            });
+          }
+
           document.addEventListener('DOMContentLoaded', function () {
             // Garante que todos os botões #btnCreateProperty abram o wizard no modal
             try {
@@ -408,6 +501,25 @@
             } catch (e) {
               console.warn('[Master] warning attaching createProperty handlers', e);
             }
+
+            // Wire logout button to open a consistent confirm modal (reuses delete modal)
+            // Replace the original node with a clone to remove any legacy inline
+            // handlers that previously appended a duplicate inline message at the
+            // end of the page. This preserves attributes and styling while
+            // ensuring only the intended handler remains attached.
+            try {
+              var logoutBtn = document.getElementById('btnLogoutMaster');
+              if (logoutBtn) {
+                var newLogout = logoutBtn.cloneNode(true);
+                logoutBtn.parentNode.replaceChild(newLogout, logoutBtn);
+                newLogout.addEventListener('click', function (ev) {
+                  ev.preventDefault();
+                  // Use the generic confirm modal; fallback to performLogout
+                  try { openLogoutConfirm(); } catch (e) { try { masterCtrl.performLogout(); } catch(_) { location.href='login.html'; } }
+                });
+                newLogout.__logoutHooked = true;
+              }
+            } catch (e) { console.warn('[Master] wiring logout button failed', e); }
 
             // Wire dos botões de fechar (X e backdrop) do modal do wizard
             try {

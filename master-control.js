@@ -3737,6 +3737,19 @@ class MasterControlSystem {
     }
   }
 
+  // Perform actual logout without additional confirmation.
+  // This is used by UI flows that show a custom confirmation modal
+  // (e.g. the header logout button which reuses the delete confirm modal).
+  performLogout() {
+    try {
+      // Keep the behavior minimal and compatible across environments
+      window.location.href = 'login.html';
+    } catch (e) {
+      console.warn('[Master] performLogout failed, redirecting fallback', e);
+      try { location.href = 'login.html'; } catch (_) {}
+    }
+  }
+
   // ========================================
   // PROPERTIES MANAGEMENT
   // ========================================
