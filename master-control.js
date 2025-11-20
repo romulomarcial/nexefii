@@ -871,6 +871,63 @@ class MasterControlSystem {
     } catch(e) { /* fallback */ try { alert(message); } catch(_){} }
   }
 
+  // Centered modal that auto-closes after a short delay
+  showTransientModal(message, autoCloseMs = 5000) {
+    try {
+      const modal = document.getElementById('confirmModal');
+      if (!modal) {
+        // fallback to toast if modal is not available
+        this.showToast(message, 'info');
+        return;
+      }
+
+      const titleEl = document.getElementById('confirmTitle');
+      const msgEl = document.getElementById('confirmMessage');
+      const btnOk = document.getElementById('btnConfirmOk');
+      const btnCancel = document.getElementById('btnConfirmCancel');
+
+      // Ajustar conteúdo
+      if (titleEl) titleEl.textContent = 'Painel Master - nexefii';
+      if (msgEl) msgEl.textContent = message || '';
+
+      // Esconder botão Cancelar e deixar só um botão de OK (se quiser)
+      const originalCancelDisplay = btnCancel ? btnCancel.style.display : '';
+      if (btnCancel) btnCancel.style.display = 'none';
+
+      // Configurar botão OK para fechar manualmente
+      const originalOkHandler = btnOk ? btnOk.onclick : null;
+      if (btnOk) {
+        btnOk.textContent = 'OK';
+        btnOk.onclick = () => cleanup();
+      }
+
+      // Abrir modal central
+      modal.style.display = 'flex';
+
+      // Auto-close após autoCloseMs
+      const timer = setTimeout(() => cleanup(), autoCloseMs);
+
+      function cleanup() {
+        try {
+          clearTimeout(timer);
+        } catch (_) {}
+
+        try {
+          modal.style.display = 'none';
+        } catch (_) {}
+
+        // Restaurar botão Cancelar
+        if (btnCancel) btnCancel.style.display = originalCancelDisplay || '';
+
+        // Restaurar handler original do OK para não quebrar confirmAction
+        if (btnOk) btnOk.onclick = originalOkHandler || null;
+      }
+    } catch (e) {
+      // fallback em caso de erro
+      this.showToast(message, 'info');
+    }
+  }
+
   // Accessible confirmation dialog returning a Promise<boolean>
   confirmAction(opts = {}) {
     var _this = this;
@@ -4422,7 +4479,8 @@ class MasterControlSystem {
 
   refreshProperties() {
     this.renderPropertiesTable();
-    this.showToast('Lista de propriedades atualizada!', 'success');
+    // [NEXEFII] Usar popup central que some sozinho em vez de toast no rodapé
+    this.showTransientModal('Lista de propriedades atualizada!', 5000);
   }
 }
 
