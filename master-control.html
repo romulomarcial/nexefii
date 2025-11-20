@@ -156,59 +156,151 @@
     
       </div>
       <script>
-        // Open wizard and listen for selected property via localStorage key set by wizard
-        (function(){
-          function openWizard(){
-            try {
-              try {
-                // Open wizard in the same tab (no popup)
-                location.href = 'pages/wizard.html?mode=create&from=master-control';
-              } catch(e) {
-                console.warn('[Master] openWizard navigation failed', e);
-              }
-            } catch(e){ console.warn('[Master] openWizard error', e); }
+        (function () {
+          function getPropertyWizardModal() {
+            return document.getElementById('propertyWizardModal') || null;
           }
 
-          function applyWizardSelection(propId){
+          function getPropertyWizardFrame() {
+            return document.getElementById('propertyWizardFrame') || null;
+          }
+
+          function openWizard() {
+            try {
+              var modal = getPropertyWizardModal();
+              var frame = getPropertyWizardFrame();
+
+              // Fallback defensivo: se o modal ou o iframe não existirem, mantém o comportamento antigo
+              if (!modal || !frame) {
+                try {
+                  location.href = 'pages/wizard.html?mode=create&from=master-control';
+                } catch (e) {
+                  console.warn('[Master] openWizard navigation failed', e);
+                }
+                return;
+              }
+
+              // Sempre força um reload fresco do wizard
+              frame.src = 'pages/wizard.html?mode=create&from=master-control&ts=' + Date.now();
+
+              modal.classList.add('open');
+              modal.setAttribute('aria-hidden', 'false');
+              document.body.style.overflow = 'hidden';
+            } catch (e) {
+              console.warn('[Master] openWizard error', e);
+            }
+          }
+
+          function closeWizardModal() {
+            try {
+              var modal = getPropertyWizardModal();
+              if (!modal) return;
+              modal.classList.remove('open');
+              modal.setAttribute('aria-hidden', 'true');
+              document.body.style.overflow = '';
+            } catch (e) {
+              console.warn('[Master] closeWizardModal error', e);
+            }
+          }
+
+          function applyWizardSelection(propId) {
             try {
               if (!propId) return;
+
               if (window.SessionContext && typeof SessionContext.setActiveProperty === 'function') {
                 SessionContext.setActiveProperty(propId);
               } else {
-                try { localStorage.setItem('nexefii_active_property', propId); } catch(e){}
+                try {
+                  localStorage.setItem('nexefii_active_property', propId);
+                } catch (e) {
+                  /* ignore */
+                }
               }
-              // best-effort: refresh to reflect selection
+
+              // Fecha o modal assim que uma propriedade for escolhida
+              closeWizardModal();
+
               console.log('[Master] Wizard selected property:', propId, '— refreshing UI');
-              setTimeout(function(){ location.reload(); }, 300);
-            } catch(e){ console.warn('[Master] applyWizardSelection error', e); }
+              setTimeout(function () {
+                location.reload();
+              }, 300);
+            } catch (e) {
+              console.warn('[Master] applyWizardSelection error', e);
+            }
           }
 
-          document.addEventListener('DOMContentLoaded', function(){
-            // Attach openWizard to all elements that may trigger wizard (covers duplicate IDs)
+          document.addEventListener('DOMContentLoaded', function () {
+            // Garante que todos os botões #btnCreateProperty abram o wizard no modal
             try {
               var btns = document.querySelectorAll('#btnCreateProperty');
               if (btns && btns.length) {
-                btns.forEach(function(b){
+                btns.forEach(function (b) {
                   try {
-                    // avoid double-binding if script re-executes
-                    if (!b.__wizardHooked) { b.addEventListener('click', openWizard); b.__wizardHooked = true; }
-                  } catch(e) { /* skip individual button errors */ }
+                    if (!b.__wizardHooked) {
+                      b.addEventListener('click', openWizard);
+                      b.__wizardHooked = true;
+                    }
+                  } catch (e) {
+                    /* skip individual button errors */
+                  }
                 });
               }
-            } catch(e) { console.warn('[Master] warning attaching createProperty handlers', e); }
+            } catch (e) {
+              console.warn('[Master] warning attaching createProperty handlers', e);
+            }
 
-            // if wizard already wrote a selection before this tab gained focus
-            try { var pending = localStorage.getItem('nexefii_wizard_selected_property'); if (pending) { applyWizardSelection(pending); localStorage.removeItem('nexefii_wizard_selected_property'); } } catch(e){}
+            // Wire dos botões de fechar (X e backdrop) do modal do wizard
+            try {
+              var modal = getPropertyWizardModal();
+              if (modal) {
+                var closes = modal.querySelectorAll('[data-pw-close]');
+                closes.forEach(function (el) {
+                  el.addEventListener('click', function (ev) {
+                    ev.preventDefault();
+                    closeWizardModal();
+                  });
+                });
+
+                var backdrop = modal.querySelector('.mc-modal-backdrop');
+                if (backdrop) {
+                  backdrop.addEventListener('click', function (ev) {
+                    if (ev.target === backdrop) {
+                      closeWizardModal();
+                    }
+                  });
+                }
+              }
+            } catch (e) {
+              console.warn('[Master] property wizard close wiring error', e);
+            }
+
+            // Se o wizard já tiver escrito a seleção antes desse tab ganhar foco
+            try {
+              var pending = localStorage.getItem('nexefii_wizard_selected_property');
+              if (pending) {
+                applyWizardSelection(pending);
+                localStorage.removeItem('nexefii_wizard_selected_property');
+              }
+            } catch (e) {
+              /* ignore */
+            }
           });
 
-          window.addEventListener('storage', function(e){
+          // Continua ouvindo mudanças de localStorage vindas do wizard
+          window.addEventListener('storage', function (e) {
             try {
               if (!e) return;
               if (e.key === 'nexefii_wizard_selected_property' && e.newValue) {
                 applyWizardSelection(e.newValue);
-                try { localStorage.removeItem('nexefii_wizard_selected_property'); } catch(e){}
+                try {
+                  localStorage.removeItem('nexefii_wizard_selected_property');
+                } catch (e2) {
+                  /* ignore */
+                }
               }
-            } catch(err){ console.warn('[Master] storage handler error', err); }
+            } catch (err) {
+              console.warn('[Master] storage handler error', err);
+            }
           });
         })();
       </script>
@@ -350,6 +442,34 @@
         </div>
       </div>
     </div>
+
+    <!-- Property Wizard modal (iframe-based, reusing mc-modal styles) -->
+    <div id="propertyWizardModal" class="mc-modal" aria-hidden="true">
+      <div class="mc-modal-backdrop" data-pw-close></div>
+      <div
+        class="mc-modal-dialog"
+        role="dialog"
+        aria-modal="true"
+        aria-labelledby="propertyWizardTitle"
+        style="max-width: 1200px; width: 95%;"
+      >
+        <div class="mc-modal-header">
+          <h3 id="propertyWizardTitle">
+            <span class="icon">🏨</span>
+            <span data-i18n="properties.wizard.title">Criar / Configurar Propriedade</span>
+          </h3>
+          <button type="button" class="mc-modal-close" data-pw-close aria-label="Fechar">✕</button>
+        </div>
+        <div class="mc-modal-body" style="min-height:80vh;padding:0;">
+          <iframe
+            id="propertyWizardFrame"
+            src=""
+            style="width:100%;height:80vh;border:none;"
+          ></iframe>
+        </div>
+      </div>
+    </div>
+      <!-- (propertyWizardModal blocks removed here to avoid duplicates) -->
 
     <!-- Navigation tabs moved above header to sit directly beneath the master header -->
 
@@ -653,6 +773,27 @@
             </div>
             <!-- End moved user form -->
           </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Property Wizard modal (iframe-based, reusing mc-modal styles) -->
+    <div id="propertyWizardModal" class="mc-modal" aria-hidden="true">
+      <div class="mc-modal-backdrop" data-pw-close></div>
+      <div class="mc-modal-dialog" role="dialog" aria-modal="true" aria-labelledby="propertyWizardTitle">
+        <div class="mc-modal-header">
+          <h3 id="propertyWizardTitle">
+            <span class="icon">🏨</span>
+            <span data-i18n="properties.wizard.title">Criar / Configurar Propriedade</span>
+          </h3>
+          <button type="button" class="mc-modal-close" data-pw-close aria-label="Fechar">✕</button>
+        </div>
+        <div class="mc-modal-body" style="min-height:60vh;padding:0;">
+          <iframe
+            id="propertyWizardFrame"
+            src=""
+            style="width:100%;height:60vh;border:none;"
+          ></iframe>
         </div>
       </div>
     </div>
@@ -1470,89 +1611,89 @@
         <!-- Help Panel (conteúdo original preservado) -->
         <div class="help-panel" id="help-properties" style="display:none;">
           <div class="help-content">
-          <h4>Gestão de Propriedades:</h4>
-          <p><strong>📋 Visão Geral:</strong> Módulo completo para gerenciar todas as propriedades (hotéis) cadastradas no sistema.</p>
-          
-          <p><strong>Funcionalidades Disponíveis:</strong></p>
-          <ul>
-            <li><strong>➕ Criar Propriedade:</strong> Adicionar nova propriedade com configurações personalizadas</li>
-            <li><strong>✏️ Editar Propriedade:</strong> Modificar informações e módulos adquiridos</li>
-            <li><strong>🚀 Implantar:</strong> Wizard de implantação para deploy de propriedade em produção</li>
-            <li><strong>🗑️ Deletar:</strong> Remover propriedade (requer confirmação)</li>
-          </ul>
-          
-          <p><strong>Informações Exibidas:</strong></p>
-          <ul>
-            <li><strong>Property ID:</strong> Identificador único (primary key)</li>
-            <li><strong>Nome:</strong> Nome da propriedade</li>
-            <li><strong>Módulos:</strong> Módulos adquiridos (Engineering, Housekeeping, Alerts, etc.)</li>
-            <li><strong>Capacidade:</strong> Limite de usuários (30, 50, 100+)</li>
-            <li><strong>Status:</strong> Ativo/Inativo</li>
-          </ul>
-          
-          <p><strong>Wizard de Implantação:</strong></p>
-          <p>O botão "🚀 Implantar" inicia um wizard multi-step que guia o processo de deploy:</p>
-          <ul>
-            <li><strong>Step 1 - Validação:</strong> Verifica configurações e requisitos</li>
-            <li><strong>Step 2 - Configuração:</strong> Define parâmetros de deploy</li>
-            <li><strong>Step 3 - Execução:</strong> Realiza implantação com feedback em tempo real</li>
-          </ul>
-          
-          <p><strong>⚠️ Importante:</strong></p>
-          <ul>
-            <li>Cada propriedade tem um <strong>ID único</strong> que serve como primary key no banco</li>
-            <li>Módulos adquiridos determinam funcionalidades disponíveis na propriedade</li>
-            <li>Capacidade de usuários limita quantos usuários podem ser criados</li>
-            <li>Implantação deve ser feita com cuidado em ambiente de produção</li>
-          </ul>
-        </div>
+            <h4>Gestão de Propriedades:</h4>
+            <p><strong>📋 Visão Geral:</strong> Módulo completo para gerenciar todas as propriedades (hotéis) cadastradas no sistema.</p>
+            <p><strong>Funcionalidades Disponíveis:</strong></p>
+            <ul>
+              <li><strong>➕ Criar Propriedade:</strong> Adicionar nova propriedade com configurações personalizadas</li>
+              <li><strong>✏️ Editar Propriedade:</strong> Modificar informações e módulos adquiridos</li>
+              <li><strong>🚀 Implantar:</strong> Wizard de implantação para deploy de propriedade em produção</li>
+              <li><strong>🗑️ Deletar:</strong> Remover propriedade (requer confirmação)</li>
+            </ul>
+            <p><strong>Informações Exibidas:</strong></p>
+            <ul>
+              <li><strong>Property ID:</strong> Identificador único (primary key)</li>
+              <li><strong>Nome:</strong> Nome da propriedade</li>
+              <li><strong>Módulos:</strong> Módulos adquiridos (Engineering, Housekeeping, Alerts, etc.)</li>
+              <li><strong>Capacidade:</strong> Limite de usuários (30, 50, 100+)</li>
+              <li><strong>Status:</strong> Ativo/Inativo</li>
+            </ul>
+            <p><strong>Wizard de Implantação:</strong></p>
+            <p>O botão "🚀 Implantar" inicia um wizard multi-step que guia o processo de deploy:</p>
+            <ul>
+              <li><strong>Step 1 - Validação:</strong> Verifica configurações e requisitos</li>
+              <li><strong>Step 2 - Configuração:</strong> Define parâmetros de deploy</li>
+              <li><strong>Step 3 - Execução:</strong> Realiza implantação com feedback em tempo real</li>
+            </ul>
+            <p><strong>⚠️ Importante:</strong></p>
+            <ul>
+              <li>Cada propriedade tem um <strong>ID único</strong> que serve como primary key no banco</li>
+              <li>Módulos adquiridos determinam funcionalidades disponíveis na propriedade</li>
+              <li>Capacidade de usuários limita quantos usuários podem ser criados</li>
+              <li>Implantação deve ser feita com cuidado em ambiente de produção</li>
+            </ul>
+          </div>
         </div>
 
         <!-- Card principal de propriedades (conteúdo original preservado) -->
         <div class="master-card mc-card mc-properties-card nx-card nx-section-card">
-          <div class="properties-actions mc-toolbar" style="display:flex;justify-content:space-between;align-items:center;margin-bottom:16px;gap:12px;flex-wrap:wrap;">
-            <div class="mc-toolbar-left" style="display:flex;align-items:center;gap:8px;flex-wrap:wrap;">
-              <button class="btn btn-primary" id="btnCreateProperty">
-                <span class="icon">➕</span>
-                <span data-i18n="properties.create">Criar Propriedade</span>
-              </button>
-              <button class="btn" id="btnRefreshProperties">
-                <span class="icon">🔄</span>
-                <span data-i18n="properties.refresh">Atualizar lista</span>
-              </button>
+          <!-- ...existing content preserved... -->
+          <div class="master-card-inner">
+            <div class="properties-actions mc-toolbar" style="display:flex;justify-content:space-between;align-items:center;margin-bottom:16px;gap:12px;flex-wrap:wrap;">
+              <div class="mc-toolbar-left" style="display:flex;align-items:center;gap:8px;flex-wrap:wrap;">
+                <button class="btn btn-primary" id="btnCreateProperty">
+                  <span class="icon">➕</span>
+                  <span data-i18n="properties.create">Criar Propriedade</span>
+                </button>
+                <button class="btn" id="btnRefreshProperties">
+                  <span class="icon">🔄</span>
+                  <span data-i18n="properties.refresh">Atualizar lista</span>
+                </button>
+              </div>
+              <div class="mc-toolbar-right" style="margin-left:auto;">
+                <input
+                  class="mc-input"
+                  id="searchProperties"
+                  type="text"
+                  autocomplete="off"
+                  placeholder="Buscar propriedades..."
+                  data-i18n-placeholder="properties.search"
+                >
+              </div>
             </div>
-            <div class="mc-toolbar-right" style="margin-left:auto;">
-              <input
-                class="mc-input"
-                id="searchProperties"
-                type="text"
-                autocomplete="off"
-                placeholder="Buscar propriedades..."
-                data-i18n-placeholder="properties.search"
-              >
-            </div>
-          </div>
 
-          <div class="mc-properties-table-wrapper">
-            <h3><span class="icon">📋</span> <span data-i18n="properties.listTitle">Propriedades Cadastradas</span></h3>
-            <div class="table-container">
-              <table class="data-table nx-table" id="propertiesTable" style="width:100%;border-collapse:separate;border-spacing:0 4px;">
-                <thead>
-                  <tr>
-                    <th data-i18n="properties.table.id">Property ID</th>
-                    <th data-i18n="properties.table.name">Nome</th>
-                    <th data-i18n="properties.table.modules">Módulos Adquiridos</th>
-                    <th data-i18n="properties.table.capacity">Capacidade</th>
-                    <th data-i18n="properties.table.link">Link</th>
-                    <th data-i18n="properties.table.status">Status</th>
-                    <th data-i18n="properties.table.actions">Ações</th>
-                  </tr>
-                </thead>
-                <tbody id="propertiesTableBody">
-                  <!-- Populated by JavaScript -->
-                </tbody>
-              </table>
+            <div class="mc-properties-table-wrapper">
+              <h3><span class="icon">📋</span> <span data-i18n="properties.listTitle">Propriedades Cadastradas</span></h3>
+              <div class="table-container">
+                <table class="data-table nx-table" id="propertiesTable" style="width:100%;border-collapse:separate;border-spacing:0 4px;">
+                  <thead>
+                    <tr>
+                      <th data-i18n="properties.table.id">Property ID</th>
+                      <th data-i18n="properties.table.name">Nome</th>
+                      <th data-i18n="properties.table.modules">Módulos Adquiridos</th>
+                      <th data-i18n="properties.table.capacity">Capacidade</th>
+                      <th data-i18n="properties.table.link">Link</th>
+                      <th data-i18n="properties.table.status">Status</th>
+                      <th data-i18n="properties.table.actions">Ações</th>
+                    </tr>
+                  </thead>
+                  <tbody id="propertiesTableBody">
+                    <!-- Populated by JavaScript -->
+                  </tbody>
+                </table>
+              </div>
             </div>
+            <div style="height:20px;"></div>
           </div>
         </div>
 
