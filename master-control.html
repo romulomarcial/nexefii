@@ -1385,123 +1385,141 @@
       </div>
     </div>
 
-    <!-- Settings Tab (NEW) -->
-    <div class="tab-content nx-section" id="tab-settings">
-      <!-- Section Header with Help -->
-      <div class="section-header">
-        <h2><span class="icon">⚙️</span> <span data-i18n="settings.title">Configurações</span></h2>
-        <button class="btn-help" data-help="settings" title="Ajuda">
-          <span class="icon">❓</span>
-        </button>
-      </div>
-      
-      <!-- Help Panel -->
-      <div class="help-panel" id="help-settings" style="display:none;">
-        <div class="help-content">
-          <h4>Configurações do Sistema:</h4>
-          <p><strong>⚙️ Configurações:</strong> Controle comportamento global do sistema, políticas de backup e preferências.</p>
-          
-          <p><strong>Políticas de Backup:</strong></p>
-          <ul>
-            <li><strong>Backup Automático:</strong> Define frequência de backups programados</li>
-            <li><strong>Retenção:</strong> Quantos dias manter backups antes de limpar automaticamente</li>
-            <li><strong>Compressão:</strong> Reduz tamanho dos arquivos de backup</li>
-            <li><strong>Criptografia:</strong> Protege dados sensíveis nos backups</li>
-          </ul>
-          
-          <p><strong>Comportamento do Sistema:</strong></p>
-          <ul>
-            <li><strong>Nível de Log:</strong> Controla verbosidade dos logs (Error/Warning/Info/Debug)</li>
-            <li><strong>Versionamento:</strong> Habilita/desabilita controle de versões automático</li>
-          </ul>
-          
-          <p><em>💡 Dica: Configure backup automático semanal com retenção de 30 dias para segurança ideal</em></p>
+    <!-- Settings Tab (refactored to Nexefii standard) -->
+    <div class="tab-content nx-section" id="tab-settings" style="display:none;">
+      <div class="mc-shell settings-section">
+
+        <!-- Breadcrumb -->
+        <div class="breadcrumb mc-breadcrumb">
+          <span class="icon">🏠</span>
+          <span data-i18n="breadcrumb.home">Início</span>
+          <span class="separator">›</span>
+          <span data-i18n="tabs.settings">Configurações</span>
         </div>
-      </div>
-      
-      <div class="system-grid">
-        <!-- Backup Policies -->
-        <div class="master-card nx-card">
-          <h3><span class="icon">💾</span> <span data-i18n="settings.backupPolicies">Políticas de Backup</span></h3>
-          <div class="settings-list">
-            <div class="setting-item">
-              <label data-i18n="settings.autoBackup">Backup Automático</label>
-              <select id="autoBackupFrequency" class="select">
-                <option value="disabled" data-i18n="settings.backupAuto.disabled">Desabilitado</option>
-                <option value="daily" data-i18n="settings.backupAuto.daily">Diário</option>
-                <option value="weekly" data-i18n="settings.backupAuto.weekly">Semanal</option>
-                <option value="monthly" data-i18n="settings.backupAuto.monthly">Mensal</option>
-              </select>
-            </div>
-            <div class="setting-item">
-              <label data-i18n="settings.retention">Retenção de Backups (dias)</label>
-              <input type="number" id="backupRetention" value="30" min="1" class="input">
-            </div>
-            <div class="setting-item">
-              <label>
-                <input type="checkbox" id="compressBackups" checked>
-                <span data-i18n="settings.compress">Comprimir backups automaticamente</span>
-              </label>
-            </div>
-            <div class="setting-item">
-              <label>
-                <input type="checkbox" id="encryptBackups">
-                <span data-i18n="settings.encrypt">Criptografar backups sensíveis</span>
-              </label>
+
+        <!-- Header -->
+        <div class="section-header mc-section-header">
+          <h2 class="mc-page-title">
+            <span class="icon">⚙️</span>
+            <span data-i18n="settings.title">Configurações do Sistema</span>
+          </h2>
+          <div class="mc-title-underline"></div>
+          <button class="btn-help mc-help-btn" id="help-settings" data-help="settings">❓</button>
+        </div>
+
+        <!-- Help panel (kept for reference, hidden by default) -->
+        <div class="help-panel" id="help-settings-panel" style="display:none;">
+          <div class="help-content">
+            <h4 data-i18n="settings.helpTitle">Configurações do Sistema:</h4>
+            <p data-i18n="settings.help">Gerencie políticas de backup, comportamento do sistema e status de armazenamento.</p>
+          </div>
+        </div>
+
+        <!-- Card 1: Políticas de Backup -->
+        <div class="master-card mc-card">
+          <div class="mc-card-header">
+            <h3 class="mc-card-title"><span class="icon">💾</span> <span data-i18n="settings.backupPolicies">Políticas de Backup</span></h3>
+          </div>
+          <div class="mc-card-body">
+            <div class="settings-list">
+              <div class="setting-item">
+                <label data-i18n="settings.autoBackup">Backup Automático</label>
+                <select id="autoBackupFrequency" class="select">
+                  <option value="disabled" data-i18n="settings.backupAuto.disabled">Desabilitado</option>
+                  <option value="daily" data-i18n="settings.backupAuto.daily">Diário</option>
+                  <option value="weekly" data-i18n="settings.backupAuto.weekly">Semanal</option>
+                  <option value="monthly" data-i18n="settings.backupAuto.monthly">Mensal</option>
+                </select>
+              </div>
+              <div class="setting-item">
+                <label data-i18n="settings.retention">Retenção de Backups (dias)</label>
+                <input type="number" id="backupRetention" value="30" min="1" class="input">
+              </div>
+              <div class="setting-item">
+                <label>
+                  <input type="checkbox" id="compressBackups" checked>
+                  <span data-i18n="settings.compress">Comprimir backups automaticamente</span>
+                </label>
+              </div>
+              <div class="setting-item">
+                <label>
+                  <input type="checkbox" id="encryptBackups">
+                  <span data-i18n="settings.encrypt">Criptografar backups sensíveis</span>
+                </label>
+              </div>
             </div>
           </div>
         </div>
 
-        <!-- System Behavior -->
-        <div class="master-card nx-card">
-          <h3><span class="icon">⚙️</span> <span data-i18n="settings.systemBehavior">Comportamento do Sistema</span></h3>
-          <div class="settings-list">
-            <div class="setting-item">
-              <label data-i18n="settings.logLevel">Nível de Log</label>
-              <select id="logLevel" class="select">
-                <option value="error" data-i18n="settings.logLevels.error">Erro</option>
-                <option value="warning" data-i18n="settings.logLevels.warning">Aviso</option>
-                <option value="info" data-i18n="settings.logLevels.info" selected>Info</option>
-                <option value="debug" data-i18n="settings.logLevels.debug">Debug</option>
-              </select>
-            </div>
-            <div class="setting-item">
-              <label data-i18n="settings.autoVersioning">Versionamento Automático</label>
-              <select id="autoVersioning" class="select">
-                <option value="enabled" selected data-i18n="settings.enabled">Habilitado</option>
-                <option value="disabled" data-i18n="settings.disabled">Desabilitado</option>
-              </select>
-            </div>
-            <div class="setting-item">
-              <label>
-                <input type="checkbox" id="doubleConfirmation" checked>
-                <span data-i18n="settings.doubleConfirm">Confirmação dupla para ações críticas</span>
-              </label>
+        <!-- Card 2: Comportamento do Sistema -->
+        <div class="master-card mc-card">
+          <div class="mc-card-header">
+            <h3 class="mc-card-title"><span class="icon">⚙️</span> <span data-i18n="settings.systemBehavior">Comportamento do Sistema</span></h3>
+          </div>
+          <div class="mc-card-body">
+            <div class="settings-list">
+              <div class="setting-item">
+                <label data-i18n="settings.logLevel">Nível de Log</label>
+                <select id="logLevel" class="select">
+                  <option value="error" data-i18n="settings.logLevels.error">Erro</option>
+                  <option value="warning" data-i18n="settings.logLevels.warning">Aviso</option>
+                  <option value="info" data-i18n="settings.logLevels.info" selected>Info</option>
+                  <option value="debug" data-i18n="settings.logLevels.debug">Debug</option>
+                </select>
+              </div>
+              <div class="setting-item">
+                <label data-i18n="settings.autoVersioning">Versionamento Automático</label>
+                <select id="autoVersioning" class="select">
+                  <option value="enabled" selected data-i18n="settings.enabled">Habilitado</option>
+                  <option value="disabled" data-i18n="settings.disabled">Desabilitado</option>
+                </select>
+              </div>
+              <div class="setting-item">
+                <label>
+                  <input type="checkbox" id="doubleConfirmation" checked>
+                  <span data-i18n="settings.doubleConfirm">Confirmação dupla para ações críticas</span>
+                </label>
+              </div>
             </div>
           </div>
         </div>
 
-        <!-- Storage Management -->
-        <div class="master-card full-width">
-          <h3><span class="icon">🗄️</span> <span data-i18n="settings.storage">Armazenamento</span></h3>
-          <div class="storage-info">
-            <div class="storage-bar">
-              <div class="storage-used" id="storageUsedBar" style="width: 0%"></div>
-            </div>
-            <div class="storage-stats">
-              <div><span data-i18n="settings.used">Usado</span>: <strong id="storageUsed">0 MB</strong></div>
-              <div><span data-i18n="settings.available">Disponível</span>: <strong id="storageAvailable">5 MB</strong></div>
-              <div><span data-i18n="settings.total">Total</span>: <strong id="storageTotal">5 MB</strong></div>
+        <!-- Card 3: Armazenamento -->
+        <div class="master-card mc-card">
+          <div class="mc-card-header">
+            <h3 class="mc-card-title"><span class="icon">🗄️</span> <span data-i18n="settings.storage">Armazenamento</span></h3>
+          </div>
+          <div class="mc-card-body">
+            <div class="storage-info">
+              <div class="storage-bar">
+                <div class="storage-used" id="storageUsedBar" style="width: 0%"></div>
+              </div>
+              <div class="storage-stats">
+                <div><span data-i18n="settings.used">Usado</span>: <strong id="storageUsed">0 MB</strong></div>
+                <div><span data-i18n="settings.available">Disponível</span>: <strong id="storageAvailable">5 MB</strong></div>
+                <div><span data-i18n="settings.total">Total</span>: <strong id="storageTotal">5 MB</strong></div>
+              </div>
             </div>
           </div>
         </div>
 
-        <!-- Save Button -->
-        <div class="master-card full-width">
-          <button class="btn btn-primary btn-large" id="btnSaveSettings" onclick="window.masterCtrl.saveSettings()">
-            <span class="icon">💾</span> <span data-i18n="settings.save">Salvar Configurações</span>
-          </button>
+        <!-- Save Button Card -->
+        <div class="master-card mc-card mc-settings-footer-card">
+          <div class="mc-card-body mc-card-body-actions">
+            <button id="btnSaveSystemSettings" class="btn btn-primary">
+              💾 <span data-i18n="settings.actions.save">Salvar Configurações</span>
+            </button>
+          </div>
         </div>
+
+        <!-- Session footer -->
+        <div class="mc-session-footer">
+          <span class="icon">🔐</span>
+          <span id="sessionUserType">Master</span>
+          <span>user logged in</span>
+          <span id="sessionLoginTime"></span>
+        </div>
+
       </div>
     </div>
 
@@ -2014,7 +2032,7 @@
     </div>
 
     <!-- Logs Tab -->
-    <section id="tab-logs" class="mc-tab-panel" style="display:none;">
+    <div class="tab-content nx-section" id="tab-logs" style="display:none;">
       <div class="mc-shell logs-section">
 
         <!-- Breadcrumb -->
@@ -2098,7 +2116,7 @@
         </div>
 
       </div>
-    </section>
+    </div>
 
     <!-- Versions Tab -->
     <div class="tab-content nx-section" id="tab-versions">
