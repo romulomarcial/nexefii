@@ -2014,84 +2014,91 @@
     </div>
 
     <!-- Logs Tab -->
-    <div class="tab-content nx-section" id="tab-logs">
-      <div class="logs-section">
-        <div class="master-card mc-card mc-logs-card">
-          <div class="mc-logs-header">
-            <div class="section-header">
-              <h3><span class="icon">📝</span> <span data-i18n="logs.title">Logs de Auditoria</span></h3>
-              <button class="btn-help" data-help="logs" title="Ajuda">
-                <span class="icon">❓</span>
-              </button>
-            </div>
-          </div>
+    <section id="tab-logs" class="mc-tab-panel" style="display:none;">
+      <div class="mc-shell logs-section">
 
-          <!-- Help Panel -->
-          <div class="help-panel" id="help-logs" style="display:none;">
-            <div class="help-content">
-              <h4>Logs de Auditoria:</h4>
-              <p><strong>📝 Logs:</strong> Registro detalhado de todas as ações realizadas no sistema para auditoria e troubleshooting.</p>
-              
-              <p><strong>Tipos de Log:</strong></p>
-              <ul>
-                <li><strong>🔴 Error:</strong> Erros críticos que impedem operações</li>
-                <li><strong>⚠️ Warning:</strong> Avisos sobre situações anormais</li>
-                <li><strong>ℹ️ Info:</strong> Informações sobre operações realizadas</li>
-                <li><strong>🐛 Debug:</strong> Detalhes técnicos para desenvolvimento</li>
-              </ul>
-              
-              <p><strong>Ações Logadas:</strong></p>
-              <ul>
-                <li>Login/Logout de usuários</li>
-                <li>Criação/Edição/Deleção de backups</li>
-                <li>Deploy/Rollback de releases</li>
-                <li>Mudanças em configurações</li>
-                <li>Operações de manutenção</li>
-                <li>Erros e exceções do sistema</li>
-              </ul>
-              
-              <p><strong>Filtros:</strong> Use filtros para encontrar eventos específicos por tipo, usuário ou período</p>
-              
-              <p><em>🔍 Investigação: Logs são essenciais para rastrear problemas e identificar uso indevido</em></p>
-            </div>
-          </div>
+        <!-- Breadcrumb -->
+        <div class="breadcrumb mc-breadcrumb">
+          <span class="icon">🏠</span>
+          <span data-i18n="breadcrumb.home">Início</span>
+          <span class="separator">›</span>
+          <span data-i18n="tabs.logs">Logs &amp; Auditoria</span>
+        </div>
 
-          <div class="mc-logs-toolbar">
-            <div class="mc-logs-toolbar-left">
-              <div class="filters-row">
-                <select id="filterLogType" class="select">
-                  <option value="" data-i18n="logs.allTypes">Todos os Tipos</option>
-                  <option value="auth" data-i18n="logs.auth">Autenticação</option>
-                  <option value="backup" data-i18n="logs.backup">Backup</option>
-                  <option value="restore" data-i18n="logs.restore">Restore</option>
-                  <option value="user" data-i18n="logs.user">Usuário</option>
-                  <option value="system" data-i18n="logs.system">Sistema</option>
-                </select>
-                <select id="filterLogLevel" class="select">
-                  <option value="" data-i18n="logs.allLevels">Todos os Níveis</option>
-                  <option value="info" data-i18n="logs.info">Info</option>
-                  <option value="warning" data-i18n="logs.warning">Aviso</option>
-                  <option value="error" data-i18n="logs.error">Erro</option>
-                  <option value="critical" data-i18n="logs.critical">Crítico</option>
-                </select>
-                <input type="date" id="filterLogDate" class="input" autocomplete="off">
+        <!-- Section Header -->
+        <div class="section-header mc-section-header">
+          <h2 class="mc-page-title">
+            <span class="icon">📜</span>
+            <span data-i18n="logs.title">Logs &amp; Auditoria</span>
+          </h2>
+          <div class="mc-title-underline"></div>
+          <button class="btn-help mc-help-btn" id="help-logs" data-help="logs">
+            ❓
+          </button>
+        </div>
+
+        <!-- Card -->
+        <div class="master-card mc-card">
+          <div class="mc-card-body">
+
+            <!-- Toolbar -->
+            <div class="mc-card-toolbar mc-logs-toolbar mc-users-toolbar">
+              <div class="mc-users-toolbar-left">
+
+                <div class="mc-users-filter">
+                  <label class="mc-field">
+                    <span>Tipo</span>
+                    <select id="filterLogType" class="mc-select">
+                      <option value="">Todos os tipos</option>
+                      <option value="auth">Autenticação</option>
+                      <option value="backup">Backup</option>
+                      <option value="restore">Restauração</option>
+                      <option value="user">Usuários</option>
+                      <option value="system">Sistema</option>
+                      <option value="version">Versões</option>
+                    </select>
+                  </label>
+                </div>
+
+                <div class="mc-users-filter">
+                  <label class="mc-field">
+                    <span>Nível</span>
+                    <select id="filterLogLevel" class="mc-select">
+                      <option value="">Todos os níveis</option>
+                      <option value="info">Info</option>
+                      <option value="warning">Aviso</option>
+                      <option value="error">Erro</option>
+                      <option value="debug">Debug</option>
+                    </select>
+                  </label>
+                </div>
+
+                <div class="mc-users-filter">
+                  <label class="mc-field">
+                    <span>Data</span>
+                    <input type="date" id="filterLogDate" class="mc-input" />
+                  </label>
+                </div>
+
+              </div>
+
+              <div class="mc-users-toolbar-right">
+                <button class="btn btn-secondary" id="btnExportLogs">
+                  ⬇️ Exportar Logs
+                </button>
+                <button class="btn btn-outline" id="btnClearLogsView">
+                  🧹 Limpar
+                </button>
               </div>
             </div>
-            <div class="mc-logs-toolbar-right">
-              <div class="card-header">
-                <button class="btn" onclick="masterCtrl.exportLogs()"><span class="icon">📤</span> <span data-i18n="logs.export">Exportar Logs</span></button>
-              </div>
-            </div>
-          </div>
 
-          <div class="mc-logs-list-wrapper">
-            <div class="logs-list" id="logsList">
-              <!-- Logs will be rendered here -->
-            </div>
+            <div id="logsList" class="logs-list"></div>
+
           </div>
         </div>
+
       </div>
-    </div>
+    </section>
 
     <!-- Versions Tab -->
     <div class="tab-content nx-section" id="tab-versions">

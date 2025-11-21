@@ -1372,6 +1372,9 @@ class MasterControlSystem {
     el = document.getElementById('filterLogType'); if (el) el.addEventListener('change', () => this.renderLogs());
     el = document.getElementById('filterLogLevel'); if (el) el.addEventListener('change', () => this.renderLogs());
     el = document.getElementById('filterLogDate'); if (el) el.addEventListener('change', () => this.renderLogs());
+    // Logs actions: export and clear view
+    el = document.getElementById('btnExportLogs'); if (el) el.addEventListener('click', () => this.exportLogs());
+    el = document.getElementById('btnClearLogsView'); if (el) el.addEventListener('click', () => this.clearLogsView());
 
     // Header user info
     el = document.getElementById('masterUserInfo'); if (el && this.currentUser) el.textContent = this.currentUser.name || this.currentUser.username || 'Master User';
@@ -3812,6 +3815,20 @@ class MasterControlSystem {
     link.href = url;
   link.download = 'logs_' + Date.now() + '.json';
     link.click();
+  }
+  clearLogsView() {
+    try {
+      const fType = document.getElementById('filterLogType');
+      const fLevel = document.getElementById('filterLogLevel');
+      const fDate = document.getElementById('filterLogDate');
+      if (fType) fType.value = '';
+      if (fLevel) fLevel.value = '';
+      if (fDate) fDate.value = '';
+      // Re-render logs with cleared filters
+      this.renderLogs();
+    } catch (e) {
+      console.warn('[masterCtrl] clearLogsView failed', e);
+    }
   }
   async logout() {
     var ok = await this.confirmAction({
