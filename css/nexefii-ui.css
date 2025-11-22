@@ -408,6 +408,43 @@ body.nx-page{
   .mc-footer-security .mc-footer-security-inner{flex-direction:column;align-items:flex-start;gap:6px}
 }
 
+/* User-provided layout/footer rules (integrated) */
+/* Garante que a página ocupe toda a altura da viewport */
+html, body {
+  height: 100%;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+}
+
+/* Container principal da página */
+.nx-page-container {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+}
+
+/* Área de conteúdo (todas as abas) */
+.master-container {
+  flex: 1;
+  overflow-y: auto;
+}
+
+/* Rodapé fixado no final (mantém compatibilidade com .mc-footer-security) */
+.master-footer,
+.mc-footer-security.master-footer {
+  padding: 8px 16px;
+  font-size: 13px;
+  color: #666;
+  background-color: #f9f9f9;
+  border-top: 1px solid #ddd;
+  text-align: center;
+  margin-top: auto; /* força o rodapé para o final */
+  box-sizing: border-box;
+}
+
+
 /* Hide Recent Activity in Dashboard by default; can be toggled by removing
    `hidden-recent-activity` from <body> (used to keep UI clean for end users). */
 body.hidden-recent-activity #tab-dashboard .mc-recent-activity,
