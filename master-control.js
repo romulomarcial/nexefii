@@ -3117,6 +3117,17 @@ class MasterControlSystem {
           if (typeF) logs = logs.filter(function(l){ return l.type === typeF; });
           if (levelF) logs = logs.filter(function(l){ return l.level === levelF; });
           if (dateF) logs = logs.filter(function(l){ return (l.timestamp||'').slice(0,10) === dateF; });
+          // Ocultado log redundante de login do master user — já presente no rodapé
+          try {
+            logs = logs.filter(function(l){
+              if (!l) return false;
+              var msg = String(l.message || '').replace(/^[^\w]+/, '').toLowerCase();
+              if (l.type === 'auth' && l.level === 'info' && /master user logged in/.test(msg)) {
+                return false; // skip rendering this redundant auth log
+              }
+              return true;
+            });
+          } catch(e) { /* noop - if filter fails, keep logs as-is */ }
 
           var html = '';
           for (var i=0;i<logs.length;i++) {
