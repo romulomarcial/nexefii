@@ -310,6 +310,36 @@ body.nx-page{
 
 /* ===== end user-requested Releases styling ===== */
 
+/* ===== Header / Breadcrumb standardization (UX Architect) ===== */
+/* Ensure the tab strip remains visible and headers align consistently across tabs */
+.nx-tab-strip { position: sticky; top: 0; z-index: 100; }
+
+/* Breadcrumb standard appearance and spacing */
+.mc-breadcrumb { margin: 8px 0 6px; display: flex; align-items: center; gap: 6px; color: #555; }
+
+/* Section header wrapper used across tabs (title + underline + help) */
+.mc-section-header { display: flex; align-items: center; justify-content: space-between; gap: 12px; margin: 6px 0 12px; }
+
+/* Page title standardization used inside mc-section-header */
+.mc-page-title { display: flex; align-items: center; gap: 8px; font-size: 18px; margin: 0; }
+
+/* Thin underline immediately under the title */
+.mc-title-underline { height: 2px; background: #e5e7eb; border-radius: 1px; margin-top: 8px; width: 100%; max-width: 140px; }
+
+/* Remove extra top padding inside nx-section and ensure immediate content after header has consistent gap */
+.nx-section { padding-top: 0; }
+.nx-section > .section-header + * { margin-top: 8px; }
+
+/* Remove any hard-coded spacer usage: prefer gaps and margins via CSS only */
+.mc-card .spacer, .mc-section-spacer { display: none !important; }
+
+@media (max-width: 780px) {
+  .mc-title-underline { max-width: 96px; }
+  .mc-section-header { flex-direction: column; align-items: flex-start; gap: 8px; }
+}
+
+/* ===== end Header standardization ===== */
+
 /* ===== Users tab styling (appended) ===== */
 
 /* 1) Wrapper for users tab */
@@ -398,6 +428,92 @@ body.nx-page{
 .mc-users-table-wrapper thead th {
   font-weight: 600;
   font-size: 13px;
+}
+
+/* ===== Maintenance tab styles ===== */
+.maintenance-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  gap: 16px;
+  align-items: start;
+  margin-top: 12px;
+}
+.maintenance-grid .master-card {
+  padding: 18px;
+  /* Ajuste visual e UX na aba Manutenção — alinhamento e compactação de cards */
+  display: flex;
+  flex-direction: column;
+  min-height: 220px; /* uniform card height */
+}
+.maintenance-grid .master-card.full-width { grid-column: 1 / -1; }
+.maintenance-grid .mc-card-header { margin-bottom: 8px; }
+.maintenance-grid .mc-card-body { flex: 1 1 auto; display:flex; flex-direction:column; }
+.maintenance-grid .mc-card-body p { color: var(--nx-muted); margin-bottom: 12px; }
+.maintenance-actions { display:flex; gap:10px; flex-wrap:wrap; align-items:center; margin-top: auto; }
+.maintenance-actions .btn { min-width: 120px; }
+
+/* Keep the security footer subtle and flush to the bottom: no extra margin below */
+.mc-footer-security { padding: 10px 0; border-top: 1px solid rgba(0,0,0,0.04); background: transparent; }
+.master-footer { box-shadow: none; }
+
+@media (max-width:780px){
+  .maintenance-grid{ grid-template-columns: 1fr; }
+  .maintenance-actions{ justify-content: flex-start; }
+}
+
+/* Recommendation card compact layout (single-line presentation) */
+.maintenance-grid .master-card.full-width .alert {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 8px 12px;
+  margin: 0; /* remove extra vertical space */
+}
+.maintenance-grid .master-card.full-width .alert .btn {
+  margin-left: auto; /* push the Backup Rápido button to the right */
+}
+@media (max-width:520px){
+  /* On very small screens stack recommendation compactly while keeping compact spacing */
+  .maintenance-grid .master-card.full-width .alert { flex-direction: column; align-items: stretch; gap:8px; }
+  .maintenance-grid .master-card.full-width .alert .btn { margin-left: 0; align-self: flex-end; }
+}
+
+/* Compact Help Panel styling for Maintenance (UX Architect) */
+.help-panel#help-maintenance { display:none; background:#f8fafc; border:1px solid #e5e7eb; border-radius:8px; padding:12px; margin:8px 0; }
+.help-panel#help-maintenance .help-content { display:grid; gap:6px; font-size:13px; color:#374151; }
+.help-panel#help-maintenance .help-item { display:block; }
+.help-panel#help-maintenance .help-item .help-desc { color:#4b5563; font-size:13px; margin-top:4px; }
+.help-panel#help-maintenance .help-note { margin-top:8px; color:#374151; font-size:13px; }
+
+
+/* ===== mc-maintenance semantic styles (required by design spec) ===== */
+.mc-maintenance-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 16px;
+}
+.mc-maintenance-card {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  min-height: 240px;
+  background: #fff;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  padding: 16px;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.05);
+}
+.mc-maintenance-card h3 { font-size:16px; margin:0 0 8px; font-weight:600; }
+.mc-maintenance-card p { flex:1; font-size:14px; color:#555; margin:0 0 12px; }
+.mc-maintenance-card .btn-group { display:flex; gap:8px; flex-wrap:wrap; justify-content:flex-start; }
+
+.mc-maintenance-recommendation { display:flex; align-items:center; justify-content:space-between; gap:12px; background:#fefbe6; border:1px solid #e6d800; border-radius:8px; padding:10px 14px; font-size:14px; }
+.mc-maintenance-recommendation .icon { margin-right:6px; }
+.mc-maintenance-recommendation + * { margin-top:12px; }
+
+@media (max-width:520px){
+  .mc-maintenance-recommendation { flex-direction:column; align-items:stretch; }
+  .mc-maintenance-recommendation .btn-group { justify-content:flex-end; }
 }
 
 /* Security footer: subtle, unobtrusive single-line footer for master-control */
@@ -492,9 +608,7 @@ body.nx-page, body.nx-page.hidden-recent-activity {
 @media (max-width:780px){
   .mc-footer-security .mc-footer-security-inner{flex-direction:column;align-items:flex-start;gap:6px}
 }
-  text-transform: uppercase;
-  letter-spacing: 0.02em;
-}
+
 
 .mc-users-table-wrapper tbody td {
   font-size: 13px;

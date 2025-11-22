@@ -1524,108 +1524,128 @@
 
     <!-- Maintenance Tab (NEW) -->
     <div class="tab-content nx-section" id="tab-maintenance">
-      <!-- Section Header with Help -->
-      <div class="section-header">
-        <h2><span class="icon">🔧</span> <span data-i18n="maintenance.title">Manutenção</span></h2>
-        <button class="btn-help" data-help="maintenance" title="Ajuda">
-          <span class="icon">❓</span>
-        </button>
-      </div>
-      
-      <!-- Help Panel -->
-      <div class="help-panel" id="help-maintenance" style="display:none;">
-        <div class="help-content">
-          <h4>Manutenção do Sistema:</h4>
-          <p><strong>🔧 Manutenção:</strong> Ferramentas para otimização, limpeza e recuperação do sistema.</p>
-          
-          <p><strong>Operações Disponíveis:</strong></p>
-          <ul>
-            <li><strong>🗑️ Limpar Cache:</strong> Remove dados temporários para liberar espaço e melhorar performance</li>
-            <li><strong>⚡ Otimizar Banco:</strong> Compacta e reorganiza estruturas de dados do localStorage</li>
-            <li><strong>🔍 Verificar Integridade:</strong> Valida consistência dos dados armazenados</li>
-            <li><strong>🧹 Limpar Logs:</strong> Remove logs antigos mantendo apenas período recente</li>
-            <li><strong>📊 Reindexar:</strong> Reconstrói índices para melhorar velocidade de busca</li>
-          </ul>
-          
-          <p><strong>Quando Usar:</strong></p>
-          <ul>
-            <li>Sistema lento ou travando</li>
-            <li>localStorage próximo do limite (5-10MB)</li>
-            <li>Após importar/restaurar backups grandes</li>
-            <li>Manutenção preventiva mensal</li>
-          </ul>
-          
-          <p><em>⚠️ Importante: Faça backup antes de operações de limpeza ou otimização</em></p>
+      <div class="mc-shell maintenance-section">
+        <!-- Section Header with Help (keeps existing semantics) -->
+        <div class="section-header mc-section-header">
+          <h2 class="mc-page-title"><span class="icon">🔧</span> <span data-i18n="maintenance.title">Manutenção</span></h2>
+          <div class="mc-title-underline" aria-hidden="true"></div>
+          <button class="btn-help" data-help="maintenance" title="Ajuda"><span class="icon">❓</span></button>
         </div>
-      </div>
-      
-      <div class="maintenance-grid">
-        <!-- Bloco duplicado de help-panel `help-maintenance` ocultado.
-             Mantém-se apenas o painel canônico acima para evitar IDs duplicados
-             e confusões no DOM. Bloco removido para consolidação de ajuda. -->
-        
-        <!-- Cache Management -->
-        <div class="master-card nx-card">
-          <h3><span class="icon">🗑️</span> <span data-i18n="maintenance.cache.title">Gerenciamento de Cache</span></h3>
-          <p data-i18n="maintenance.cache.description">Limpa cache temporário e otimiza performance.</p>
-          <div class="maintenance-actions">
-            <button class="btn btn-warning" id="btnClearCache" onclick="window.masterCtrl.clearCache()">
-              <span class="icon">🗑️</span> <span data-i18n="maintenance.cache.clear">Limpar Cache</span>
-            </button>
-            <button class="btn" id="btnClearI18nCache" onclick="window.masterCtrl.clearI18nCache()">
-              <span class="icon">🌐</span> <span data-i18n="maintenance.cache.clearI18n">Limpar Cache i18n</span>
-            </button>
+
+        <div class="help-panel" id="help-maintenance" style="display:none;">
+          <div class="help-content">
+            <h4 data-i18n="maintenance.helpTitle">Manutenção do Sistema</h4>
+
+            <div class="help-item">
+              <strong>Limpar Cache</strong>
+              <div class="help-desc">Remove chaves temporárias e dados de sessão não críticos (memória, caches in-memory). Recomendado antes e após grandes atualizações de conteúdo ou deploys menores.</div>
+            </div>
+
+            <div class="help-item">
+              <strong>Limpar Cache i18n</strong>
+              <div class="help-desc">Limpa caches de tradução locais. Útil após adicionar/alterar idiomas ou chaves de tradução para forçar recarregamento imediato das strings.</div>
+            </div>
+
+            <div class="help-item">
+              <strong>Otimizar Banco</strong>
+              <div class="help-desc">Compacta estruturas e índices de armazenamento, reduz fragmentação e melhora tempos de leitura. Evite executar imediatamente após uma restauração; prefira rodar em janela de manutenção.</div>
+            </div>
+
+            <div class="help-item">
+              <strong>Analisar Integridade</strong>
+              <div class="help-desc">Executa varredura em busca de chaves/inconsistências. Esta operação é não-destrutiva e não faz correções automáticas — apenas reporta achados.</div>
+            </div>
+
+            <div class="help-item">
+              <strong>Reparar Integridade</strong>
+              <div class="help-desc">Tenta corrigir chaves corrompidas e inconsistências detectadas. Gera logs de alteração e alerta; execute somente após criar backup completo.</div>
+            </div>
+
+            <div class="help-item">
+              <strong>Reset Completo</strong>
+              <div class="help-desc">Restaura o sistema ao estado inicial (configurações e dados resetados). AÇÃO IRREVERSÍVEL — backup completo obrigatório antes de executar.</div>
+            </div>
+
+            <div class="help-note"><em>Boas práticas:</em> sempre crie um backup antes de operações de reparo ou reset. Monitorar logs após operações críticas é recomendado.</div>
           </div>
         </div>
 
-        <!-- Database Optimization -->
-        <div class="master-card">
-          <h3><span class="icon">⚡</span> <span data-i18n="maintenance.database.title">Otimização de Banco</span></h3>
-          <p data-i18n="maintenance.database.description">Compacta e otimiza estruturas de dados.</p>
-          <div class="maintenance-actions">
-            <button class="btn btn-primary" id="btnOptimizeDb" onclick="window.masterCtrl.optimizeDatabase()">
-              <span class="icon">⚡</span> <span data-i18n="maintenance.database.optimize">Otimizar Agora</span>
-            </button>
-            <button class="btn" id="btnAnalyzeDb" onclick="window.masterCtrl.optimizeDatabase()">
-              <span class="icon">🔍</span> <span data-i18n="maintenance.database.analyze">Analisar Integridade</span>
-            </button>
+        <div class="maintenance-grid mc-maintenance-grid">
+          <!-- Cache Management -->
+          <div class="master-card mc-card mc-maintenance-card">
+            <div class="mc-card-header">
+              <h3 class="mc-card-title"><span class="icon">🗑️</span> <span data-i18n="maintenance.cache.title">Gerenciamento de Cache</span></h3>
+            </div>
+            <div class="mc-card-body">
+              <p data-i18n="maintenance.cache.description">Limpa cache temporário e otimiza performance.</p>
+              <div class="maintenance-actions">
+                <div class="btn-group">
+                  <button class="btn btn-warning" id="btnClearCache" onclick="window.masterCtrl.clearCache()"><span class="icon">🗑️</span> <span data-i18n="maintenance.cache.clear">Limpar Cache</span></button>
+                  <button class="btn" id="btnClearI18nCache" onclick="window.masterCtrl.clearI18nCache()"><span class="icon">🌐</span> <span data-i18n="maintenance.cache.clearI18n">Limpar Cache i18n</span></button>
+                </div>
+              </div>
+            </div>
           </div>
-        </div>
 
-        <!-- Integrity Repair -->
-        <div class="master-card">
-          <h3><span class="icon">🔧</span> <span data-i18n="maintenance.integrity.title">Reparação de Integridade</span></h3>
-          <p data-i18n="maintenance.integrity.description">Detecta e corrige inconsistências de dados.</p>
-          <div class="maintenance-actions">
-            <button class="btn btn-secondary" id="btnRepairIntegrity" onclick="window.masterCtrl.repairIntegrity()">
-              <span class="icon">🔧</span> <span data-i18n="maintenance.integrity.repair">Reparar</span>
-            </button>
-            <button class="btn" id="btnValidateIntegrity" onclick="window.masterCtrl.repairIntegrity()">
-              <span class="icon">✅</span> <span data-i18n="maintenance.integrity.validate">Validar</span>
-            </button>
+          <!-- Database Optimization -->
+          <div class="master-card mc-card mc-maintenance-card">
+            <div class="mc-card-header">
+              <h3 class="mc-card-title"><span class="icon">⚡</span> <span data-i18n="maintenance.database.title">Otimização de Banco</span></h3>
+            </div>
+            <div class="mc-card-body">
+              <p data-i18n="maintenance.database.description">Compacta e otimiza estruturas de dados.</p>
+              <div class="maintenance-actions">
+                <div class="btn-group">
+                  <button class="btn btn-primary" id="btnOptimizeDb" onclick="window.masterCtrl.optimizeDatabase()"><span class="icon">⚡</span> <span data-i18n="maintenance.database.optimize">Otimizar Agora</span></button>
+                  <button class="btn" id="btnAnalyzeDb" onclick="window.masterCtrl.optimizeDatabase()"><span class="icon">🔍</span> <span data-i18n="maintenance.database.analyze">Analisar Integridade</span></button>
+                </div>
+              </div>
+            </div>
           </div>
-        </div>
 
-        <!-- System Reset -->
-        <div class="master-card">
-          <h3><span class="icon">🔴</span> <span data-i18n="maintenance.reset.title">Reset do Sistema</span></h3>
-          <p data-i18n="maintenance.reset.description">⚠️ Restaura o sistema ao estado inicial. Ação irreversível!</p>
-          <div class="maintenance-actions">
-            <button class="btn btn-danger" id="btnResetSystem" onclick="window.masterCtrl.resetSystem()">
-              <span class="icon">🔴</span> <span data-i18n="maintenance.reset.execute">Reset Completo</span>
-            </button>
+          <!-- Integrity Repair -->
+          <div class="master-card mc-card mc-maintenance-card">
+            <div class="mc-card-header">
+              <h3 class="mc-card-title"><span class="icon">🔧</span> <span data-i18n="maintenance.integrity.title">Reparação de Integridade</span></h3>
+            </div>
+            <div class="mc-card-body">
+              <p data-i18n="maintenance.integrity.description">Detecta e corrige inconsistências de dados.</p>
+              <div class="maintenance-actions">
+                <div class="btn-group">
+                  <button class="btn btn-secondary" id="btnRepairIntegrity" onclick="window.masterCtrl.repairIntegrity()"><span class="icon">🔧</span> <span data-i18n="maintenance.integrity.repair">Reparar</span></button>
+                  <button class="btn" id="btnValidateIntegrity" onclick="window.masterCtrl.repairIntegrity()"><span class="icon">✅</span> <span data-i18n="maintenance.integrity.validate">Validar</span></button>
+                </div>
+              </div>
+            </div>
           </div>
-        </div>
 
-        <!-- Backup Before Actions -->
-        <div class="master-card full-width">
-          <div class="alert alert-info">
-            <span class="icon">💡</span>
-            <strong data-i18n="maintenance.backup.recommendation">Recomendação:</strong>
-            <span data-i18n="maintenance.backup.message">Sempre crie um backup antes de executar operações de manutenção.</span>
-            <button class="btn btn-sm" id="btnQuickBackupMaintenance" onclick="window.masterCtrl.createBackup('full')">
-              <span class="icon">💾</span> <span data-i18n="maintenance.backup.quick">Backup Rápido</span>
-            </button>
+          <!-- System Reset -->
+          <div class="master-card mc-card mc-maintenance-card">
+            <div class="mc-card-header">
+              <h3 class="mc-card-title"><span class="icon">🔴</span> <span data-i18n="maintenance.reset.title">Reset do Sistema</span></h3>
+            </div>
+            <div class="mc-card-body">
+              <p data-i18n="maintenance.reset.description">⚠️ Restaura o sistema ao estado inicial. Ação irreversível!</p>
+              <div class="maintenance-actions">
+                <div class="btn-group">
+                  <button class="btn btn-danger" id="btnResetSystem" onclick="window.masterCtrl.resetSystem()"><span class="icon">🔴</span> <span data-i18n="maintenance.reset.execute">Reset Completo</span></button>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Backup Before Actions (full-width) -->
+          <div class="master-card mc-card full-width mc-maintenance-card mc-maintenance-recommendation">
+            <div class="mc-card-body">
+              <div class="alert alert-info">
+                <span class="icon">💡</span>
+                <strong data-i18n="maintenance.backup.recommendation">Recomendação:</strong>
+                <span data-i18n="maintenance.backup.message">Sempre crie um backup antes de executar operações de manutenção.</span>
+                <div class="btn-group">
+                  <button class="btn btn-sm" id="btnQuickBackupMaintenance" onclick="window.masterCtrl.createBackup('full')"><span class="icon">💾</span> <span data-i18n="maintenance.backup.quick">Backup Rápido</span></button>
+                </div>
+              </div>
+            </div>
           </div>
         </div>
       </div>
@@ -1634,8 +1654,9 @@
     <!-- Internationalization Tab (NEW) -->
     <div class="tab-content nx-section" id="tab-i18n">
     <!-- Section Header with Help -->
-      <div class="section-header">
-        <h2><span class="icon">🌐</span> <span data-i18n="i18n.title">Internacionalização</span></h2>
+      <div class="section-header mc-section-header">
+        <h2 class="mc-page-title"><span class="icon">🌐</span> <span data-i18n="i18n.title">Internacionalização</span></h2>
+        <div class="mc-title-underline" aria-hidden="true"></div>
         <button class="btn-help" data-help="i18n" title="Ajuda">
           <span class="icon">❓</span>
         </button>
@@ -1734,8 +1755,9 @@
     <!-- Metrics Tab (NEW) -->
     <div class="tab-content nx-section" id="tab-metrics">
       <!-- Section Header with Help -->
-      <div class="section-header">
-        <h2><span class="icon">📈</span> <span data-i18n="metrics.title">Métricas</span></h2>
+      <div class="section-header mc-section-header">
+        <h2 class="mc-page-title"><span class="icon">📈</span> <span data-i18n="metrics.title">Métricas</span></h2>
+        <div class="mc-title-underline" aria-hidden="true"></div>
         <button class="btn-help" data-help="metrics" title="Ajuda">
           <span class="icon">❓</span>
         </button>
@@ -2023,7 +2045,6 @@
                 </table>
               </div>
             </div>
-            <div style="height:20px;"></div>
           </div>
         </div>
 
@@ -2984,6 +3005,61 @@
       </div>
     </div>
   </div>
+      <!-- Maintenance Help Modal (lightweight, activated by ? button) -->
+      <div id="maintenanceHelpModal" class="mc-modal" aria-hidden="true" style="display:none;">
+        <div class="mc-modal-backdrop" data-maint-help-close></div>
+        <div class="mc-modal-dialog" role="dialog" aria-modal="true" aria-labelledby="maintenanceHelpTitle" style="max-width:760px;">
+          <div class="mc-modal-header">
+            <h3 id="maintenanceHelpTitle"><span class="icon">🔧</span> Ajuda — Manutenção</h3>
+            <button type="button" class="mc-modal-close" data-maint-help-close aria-label="Fechar">✕</button>
+          </div>
+          <div class="mc-modal-body">
+            <div style="display:flex;flex-direction:column;gap:12px;font-size:14px;">
+              <section>
+                <h4>Limpar Cache</h4>
+                <p>Remove dados temporários e entradas de cache do navegador/localStorage relacionadas a recursos temporários. Riscos: pode aumentar o tempo de carregamento nas próximas requisições; sem perda de dados persistentes.</p>
+                <p><strong>Quando usar:</strong> após deploys, ao diagnosticar dados inconsistentes ou quando storage estiver alto.</p>
+                <p><strong>Tempo estimado:</strong> <em>segundos</em>.</p>
+              </section>
+              <section>
+                <h4>Otimizar Banco</h4>
+                <p>Reorganiza e compacta estruturas armazenadas (localStorage snapshots, índices internos), reduzindo fragmentação e liberando espaço.</p>
+                <p><strong>Riscos:</strong> operação potencialmente custosa em tempo; recomenda-se backup prévio. Suspende operações intensas durante execução para evitar conflitos.</p>
+                <p><strong>Tempo estimado:</strong> <em>segundos a minutos, dependendo do volume</em>.</p>
+              </section>
+              <section>
+                <h4>Reparação de Integridade</h4>
+                <p>Valida consistência de entidades (users, properties, backups, índices) e aplica correções não destrutivas quando possível.</p>
+                <p><strong>Riscos:</strong> em casos complexos pode marcar registros como 'suspeitos' para revisão manual; sempre revisar logs após execução.</p>
+                <p><strong>Quando usar:</strong> após importações, restaurações ou detecção de comportamentos anômalos.</p>
+              </section>
+              <section>
+                <h4>Reset Completo</h4>
+                <p>Restaura o sistema ao estado inicial (remove dados não persistidos). <strong>Ação irreversível.</strong></p>
+                <p><strong>Riscos:</strong> perda total dos dados locais; executar somente em ambiente de teste ou após backup completo.</p>
+                <p><strong>Tempo estimado:</strong> <em>instante</em>, seguido por reload.</p>
+              </section>
+              <div style="font-size:13px;color:var(--nx-muted);">Dica: Use o botão <em>Backup Rápido</em> antes de operações destrutivas. Consulte os logs após execução.</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <script>
+        (function(){
+          try {
+            var helpBtn = document.querySelector('#tab-maintenance .section-header .btn-help[data-help="maintenance"]');
+            var modal = document.getElementById('maintenanceHelpModal');
+            function open() { if (!modal) return; modal.style.display = 'block'; modal.classList.add('open'); modal.setAttribute('aria-hidden','false'); document.body.style.overflow='hidden'; }
+            function close() { if (!modal) return; modal.style.display = 'none'; modal.classList.remove('open'); modal.setAttribute('aria-hidden','true'); document.body.style.overflow=''; }
+            if (helpBtn) helpBtn.addEventListener('click', function(e){ e.preventDefault(); open(); });
+            if (modal) {
+              modal.querySelectorAll('[data-maint-help-close]').forEach(function(el){ el.addEventListener('click', function(ev){ ev.preventDefault(); close(); }); });
+              modal.addEventListener('keydown', function(ev){ if (ev.key === 'Escape') close(); });
+            }
+          } catch(e){ console.warn('maintenance help modal wiring failed', e); }
+        })();
+      </script>
 
   <!-- Create User Modal (legacy) - commented out because canonical modal is used above
   <div id="createUserModal" class="modal" style="display:none;">
