@@ -167,7 +167,7 @@
     @keyframes pw-spin { to { transform: rotate(360deg); } }
   </style>
 </head>
-<body class="nx-page">
+<body class="nx-page hidden-recent-activity">
   <div class="nx-page-container">
   <div class="master-container nx-page-body">
     <!-- Header -->
@@ -926,13 +926,9 @@
 
         </div> <!-- /.mc-dashboard-layout -->
 
-        <!-- Recent Activity (full width) -->
-        <div class="master-card full-width mc-card mc-recent-activity">
-          <h3><span class="icon">🕐</span> <span data-i18n="overview.recentActivity">Atividade Recente</span></h3>
-          <div class="activity-list" id="recentActivity">
-            <!-- Activity items will be rendered here -->
-          </div>
-        </div>
+        <!-- Bloco de Atividade Recente removido do Dashboard — mantida rastreabilidade interna via logs -->
+        <!-- Placeholder oculto mantido para compatibilidade com scripts que possam ler o elemento (não exibido) -->
+        <div id="recentActivity" aria-hidden="true" style="display:none;"></div>
       </div> <!-- /.mc-shell -->
     </div>
 
@@ -1512,12 +1508,15 @@
           </div>
         </div>
 
-        <!-- Session footer -->
-        <div class="mc-session-footer">
-          <span class="icon">🔐</span>
-          <span id="sessionUserType">Master</span>
-          <span>user logged in</span>
-          <span id="sessionLoginTime"></span>
+        <!-- Removido status visual de login do master user — mantida autenticação funcional -->
+        <!--
+          Session footer removed to reduce UI noise. Authentication and
+          logging remain unchanged. A hidden placeholder is kept so any
+          scripts referencing the IDs do not error.
+        -->
+        <div class="mc-session-footer" style="display:none;" aria-hidden="true">
+          <span id="sessionUserType" style="display:none;"></span>
+          <span id="sessionLoginTime" style="display:none;"></span>
         </div>
 
       </div>
@@ -3419,6 +3418,27 @@
   <script src="js/master-control-integrations.js"></script>
   <script src="js/demo-seeder.js"></script>
   </div><!-- /.nx-page-container -->
+  <!-- Rodapé ajustado para renderizar como última linha da página, sem espaços abaixo -->
+  <!-- Single security footer (shows last auth/activity) -->
+  <div class="mc-footer-security" role="contentinfo" aria-label="Security footer" style="width:100%; box-sizing:border-box;">
+    <div class="mc-footer-security-inner" style="max-width:1200px; margin:0 auto; padding:10px 14px; display:flex; gap:12px; align-items:center; justify-content:space-between; font-size:13px; color:var(--nx-muted,#6c757d);">
+      <div style="display:flex; gap:10px; align-items:center;">
+        <span style="font-size:14px; opacity:0.9; color:var(--nx-surface,#222);">🔒</span>
+        <div style="display:flex; gap:8px; align-items:center;">
+          <div style="font-weight:600; color:var(--nx-surface,#222);">Usuário:</div>
+          <div id="mc-footer-user" style="min-width:120px;">-</div>
+        </div>
+      </div>
+      <div style="display:flex; gap:10px; align-items:center;">
+        <div style="font-weight:600; color:var(--nx-surface,#222);">Última atividade:</div>
+        <div id="mc-footer-timestamp">-</div>
+      </div>
+      <div style="display:flex; gap:8px; align-items:center;">
+        <div style="font-weight:600; color:var(--nx-surface,#222);">Canal:</div>
+        <div id="mc-footer-channel">-</div>
+      </div>
+    </div>
+  </div>
   <script src="master-control.js"></script>
   <script src="master-control-enterprise.js"></script>
   <script src="master-control-backups.js"></script>

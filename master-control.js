@@ -3,6 +3,46 @@
  * Sistema de controle master com backup/restore e versionamento
  */
 
+// Security footer UI helper (single footer on the page)
+const SecurityFooterUI = (function(){
+  function safeText(el, value) {
+    if (!el) return;
+    el.textContent = value || '';
+  }
+
+  function formatTimestamp(ts) {
+    try {
+      const d = ts instanceof Date ? ts : new Date(ts);
+      if (isNaN(d.getTime())) return '';
+      return d.toLocaleString(undefined, {
+        year: 'numeric', month: '2-digit', day: '2-digit',
+        hour: '2-digit', minute: '2-digit', second: '2-digit'
+      });
+    } catch (e) { return ''; }
+  }
+
+  function update(activity) {
+    try {
+      var userEl = document.getElementById('mc-footer-user');
+      var tsEl = document.getElementById('mc-footer-timestamp');
+      var channelEl = document.getElementById('mc-footer-channel');
+      if (!userEl && !tsEl && !channelEl) return;
+
+      const userName = (activity && (activity.userName || activity.user)) || (window.currentUser && (window.currentUser.name || window.currentUser.username)) || 'Unknown user';
+      const timestamp = (activity && (activity.timestamp || activity.time)) || Date.now();
+      const channel = (activity && (activity.channel || activity.scope || activity.category)) || (activity && activity.type && activity.level ? (activity.type + ' • ' + activity.level) : 'auth • info');
+
+      safeText(userEl, userName);
+      safeText(tsEl, formatTimestamp(timestamp));
+      safeText(channelEl, channel);
+    } catch (e) {
+      try { console.warn('SecurityFooterUI.update failed', e); } catch(_) {}
+    }
+  }
+
+  return { update };
+})();
+
 class MasterControlSystem {
   constructor() {
     this.currentUser = null;
@@ -206,10 +246,35 @@ class MasterControlSystem {
         if (typeof wirePanelHelp === 'function') {
           wirePanelHelp();
         }
+        // Update security footer after UI is ready (uses last auth/log entry)
+        try {
+          setTimeout(() => {
+            try {
+              const mc = window.masterCtrl;
+              const logs = (mc && mc.logs) || [];
+              const lastAuth = (logs && logs.slice().reverse().find(l => l.type === 'auth')) || (logs && logs[logs.length-1]);
+              if (typeof SecurityFooterUI !== 'undefined' && SecurityFooterUI && typeof SecurityFooterUI.update === 'function') {
+                if (lastAuth) {
+                  SecurityFooterUI.update({ userName: (mc && mc.currentUser && (mc.currentUser.name || mc.currentUser.username)) || lastAuth.userId || lastAuth.user, timestamp: lastAuth.timestamp || lastAuth.ts || lastAuth.time, channel: lastAuth.type || lastAuth.category });
+                } else if (mc && mc.currentUser) {
+                  SecurityFooterUI.update({ userName: (mc.currentUser.name || mc.currentUser.username), timestamp: Date.now(), channel: 'session' });
+                }
+              }
+            } catch (e) { /* ignore */ }
+          }, 150);
+        } catch (e) {}
         // Ensure tab visibility is correct on initial load
         try {
           if (typeof initMasterTabsOnLoad === 'function') initMasterTabsOnLoad();
         } catch(e) { console.warn('[MasterControl] initMasterTabsOnLoad failed', e); }
+
+        // UX: By default Recent Activity block is hidden for end-users to reduce noise.
+        // Developers can enable it by setting `window.DEBUG_SHOW_RECENT_ACTIVITY = true` before load.
+        try {
+          if (window.DEBUG_SHOW_RECENT_ACTIVITY) {
+            document.body.classList.remove('hidden-recent-activity');
+          }
+        } catch (e) { /* ignore */ }
       } catch(e) {
         console.error('[MasterControl] Erro na inicialização principal', e);
       }
@@ -987,6 +1052,8 @@ class MasterControlSystem {
     }
 
     this.saveLogs();
+    // Update single security footer with last activity
+    try { if (typeof SecurityFooterUI !== 'undefined' && SecurityFooterUI && typeof SecurityFooterUI.update === 'function') SecurityFooterUI.update({ userName: (this.currentUser && (this.currentUser.name || this.currentUser.username)) || log.userId, timestamp: log.timestamp, channel: log.type }); } catch(_) {}
   }
 
   // ========================================
@@ -2944,8 +3011,8 @@ class MasterControlSystem {
                 '<div class="activity-meta">' + new Date(lg.timestamp).toLocaleString() + ' • ' + lg.type + ' • ' + lg.level + '</div>' +
                 '</div></div>';
       }
-  var ra = document.getElementById('recentActivity');
-  if (ra) ra.innerHTML = html || '<p>' + this.t('msgs.noneActivity','Sem itens') + '</p>';
+      var ra = document.getElementById('recentActivity');
+      if (ra) ra.innerHTML = html || '<p>' + this.t('msgs.noneActivity','Sem itens') + '</p>';
     } catch(e) {
       console.warn('renderDashboard failed', e);
     }

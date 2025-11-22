@@ -398,6 +398,63 @@ body.nx-page{
 .mc-users-table-wrapper thead th {
   font-weight: 600;
   font-size: 13px;
+}
+
+/* Security footer: subtle, unobtrusive single-line footer for master-control */
+.mc-footer-security{border-top:1px solid var(--nx-border);background:transparent}
+.mc-footer-security .mc-footer-security-inner{display:flex;align-items:center;justify-content:space-between;padding:8px 12px;font-size:13px;color:var(--nx-muted)}
+.mc-footer-security .mc-footer-security-inner > div{display:flex;align-items:center;gap:8px}
+@media (max-width:780px){
+  .mc-footer-security .mc-footer-security-inner{flex-direction:column;align-items:flex-start;gap:6px}
+}
+
+/* Hide Recent Activity in Dashboard by default; can be toggled by removing
+   `hidden-recent-activity` from <body> (used to keep UI clean for end users). */
+body.hidden-recent-activity #tab-dashboard .mc-recent-activity,
+body.hidden-recent-activity #tab-dashboard #recentActivity {
+  display: none !important;
+}
+
+/* Layout tweaks to ensure footer sits as the last visible line of the page
+   across all tabs. Keeps footer at page bottom without empty whitespace. */
+html, body {
+  height: 100%;
+  margin: 0; /* remove default body margin that may create gap */
+}
+body.nx-page, body.nx-page.hidden-recent-activity {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
+.nx-page-container {
+  flex: 1 1 auto;
+  display: flex;
+  flex-direction: column;
+}
+.master-container {
+  flex: 1 1 auto;
+}
+
+/* Footer visual rules: remove extra margin/padding below and keep it visible
+   as the last line. Do not change content — only visual placement. */
+.mc-footer-security{
+  margin: 0;
+  padding: 8px 14px;
+  box-sizing: border-box;
+  background: transparent;
+  border-top: 1px solid var(--nx-border);
+  flex: 0 0 auto;
+}
+.mc-footer-security .mc-footer-security-inner{padding:0;}
+
+/* Ensure no bottom spacing created by siblings */
+#tab-dashboard, #tab-backups, #tab-users, #tab-integrations, #tab-properties, #tab-logs, #tab-settings, #tab-maintenance, #tab-i18n, #tab-metrics {
+  display: block;
+}
+
+@media (max-width:780px){
+  .mc-footer-security .mc-footer-security-inner{flex-direction:column;align-items:flex-start;gap:6px}
+}
   text-transform: uppercase;
   letter-spacing: 0.02em;
 }
