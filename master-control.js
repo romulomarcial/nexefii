@@ -43,6 +43,23 @@ const SecurityFooterUI = (function(){
   return { update };
 })();
 
+// Global helper: attach event listener once and mark element as bound.
+// /* Correção de duplicações e padronização de i18n — init idempotente, IDs únicos, listeners guardados */
+window.addBoundListener = function(el, ev, handler) {
+  try {
+    if (!el) return;
+    // If selector string passed, attach to all matching
+    if (typeof el === 'string') {
+      document.querySelectorAll(el).forEach(e => { if (!e.dataset.bound) { e.addEventListener(ev, handler); e.dataset.bound = '1'; } });
+      return;
+    }
+    if (!el.dataset) el.dataset = {};
+    if (el.dataset.bound) return;
+    el.addEventListener(ev, handler);
+    el.dataset.bound = '1';
+  } catch (e) { try { console.warn('addBoundListener failed', e); } catch(_){} }
+};
+
 class MasterControlSystem {
   constructor() {
     this.currentUser = null;
@@ -207,11 +224,9 @@ class MasterControlSystem {
     function wirePanelHelp(){
       try {
         document.querySelectorAll('.panel-help[data-help-id]').forEach(btn => {
-          btn.addEventListener('click', () => {
-            const id = btn.getAttribute('data-help-id');
-            const msg = HelpTexts[id] || 'Ajuda não configurada para esta seção.';
-            alert(msg);
-          });
+          // guarded listener attachment to avoid duplication on re-init
+          const handler = function(){ const id = btn.getAttribute('data-help-id'); const msg = HelpTexts[id] || 'Ajuda não configurada para esta seção.'; alert(msg); };
+          if (window.addBoundListener) window.addBoundListener(btn, 'click', handler); else if (!btn.dataset.bound) { btn.addEventListener('click', handler); btn.dataset.bound = '1'; }
         });
       } catch(e) {
         console.warn('[MasterControl] wirePanelHelp error', e);
@@ -246,6 +261,69 @@ class MasterControlSystem {
         if (typeof wirePanelHelp === 'function') {
           wirePanelHelp();
         }
+        // Centralized i18n bindings: attach guarded handlers that call the i18nActions API
+        (function attachI18nBindings(){
+          try {
+            function doAttach() {
+              try {
+                if (!window.i18nActions) return false;
+                // Buttons and controls to centralize (use the real DOM IDs)
+                var map = [
+                  {
+                    id: 'btnExportTranslations',
+                    fn: function () {
+                      try { window.i18nActions.exportTranslations(); }
+                      catch (e) { console.warn('i18n export failed', e); }
+                    }
+                  },
+                  {
+                    id: 'btnImportTranslations',
+                    fn: function () {
+                      try { window.i18nActions.importTranslations(); }
+                      catch (e) { console.warn('i18n import failed', e); }
+                    }
+                  },
+                  {
+                    id: 'btnAddLanguage',
+                    fn: function () {
+                      try { window.i18nActions.addLanguage(); }
+                      catch (e) { console.warn('i18n add lang failed', e); }
+                    }
+                  },
+                  {
+                    id: 'btnNewI18nKey',
+                    fn: function () {
+                      try { window.i18nActions.newKey(); }
+                      catch (e) { console.warn('i18n new key failed', e); }
+                    }
+                  },
+                  {
+                    id: 'btnValidateTranslations',
+                    fn: function () {
+                      try { window.i18nActions.validate(); }
+                      catch (e) { console.warn('i18n validate failed', e); }
+                    }
+                  }
+                ];
+                map.forEach(m => {
+                  var el = document.getElementById(m.id);
+                  if (!el) return;
+                  if (window.addBoundListener) window.addBoundListener(el, 'click', m.fn); else if (!el.dataset.bound) { el.addEventListener('click', m.fn); el.dataset.bound = '1'; }
+                });
+                // filter change: delegate to i18nActions.render/populate via render if needed
+                var filter = document.getElementById('i18nFilterTab');
+                if (filter) {
+                  var onf = function(){ try { if (window.i18nActions && window.i18nActions.render) window.i18nActions.render(); } catch(e){} };
+                  if (window.addBoundListener) window.addBoundListener(filter, 'change', onf); else if (!filter.dataset.bound) { filter.addEventListener('change', onf); filter.dataset.bound = '1'; }
+                }
+                return true;
+              } catch(e) { console.warn('attachI18nBindings inner failed', e); return false; }
+            }
+            // try immediately, if not ready retry a few times
+            var attempts = 0;
+            var t = setInterval(function(){ attempts++; if (doAttach() || attempts > 10) clearInterval(t); }, 200);
+          } catch(e) { console.warn('attachI18nBindings failed', e); }
+        })();
         // Update security footer after UI is ready (uses last auth/log entry)
         try {
           setTimeout(() => {
@@ -308,6 +386,64 @@ class MasterControlSystem {
         console.warn('[MasterControl] initMasterTabsOnLoad(): failed to ensure initial tab state', e);
       }
     }
+
+    // Render function for the Internacionalização tab
+    // Cleans the tab and delegates rendering to the i18nActions module when available.
+    function renderI18nTab() {
+      try {
+        var tab = document.getElementById('tab-i18n');
+        if (!tab) return;
+        // clear previous content to ensure idempotent mount
+        try { tab.innerHTML = ''; } catch(e) {}
+
+        if (window.i18nActions && typeof window.i18nActions.render === 'function') {
+          try { window.i18nActions.render(); } catch(e){ console.warn('i18nActions.render failed', e); }
+        } else {
+          // If i18nActions is not ready yet, queue a render request
+          window.i18nActions = window.i18nActions || { _queue: [], ready: false };
+          window.i18nActions._queue = window.i18nActions._queue || [];
+          window.i18nActions._queue.push({ name: 'render', args: [] });
+        }
+      } catch (e) { console.warn('[MasterControl] renderI18nTab error', e); }
+    }
+
+    // Delegate tab activation clicks to trigger render for i18n when its tab is selected.
+    // This is defensive to support multiple tab implementations used across the app.
+    document.addEventListener('click', function(e){
+      try {
+        var btn = e.target.closest && e.target.closest('[data-tab], .tab-btn, [data-target]');
+        if (!btn) return;
+        var tabName = btn.getAttribute('data-tab') || btn.dataset.tab || btn.getAttribute('data-target') || btn.dataset.target || '';
+        if (!tabName && btn.classList.contains('tab-btn')) {
+          // fallback: some tab-btns may store target in aria-controls
+          tabName = btn.getAttribute('aria-controls') || '';
+          if (tabName && tabName.indexOf('tab-') === 0) tabName = tabName.replace('tab-', '');
+        }
+        if (String(tabName).toLowerCase() === 'i18n' || String(tabName).toLowerCase() === 'tab-i18n' || String(tabName).toLowerCase() === 'internationalization') {
+          // ensure i18n tab is rendered
+          setTimeout(renderI18nTab, 30);
+        }
+      } catch(e) { /* ignore */ }
+    }, true);
+
+    // MutationObserver: if the tab element becomes visible or gets 'active' class, render it.
+    try {
+      var i18nTabEl = document.getElementById('tab-i18n');
+      if (i18nTabEl) {
+        var mo = new MutationObserver(function(mutations){
+          try {
+            mutations.forEach(function(m){
+              if (m.type === 'attributes') {
+                var el = m.target;
+                var visible = (el.offsetParent !== null) || (el.style && el.style.display && el.style.display !== 'none') || el.classList.contains('active');
+                if (visible) renderI18nTab();
+              }
+            });
+          } catch(e) {}
+        });
+        mo.observe(i18nTabEl, { attributes: true, attributeFilter: ['style', 'class'] });
+      }
+    } catch(e) { /* ignore */ }
     
     // Inicializar Enterprise UI (somente se disponível; caso contrário, deferir)
     if (typeof this.initEnterpriseUI === 'function') {

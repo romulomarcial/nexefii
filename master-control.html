@@ -8,7 +8,7 @@
   <link rel="alternate icon" href="favicon.ico">
   <link rel="stylesheet" href="sprints/sprint-13/outputs/web/css/style.css">
   <link rel="stylesheet" href="css/nexefii-ui.css">
-  <script src="/core/i18n/I18nManager.js"></script>
+  <!-- <script src="/core/i18n/I18nManager.js"></script> -->
   <script>
     // Client-side auth guard (redirect to login when not authenticated)
     (function(){
@@ -178,6 +178,16 @@
       </div>
   <div class="header-right">
       <span class="user-info" id="masterUserInfo" data-i18n="master.user">Master User</span>
+   <div id="languageSelectorHeader" class="mc-lang-dropdown">
+       <button class="mc-lang-btn">
+           🌐 <span id="currentLang">BR</span>
+       </button>
+       <div class="mc-lang-menu">
+           <div class="mc-lang-option" data-lang="br">BR — Português</div>
+           <div class="mc-lang-option" data-lang="us">US — English</div>
+           <div class="mc-lang-option" data-lang="es">ES — Español</div>
+       </div>
+   </div>
   <button class="btn btn-danger" id="btnLogoutMaster"><span class="icon">🚪</span> <span data-i18n="logout">Sair</span></button>
     
       </div>
@@ -1664,11 +1674,107 @@
       
       <!-- Help Panel -->
       <div class="help-panel" id="help-i18n" style="display:none;">
-        <div class="help-content">
-          <h4>Internacionalização (i18n):</h4>
-          <p><strong>🌐 i18n:</strong> Gerenciamento de idiomas e traduções da interface do sistema.</p>
-          
-          <p><strong>Idiomas Suportados:</strong></p>
+          <div class="help-content">
+            <h4 data-i18n="i18n.helpTitle">Internacionalização (i18n)</h4>
+            <p data-i18n="i18n.helpIntro"><strong>🌐 i18n:</strong> Gerencie idiomas, traduções e chaves do sistema.</p>
+          </div>
+        </div>
+
+      <!-- I18N Management Sections -->
+      <div class="mc-shell i18n-management" style="padding:0;">
+
+        <!-- Languages Card -->
+        <div class="master-card mc-card mc-i18n-languages" style="margin-top:12px;">
+          <div class="mc-card-header">
+            <h3 class="mc-card-title"><span class="icon">🌐</span> <span data-i18n="i18n.languages.title">Idiomas Disponíveis</span></h3>
+          </div>
+          <div class="mc-card-body">
+            <div class="mc-flex" style="flex-wrap:wrap;gap:8px;align-items:center;margin-bottom:8px;">
+              <div class="mc-badge" data-i18n="i18n.languages.activeLabel">Ativos:</div>
+              <div id="i18nActiveList" class="mc-module-pill" style="display:flex;gap:8px;align-items:center;">
+                <span class="mc-module-pill" data-lang="pt">PT</span>
+                <span class="mc-module-pill" data-lang="en">EN</span>
+                <span class="mc-module-pill" data-lang="es">ES</span>
+              </div>
+            </div>
+
+            <div class="mc-actions-row" style="margin-top:8px;">
+              <button class="btn btn-primary" id="btnAddLanguage" data-i18n="i18n.actions.addLanguage">Adicionar Idioma</button>
+              <button class="btn" id="btnExportTranslations" data-i18n="i18n.actions.export">Exportar Traduções</button>
+              <button class="btn" id="btnImportTranslations" data-i18n="i18n.actions.import">Importar Traduções</button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Translation Keys -->
+        <div class="master-card mc-card mc-i18n-keys" style="margin-top:16px;">
+          <div class="mc-card-header">
+            <h3 class="mc-card-title"><span class="icon">🔑</span> <span data-i18n="i18n.keys.title">Chaves de Tradução</span></h3>
+          </div>
+          <div class="mc-card-body">
+            <div style="display:flex;justify-content:space-between;align-items:center;gap:12px;margin-bottom:8px;flex-wrap:wrap;">
+              <div style="display:flex;gap:8px;align-items:center;">
+                <label for="i18nFilterTab" style="font-weight:600;"> <span data-i18n="i18n.filter.label">Filtrar por aba</span> </label>
+                <select id="i18nFilterTab" class="mc-select" style="min-width:180px;">
+                  <option value="">-- <span data-i18n="i18n.filter.all">Todas as abas</span> --</option>
+                  <option value="dashboard" data-i18n="tabs.dashboard">Dashboard</option>
+                  <option value="backups" data-i18n="tabs.backups">Backups</option>
+                  <option value="releases" data-i18n="tabs.releases">Releases & Rollback</option>
+                  <option value="users" data-i18n="tabs.users">Usuários</option>
+                  <option value="integrations" data-i18n="tabs.integrations">Integrações</option>
+                  <option value="properties" data-i18n="tabs.properties">Propriedades</option>
+                  <option value="logs" data-i18n="tabs.logs">Logs & Auditoria</option>
+                  <option value="settings" data-i18n="tabs.settings">Configurações</option>
+                  <option value="maintenance" data-i18n="tabs.maintenance">Manutenção</option>
+                  <option value="i18n" data-i18n="tabs.i18n">Internacionalização</option>
+                  <option value="metrics" data-i18n="tabs.metrics">Métricas</option>
+                </select>
+              </div>
+              <div style="display:flex;gap:8px;">
+                <button class="btn" id="btnNewI18nKey" data-i18n="i18n.actions.newKey">Nova Chave</button>
+              </div>
+            </div>
+
+            <div class="mc-users-table-wrapper" style="overflow:auto;">
+              <table id="i18nKeysTable" class="mc-table" style="width:100%;min-width:900px;border-collapse:collapse;">
+                <thead>
+                  <tr>
+                    <th style="text-align:left;padding:8px;border-bottom:1px solid var(--nx-border);">Chave</th>
+                    <th style="text-align:left;padding:8px;border-bottom:1px solid var(--nx-border);">PT</th>
+                    <th style="text-align:left;padding:8px;border-bottom:1px solid var(--nx-border);">EN</th>
+                    <th style="text-align:left;padding:8px;border-bottom:1px solid var(--nx-border);">ES</th>
+                    <th style="text-align:left;padding:8px;border-bottom:1px solid var(--nx-border);">Ações</th>
+                  </tr>
+                </thead>
+                <tbody id="i18nKeysTableBody">
+                  <!-- Rows populated by JS -->
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+
+        <!-- Validation / Coverage -->
+        <div class="master-card mc-card mc-i18n-validation" style="margin-top:16px;">
+          <div class="mc-card-header">
+            <h3 class="mc-card-title"><span class="icon">✔️</span> <span data-i18n="i18n.validation.title">Validação</span></h3>
+          </div>
+          <div class="mc-card-body">
+            <div style="display:flex;gap:12px;flex-wrap:wrap;">
+              <div style="min-width:200px;">
+                <div data-i18n="i18n.validation.coverage">Cobertura PT: <strong id="i18nCoveragePt">0%</strong></div>
+                <div data-i18n="i18n.validation.coverage">Cobertura EN: <strong id="i18nCoverageEn">0%</strong></div>
+                <div data-i18n="i18n.validation.coverage">Cobertura ES: <strong id="i18nCoverageEs">0%</strong></div>
+              </div>
+              <div style="margin-left:auto;display:flex;gap:8px;">
+                <button class="btn" id="btnValidateTranslations" data-i18n="i18n.actions.validate">Validar Traduções</button>
+              </div>
+            </div>
+            <div id="i18nValidationAlerts" style="margin-top:8px;color:#b91c1c;display:none;"></div>
+          </div>
+        </div>
+
+      </div>
           <ul>
             <li><strong>🇧🇷 Português:</strong> Idioma padrão do sistema</li>
             <li><strong>🇺🇸 English:</strong> Inglês internacional</li>
@@ -1685,69 +1791,6 @@
           </ul>
           
           <p><em>💡 Dica: Arquivos de tradução ficam em js/translations/*.json</em></p>
-        </div>
-      </div>
-      
-      <div class="i18n-grid">
-        <!-- Language Selector -->
-        <div class="master-card">
-          <h3><span class="icon">🌍</span> <span data-i18n="i18n.languageSelector">Seletor de Idioma</span></h3>
-          <div class="language-options">
-            <button class="language-btn active" data-lang="pt">
-              <span class="flag">🇧🇷</span>
-              <span data-i18n="i18n.languages.pt">Português</span>
-            </button>
-            <button class="language-btn" data-lang="en">
-              <span class="flag">🇺🇸</span>
-              <span data-i18n="i18n.languages.en">English</span>
-            </button>
-            <button class="language-btn" data-lang="es">
-              <span class="flag">🇪🇸</span>
-              <span data-i18n="i18n.languages.es">Español</span>
-            </button>
-          </div>
-        </div>
-
-        <!-- Translation Status -->
-        <div class="master-card">
-          <h3><span class="icon">📊</span> <span data-i18n="i18n.status.title">Status de Traduções</span></h3>
-          <div class="translation-stats">
-            <div class="stat-item">
-              <span class="flag">🇧🇷</span>
-              <span data-i18n="i18n.languages.pt">Português</span>
-              <div class="progress-bar"><div class="progress-fill" style="width:100%"></div></div>
-              <span class="stat-value">100%</span>
-            </div>
-            <div class="stat-item">
-              <span class="flag">🇺🇸</span>
-              <span data-i18n="i18n.languages.en">English</span>
-              <div class="progress-bar"><div class="progress-fill" style="width:100%"></div></div>
-              <span class="stat-value">100%</span>
-            </div>
-            <div class="stat-item">
-              <span class="flag">🇪🇸</span>
-              <span data-i18n="i18n.languages.es">Español</span>
-              <div class="progress-bar"><div class="progress-fill" style="width:100%"></div></div>
-              <span class="stat-value">100%</span>
-            </div>
-          </div>
-        </div>
-
-        <!-- Test Translation -->
-        <div class="master-card">
-          <h3><span class="icon">🧪</span> <span data-i18n="i18n.test.title">Testar Tradução</span></h3>
-          <div class="test-section">
-            <div class="form-group">
-              <label data-i18n="i18n.test.key">Chave de Tradução</label>
-              <input type="text" id="testI18nKey" class="input" autocomplete="off" placeholder="master.title" data-i18n-placeholder="i18n.test.keyPlaceholder">
-            </div>
-            <button class="btn btn-primary" id="btnTestI18n">
-              <span class="icon">🔍</span> <span data-i18n="i18n.test.execute">Testar</span>
-            </button>
-            <div id="testI18nResult" class="test-result" style="display:none;">
-              <!-- Test results will appear here -->
-            </div>
-          </div>
         </div>
       </div>
     </div>
@@ -3480,9 +3523,6 @@
     </div> <!-- fim modal-content -->
   </div> <!-- fim modal -->
 
-
-
-
   <script src="properties.js"></script>
   <script src="property-local-test-generator.js"></script>
   <script src="demo-data-generator.js"></script>
@@ -3496,6 +3536,7 @@
   </div><!-- /.nx-page-container -->
   <!-- Rodapé ajustado para renderizar como última linha da página, sem espaços abaixo -->
   <!-- Single security footer (shows last auth/activity) -->
+  <!-- i18n placeholder removed (duplicate) -->
   <div class="mc-footer-security master-footer" role="contentinfo" aria-label="Security footer" style="width:100%; box-sizing:border-box;">
     <div class="mc-footer-security-inner" style="max-width:1200px; margin:0 auto; display:flex; gap:12px; align-items:center; justify-content:space-between; font-size:13px; color:var(--nx-muted,#6c757d);">
       <div style="display:flex; gap:10px; align-items:center;">
@@ -3519,7 +3560,44 @@
   <script src="master-control-enterprise.js"></script>
   <script src="master-control-backups.js"></script>
   <script src="master-control-v3-compatibility.js"></script>
+  <script src="i18n-actions.js"></script>
   <script src="property-publish-helpers.js"></script>
+
+   <style>
+     .mc-lang-dropdown { position: relative; margin-right: 15px; display: inline-block; }
+     .mc-lang-btn { background: #fff; border: 1px solid #ddd; padding: 6px 12px; border-radius: 8px; cursor: pointer; }
+     .mc-lang-menu { display:none; position:absolute; right:0; top:38px; background:#fff; border:1px solid #ddd; border-radius:8px; padding:5px 0; width:180px; box-shadow:0 4px 12px rgba(0,0,0,0.1); }
+     .mc-lang-dropdown.open .mc-lang-menu { display:block; }
+     .mc-lang-option { padding:10px 14px; cursor:pointer; }
+     .mc-lang-option:hover { background:#f0f7ff; }
+   </style>
+
+  <script>
+     document.addEventListener("DOMContentLoaded", () => {
+       const root = document.querySelector(".mc-lang-dropdown");
+       const btn = root.querySelector(".mc-lang-btn");
+       const menu = root.querySelector(".mc-lang-menu");
+       const currentLangLabel = document.getElementById("currentLang");
+
+       btn.addEventListener("click", () => {
+         root.classList.toggle("open");
+       });
+
+       root.querySelectorAll(".mc-lang-option").forEach(opt => {
+         opt.addEventListener("click", () => {
+           const lang = opt.dataset.lang;
+           localStorage.setItem("nexefii-lang", lang);
+           currentLangLabel.textContent = lang.toUpperCase();
+           I18nManager.setLanguage(lang);
+           I18nManager.applyTranslations();
+           root.classList.remove("open");
+         });
+       });
+
+       const saved = localStorage.getItem("nexefii-lang") || "br";
+       currentLangLabel.textContent = saved.toUpperCase();
+     });
+   </script>
 </body>
 </html>
 

@@ -340,6 +340,20 @@ body.nx-page{
 
 /* ===== end Header standardization ===== */
 
+/* ===== i18n management specific styles ===== */
+.mc-i18n-languages .mc-module-pill { display:inline-flex; padding:6px 10px; border-radius:999px; background:#fbfdff; border:1px solid var(--nx-border); }
+.mc-i18n-keys .mc-card-body { padding: 8px 0 0 0; }
+.mc-i18n-keys table.mc-table th, .mc-i18n-keys table.mc-table td { padding:8px 12px; border-bottom:1px solid var(--nx-border); }
+.mc-i18n-keys table.mc-table tbody tr:hover { background: #fbfdff; }
+.mc-i18n-validation .mc-card-body { display:flex; flex-direction:column; gap:8px; }
+
+@media (max-width:780px){
+  .mc-i18n-keys table { min-width: 600px; }
+  .mc-i18n-languages .mc-module-pill { margin-bottom:6px; }
+}
+
+/* keep footer last line behaviour unchanged */
+
 /* ===== Users tab styling (appended) ===== */
 
 /* 1) Wrapper for users tab */
